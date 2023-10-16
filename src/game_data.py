@@ -174,11 +174,11 @@ music_volume_multiplier = 1.0
 #             Enemy Information
 #
 #             ||     Name     |  Type  |HP |Defense|KB Resist|Damage|    Blood Col   |   Item Drops   | Coin Drops ||
-enemy_data = [[ "Green Slime", "Slime", 14,      0,     -0.2,     6, (10,  200,  10), [("terraria.item.gel_blue", 1, 3, 100)], ( 5,  30)],
-              [  "Blue Slime", "Slime", 25,      2,        0,     7, (10,   10, 200), [("terraria.item.gel_blue", 1, 3, 100)], (15,  50)],
-              [   "Red Slime", "Slime", 35,      4,        0,    12, (200,  10,  10), [("terraria.item.gel_blue", 1, 3, 100)], (25,  75)],
-              ["Purple Slime", "Slime", 40,      6,      0.1,    12, (200,  10, 200), [("terraria.item.gel_blue", 1, 3, 100)], (35, 110)],
-              ["Yellow Slime", "Slime", 45,      7,        0,    15, (200, 150,  10), [("terraria.item.gel_blue", 1, 3, 100)], (45, 130)],
+enemy_data = [[ "Green Slime", "Slime", 14,      0,     -0.2,     6, (10,  200,  10), [("terraria.item.gel", 1, 3, 100)], ( 5,  30)],
+              [  "Blue Slime", "Slime", 25,      2,        0,     7, (10,   10, 200), [("terraria.item.gel", 1, 3, 100)], (15,  50)],
+              [   "Red Slime", "Slime", 35,      4,        0,    12, (200,  10,  10), [("terraria.item.gel", 1, 3, 100)], (25,  75)],
+              ["Purple Slime", "Slime", 40,      6,      0.1,    12, (200,  10, 200), [("terraria.item.gel", 1, 3, 100)], (35, 110)],
+              ["Yellow Slime", "Slime", 45,      7,        0,    15, (200, 150,  10), [("terraria.item.gel", 1, 3, 100)], (45, 130)],
               ]
 
 
@@ -695,9 +695,9 @@ def parse_item_data():
         item_data["@sell_price"] = int(item_data["@sell_price"])
         item_data["@hold_offset"] = float(item_data["@hold_offset"])
         try:
-            loaded_surf = pygame.image.load(item_data["@image_path"]).convert()
-            item_data["@image"] = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2))
-            item_data["@image"].set_colorkey((255, 0, 255))
+            item_data["@image"] = pygame.image.load(item_data["@image_path"]).convert()
+            
+            item_data["@image"].set_colorkey((0, 0, 0))
             item_data["@item_slot_offset_x"] = int(24 - item_data["@image"].get_width() * 0.5)
             item_data["@item_slot_offset_y"] = int(24 - item_data["@image"].get_height() * 0.5)
         except FileNotFoundError:
@@ -712,10 +712,9 @@ def parse_item_data():
             item_data["@crit_chance"] = float(item_data["@crit_chance"])
             try:
                 loaded_surf = pygame.image.load(item_data["@world_override_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@world_override_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@world_override_image"])
-                item_data["@world_override_image"].set_colorkey((255, 0, 255))
+                item_data["@world_override_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+                loaded_surf = item_data["@world_override_image"]
+                item_data["@world_override_image"].set_colorkey((0, 0, 0))
             except FileNotFoundError:
                 item_data["@world_override_image"] = None
             except pygame.error:
@@ -755,10 +754,9 @@ def parse_item_data():
             item_data["@grapple_max_chains"] = int(item_data["@grapple_max_chains"])
             try:
                 loaded_surf = pygame.image.load(item_data["@grapple_chain_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@grapple_chain_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@grapple_chain_image"])
-                item_data["@grapple_chain_image"].set_colorkey((255, 0, 255))
+                item_data["@grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+                loaded_surf = item_data["@grapple_chain_image"]
+                item_data["@grapple_chain_image"].set_colorkey((0, 0, 0))
             except FileNotFoundError:
                 item_data["@grapple_chain_image"] = None
             except pygame.error:
@@ -766,10 +764,9 @@ def parse_item_data():
 
             try:
                 loaded_surf = pygame.image.load(item_data["@grapple_claw_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@grapple_claw_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@grapple_claw_image"])
-                item_data["@grapple_claw_image"].set_colorkey((255, 0, 255))
+                item_data["@grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+                loaded_surf = item_data["@grapple_claw_image"]
+                item_data["@grapple_claw_image"].set_colorkey((0, 0, 0))
             except FileNotFoundError:
                 item_data["@grapple_claw_image"] = None
             except pygame.error:
@@ -821,7 +818,7 @@ def parse_tile_data():
         tile_data["@light_emission"] = int(tile_data["@light_emission"])
 
         if tile_data["@average_colour"] == "auto":
-            tile_data["@average_colour"] = (255, 0, 255)
+            tile_data["@average_colour"] = (0, 0, 0)
             override_average_colour = True
         else:
             val_array = tile_data["@average_colour"].split(",")
@@ -831,8 +828,9 @@ def parse_tile_data():
         tile_data["@tags"] = make_tile_tag_list(tile_data["@tags"])
         try:
             tile_data["@image"] = pygame.image.load(tile_data["@image_path"]).convert_alpha()  # , (commons.BLOCKSIZE, commons.BLOCKSIZE)
+            tile_image = tile_data["@image"]
             if override_average_colour:
-                tile_data["@average_colour"] = pygame.transform.average_color(tile_data["@image"])
+                tile_data["@average_colour"] = pygame.transform.average_color(tile_image)
         except FileNotFoundError:
             tile_data["@image"] = None
         except pygame.error:
@@ -844,7 +842,7 @@ def parse_tile_data():
             tile_data["@multitile_dimensions"] = int_tuple_str_to_int_tuple(tile_data["@multitile_dimensions"])
             tile_data["@multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["@multitile_required_solids"])
             try:
-                tile_data["@multitile_image"] = pygame.transform.scale2x(pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha())  # , (commons.BLOCKSIZE * tile_data["@multitile_dimensions"][0], commons.BLOCKSIZE * tile_data["@multitile_dimensions"][1])
+                tile_data["@multitile_image"] = pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha()  # , (commons.BLOCKSIZE * tile_data["@multitile_dimensions"][0], commons.BLOCKSIZE * tile_data["@multitile_dimensions"][1])
                 if override_average_colour:
                     tile_data["@average_colour"] = pygame.transform.average_color(tile_data["@multitile_image"])
             except FileNotFoundError:
@@ -922,10 +920,12 @@ def parse_wall_data():
             override_average_colour = False
 
         try:
+            # TODO Remove transform.scale when changing tile images to official images.
             wall_data["@image"] = pygame.transform.scale(pygame.image.load(wall_data["@image_path"]).convert_alpha(), (commons.BLOCKSIZE, commons.BLOCKSIZE))
-            wall_data["@image"].set_colorkey((255, 0, 255))
+            wall_data["@image"].set_colorkey((0, 0, 0))
+            wall_image = wall_data["@image"]
             if override_average_colour:
-                wall_data["@average_colour"] = pygame.transform.average_color(wall_data["@image"])
+                wall_data["@average_colour"] = pygame.transform.average_color(wall_image)
 
         except FileNotFoundError:
             wall_data["@image"] = None
@@ -1212,7 +1212,6 @@ def get_loot_id_by_id_str(loot_id_str):
 
 def get_loot_by_id_str(loot_id_str):
     return get_loot_by_id(get_loot_id_by_id_str(loot_id_str))
-
 
 parse_item_data()
 create_item_id_str_hash_table()

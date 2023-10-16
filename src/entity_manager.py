@@ -244,7 +244,6 @@ def draw_damage_numbers():
         if damage_number[3] < 0.5:
             damage_number[2].set_alpha(damage_number[3] * 510)
         surf = damage_number[2].copy()
-        # surf = pygame.transform.scale2x(surf)
         surf = shared_methods.rotate_surface(surf, -damage_number[1][0] * 35)
         commons.screen.blit(surf, (damage_number[0][0] - surf.get_width() * 0.5, damage_number[0][1] - surf.get_height() * 0.5))
 
@@ -337,8 +336,6 @@ def add_message(text, colour, life=5, outline_colour=(0, 0, 0)):
     text1 = commons.DEFAULTFONT.render(text, False, colour)
     text2 = commons.DEFAULTFONT.render(text, False, outline_colour)
     surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2))
-    surf.fill((255, 0, 255))
-    surf.set_colorkey((255, 0, 255))
     if commons.FANCYTEXT:
         surf.blit(text2, (-1, 1))
         surf.blit(text2, (3, 1))
@@ -406,8 +403,8 @@ def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
     size = commons.DEFAULTFONT.size(string)
     size = (size[0] + 2, size[1] + 2)
     surf = pygame.Surface(size)
-    surf.set_colorkey((255, 0, 255))
-    surf.fill((255, 0, 255))
+    surf.set_colorkey((0, 0, 0))
+    surf.fill((0, 0, 0))
     surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_colour(tier), commons.DEFAULTFONT), (1, 1))
     vel = (random.random() * 2 - 1, -50.0)
     recent_pickups.append([item_id, amnt, surf, pos, vel, 3.0])

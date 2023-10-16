@@ -507,16 +507,14 @@ class Player:
 					swing_surface =	world_override_image
 
 			item_scale = item.get_scale()
-			inner_dimensions = (int(swing_surface.get_width() *	item_scale),
-								int(swing_surface.get_height() * item_scale))
+			inner_dimensions = (int(swing_surface.get_width() *	item_scale), int(swing_surface.get_height() * item_scale))
 			scaled_surface = pygame.transform.scale(swing_surface, inner_dimensions)
-			scaled_surface.set_colorkey()
+			scaled_surface.set_colorkey((0, 0, 0))
 			padded_dimensions =	(int(inner_dimensions[0] * 1.414), int(inner_dimensions[1] * 1.414))
 			padded_surface = pygame.Surface(padded_dimensions)
-			padded_surface.fill((255, 0, 255))
-			padded_surface.blit(scaled_surface,	(int(padded_dimensions[0] *	0.5	- inner_dimensions[0] *	0.5),
-												 int(padded_dimensions[1] *	0.5	- inner_dimensions[1] *	0.5)))
-			padded_surface.set_colorkey((255, 0, 255))
+			padded_surface.fill((0, 0, 0))
+			padded_surface.blit(scaled_surface,	(int(padded_dimensions[0] *	0.5	- inner_dimensions[0] *	0.5), int(padded_dimensions[1] *	0.5	- inner_dimensions[1] *	0.5)))
+			padded_surface.set_colorkey((0, 0, 0))
 			self.current_item_swing_image =	padded_surface
 			self.current_item_swing_offset = math.sqrt((inner_dimensions[0]	* 0.5) ** 2	+ (inner_dimensions[1] * 0.5) ** 2) * 0.8
 
@@ -1181,7 +1179,7 @@ class Player:
 					offset_x = 10
 				else:
 					offset_x = -10
-					rotated_item_surf =	pygame.transform.flip(rotated_item_surf, True, False)
+					rotated_item_surf = pygame.transform.flip(rotated_item_surf, True, False)
 				commons.screen.blit(rotated_item_surf, (screen_position_x -	rotated_item_surf.get_width() *	0.5	+ offset_x,	screen_position_y -	rotated_item_surf.get_height() * 0.5))
 			
 			elif self.item_swing:
