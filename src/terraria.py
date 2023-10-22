@@ -644,14 +644,7 @@ pygame.display.set_icon(ICON)
 
 clock = pygame.time.Clock()
 
-commons.DEFAULT_PLAYER_MODEL = player.Model(0, 0, (127, 72, 36),
-                                            (62, 22, 0),
-                                            (0, 0, 0),
-                                            (95, 125, 127),
-                                            (48, 76, 127),
-                                            (129, 113, 45),
-                                            (80,  100,  45)
-                                            )
+commons.DEFAULT_PLAYER_MODEL = player.Model(0, 0, (127, 72, 36), (62, 22, 0), (0, 0, 0), (95, 125, 127), (48, 76, 127), (129, 113, 45), (80,  100,  45))
 
 if commons.SPLASHSCREEN:
     run_splash_screen()
@@ -665,9 +658,11 @@ fade_float = 0.0
 fade_background_id = -1
 fade_surf = pygame.Surface((0, 0))
 background_id = 5
-
 background_tick = 0
 background_scroll_vel = 0
+
+background_scroll = 0
+
 auto_save_tick = 0
 fps_tick = 0
 last_hovered_item = None
@@ -897,12 +892,23 @@ while game_running:
             world.save()
         else:
             auto_save_tick -= commons.DELTA_TIME
-                
+
     elif commons.GAME_STATE == "MAINMENU":
-        parallax_pos = (parallax_pos[0] - commons.DELTA_TIME * 20, 0)
-        if parallax_pos[0] < -1000:
-            parallax_pos = (0, 0)
-        commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
+        splash_screen_images = []
+        for i in range(4):
+            # TODO Convert to function
+            splash_screen_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
+            splash_screen_images.append(splash_screen_image)
+            splash_screen_width = splash_screen_images[i].get_width()
+            splash_screen_height = splash_screen_images[i].get_height()
+            splash_screen_repeat = int(math.ceil(commons.WINDOW_WIDTH / splash_screen_width) + 1)
+            splash_screen_speed = 1
+            parallax_pos = (parallax_pos[0] + commons.DELTA_TIME * 20 * splash_screen_speed, 0)
+            if parallax_pos[0] > splash_screen_repeat * splash_screen_width:
+                parallax_pos = (0, parallax_pos[1])
+            for x in range(splash_screen_repeat * 2):
+                commons.screen.blit(splash_screen_images[i], ((x * splash_screen_width) - parallax_pos[0], commons.WINDOW_HEIGHT - splash_screen_height))
+        # commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
         menu_manager.update_menu_buttons()
         menu_manager.draw_menu_buttons()
         if commons.GAME_SUB_STATE == "MAIN":
