@@ -629,6 +629,26 @@ def draw_interactable_block_hover():
             commons.screen.blit(item_data["@image"], commons.MOUSE_POS)
 
 
+"""================================================================================================================= 
+    draw_bg -> void
+
+    Draws the menu background
+-----------------------------------------------------------------------------------------------------------------"""
+
+
+def draw_bg():
+    for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_width)) - 1):
+        menu_background_speed = 1
+        menu_background_x = (x * menu_background_width) - scroll * menu_background_speed
+        menu_background_y = commons.WINDOW_HEIGHT - bg_height
+        for i in menu_background_images:
+            if menu_background_x >= menu_background_width * 2:
+                commons.screen.blit(i, (0, menu_background_y))    
+            else:
+                commons.screen.blit(i, (menu_background_x, menu_background_y))
+            menu_background_speed += 1
+
+
 good_colour = (10, 230, 10)
 bad_colour = (230, 10, 10)
 
@@ -661,8 +681,6 @@ background_id = 5
 background_tick = 0
 background_scroll_vel = 0
 
-background_scroll = 0
-
 auto_save_tick = 0
 fps_tick = 0
 last_hovered_item = None
@@ -683,6 +701,15 @@ light_min_y = 0
 light_max_y = 0
 
 global_lighting = 255 # TODO Might change later.
+
+menu_background_images = []
+for i in range(4):
+    menu_background_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
+    menu_background_images.append(menu_background_image)
+    menu_background_width = menu_background_images[i].get_width()
+    bg_height = menu_background_images[i].get_height()
+
+scroll = 0
 
 LIGHTRENDERDISTANCEX = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCKSIZE) + 9
 LIGHTRENDERDISTANCEY = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCKSIZE) + 9
@@ -894,20 +921,8 @@ while game_running:
             auto_save_tick -= commons.DELTA_TIME
 
     elif commons.GAME_STATE == "MAINMENU":
-        splash_screen_images = []
-        for i in range(4):
-            # TODO Convert to function
-            splash_screen_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
-            splash_screen_images.append(splash_screen_image)
-            splash_screen_width = splash_screen_images[i].get_width()
-            splash_screen_height = splash_screen_images[i].get_height()
-            splash_screen_repeat = int(math.ceil(commons.WINDOW_WIDTH / splash_screen_width) + 1)
-            splash_screen_speed = 1
-            parallax_pos = (parallax_pos[0] + commons.DELTA_TIME * 20 * splash_screen_speed, 0)
-            if parallax_pos[0] > splash_screen_repeat * splash_screen_width:
-                parallax_pos = (0, parallax_pos[1])
-            for x in range(splash_screen_repeat * 2):
-                commons.screen.blit(splash_screen_images[i], ((x * splash_screen_width) - parallax_pos[0], commons.WINDOW_HEIGHT - splash_screen_height))
+        draw_bg()
+        scroll += 0.2
         # commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
         menu_manager.update_menu_buttons()
         menu_manager.draw_menu_buttons()
