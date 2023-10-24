@@ -1,7 +1,7 @@
 # enemy.py
 
 import pygame, math, random
-from pygame.locals import *
+from pygame.locals import Rect
 
 import game_data
 from game_data import *

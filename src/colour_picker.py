@@ -1,7 +1,7 @@
 # colour_picker.py
 
 import pygame
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 
@@ -101,5 +101,5 @@ class ColourPicker:
     def draw(self):
         commons.screen.blit(self.surface, self.position)
 
-        if self.selected_x is not None and self.selected_y is not None:
+        if self.selected_x and self.selected_y is not None:
             pygame.draw.circle(commons.screen, (128, 128, 128), (self.selected_x + self.position[0] + self.border_size, self.selected_y + self.position[1] + self.border_size), 5, 1)

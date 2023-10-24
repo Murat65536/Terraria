@@ -2,7 +2,7 @@
 # world.py
 
 import pygame, random, pickle, datetime, perlin, math
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 import game_data

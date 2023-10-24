@@ -3,11 +3,48 @@ import pygame
 import sys
 import math
 import random
-import pickle
 import _thread
 import datetime
 
-from pygame.locals import *
+from pygame.locals import (
+    Rect, 
+    KEYDOWN, 
+    QUIT, 
+    KMOD_LSHIFT, 
+    KMOD_RSHIFT, 
+    K_ESCAPE, 
+    K_SPACE, 
+    KEYUP, 
+    MOUSEBUTTONDOWN, 
+    K_BACKSPACE, 
+    K_a, 
+    K_d, 
+    K_s, 
+    K_x, 
+    K_f, 
+    K_r, 
+    K_t, 
+    K_g, 
+    K_c, 
+    K_v, 
+    K_p, 
+    K_u, 
+    K_j, 
+    K_h, 
+    K_l, 
+    K_b, 
+    K_p, 
+    K_1, 
+    K_2, 
+    K_3, 
+    K_4, 
+    K_5, 
+    K_6, 
+    K_7, 
+    K_8, 
+    K_9, 
+    K_0
+)
 
 # Set to 8000 for creepy mode (48000 norm) DO NOT CHANGE PLACE TO BELOW THE IMPORTS!
 pygame.mixer.pre_init(48000, -16, 2, 1024)
@@ -66,8 +103,6 @@ def fade_background(new_background_id):
 def draw_death_message():
     death_text = shared_methods.outline_text("You were slain...", (229, 127, 127), commons.LARGEFONT)
     alpha = (1 - entity_manager.client_player.DeathFadeIn * 0.15) * 255
-    if alpha > 255:
-        alpha = 255
     death_text.set_alpha(alpha)
     commons.screen.blit(death_text, (commons.WINDOW_WIDTH * 0.5 - death_text.get_width() * 0.5, commons.WINDOW_HEIGHT * 0.5))
 
@@ -630,23 +665,36 @@ def draw_interactable_block_hover():
 
 
 """================================================================================================================= 
-    draw_bg -> void
+    draw_menu_background_sky -> void
 
     Draws the menu background
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def draw_bg():
-    for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_width)) - 1):
-        menu_background_speed = 1
-        menu_background_x = (x * menu_background_width) - scroll * menu_background_speed
-        menu_background_y = commons.WINDOW_HEIGHT - bg_height
-        for i in menu_background_images:
-            if menu_background_x >= menu_background_width * 2:
-                commons.screen.blit(i, (0, menu_background_y))    
-            else:
-                commons.screen.blit(i, (menu_background_x, menu_background_y))
-            menu_background_speed += 1
+def draw_menu_background_sky():
+    for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_sky_width))):
+        commons.screen.blit(menu_background_sky, (x * menu_background_sky_width, 0))
+
+
+"""================================================================================================================= 
+    draw_menu_background -> void
+
+    Draws the menu background
+-----------------------------------------------------------------------------------------------------------------"""
+
+
+def draw_menu_background():
+        for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_width))):
+            menu_background_speed = 1
+            
+            for i in menu_background_images:
+                menu_background_position_x = (x * menu_background_width) - scroll * menu_background_speed
+                menu_background_position_y = commons.WINDOW_HEIGHT - menu_background_height
+                if menu_background_position_x > commons.WINDOW_WIDTH:
+                    menu_background_position_x = 0
+                # print(menu_background_position_x, menu_background_speed)
+                commons.screen.blit(i, (menu_background_position_x, menu_background_position_y))
+                menu_background_speed += 0.2
 
 
 good_colour = (10, 230, 10)
@@ -702,12 +750,16 @@ light_max_y = 0
 
 global_lighting = 255 # TODO Might change later.
 
+menu_background_sky = pygame.image.load("res/images/backgrounds/Background_0.png").convert_alpha()
+menu_background_sky_width = menu_background_sky.get_width()
+menu_background_sky_height = menu_background_sky.get_height()
+
 menu_background_images = []
 for i in range(4):
     menu_background_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
     menu_background_images.append(menu_background_image)
     menu_background_width = menu_background_images[i].get_width()
-    bg_height = menu_background_images[i].get_height()
+    menu_background_height = menu_background_images[i].get_height()
 
 scroll = 0
 
@@ -921,7 +973,8 @@ while game_running:
             auto_save_tick -= commons.DELTA_TIME
 
     elif commons.GAME_STATE == "MAINMENU":
-        draw_bg()
+        draw_menu_background_sky()
+        draw_menu_background()
         scroll += 0.2
         # commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
         menu_manager.update_menu_buttons()

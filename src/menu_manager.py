@@ -5,7 +5,7 @@ import sys
 import pickle
 import webbrowser
 import datetime
-from pygame.locals import *
+from pygame.locals import Rect
 
 from player import Player
 import player

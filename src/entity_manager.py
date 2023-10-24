@@ -3,7 +3,7 @@
 import pygame
 import math
 import random
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 import game_data
@@ -298,7 +298,7 @@ def spawn_enemy(position=None, enemy_id=None):
         enemies.append(Enemy(position, enemy_id))
 
 
-def spawn_particle(position, colour, life=2, magnitude=1, size=5, angle=None, spread=math.pi / 4, gravity=0.25, velocity=None, outline=False):
+def spawn_particle(position, colour, life=2.0, magnitude=1.0, size=5, angle=None, spread=math.pi / 4, gravity=0.25, velocity=None, outline=False):
     particles.append(Particle(position, colour, life, magnitude, size, angle, spread, gravity, velocity, outline))
 
 
