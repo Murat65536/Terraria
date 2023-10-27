@@ -37,7 +37,7 @@ class Enemy:
         self.defense = int(game_data.enemy_data[self.enemy_id][3])
         self.knockback_resist = int(game_data.enemy_data[self.enemy_id][3])
         self.attack_damage = int(game_data.enemy_data[self.enemy_id][5])
-        self.blood_colour = tuple(game_data.enemy_data[self.enemy_id][6])
+        self.blood_color = tuple(game_data.enemy_data[self.enemy_id][6])
         self.rect = Rect(self.position[0] - commons.BLOCKSIZE, self.position[1] - commons.BLOCKSIZE / 1.5, commons.BLOCKSIZE * 2, commons.BLOCKSIZE * 1.5)
         self.grounded = False
 
@@ -207,7 +207,7 @@ class Enemy:
             entity_manager.add_damage_number(self.position, value, crit=crit)
 
             if self.hp > 0:  # Check if the enemy has died from damage
-                game_data.play_sound("terraria.sound.slime_hurt")
+                game_data.play_sound("sound.slime_hurt")
                 if commons.PARTICLES:
                     if source_velocity is not None:
                         velocity_angle = math.atan2(source_velocity[1], source_velocity[0])
@@ -218,7 +218,7 @@ class Enemy:
 
                     for i in range(int(5 * commons.PARTICLEDENSITY)):  # Blood particles
                         particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
-                        entity_manager.spawn_particle(particle_pos, self.blood_colour, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.5, outline=False)
+                        entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.5, outline=False)
             else:
                 self.kill(source_velocity)
 
@@ -267,9 +267,9 @@ class Enemy:
 
                 for i in range(int(25 * commons.PARTICLEDENSITY)):  # Blood particles
                     particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
-                    entity_manager.spawn_particle(particle_pos, self.blood_colour, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.4, outline=False)
+                    entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.4, outline=False)
 
-            game_data.play_sound("terraria.sound.slime_death")  # Death sound
+            game_data.play_sound("sound.slime_death")  # Death sound
 
             entity_manager.enemies.remove(self)
 
@@ -321,7 +321,7 @@ class Enemy:
         if self.hp < self.max_hp:
             hp_float = self.hp / self.max_hp
             col = (255 * (1 - hp_float), 255 * hp_float, 0)
-            pygame.draw.rect(commons.screen, shared_methods.darken_colour(col), Rect(left, top + 30, self.rect.width, 10), 0)
+            pygame.draw.rect(commons.screen, shared_methods.darken_color(col), Rect(left, top + 30, self.rect.width, 10), 0)
             pygame.draw.rect(commons.screen, col, Rect(left + 2, top + 32, (self.rect.width - 4) * hp_float, 6), 0)
         if commons.HITBOXES:
             pygame.draw.rect(commons.screen, (255, 0, 0), Rect(self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5, self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5, self.rect.width, self.rect.height), 1)

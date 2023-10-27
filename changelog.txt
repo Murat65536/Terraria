@@ -72,7 +72,7 @@
 - Added simple player creation saving
 - Improved text readability and quality
 - Enemy hover text
-- Item tier colours
+- Item tier colors
 
 - Added config option: FANCYTEXT
 

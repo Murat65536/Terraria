@@ -29,15 +29,15 @@ menu_buttons = []
     table
 -----------------------------------------------------------------------------------------------------------------"""
 class MenuButton:
-    def __init__(self, text, position, font, click_sound_id, is_button, colour=(153, 153, 153), outline_colour=(0, 0, 0)):
+    def __init__(self, text, position, font, click_sound_id, is_button, color=(153, 153, 153), outline_color=(0, 0, 0)):
         self.text = text
         self.position = position
 
         self.is_button = is_button
 
-        self.colour = colour
+        self.color = color
 
-        self.text_surface = shared_methods.outline_text(text, self.colour, font, outline_colour)
+        self.text_surface = shared_methods.outline_text(text, self.color, font, outline_color)
 
         if self.is_button:
             self.alt_text_surface = shared_methods.outline_text(text, (255, 255, 0), font)
@@ -60,15 +60,15 @@ class MenuButton:
         if self.is_button:
             if self.rect.collidepoint(commons.MOUSE_POS):
                 if not self.hovered:
-                    game_data.play_sound("terraria.sound.menu_select")
+                    game_data.play_sound("sound.menu_select")
                     self.hovered = True
                 if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
                     commons.WAIT_TO_USE = True
                     self.clicked = True
                     if self.text == "Back":
-                        game_data.play_sound("terraria.sound.menu_close")
+                        game_data.play_sound("sound.menu_close")
                     else:
-                        game_data.play_sound("terraria.sound.menu_open")
+                        game_data.play_sound("sound.menu_open")
             else:
                 self.hovered = False
                 self.clicked = False
@@ -188,36 +188,36 @@ def update_menu_buttons():
                     commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
                     commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
-                elif menu_button.text == "Hair Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 3
+                elif menu_button.text == "Hair Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 3
 
-                elif menu_button.text == "Eye Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 4
+                elif menu_button.text == "Eye Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 4
 
-                elif menu_button.text == "Skin Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 2
+                elif menu_button.text == "Skin Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 2
 
                 elif menu_button.text == "Clothes":
                     commons.GAME_SUB_STATE = "CLOTHES"
 
-                elif menu_button.text == "Shirt Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 5
+                elif menu_button.text == "Shirt Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 5
 
-                elif menu_button.text == "Undershirt Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 6
+                elif menu_button.text == "Undershirt Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 6
 
-                elif menu_button.text == "Trouser Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 7
+                elif menu_button.text == "Trouser Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 7
 
-                elif menu_button.text == "Shoe Colour":
-                    commons.GAME_SUB_STATE = "COLOURPICKER"
-                    commons.PLAYER_MODEL_COLOUR_INDEX = 8
+                elif menu_button.text == "Shoe Color":
+                    commons.GAME_SUB_STATE = "COLORPICKER"
+                    commons.PLAYER_MODEL_COLOR_INDEX = 8
 
                 elif menu_button.text == "Randomize":
                     commons.PLAYER_MODEL_DATA = [0, random.randint(0, 8),
@@ -277,11 +277,11 @@ def update_menu_buttons():
                     commons.GAME_SUB_STATE = "WORLDSELECTION"
                     load_menu_player_data()
 
-                if commons.GAME_SUB_STATE == "COLOURPICKER":
-                    if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][1] is not None:
-                        entity_manager.client_colour_picker.selected_colour = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][0])
-                    entity_manager.client_colour_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][1]
-                    entity_manager.client_colour_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][2]
+                if commons.GAME_SUB_STATE == "COLORPICKER":
+                    if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
+                        entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
+                    entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
+                    entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
 
                 # Update last game sub state variable is the sub state changed
                 if temp_game_sub_state != commons.GAME_SUB_STATE:
@@ -330,8 +330,8 @@ def load_menu_player_data():
         player_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULTFONT), (5, 20))  # Creation date
         player_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULTFONT), (5, 40))  # Playtime
         player_data_surf.blit(shared_methods.outline_text(str(dat[7])[:19], (230, 230, 0), commons.DEFAULTFONT), (80, 20))  # Creation date
-        player_data_surf.blit(shared_methods.outline_text(str(dat[5]) + "HP", (230, 10, 10), commons.DEFAULTFONT, outline_colour=(128, 5, 5)), (155, 3))  # hp
-        player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULTFONT, outline_colour=(30, 41, 122)), (205, 3))  # mana
+        player_data_surf.blit(shared_methods.outline_text(str(dat[5]) + "HP", (230, 10, 10), commons.DEFAULTFONT, outline_color=(128, 5, 5)), (155, 3))  # hp
+        player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULTFONT, outline_color=(30, 41, 122)), (205, 3))  # mana
         player_data_surf.blit(shared_methods.outline_text(str(int((dat[6] / 60) // 60)) + ":" + str(int(dat[6] // 60 % 60)).zfill(2) + ":" + str(int(dat[6] % 60)).zfill(2), (230, 230, 0), commons.DEFAULTFONT), (90, 40))  # playtime
         sprites = player.render_sprites(dat[1], directions=1, arm_frame_count=1, torso_frame_count=1)
         player_data_surf.blit(sprites[0][0], (270, 0))
@@ -396,17 +396,17 @@ menu_buttons.append(MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90)
 menu_buttons.append(MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGEFONT, 24, True))
 
 menu_buttons.append(MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGEFONT, 26, True))
-menu_buttons.append(MenuButton("Hair Colour", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Eye Colour", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Skin Colour", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGEFONT, 26, True))
 
-menu_buttons.append(MenuButton("Shirt Colour", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Undershirt Colour", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Trouser Colour", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Shoe Colour", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
 
 menu_buttons.append(MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGEFONT, 24, True))
 

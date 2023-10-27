@@ -478,16 +478,16 @@ def generate_terrain(gen_type, blit_progress=False):
                 else:
                     biome = 2
 
-                tile_value = "terraria.tile.air"
-                wall_value = "terraria.wall.air"
+                tile_value = "tile.air"
+                wall_value = "wall.air"
 
                 if map_index_y > 350 + random.randint(-5, 5):  # Caverns layer 2
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     if val > 0.55:
-                        tile_value = "terraria.tile.air"
-                        wall_value = "terraria.wall.air"
+                        tile_value = "tile.air"
+                        wall_value = "wall.air"
                     elif val > 0.1:
-                        tile_value = "terraria.tile.air"
+                        tile_value = "tile.air"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     else:
                         tile_value = game_data.biome_tile_vals[biome][0][2]
@@ -497,10 +497,10 @@ def generate_terrain(gen_type, blit_progress=False):
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     val2 = noise_gen.noise2(map_index_x / 30 + noise_offsets[0], map_index_y / 30 + noise_offsets[0])
                     if -0.2 < val < 0.2:
-                        tile_value = "terraria.tile.air"
-                        wall_value = "terraria.wall.air"
+                        tile_value = "tile.air"
+                        wall_value = "wall.air"
                     elif -0.4 < val < 0.4:
-                        tile_value = "terraria.tile.air"
+                        tile_value = "tile.air"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     elif val2 > 0.5:
                         tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -513,7 +513,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     val2 = noise_gen.noise2(map_index_x / 30 + noise_offsets[0], map_index_y / 30 + noise_offsets[0])
                     if val > 0.3:
-                        tile_value = "terraria.tile.air"
+                        tile_value = "tile.air"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     elif val2 > 0.3:
                         tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -527,7 +527,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val2 = noise_gen.noise2(map_index_x / 15 + noise_offsets[0], map_index_y / 15 + noise_offsets[0])
 
                     if -0.2 < val < 0.2:
-                        tile_value = "terraria.tile.air"
+                        tile_value = "tile.air"
                     elif val2 > -0.75:
                         tile_value = game_data.biome_tile_vals[biome][0][2]
                     else:
@@ -540,7 +540,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val4 = noise_gen.noise2(map_index_x / 100 + noise_offsets[1], map_index_y / 75 + noise_offsets[1]) + noise_gen.noise2(map_index_x / 20 + noise_offsets[1], map_index_y / 8 + noise_offsets[1]) * 0.2
                     if map_index_y >= val * 5 + 60 + val2 * 30:
                         if -0.15 < val4 < 0.15:
-                            tile_value = "terraria.tile.air"
+                            tile_value = "tile.air"
                             wall_value = game_data.biome_tile_vals[biome][1][0]
                         elif val3 > -0.6:
                             tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -552,14 +552,14 @@ def generate_terrain(gen_type, blit_progress=False):
                             tile_value = game_data.biome_tile_vals[biome][0][0]
                             wall_value = game_data.biome_tile_vals[biome][1][0]
                     else:
-                        tile_value = "terraria.tile.air"
+                        tile_value = "tile.air"
                 world.tile_data[map_index_x][map_index_y] = [game_data.get_tile_id_by_id_str(tile_value), game_data.get_wall_id_by_id_str(wall_value)]
 
         if blit_progress:
             blit_generation_stage("Spawning ores")
 
-        copper_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.copper")
-        silver_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.silver")
+        copper_tile_id = game_data.get_tile_id_by_id_str("tile.copper")
+        silver_tile_id = game_data.get_tile_id_by_id_str("tile.silver")
 
         for i in range(int(WORLD_SIZE_X * WORLD_SIZE_Y / 1200)):
             create_vein(random.randint(0, WORLD_SIZE_X - 1), random.randint(70, 500), copper_tile_id, random.randint(2, 4))
@@ -591,14 +591,14 @@ def generate_terrain(gen_type, blit_progress=False):
                 if can_place:
                     for y_pos in range(80):
                         if world.tile_data[x_pos][y_pos][0] != game_data.air_tile_id:
-                            spawn_structure(x_pos, y_pos, "terraria.structure.mineshaft_top", (3, 6), True)
+                            spawn_structure(x_pos, y_pos, "structure.mineshaft_top", (3, 6), True)
                             break
 
                     mine_shaft_positions.append(x_pos)
                     break
 
         for i in range(math.ceil((WORLD_SIZE_X * WORLD_SIZE_Y) / 15000)):
-            spawn_structure(random.randint(50, WORLD_SIZE_X - 50), random.randint(100, WORLD_SIZE_Y - 50), "terraria.structure.undergound_cabin_a", (4, 0), True, check_placement_validity=True)
+            spawn_structure(random.randint(50, WORLD_SIZE_X - 50), random.randint(100, WORLD_SIZE_Y - 50), "structure.undergound_cabin_a", (4, 0), True, check_placement_validity=True)
 
         if blit_progress:
             blit_generation_stage("Growing Trees")
@@ -882,11 +882,11 @@ def create_vein(i, j, tile_id, size):
 def create_tree(i, j, height):
     global world
 
-    trunk_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.trunk")
-    snow_leaves_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.leaves_snow")
-    leaves_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.leaves")
-    grass_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.grass")
-    snow_tile_id = game_data.get_tile_id_by_id_str("terraria.tile.snow")
+    trunk_tile_id = game_data.get_tile_id_by_id_str("tile.trunk")
+    snow_leaves_tile_id = game_data.get_tile_id_by_id_str("tile.leaves_snow")
+    leaves_tile_id = game_data.get_tile_id_by_id_str("tile.leaves")
+    grass_tile_id = game_data.get_tile_id_by_id_str("tile.grass")
+    snow_tile_id = game_data.get_tile_id_by_id_str("tile.snow")
 
     grounded = False
 
@@ -1125,9 +1125,9 @@ def spawn_pot(pos_x, pos_y):
     for i in range(50):
         if tile_in_map(pos_x, pos_y):
             if viable_blocks >= 1 and world.tile_data[pos_x][pos_y][0] != game_data.air_tile_id:
-                pot_options = ["terraria.tile.pot_short_gray", "terraria.tile.pot_short_brown"]
+                pot_options = ["tile.pot_short_gray", "tile.pot_short_brown"]
                 if viable_blocks >= 2:
-                    pot_options += ["terraria.tile.pot_tall_gray", "terraria.tile.pot_tall_brown"]
+                    pot_options += ["tile.pot_tall_gray", "tile.pot_tall_brown"]
 
                 random_choice = pot_options[random.randint(0, len(pot_options) - 1)]
                 random_choice_tile_data = game_data.get_tile_by_id_str(random_choice)

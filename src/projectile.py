@@ -118,15 +118,15 @@ class Projectile:
             if self.bounce_num <= 0:
                 entity_manager.projectiles.remove(self)
                 if commons.PARTICLES:
-                    colour = shared_methods.get_block_average_colour(block_hit_tile_id)
+                    color = shared_methods.get_block_average_color(block_hit_tile_id)
                     velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
                     velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
                     for i in range(int(4 * commons.PARTICLEDENSITY)):
-                        entity_manager.spawn_particle(self.position, colour, life=0.5, angle=velocity_angle, spread=0.8, magnitude=velocity_magnitude * random.random() * 0.7, gravity=0, size=8)
+                        entity_manager.spawn_particle(self.position, color, life=0.5, angle=velocity_angle, spread=0.8, magnitude=velocity_magnitude * random.random() * 0.7, gravity=0, size=8)
                 if self.projectile_type == "Bullet":
-                    game_data.play_sound("terraria.sound.bullet")
+                    game_data.play_sound("sound.bullet")
                 else:
-                    game_data.play_sound("terraria.sound.dig")
+                    game_data.play_sound("sound.dig")
                 return
 
         for enemy in entity_manager.enemies:

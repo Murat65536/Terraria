@@ -8,7 +8,7 @@
 - pickle
 - datetime
 - webbrowser
-- xmltodict (included)
+- xmltodict
 
 ## Notes:
 - You can turn off and on settings in the 'config.txt' file

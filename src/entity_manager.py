@@ -16,7 +16,7 @@ from enemy import Enemy
 from particle import Particle
 from projectile import Projectile
 from physics_item import PhysicsItem
-from colour_picker import ColourPicker
+from color_picker import ColorPicker
 from item import Item
 
 
@@ -30,7 +30,7 @@ recent_pickups = []
 
 client_player = None
 client_prompt = None
-client_colour_picker = ColourPicker((int(commons.WINDOW_WIDTH * 0.5 - 155),  190),  300,  300)
+client_color_picker = ColorPicker((int(commons.WINDOW_WIDTH * 0.5 - 155),  190),  300,  300)
 
 camera_position = (0, 0)
 old_camera_position = (0, 0)
@@ -298,8 +298,8 @@ def spawn_enemy(position=None, enemy_id=None):
         enemies.append(Enemy(position, enemy_id))
 
 
-def spawn_particle(position, colour, life=2.0, magnitude=1.0, size=5, angle=None, spread=math.pi / 4, gravity=0.25, velocity=None, outline=False):
-    particles.append(Particle(position, colour, life, magnitude, size, angle, spread, gravity, velocity, outline))
+def spawn_particle(position, color, life=2.0, magnitude=1.0, size=5, angle=None, spread=math.pi / 4, gravity=0.25, velocity=None, outline=False):
+    particles.append(Particle(position, color, life, magnitude, size, angle, spread, gravity, velocity, outline))
 
 
 def spawn_physics_item(item, position, velocity=None, pickup_delay=100):
@@ -332,10 +332,10 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
                                       is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
 
 
-def add_message(text, colour, life=5, outline_colour=(0, 0, 0)):
+def add_message(text, color, life=5, outline_color=(0, 0, 0)):
     global messages
-    text1 = commons.DEFAULTFONT.render(text, False, colour)
-    text2 = commons.DEFAULTFONT.render(text, False, outline_colour)
+    text1 = commons.DEFAULTFONT.render(text, False, color)
+    text2 = commons.DEFAULTFONT.render(text, False, outline_color)
     surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2))
     surf.fill((255, 0, 255))
     surf.set_colorkey((255, 0, 255))
@@ -349,17 +349,17 @@ def add_message(text, colour, life=5, outline_colour=(0, 0, 0)):
     messages.insert(0, [surf, life])
 
 
-def add_damage_number(pos, val, crit=False, colour=None):
+def add_damage_number(pos, val, crit=False, color=None):
     global damage_numbers
 
-    if colour is None:
+    if color is None:
         if crit:
-            colour = (246, 97, 28)
+            color = (246, 97, 28)
         else:
-            colour = (207, 127, 63)
+            color = (207, 127, 63)
 
-    t1 = commons.MEDIUMFONT.render(str(int(val)), False, colour)
-    t2 = commons.MEDIUMFONT.render(str(int(val)), False, (colour[0] * 0.8, colour[1] * 0.8, colour[2] * 0.8))
+    t1 = commons.MEDIUMFONT.render(str(int(val)), False, color)
+    t2 = commons.MEDIUMFONT.render(str(int(val)), False, (color[0] * 0.8, color[1] * 0.8, color[2] * 0.8))
 
     width = t1.get_width() + 2
     height = t1.get_height() + 2
@@ -408,6 +408,6 @@ def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
     surf = pygame.Surface(size)
     surf.set_colorkey((255, 0, 255))
     surf.fill((255, 0, 255))
-    surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_colour(tier), commons.DEFAULTFONT), (1, 1))
+    surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULTFONT), (1, 1))
     vel = (random.random() * 2 - 1, -50.0)
     recent_pickups.append([item_id, amnt, surf, pos, vel, 3.0])

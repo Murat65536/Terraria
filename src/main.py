@@ -5,7 +5,6 @@ import math
 import random
 import _thread
 import datetime
-
 from pygame.locals import (
     Rect, 
     KEYDOWN, 
@@ -46,7 +45,7 @@ from pygame.locals import (
     K_0
 )
 
-# Set to 8000 for creepy mode (48000 norm) DO NOT CHANGE PLACE TO BELOW THE IMPORTS!
+# Sound Settings
 pygame.mixer.pre_init(48000, -16, 2, 1024)
 pygame.init()
 pygame.mixer.init()
@@ -62,9 +61,9 @@ import player
 import game_data
 from game_data import TileTag
 import prompt
-from menu_manager import load_menu_player_data
+# from menu_manager import load_menu_player_data
 
-from item import *
+from item import Item, ItemLocation, ItemTag, ItemPrefixGroup, ItemSlotClickResult
 # from sound_manager import *
 
 
@@ -116,8 +115,8 @@ def render_hand_text():
     global hand_text
     item = entity_manager.client_player.items[ItemLocation.HOTBAR][entity_manager.client_player.hotbar_index]
     if item is not None:
-        colour = shared_methods.get_tier_colour(item.get_tier())
-        hand_text = shared_methods.outline_text(item.get_name(), colour, commons.DEFAULTFONT)
+        color = shared_methods.get_tier_color(item.get_tier())
+        hand_text = shared_methods.outline_text(item.get_name(), color, commons.DEFAULTFONT)
     else:
         hand_text = shared_methods.outline_text("", (255, 255, 255), commons.DEFAULTFONT)
         
@@ -201,7 +200,7 @@ def render_stats_text(pos):
             stats_text.fill((255, 0, 255))
             stats_text.set_colorkey((255, 0, 255))
             
-            stats = [shared_methods.outline_text(item.get_name(), shared_methods.get_tier_colour(item.get_tier()), commons.DEFAULTFONT)]
+            stats = [shared_methods.outline_text(item.get_name(), shared_methods.get_tier_color(item.get_tier()), commons.DEFAULTFONT)]
 
             if item.has_tag(ItemTag.WEAPON):
                 stats.append(shared_methods.outline_text(str(round(item.get_attack_damage(), 1)).rstrip('0').rstrip('.') + " true melee damage", (255, 255, 255), commons.DEFAULTFONT))
@@ -225,72 +224,72 @@ def render_stats_text(pos):
             if item.has_prefix:
                 if item.prefix_data[1][1] != 0:
                     if item.prefix_data[1][1] > 0:
-                        colour = tuple(good_colour)
+                        color = tuple(good_color)
                     else:
-                        colour = tuple(bad_colour)
-                    stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][1] * 100))) + "% damage", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                        color = tuple(bad_color)
+                    stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][1] * 100))) + "% damage", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 if item.prefix_data[0] != ItemPrefixGroup.UNIVERSAL:
                     if item.prefix_data[1][2] != 0:
                         if item.prefix_data[1][2] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][2] * 100))) + "% speed", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][2] * 100))) + "% speed", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 else:
                     if item.prefix_data[1][2] != 0:
                         if item.prefix_data[1][2] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][2] * 100))) + "% critical strike chance", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][2] * 100))) + "% critical strike chance", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                     if item.prefix_data[1][3] != 0:
                         if item.prefix_data[1][3] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][3] * 100))) + "% knockback", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][3] * 100))) + "% knockback", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 if item.prefix_data[0] != ItemPrefixGroup.UNIVERSAL:
                     if item.prefix_data[1][3] != 0:
                         if item.prefix_data[1][3] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][3] * 100))) + "% critical strike chance", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][3] * 100))) + "% critical strike chance", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 if item.prefix_data[0] == ItemPrefixGroup.COMMON:
                     if item.prefix_data[1][4] != 0:
                         if item.prefix_data[1][4] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% knockback", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% knockback", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 if item.prefix_data[0] == ItemPrefixGroup.MELEE:
                     if item.prefix_data[1][4] != 0:
                         if item.prefix_data[1][4] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% size", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% size", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 elif item.prefix_data[0] == ItemPrefixGroup.RANGED:
                     if item.prefix_data[1][4] != 0:
                         if item.prefix_data[1][4] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% projectile velocity", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% projectile velocity", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 elif item.prefix_data[0] == ItemPrefixGroup.MAGICAL:
                     if item.prefix_data[1][4] != 0:
                         if item.prefix_data[1][4] < 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% size", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][4] * 100))) + "% size", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
                 if item.prefix_data[0] == ItemPrefixGroup.MELEE or item.prefix_data[0] == ItemPrefixGroup.RANGED or item.prefix_data[0] == ItemPrefixGroup.MAGICAL:
                     if item.prefix_data[1][5] != 0:
                         if item.prefix_data[1][5] > 0:
-                            colour = tuple(good_colour)
+                            color = tuple(good_color)
                         else:
-                            colour = tuple(bad_colour)
-                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][5] * 100))) + "% knockback", colour, commons.DEFAULTFONT, outline_colour=shared_methods.darken_colour(colour)))
+                            color = tuple(bad_color)
+                        stats.append(shared_methods.outline_text(add_plus(str(int(item.prefix_data[1][5] * 100))) + "% knockback", color, commons.DEFAULTFONT, outline_color=shared_methods.darken_color(color)))
             for stat_index in range(len(stats)):
                 stats_text.blit(stats[stat_index], (0, stat_index * 15))
         return True
@@ -523,7 +522,7 @@ def draw_inventory_hover_text():
                     if commons.ITEM_HOLDING.item_id == entity_manager.client_player.items[ItemLocation.CRAFTING_MENU][array_index][0]:
                         if commons.ITEM_HOLDING.amnt < commons.ITEM_HOLDING.get_max_stack():
                             commons.ITEM_HOLDING.amnt += entity_manager.client_player.items[ItemLocation.CRAFTING_MENU][array_index][1]
-                            game_data.play_sound("terraria.sound.grab")
+                            game_data.play_sound("sound.grab")
             
             if render_stats_text([ItemLocation.CRAFTING_MENU, array_index]) and not commons.IS_HOLDING_ITEM:
                 commons.screen.blit(stats_text, (commons.MOUSE_POS[0] + 10, commons.MOUSE_POS[1] + 10))
@@ -634,17 +633,17 @@ def draw_exit_button():
     if Rect(left, top, 50, 20).collidepoint(commons.MOUSE_POS):
         if not exit_button_hover:
             exit_button_hover = True
-            game_data.play_sound("terraria.sound.menu_select")
-        colour = (230, 230, 0)
+            game_data.play_sound("sound.menu_select")
+        color = (230, 230, 0)
         if pygame.mouse.get_pressed()[0]:
             entity_manager.client_player.inventory_open = False
             entity_manager.client_player.chest_open = False
             entity_manager.client_prompt = prompt.Prompt("Exit", game_data.exit_messages[random.randint(0, len(game_data.exit_messages) - 1)], button_1_name="Yep", size=(6, 2))
             commons.WAIT_TO_USE = True
     else:
-        colour = (255, 255, 255)
+        color = (255, 255, 255)
         exit_button_hover = False
-    exit_text = shared_methods.outline_text("Save and Quit", colour, commons.DEFAULTFONT)
+    exit_text = shared_methods.outline_text("Save and Quit", color, commons.DEFAULTFONT)
     commons.screen.blit(exit_text, (left, top))
 
 
@@ -684,21 +683,15 @@ def draw_menu_background_sky():
 
 
 def draw_menu_background():
-        for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_width))):
-            menu_background_speed = 1
-            
-            for i in menu_background_images:
-                menu_background_position_x = (x * menu_background_width) - scroll * menu_background_speed
-                menu_background_position_y = commons.WINDOW_HEIGHT - menu_background_height
-                if menu_background_position_x > commons.WINDOW_WIDTH:
-                    menu_background_position_x = 0
-                # print(menu_background_position_x, menu_background_speed)
-                commons.screen.blit(i, (menu_background_position_x, menu_background_position_y))
-                menu_background_speed += 0.2
+        menu_background_speed = 1
+        for i in range(len(menu_background_images)):
+            menu_background_speed += 1
+            for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width)):
+                commons.screen.blit(menu_background_images[i], (x * menu_background_width - scroll * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height))
 
 
-good_colour = (10, 230, 10)
-bad_colour = (230, 10, 10)
+good_color = (10, 230, 10)
+bad_color = (230, 10, 10)
 
 # MAX SURF WIDTH IS 16383
 
@@ -747,21 +740,20 @@ light_min_x = 0
 light_max_x = 0
 light_min_y = 0
 light_max_y = 0
+global_lighting = 255
 
-global_lighting = 255 # TODO Might change later.
 
 menu_background_sky = pygame.image.load("res/images/backgrounds/Background_0.png").convert_alpha()
 menu_background_sky_width = menu_background_sky.get_width()
 menu_background_sky_height = menu_background_sky.get_height()
-
 menu_background_images = []
 for i in range(4):
     menu_background_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
     menu_background_images.append(menu_background_image)
     menu_background_width = menu_background_images[i].get_width()
     menu_background_height = menu_background_images[i].get_height()
-
 scroll = 0
+
 
 LIGHTRENDERDISTANCEX = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCKSIZE) + 9
 LIGHTRENDERDISTANCEY = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCKSIZE) + 9
@@ -990,7 +982,7 @@ while game_running:
                             commons.WAIT_TO_USE = True
                             commons.PLAYER_DATA = commons.PLAYER_SAVE_OPTIONS[i][0]
                             menu_manager.load_menu_world_data()
-                            game_data.play_sound("terraria.sound.menu_open")
+                            game_data.play_sound("sound.menu_open")
                             commons.GAME_SUB_STATE = "WORLDSELECTION"
                             commons.GAME_SUB_STATE_STACK.append("PLAYERSELECTION")
                             menu_manager.update_active_menu_buttons()
@@ -1020,7 +1012,7 @@ while game_running:
                 if Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POS):
                     for i in range(len(commons.WORLD_SAVE_OPTIONS)):
                         if Rect(load_menu_box_left2, 132 + i * 60 + save_select_y_offset, 315, 60).collidepoint(commons.MOUSE_POS):
-                            game_data.play_sound("terraria.sound.menu_open")
+                            game_data.play_sound("sound.menu_open")
 
                             world.load(commons.WORLD_SAVE_OPTIONS[i][0])
 
@@ -1102,20 +1094,20 @@ while game_running:
             commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
             commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-        elif commons.GAME_SUB_STATE == "COLOURPICKER":
+        elif commons.GAME_SUB_STATE == "COLORPICKER":
 
-            entity_manager.client_colour_picker.update()
+            entity_manager.client_color_picker.update()
 
-            if entity_manager.client_colour_picker.selected_x is not None and entity_manager.client_colour_picker.selected_y is not None:
-                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][1] = entity_manager.client_colour_picker.selected_x
-                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][2] = entity_manager.client_colour_picker.selected_y
-                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOUR_INDEX][0] = tuple(entity_manager.client_colour_picker.selected_colour)
+            if entity_manager.client_color_picker.selected_x is not None and entity_manager.client_color_picker.selected_y is not None:
+                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] = entity_manager.client_color_picker.selected_x
+                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] = entity_manager.client_color_picker.selected_y
+                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] = tuple(entity_manager.client_color_picker.selected_color)
                 player.update_player_model_using_model_data()
                 commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
             
             commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
             commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
-            entity_manager.client_colour_picker.draw()
+            entity_manager.client_color_picker.draw()
             
     # Draw a prompt if there is one
     if entity_manager.client_prompt is not None:
@@ -1175,12 +1167,12 @@ while game_running:
                 # Toggle Inventory
                 if event.key == K_ESCAPE:
                     if entity_manager.client_player.inventory_open:
-                        game_data.play_sound("terraria.sound.menu_close")
+                        game_data.play_sound("sound.menu_close")
                         entity_manager.client_player.render_current_item_image()
                         entity_manager.client_player.inventory_open = False
                         entity_manager.client_player.chest_open = False
                     else:
-                        game_data.play_sound("terraria.sound.menu_open")
+                        game_data.play_sound("sound.menu_open")
                         entity_manager.client_player.inventory_open = True
                         entity_manager.client_player.crafting_menu_offset_y = 120
                         entity_manager.client_player.update_craftable_items()
@@ -1219,28 +1211,28 @@ while game_running:
                     if commons.SHIFT_ACTIVE:
                         while len(entity_manager.enemies) > 0:
                             entity_manager.enemies[0].kill((0, -50))
-                        entity_manager.add_message("All enemies killed", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("All enemies killed", (255, 223, 10), outline_color=(80, 70, 3))
                 
                 # Spawn Enemy Cheat
                 if event.key == K_f:
                     if commons.SHIFT_ACTIVE:
                         entity_manager.spawn_enemy((entity_manager.camera_position[0] - commons.WINDOW_WIDTH * 0.5 + commons.MOUSE_POS[0], entity_manager.camera_position[1] - commons.WINDOW_HEIGHT * 0.5 + commons.MOUSE_POS[1]))
-                        entity_manager.add_message("Spawned enemy", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("Spawned enemy", (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Respawn Cheats
                 if event.key == K_r:
                     if commons.SHIFT_ACTIVE:
                         world.world.spawn_position = tuple(entity_manager.client_player.position)
-                        entity_manager.add_message("Spawn point moved to " + str(world.world.spawn_position), (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("Spawn point moved to " + str(world.world.spawn_position), (255, 223, 10), outline_color=(80, 70, 3))
                     else:
                         if commons.PARTICLES:
                             for i in range(int(20 * commons.PARTICLEDENSITY)):
                                 entity_manager.spawn_particle(entity_manager.client_player.position, (230, 230, 255), magnitude=1 + random.random() * 6, size=15, gravity=0)
 
-                        game_data.play_sound("terraria.sound.mirror")
+                        game_data.play_sound("sound.mirror")
 
                         entity_manager.client_player.respawn()
-                        entity_manager.add_message("Player respawned", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("Player respawned", (255, 223, 10), outline_color=(80, 70, 3))
 
                         if commons.PARTICLES:
                             for i in range(int(40 * commons.PARTICLEDENSITY)):
@@ -1261,28 +1253,28 @@ while game_running:
 
                                 if tile_id != game_data.air_tile_id:
                                     tile_data = game_data.get_tile_by_id(tile_id)
-                                    if tile_data["@average_colour"] != (255, 0, 255):
-                                        pygame.draw.rect(world_surf, tile_data["@average_colour"], Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+                                    if tile_data["@average_color"] != (255, 0, 255):
+                                        pygame.draw.rect(world_surf, tile_data["@average_color"], Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
                                         continue
 
                                 if wall_id != game_data.air_wall_id:
                                     wall_data = game_data.get_wall_by_id(wall_id)
-                                    if wall_data["@average_colour"] != (255, 0, 255):
-                                        pygame.draw.rect(world_surf, wall_data["@average_colour"], Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+                                    if wall_data["@average_color"] != (255, 0, 255):
+                                        pygame.draw.rect(world_surf, wall_data["@average_color"], Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
                                         continue
 
                                 sky_darken_factor = 1.0 - 0.7 * min(1.0, max(0.0, (tile_y - 55) / 110))
-                                colour = shared_methods.darken_colour((135, 206, 234), sky_darken_factor)
-                                pygame.draw.rect(world_surf, colour, Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+                                color = shared_methods.darken_color((135, 206, 234), sky_darken_factor)
+                                pygame.draw.rect(world_surf, color, Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
 
                         pygame.image.save(world_surf, path)
-                        entity_manager.add_message("World Snapshotshot Saved to: '" + path + "'", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("World Snapshotshot Saved to: '" + path + "'", (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Gravity Reverse Cheat
                 if event.key == K_g:
                     if commons.SHIFT_ACTIVE:
                         commons.GRAVITY = -commons.GRAVITY
-                        entity_manager.add_message("Gravity reversed", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("Gravity reversed", (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Random Item Prefix Cheat
                 if event.key == K_c:
@@ -1297,33 +1289,33 @@ while game_running:
                 if event.key == K_v:
                     if commons.SHIFT_ACTIVE:
                         entity_manager.client_prompt = prompt.Prompt("test", "My name's the guide, I can help you around this awfully crafted world. It's basically just a rip off of terraria so this should be child's play")
-                        entity_manager.add_message("Random prompt deployed", (255, 223, 10), outline_colour=(80, 70, 3))
+                        entity_manager.add_message("Random prompt deployed", (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Get Tile and Wall IDS
                 if event.key == K_p:
                     if commons.SHIFT_ACTIVE: 
                         if world.tile_in_map(commons.TILE_POSITION_MOUSE_HOVERING[0], commons.TILE_POSITION_MOUSE_HOVERING[1]):
                             wallID = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][1]
-                            entity_manager.add_message("Wall at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(wallID), (255, 223, 10), outline_colour=(80, 70, 3))
+                            entity_manager.add_message("Wall at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(wallID), (255, 223, 10), outline_color=(80, 70, 3))
                     else:
                         if world.tile_in_map(commons.TILE_POSITION_MOUSE_HOVERING[0], commons.TILE_POSITION_MOUSE_HOVERING[1]):
                             tileID = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
-                            entity_manager.add_message("Tile at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(tileID), (255, 223, 10), outline_colour=(80, 70, 3))
+                            entity_manager.add_message("Tile at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(tileID), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Toggle UI
                 if event.key == K_u:
                     commons.DRAWUI = not commons.DRAWUI
-                    entity_manager.add_message("UI " + shared_methods.get_on_off(commons.DRAWUI), (255, 223, 10), outline_colour=(80, 70, 3))
+                    entity_manager.add_message("UI " + shared_methods.get_on_off(commons.DRAWUI), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Toggle SMOOTHCAM
                 if event.key == K_j:
                     commons.SMOOTHCAM = not commons.SMOOTHCAM
-                    entity_manager.add_message("Smooth camera " + shared_methods.get_on_off(commons.SMOOTHCAM), (255, 223, 10), outline_colour=(80, 70, 3))
+                    entity_manager.add_message("Smooth camera " + shared_methods.get_on_off(commons.SMOOTHCAM), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Toggle HITBOXES
                 if event.key == K_h:
                     commons.HITBOXES = not commons.HITBOXES
-                    entity_manager.add_message("Hitboxes " + shared_methods.get_on_off(commons.HITBOXES), (255, 223, 10), outline_colour=(80, 70, 3))
+                    entity_manager.add_message("Hitboxes " + shared_methods.get_on_off(commons.HITBOXES), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Hotbar Item Selection
                 if event.key == K_1:
@@ -1352,20 +1344,18 @@ while game_running:
                     entity_manager.client_player.item_swing = False
                     render_hand_text()
 
-                    game_data.play_sound("terraria.sound.menu_select")
+                    game_data.play_sound("sound.menu_select")
                 
                 # Toggle Lighting
                 if event.key == K_l:
                     commons.EXPERIMENTALLIGHTING = not commons.EXPERIMENTALLIGHTING
-                    entity_manager.add_message("Experimental lighting " + shared_methods.get_on_off(commons.EXPERIMENTALLIGHTING), (255, 223, 10), outline_colour=(80, 70, 3))
+                    entity_manager.add_message("Experimental lighting " + shared_methods.get_on_off(commons.EXPERIMENTALLIGHTING), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Toggle Background
                 if event.key == K_b:
                     if commons.SHIFT_ACTIVE:
                         commons.BACKGROUND = not commons.BACKGROUND
-                        entity_manager.add_message("Background " + shared_methods.get_on_off(commons.BACKGROUND), (255, 223, 10), outline_colour=(80, 70, 3))
-                
-                # These were once sound_manager.
+                        entity_manager.add_message("Background " + shared_methods.get_on_off(commons.BACKGROUND), (255, 223, 10), outline_color=(80, 70, 3))
 
                 # Music Volume Up
                 # if event.key == K_UP and commons.SHIFT_ACTIVE:
@@ -1405,7 +1395,7 @@ while game_running:
                             entity_manager.client_player.render_current_item_image()
                             entity_manager.client_player.item_swing = False
                             render_hand_text()
-                            game_data.play_sound("terraria.sound.menu_select")
+                            game_data.play_sound("sound.menu_select")
                         else:
                             entity_manager.client_player.hotbar_index = 9
 
@@ -1418,7 +1408,7 @@ while game_running:
                             entity_manager.client_player.render_current_item_image()
                             entity_manager.client_player.item_swing = False
                             render_hand_text()
-                            game_data.play_sound("terraria.sound.menu_select")
+                            game_data.play_sound("sound.menu_select")
                         else:
                             entity_manager.client_player.hotbar_index = 0
 

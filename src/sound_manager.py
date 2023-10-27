@@ -60,7 +60,7 @@ def ChangeMusicVolume(amount):
     musicVolume += amount
     musicVolume = max(min(musicVolume, 1), 0)
     pygame.mixer.music.set_volume(musicVolume)
-    entity_manager.AddMessage("Music volume set to " + str(round(musicVolume, 2)),  (255, 223, 10), outlineColour = (80, 70, 3))
+    entity_manager.AddMessage("Music volume set to " + str(round(musicVolume, 2)),  (255, 223, 10), outlineColor = (80, 70, 3))
 
 def ChangeSoundVolume(amount):
     global soundVolume

@@ -47,9 +47,9 @@ class Prompt:
             self.bot = pos[1] + self.height - 30
 
         if npc:
-            game_data.play_sound("terraria.sound.chat")
+            game_data.play_sound("sound.chat")
         else:
-            game_data.play_sound("terraria.sound.menu_open")
+            game_data.play_sound("sound.menu_open")
 
     """================================================================================================================= 
         prompt.Prompt.update -> void
@@ -63,7 +63,7 @@ class Prompt:
             if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
                 if not self.shop_hover:
                     self.shop_hover = True
-                    game_data.play_sound("terraria.sound.menu_select")
+                    game_data.play_sound("sound.menu_select")
             else:
                 self.shop_hover = False
             offset_x += 60
@@ -72,7 +72,7 @@ class Prompt:
             if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
                 if not self.button_1_hover:
                     self.button_1_hover = True
-                    game_data.play_sound("terraria.sound.menu_select")
+                    game_data.play_sound("sound.menu_select")
                 if pygame.mouse.get_pressed()[0]:
                     self.button_1_pressed = True
             else:
@@ -82,16 +82,16 @@ class Prompt:
         if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
             if not self.close_hover:
                 self.close_hover = True
-                game_data.play_sound("terraria.sound.menu_select")
+                game_data.play_sound("sound.menu_select")
             if pygame.mouse.get_pressed()[0]:
-                game_data.play_sound("terraria.sound.menu_close")
+                game_data.play_sound("sound.menu_close")
                 self.close = True
         else:
             self.close_hover = False
             
         if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
             if not Rect(self.left, self.top, self.width, self.height).collidepoint(commons.MOUSE_POS):
-                game_data.play_sound("terraria.sound.menu_close")
+                game_data.play_sound("sound.menu_close")
                 self.close = True
                 
         if self.name == "Exit":

@@ -33,30 +33,30 @@ def get_on_off(bool_var):
 
 
 """================================================================================================================= 
-    shared_methods.darken_colour -> tuple
+    shared_methods.darken_color -> tuple
 
-    Multiplies all three components of a colour tuple by a given float
+    Multiplies all three components of a color tuple by a given float
 -----------------------------------------------------------------------------------------------------------------"""
-def darken_colour(colour, factor=0.6):
-    return colour[0] * factor, colour[1] * factor, colour[2] * factor
+def darken_color(color, factor=0.6):
+    return color[0] * factor, color[1] * factor, color[2] * factor
 
 
 """================================================================================================================= 
-    shared_methods.get_block_average_colour -> tuple
+    shared_methods.get_block_average_color -> tuple
 
-    Given a tile_id, the average colour of that tile's image is computed using the 'pygame.transform.average_color'
+    Given a tile_id, the average color of that tile's image is computed using the 'pygame.transform.average_color'
     function, or potentially overridden in the tile tool
 -----------------------------------------------------------------------------------------------------------------"""
-def get_block_average_colour(tile_id):
+def get_block_average_color(tile_id):
     tile_data = game_data.get_tile_by_id(tile_id)
-    return tile_data["@average_colour"]
+    return tile_data["@average_color"]
 
 """================================================================================================================= 
-    shared_methods.get_tier_colour -> tuple
+    shared_methods.get_tier_color -> tuple
 
-    Given an item tier, a colour representing that tier is returned
+    Given an item tier, a color representing that tier is returned
 -----------------------------------------------------------------------------------------------------------------"""
-def get_tier_colour(tier):
+def get_tier_color(tier):
     if tier < 0:
         return 150, 150, 150  # Gray
     elif tier == 1:
@@ -105,10 +105,10 @@ def rotate_surface(image, angle):
     Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
     an outline effect
 -----------------------------------------------------------------------------------------------------------------"""
-def outline_text(string, color, font, outline_colour=(0, 0, 0)):
+def outline_text(string, color, font, outline_color=(0, 0, 0)):
     text1 = font.render(string, False, color)
     if commons.FANCYTEXT:
-        text2 = font.render(string, False, outline_colour)
+        text2 = font.render(string, False, outline_color)
         surf = pygame.Surface((text2.get_width() + 2, text2.get_height() + 2))
         surf.fill((255, 0, 255))
         surf.set_colorkey((255, 0, 255))
@@ -173,22 +173,22 @@ def create_menu_surface(width, height, body):
 
 
 """================================================================================================================= 
-    shared_methods.colour_surface -> pygame.Surface
+    shared_methods.color_surface -> pygame.Surface
 
-    Uses the pygame.BLEND_RGB_ADD blend flag to colour a grayscale image with the given colour
+    Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
-def colour_surface(grey_surf, col):
+def color_surface(grey_surf, col):
     if col == ():
         col = (0, 0, 0)
     x = grey_surf.get_width()
     y = grey_surf.get_height()
     surf = pygame.Surface((x, y))
     surf.fill((255, 255, 255))
-    surf.set_colorkey((255, 255, 255))  # set the colourkey to white
+    surf.set_colorkey((255, 255, 255))  # set the colorkey to white
     surf.blit(grey_surf, (0, 0))  # create a surf with the given hair and white background
-    colour = pygame.Surface((x, y))
-    colour.fill(col)  # create a blank surf with the colour of the hair
-    surf.blit(colour, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
+    color = pygame.Surface((x, y))
+    color.fill(col)  # create a blank surf with the color of the hair
+    surf.blit(color, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
     return surf
 
 

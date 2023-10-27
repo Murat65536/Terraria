@@ -97,8 +97,8 @@ class Player:
 		# Set hotbar info
 		if hotbar is None:
 			self.items[ItemLocation.HOTBAR]	= [
-				Item(game_data.get_item_id_by_id_str("terraria.item.pickaxe_copper"),	auto_assign_prefix=False),
-				Item(game_data.get_item_id_by_id_str("terraria.item.StoneBlock"), amnt=100),
+				Item(game_data.get_item_id_by_id_str("item.pickaxe_copper"),	auto_assign_prefix=False),
+				Item(game_data.get_item_id_by_id_str("item.StoneBlock"), amnt=100),
 				None,
 				None,
 				None,
@@ -156,8 +156,8 @@ class Player:
 		self.invincible_timer =	2.0
 		self.invincible	= True
 
-		hp_text_colour = (255 *	(1 - self.hp / self.max_hp), 255 * (self.hp	/ self.max_hp),	0)
-		self.hp_text = shared_methods.outline_text(str(self.hp), hp_text_colour, commons.DEFAULTFONT, outline_colour=(hp_text_colour[0]	* 0.5, hp_text_colour[1] * 0.5,	hp_text_colour[2] *	0.5))
+		hp_text_color = (255 *	(1 - self.hp / self.max_hp), 255 * (self.hp	/ self.max_hp),	0)
+		self.hp_text = shared_methods.outline_text(str(self.hp), hp_text_color, commons.DEFAULTFONT, outline_color=(hp_text_color[0]	* 0.5, hp_text_color[1] * 0.5,	hp_text_color[2] *	0.5))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - self.hp - self.hp_text.get_width()	* 0.5
 
 		self.grounded =	True
@@ -413,13 +413,13 @@ class Player:
 				value =	1
 			self.hp	-= value
 
-			entity_manager.add_damage_number(self.position,	value, colour=(240,	20,	20))
+			entity_manager.add_damage_number(self.position,	value, color=(240,	20,	20))
 
 			if self.hp < 0:
 				self.hp	= 0
 
 			if self.hp > 0:  # check if the	player has died	from damage
-				game_data.play_sound("terraria.sound.player_hurt")  # random hurt	sound
+				game_data.play_sound("sound.player_hurt")  # hurt sound
 
 				if commons.PARTICLES:
 					if source_velocity is not None:
@@ -440,7 +440,7 @@ class Player:
 				self.velocity =	(self.velocity[0] +	direction *	remaining_knockback, remaining_knockback * -1.5)
 
 		hp_float = self.hp / self.max_hp
-		self.hp_text = shared_methods.outline_text(str(self.hp), ((1 - hp_float) * 255,	hp_float * 255,	0),	commons.DEFAULTFONT, outline_colour=((1	- hp_float)	* 180, hp_float	* 180, 0))
+		self.hp_text = shared_methods.outline_text(str(self.hp), ((1 - hp_float) * 255,	hp_float * 255,	0),	commons.DEFAULTFONT, outline_color=((1	- hp_float)	* 180, hp_float	* 180, 0))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - hp_float *	100	- self.hp_text.get_width() * 0.5
 
 	"""=================================================================================================================	
@@ -469,7 +469,7 @@ class Player:
 												  self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5),
 												  (230,	0, 0), life=1, angle=velocity_angle, size=10, spread=0.9,
 												  magnitude=random.random()	* velocity_magnitude * 0.8,	gravity=0.15, outline=False)
-			game_data.play_sound("terraria.sound.player_death")  # death sound
+			game_data.play_sound("sound.player_death")  # death sound
 
 	"""=================================================================================================================	
 		player.Player.respawn -> void
@@ -481,7 +481,7 @@ class Player:
 		self.velocity =	(0,	0)
 		self.alive = True
 		self.hp	= int(self.max_hp)	# reset	hp
-		self.hp_text = shared_methods.outline_text(str(self.hp), (0, 255, 0), commons.DEFAULTFONT, outline_colour=(0, 180, 0))
+		self.hp_text = shared_methods.outline_text(str(self.hp), (0, 255, 0), commons.DEFAULTFONT, outline_color=(0, 180, 0))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - 100 - self.hp_text.get_width()	* 0.5
 		self.invincible = True # When you spawn, you are invincible for 3 seconds.
 		self.invincible_timer = 3.0
@@ -529,13 +529,13 @@ class Player:
 		if self.animation_tick <= 0:  # Happens	every 'animation_speed'	frames
 			self.animation_tick	+= self.animation_speed
 			if self.grounded:
-				if self.moving_left and not self.moving_right:  # If moving left,	cycle through left frames
+				if self.moving_left and not self.moving_right:  # If moving left, cycle through left frames
 					if self.animation_frame	< 29:
 						self.animation_frame += 1
 					else:
 						self.animation_frame = 17
 					return
-				elif self.moving_right and not self.moving_left:	 # If moving right,	cycle through right	frames
+				elif self.moving_right and not self.moving_left: # If moving right, cycle through right frames
 					if self.animation_frame	< 14:
 						self.animation_frame += 1
 					else:
@@ -715,8 +715,8 @@ class Player:
 									world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place["@id"]
 
 									if world.tile_in_map(block_position[0],	block_position[1] +	1):
-										if game_data.get_tile_by_id(world.world.tile_data[block_position[0]][block_position[1]][0])["@id_str"] == "terraria.tile.grass":
-											world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("terraria.tile.dirt")
+										if game_data.get_tile_by_id(world.world.tile_data[block_position[0]][block_position[1]][0])["@id_str"] == "tile.grass":
+											world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("tile.dirt")
 
 									world.update_terrain_surface(block_position[0],	block_position[1])
 
@@ -771,7 +771,7 @@ class Player:
 			self.should_swing_arm =	True
 			self.item_swing	= True
 
-			game_data.play_sound("terraria.sound.swing")
+			game_data.play_sound("sound.swing")
 
 			if math.sqrt((screen_position_x	- commons.MOUSE_POS[0])	** 2 + (screen_position_y -	commons.MOUSE_POS[1]) ** 2) < commons.BLOCKSIZE	* commons.PLAYER_REACH or commons.CREATIVE:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
@@ -788,18 +788,18 @@ class Player:
 								item_id	= game_data.get_item_id_by_id_str(tile_dat["@item_id_str"])
 								# Remove Grass from	dirt
 								if tile_id == game_data.grass_tile_id:
-									world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("terraria.tile.dirt")
+									world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("tile.dirt")
 								else:
 									world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.air_tile_id
 
 									entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCKSIZE, (block_position[1]	+ 0.5) * commons.BLOCKSIZE), pickup_delay=10)
 								world.update_terrain_surface(block_position[0],	block_position[1])
-								colour = tile_dat["@average_colour"]
+								color = tile_dat["@average_color"]
 
 								game_data.play_tile_hit_sfx(tile_id)
 								if commons.PARTICLES:
 									for	i in range(int(random.randint(2, 3) * commons.PARTICLEDENSITY)):
-										entity_manager.spawn_particle((block_position[0] * commons.BLOCKSIZE + commons.BLOCKSIZE * 0.5,	block_position[1] *	commons.BLOCKSIZE +	commons.BLOCKSIZE *	0.5), colour, size=13, life=1, angle=-math.pi *	0.5, spread=math.pi, gravity=0.05)
+										entity_manager.spawn_particle((block_position[0] * commons.BLOCKSIZE + commons.BLOCKSIZE * 0.5,	block_position[1] *	commons.BLOCKSIZE +	commons.BLOCKSIZE *	0.5), color, size=13, life=1, angle=-math.pi *	0.5, spread=math.pi, gravity=0.05)
 
 					elif tool_item.has_tag(ItemTag.HAMMER):
 						wall_id	= world.world.tile_data[block_position[0]][block_position[1]][1]
@@ -829,7 +829,7 @@ class Player:
 			self.use_delta = 0.0
 			self.use_delay = melee_weapon_item.get_attack_speed() *	0.01
 
-			game_data.play_sound("terraria.sound.swing")
+			game_data.play_sound("sound.swing")
 
 			self.should_swing_arm =	True
 			self.item_swing	= True
@@ -1282,7 +1282,7 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	open_chest(self, items):
 		if not self.chest_open:
-			game_data.play_sound("terraria.sound.menu_open")
+			game_data.play_sound("sound.menu_open")
 			self.chest_open	= True
 		self.inventory_open	= True
 		self.items[ItemLocation.CHEST] = items
@@ -1329,11 +1329,11 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	jump(self):
 		if self.alive and self.grounded:
-			game_data.play_sound("terraria.sound.jump")
+			game_data.play_sound("sound.jump")
 			if commons.PARTICLES:
-				colour = shared_methods.get_block_average_colour(self.last_block_on)
+				color = shared_methods.get_block_average_color(self.last_block_on)
 				for	i in range(int(random.randint(5, 8) * commons.PARTICLEDENSITY)):
-					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCKSIZE *	1.5), colour, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
+					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCKSIZE *	1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
 			self.velocity =	(self.velocity[0], -50)
 			self.grounded =	False
 
@@ -1353,16 +1353,16 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 	sprites	= []
 	arm_sprites	= []
 	for	j in range(directions):	 # for both	directions
-		hair = shared_methods.colour_surface(surface_manager.hair[model.hair_id], model.hair_col)
+		hair = shared_methods.color_surface(surface_manager.hair[model.hair_id], model.hair_col)
 
 		if j == 1:	# flip if necessary
 			hair = pygame.transform.flip(hair, True, False)
 
-		torso =	shared_methods.colour_surface(surface_manager.torsos[0], model.shirt_col)
+		torso =	shared_methods.color_surface(surface_manager.torsos[0], model.shirt_col)
 		if j == 0:	# flip if necessary
 			torso =	pygame.transform.flip(torso, True, False)
 
-		head = shared_methods.colour_surface(surface_manager.hair[9], model.skin_col)
+		head = shared_methods.color_surface(surface_manager.hair[9], model.skin_col)
 		pygame.draw.rect(head, (255, 254, 255),	Rect(20, 22, 4, 4),	0)
 		pygame.draw.rect(head, model.eye_col, Rect(22, 22, 2, 4), 0)
 
@@ -1373,11 +1373,11 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 			body_surf =	pygame.Surface((44,	75))
 			body_surf.fill((255, 0, 255))
 			body_surf.set_colorkey(
-				(255, 0, 255))	# create the surf for the whole	player with	a colourkey	of (255, 0, 255)
-			trousers = shared_methods.colour_surface(surface_manager.torsos[i +	1],	model.trouser_col)
+				(255, 0, 255))	# create the surf for the whole	player with	a colorkey	of (255, 0, 255)
+			trousers = shared_methods.color_surface(surface_manager.torsos[i +	1],	model.trouser_col)
 			if j == 0:	# flip if necessary
 				trousers = pygame.transform.flip(trousers, True, False)
-			shoes =	shared_methods.colour_surface(surface_manager.torsos[i + 16], model.shoe_col)
+			shoes =	shared_methods.color_surface(surface_manager.torsos[i + 16], model.shoe_col)
 			if j == 0:	# flip if necessary
 				shoes =	pygame.transform.flip(shoes, True, False)
 			body_surf.blit(torso, (0, 4))
@@ -1393,11 +1393,11 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 			arm_surf.fill((255,	0, 255))
 			arm_surf.set_colorkey((255,	0, 255))
 
-			arms = shared_methods.colour_surface(surface_manager.torsos[i +	31], model.under_shirt_col)
+			arms = shared_methods.color_surface(surface_manager.torsos[i +	31], model.under_shirt_col)
 			if j == 0:	# flip if necessary
 				arms = pygame.transform.flip(arms, True, False)
 
-			hands =	shared_methods.colour_surface(surface_manager.torsos[i + 51], model.skin_col)
+			hands =	shared_methods.color_surface(surface_manager.torsos[i + 51], model.skin_col)
 			if j == 0:	# flip if necessary
 				hands =	pygame.transform.flip(hands, True, False)
 

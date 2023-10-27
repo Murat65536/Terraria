@@ -13,11 +13,11 @@ import entity_manager
     Holds all the information required to update and draw a single particle
 -----------------------------------------------------------------------------------------------------------------"""
 class Particle:
-    def __init__(self, position, colour, life, magnitude, size, angle, spread, gravity, velocity=None, outline=True):
+    def __init__(self, position, color, life, magnitude, size, angle, spread, gravity, velocity=None, outline=True):
         self.position = position
         self.life = life + (random.random() * life * 0.1 - life * 0.05)  # How long it lasts for (randomized slightly)
         self.initLife = self.life
-        self.colour = colour
+        self.color = color
         self.size = size + random.random() * size * 0.1 - size * 0.05  # How large it will be (randomized slightly)
         self.initSize = self.size
         self.outline = outline
@@ -57,6 +57,6 @@ class Particle:
     def draw(self):
         rect = Rect(self.position[0] - self.size * 0.5 - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
                     self.position[1] - self.size * 0.5 - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5, self.size, self.size)
-        pygame.draw.rect(commons.screen, self.colour, rect, 0)  # Draw 2 rects for each particle (fill and outline)
+        pygame.draw.rect(commons.screen, self.color, rect, 0)  # Draw 2 rects for each particle (fill and outline)
         if self.outline:
             pygame.draw.rect(commons.screen, (0, 0, 0), rect, 1)

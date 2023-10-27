@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <projectiles>
-	<projectile id="0" id_str="terraria.projectile.INVALID"></projectile>
-	<projectile id="1" id_str="terraria.projectile.arrow"></projectile>
-	<projectile id="2" id_str="terraria.projectile.bullet"></projectile>
+	<projectile id="0" id_str="projectile.INVALID"></projectile>
+	<projectile id="1" id_str="projectile.arrow"></projectile>
+	<projectile id="2" id_str="projectile.bullet"></projectile>
 </projectiles>

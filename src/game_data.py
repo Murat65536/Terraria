@@ -2,7 +2,6 @@
 
 import xmltodict
 import pygame
-from collections import OrderedDict
 from enum import Enum
 import commons
 import random
@@ -144,9 +143,9 @@ def find_next_char_in_string(string, char, start_index):
 
 # Biome Tile Information
 # [[surface tile,base tile, alt tile],[wall tile, alt wall tile]]
-biome_tile_vals = [[["terraria.tile.grass", "terraria.tile.dirt", "terraria.tile.stone"], ["terraria.wall.dirt", "terraria.wall.stone"]],
-                   [["terraria.tile.snow", "terraria.tile.snow", "terraria.tile.ice"], ["terraria.wall.snow", "terraria.wall.ice"]],
-                   [["terraria.tile.sand", "terraria.tile.sand", "terraria.tile.sandstone"], ["terraria.wall.hardened_sand", "terraria.wall.sandstone"]]
+biome_tile_vals = [[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wall.stone"]],
+                   [["tile.snow", "tile.snow", "tile.ice"], ["wall.snow", "wall.ice"]],
+                   [["tile.sand", "tile.sand", "tile.sandstone"], ["wall.hardened_sand", "wall.sandstone"]]
                   ]
 
 platform_blocks = [257]
@@ -174,11 +173,11 @@ music_volume_multiplier = 1.0
 #             Enemy Information
 #
 #             ||     Name     |  Type  |HP |Defense|KB Resist|Damage|    Blood Col   |   Item Drops   | Coin Drops ||
-enemy_data = [[ "Green Slime", "Slime", 14,      0,     -0.2,     6, (10,  200,  10), [("terraria.item.gel_blue", 1, 3, 100)], ( 5,  30)],
-              [  "Blue Slime", "Slime", 25,      2,        0,     7, (10,   10, 200), [("terraria.item.gel_blue", 1, 3, 100)], (15,  50)],
-              [   "Red Slime", "Slime", 35,      4,        0,    12, (200,  10,  10), [("terraria.item.gel_blue", 1, 3, 100)], (25,  75)],
-              ["Purple Slime", "Slime", 40,      6,      0.1,    12, (200,  10, 200), [("terraria.item.gel_blue", 1, 3, 100)], (35, 110)],
-              ["Yellow Slime", "Slime", 45,      7,        0,    15, (200, 150,  10), [("terraria.item.gel_blue", 1, 3, 100)], (45, 130)],
+enemy_data = [[ "Green Slime", "Slime", 14,      0,     -0.2,     6, (10,  200,  10), [("item.gel_blue", 1, 3, 100)], ( 5,  30)],
+              [  "Blue Slime", "Slime", 25,      2,        0,     7, (10,   10, 200), [("item.gel_blue", 1, 3, 100)], (15,  50)],
+              [   "Red Slime", "Slime", 35,      4,        0,    12, (200,  10,  10), [("item.gel_blue", 1, 3, 100)], (25,  75)],
+              ["Purple Slime", "Slime", 40,      6,      0.1,    12, (200,  10, 200), [("item.gel_blue", 1, 3, 100)], (35, 110)],
+              ["Yellow Slime", "Slime", 45,      7,        0,    15, (200, 150,  10), [("item.gel_blue", 1, 3, 100)], (45, 130)],
               ]
 
 
@@ -542,7 +541,7 @@ active_menu_buttons = [
     ["CREDITS", 0, 1, 9, 10, 11, 12, 13],
     ["PLAYERSELECTION", 0, 1, 14, 15],
     ["PLAYERCREATION", 0, 1, 16, 17, 18, 19, 20, 21, 22],
-    ["COLOURPICKER", 0, 1],
+    ["COLORPICKER", 0, 1],
     ["CLOTHES", 0, 1, 23, 24, 25, 26],
     ["PLAYERNAMING", 0, 1, 27],
     ["WORLDSELECTION", 0, 1, 28, 29],
@@ -820,19 +819,19 @@ def parse_tile_data():
         tile_data["@light_reduction"] = int(tile_data["@light_reduction"])
         tile_data["@light_emission"] = int(tile_data["@light_emission"])
 
-        if tile_data["@average_colour"] == "auto":
-            tile_data["@average_colour"] = (255, 0, 255)
-            override_average_colour = True
+        if tile_data["@average_color"] == "auto":
+            tile_data["@average_color"] = (255, 0, 255)
+            override_average_color = True
         else:
-            val_array = tile_data["@average_colour"].split(",")
-            tile_data["@average_colour"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
-            override_average_colour = False
+            val_array = tile_data["@average_color"].split(",")
+            tile_data["@average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
+            override_average_color = False
 
         tile_data["@tags"] = make_tile_tag_list(tile_data["@tags"])
         try:
             tile_data["@image"] = pygame.image.load(tile_data["@image_path"]).convert_alpha()  # , (commons.BLOCKSIZE, commons.BLOCKSIZE)
-            if override_average_colour:
-                tile_data["@average_colour"] = pygame.transform.average_color(tile_data["@image"])
+            if override_average_color:
+                tile_data["@average_color"] = pygame.transform.average_color(tile_data["@image"])
         except FileNotFoundError:
             tile_data["@image"] = None
         except pygame.error:
@@ -845,8 +844,8 @@ def parse_tile_data():
             tile_data["@multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["@multitile_required_solids"])
             try:
                 tile_data["@multitile_image"] = pygame.transform.scale2x(pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha())  # , (commons.BLOCKSIZE * tile_data["@multitile_dimensions"][0], commons.BLOCKSIZE * tile_data["@multitile_dimensions"][1])
-                if override_average_colour:
-                    tile_data["@average_colour"] = pygame.transform.average_color(tile_data["@multitile_image"])
+                if override_average_color:
+                    tile_data["@average_color"] = pygame.transform.average_color(tile_data["@multitile_image"])
             except FileNotFoundError:
                 tile_data["@multitile_image"] = None
             except pygame.error:
@@ -913,19 +912,19 @@ def parse_wall_data():
         wall_data["@mask_type"] = get_tile_mask_type_from_str(wall_data["@mask_type"])
         wall_data["@mask_merge_id_strs"] = wall_data["@mask_merge_id_strs"].split(",")
 
-        if wall_data["@average_colour"] == "auto":
-            wall_data["@average_colour"] = (255, 0, 255)
-            override_average_colour = True
+        if wall_data["@average_color"] == "auto":
+            wall_data["@average_color"] = (255, 0, 255)
+            override_average_color = True
         else:
-            val_array = wall_data["@average_colour"].split(",")
-            wall_data["@average_colour"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
-            override_average_colour = False
+            val_array = wall_data["@average_color"].split(",")
+            wall_data["@average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
+            override_average_color = False
 
         try:
             wall_data["@image"] = pygame.transform.scale(pygame.image.load(wall_data["@image_path"]).convert_alpha(), (commons.BLOCKSIZE, commons.BLOCKSIZE))
             wall_data["@image"].set_colorkey((255, 0, 255))
-            if override_average_colour:
-                wall_data["@average_colour"] = pygame.transform.average_color(wall_data["@image"])
+            if override_average_color:
+                wall_data["@average_color"] = pygame.transform.average_color(wall_data["@image"])
 
         except FileNotFoundError:
             wall_data["@image"] = None
@@ -1009,7 +1008,7 @@ def change_music_volume(amount):
     music_volume_multiplier = max(min(music_volume_multiplier, 1), 0)
     if music_volume_multiplier != volume_before:
         pygame.mixer.music.set_volume(music_volume_multiplier)
-        # entity_manager.add_message("Music volume set to " + str(round(music_volume_multiplier, 2)),  (255, 223, 10), life=2, outline_colour=(80, 70, 3))
+        # entity_manager.add_message("Music volume set to " + str(round(music_volume_multiplier, 2)),  (255, 223, 10), life=2, outline_color=(80, 70, 3))
 
 
 def change_sound_volume(amount):
@@ -1020,7 +1019,7 @@ def change_sound_volume(amount):
     if sound_volume_multiplier != volume_before:
         for sound in xml_sound_data:
             sound["@sound"].set_volume(sound["@volume"] * sound_volume_multiplier)
-        # entity_manager.add_message("Sound volume set to " + str(round(sound_volume_multiplier, 2)), (255, 223, 10), life=2, outline_colour=(80, 70, 3))
+        # entity_manager.add_message("Sound volume set to " + str(round(sound_volume_multiplier, 2)), (255, 223, 10), life=2, outline_color=(80, 70, 3))
 
 
 def play_sound(sound_id_str):
@@ -1234,7 +1233,7 @@ create_structure_id_str_hash_table()
 parse_loot_data()
 create_loot_id_str_hash_table()
 
-air_tile_id = get_tile_id_by_id_str("terraria.tile.air")
-grass_tile_id = get_tile_id_by_id_str("terraria.tile.grass")
+air_tile_id = get_tile_id_by_id_str("tile.air")
+grass_tile_id = get_tile_id_by_id_str("tile.grass")
 
-air_wall_id = get_wall_id_by_id_str("terraria.wall.air")
+air_wall_id = get_wall_id_by_id_str("wall.air")
