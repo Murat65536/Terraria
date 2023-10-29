@@ -671,7 +671,7 @@ def draw_interactable_block_hover():
 
 
 def draw_menu_background_sky():
-    for x in range(int(math.ceil(commons.WINDOW_WIDTH / menu_background_sky_width))):
+    for x in range(math.ceil(commons.WINDOW_WIDTH / menu_background_sky_width)):
         commons.screen.blit(menu_background_sky, (x * menu_background_sky_width, 0))
 
 
@@ -683,11 +683,14 @@ def draw_menu_background_sky():
 
 
 def draw_menu_background():
-        menu_background_speed = 1
-        for i in range(len(menu_background_images)):
-            menu_background_speed += 1
-            for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width)):
-                commons.screen.blit(menu_background_images[i], (x * menu_background_width - scroll * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height))
+    menu_background_speed = 1
+    for i in range(len(menu_background_images)):
+        menu_background_speed += 1
+        for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
+            if menu_background_scroll[i] * menu_background_speed > commons.WINDOW_WIDTH:
+                menu_background_scroll[i] = 0
+            print(menu_background_scroll[i] * menu_background_speed)
+            commons.screen.blit(menu_background_images[i], (x * menu_background_width - menu_background_scroll[i] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height))
 
 
 good_color = (10, 230, 10)
@@ -743,15 +746,17 @@ light_max_y = 0
 global_lighting = 255
 
 
-menu_background_sky = pygame.image.load("res/images/backgrounds/Background_0.png").convert_alpha()
+menu_background_sky = pygame.image.load("res/images/backgrounds/MenuBackgrounds/Sky/Background_0.png").convert_alpha()
 menu_background_sky_width = menu_background_sky.get_width()
 menu_background_sky_height = menu_background_sky.get_height()
 menu_background_images = []
-for i in range(4):
-    menu_background_image = pygame.image.load(f"./res/images/backgrounds/Background_{i}.png").convert_alpha()
+menu_background_scroll = {}
+for i in range(3):
+    menu_background_image = pygame.image.load(f"./res/images/backgrounds/MenuBackgrounds/Ground/Background_{i}.png").convert_alpha()
     menu_background_images.append(menu_background_image)
     menu_background_width = menu_background_images[i].get_width()
     menu_background_height = menu_background_images[i].get_height()
+    menu_background_scroll.update({i:0})
 scroll = 0
 
 
@@ -967,7 +972,8 @@ while game_running:
     elif commons.GAME_STATE == "MAINMENU":
         draw_menu_background_sky()
         draw_menu_background()
-        scroll += 0.2
+        for i in range(len(menu_background_scroll)):
+            menu_background_scroll[i] += 0.2
         # commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
         menu_manager.update_menu_buttons()
         menu_manager.draw_menu_buttons()
