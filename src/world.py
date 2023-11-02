@@ -14,7 +14,7 @@ import item
 from item import Item
 from enum import Enum
 
-from game_data import *
+from game_data import TileTag, TileMaskType, get_item_id_by_id_str, find_structures_for_connection
 
 
 WORLD_SIZE_X = 0

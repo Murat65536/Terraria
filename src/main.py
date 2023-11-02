@@ -129,15 +129,6 @@ def render_hand_text():
 def run_splash_screen():
     age = 0
     black_surf = pygame.Surface((commons.WINDOW_WIDTH, commons.WINDOW_HEIGHT))
-    sprites = player.render_sprites(commons.DEFAULT_PLAYER_MODEL, directions=1)
-
-    torso_frame = 2
-    arm_frame = 6
-
-    x_pos = -30
-
-    slow_tick = 0
-    fast_tick = 0
 
     commons.OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
     
