@@ -676,6 +676,8 @@ def draw_menu_background_sky():
 def draw_menu_background():
     menu_background_speed = 1
     for i in range(len(menu_background_images)):
+        menu_background_width = menu_background_images[i].get_width()
+        menu_background_height = menu_background_images[i].get_height()
         menu_background_speed += 1
         if menu_background_width - menu_background_scroll[i] * menu_background_speed < 0:
             menu_background_scroll[i] = 0
@@ -744,8 +746,6 @@ menu_background_scroll = {}
 for i in range(3):
     menu_background_image = pygame.image.load(f"./res/images/backgrounds/MenuBackgrounds/Ground/Background_{i}.png").convert_alpha()
     menu_background_images.append(menu_background_image)
-    menu_background_width = menu_background_images[i].get_width()
-    menu_background_height = menu_background_images[i].get_height()
     menu_background_scroll.update({i:0})
 scroll = 0
 
