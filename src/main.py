@@ -677,7 +677,6 @@ def draw_menu_background():
     menu_background_speed = 1
     for i in range(len(menu_background_images)):
         menu_background_speed += 1
-        print(menu_background_width - menu_background_scroll[i] * menu_background_speed)
         if menu_background_width - menu_background_scroll[i] * menu_background_speed < 0:
             menu_background_scroll[i] = 0
         for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
