@@ -677,10 +677,10 @@ def draw_menu_background():
     menu_background_speed = 1
     for i in range(len(menu_background_images)):
         menu_background_speed += 1
+        print(menu_background_width - menu_background_scroll[i] * menu_background_speed)
+        if menu_background_width - menu_background_scroll[i] * menu_background_speed < 0:
+            menu_background_scroll[i] = 0
         for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
-            if menu_background_scroll[i] * menu_background_speed > commons.WINDOW_WIDTH:
-                menu_background_scroll[i] = 0
-            print(menu_background_scroll[i] * menu_background_speed)
             commons.screen.blit(menu_background_images[i], (x * menu_background_width - menu_background_scroll[i] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height))
 
 
@@ -791,7 +791,7 @@ while game_running:
 
     if commons.GAME_STATE == "PLAYING":
         # TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
-        base_zero_to_one_float = math.sin(datetime.timedelta(seconds = entity_manager.client_player.play_time) / datetime.timedelta(hours=1) / 0.4 * 6) * 0.5 + 0.5 # TODO The get_ticks starts at the time the game runs. Not the time the world is selected. Fix it.
+        base_zero_to_one_float = math.sin(datetime.timedelta(seconds = entity_manager.client_player.play_time) / datetime.timedelta(hours=1) / 0.4 * 6) * 0.5 + 0.5
         smoothed_zero_to_one_float = shared_methods.smooth_zero_to_one(base_zero_to_one_float, 0)
         smoothed_zero_to_one_float = smoothed_zero_to_one_float * 0.75 + 0.25
         commons.CURRENT_SKY_LIGHTING = int(smoothed_zero_to_one_float * global_lighting) # Global lighting is 17. 15 minutes of day and 9 minutes of night. 17*15=255.
@@ -965,7 +965,6 @@ while game_running:
         draw_menu_background()
         for i in range(len(menu_background_scroll)):
             menu_background_scroll[i] += 0.2
-        # commons.screen.blit(pygame.image.load("res/images/backgrounds/background.png"), parallax_pos)
         menu_manager.update_menu_buttons()
         menu_manager.draw_menu_buttons()
         if commons.GAME_SUB_STATE == "MAIN":
