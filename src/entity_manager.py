@@ -336,9 +336,7 @@ def add_message(text, color, life=5, outline_color=(0, 0, 0)):
     global messages
     text1 = commons.DEFAULTFONT.render(text, False, color)
     text2 = commons.DEFAULTFONT.render(text, False, outline_color)
-    surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2))
-    surf.fill((255, 0, 255))
-    surf.set_colorkey((255, 0, 255))
+    surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2), pygame.SRCALPHA)
     if commons.FANCYTEXT:
         surf.blit(text2, (-1, 1))
         surf.blit(text2, (3, 1))
@@ -369,9 +367,7 @@ def add_damage_number(pos, val, crit=False, color=None):
     else:
         size = height
 
-    surf = pygame.Surface((size, size))
-    surf.fill((255, 0, 255))
-    surf.set_colorkey((255, 0, 255))
+    surf = pygame.Surface((size, size), pygame.SRCALPHA)
 
     midx = size * 0.5 - width * 0.5
     midy = size * 0.5 - height * 0.5
@@ -405,9 +401,7 @@ def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
             string = game_data.xml_item_data[item_id]["@name"]
     size = commons.DEFAULTFONT.size(string)
     size = (size[0] + 2, size[1] + 2)
-    surf = pygame.Surface(size)
-    surf.set_colorkey((255, 0, 255))
-    surf.fill((255, 0, 255))
+    surf = pygame.Surface(size, pygame.SRCALPHA)
     surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULTFONT), (1, 1))
     vel = (random.random() * 2 - 1, -50.0)
     recent_pickups.append([item_id, amnt, surf, pos, vel, 3.0])

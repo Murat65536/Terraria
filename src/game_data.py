@@ -694,9 +694,8 @@ def parse_item_data():
         item_data["@sell_price"] = int(item_data["@sell_price"])
         item_data["@hold_offset"] = float(item_data["@hold_offset"])
         try:
-            loaded_surf = pygame.image.load(item_data["@image_path"]).convert()
-            item_data["@image"] = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2))
-            item_data["@image"].set_colorkey((255, 0, 255))
+            loaded_surf = pygame.image.load(item_data["@image_path"]).convert_alpha()
+            item_data["@image"] = loaded_surf
             item_data["@item_slot_offset_x"] = int(24 - item_data["@image"].get_width() * 0.5)
             item_data["@item_slot_offset_y"] = int(24 - item_data["@image"].get_height() * 0.5)
         except FileNotFoundError:
@@ -710,11 +709,8 @@ def parse_item_data():
             item_data["@knockback"] = float(item_data["@knockback"])
             item_data["@crit_chance"] = float(item_data["@crit_chance"])
             try:
-                loaded_surf = pygame.image.load(item_data["@world_override_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@world_override_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@world_override_image"])
-                item_data["@world_override_image"].set_colorkey((255, 0, 255))
+                loaded_surf = pygame.image.load(item_data["@world_override_image_path"]).convert_alpha()
+                item_data["@world_override_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
             except FileNotFoundError:
                 item_data["@world_override_image"] = None
             except pygame.error:
@@ -753,21 +749,16 @@ def parse_item_data():
             item_data["@grapple_chain_length"] = float(item_data["@grapple_chain_length"])
             item_data["@grapple_max_chains"] = int(item_data["@grapple_max_chains"])
             try:
-                loaded_surf = pygame.image.load(item_data["@grapple_chain_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@grapple_chain_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@grapple_chain_image"])
-                item_data["@grapple_chain_image"].set_colorkey((255, 0, 255))
+                loaded_surf = pygame.image.load(item_data["@grapple_chain_image_path"]).convert_alpha()
+                item_data["@grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
             except FileNotFoundError:
                 item_data["@grapple_chain_image"] = None
             except pygame.error:
                 item_data["@grapple_chain_image"] = None
 
             try:
-                loaded_surf = pygame.image.load(item_data["@grapple_claw_image_path"]).convert()
-                new_size = (loaded_surf.get_width() * 2, loaded_surf.get_height() * 2)
-                item_data["@grapple_claw_image"] = pygame.Surface(new_size)
-                pygame.transform.scale(loaded_surf, new_size, item_data["@grapple_claw_image"])
+                loaded_surf = pygame.image.load(item_data["@grapple_claw_image_path"]).convert_alpha()
+                item_data["@grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
                 item_data["@grapple_claw_image"].set_colorkey((255, 0, 255))
             except FileNotFoundError:
                 item_data["@grapple_claw_image"] = None
@@ -1233,7 +1224,7 @@ create_structure_id_str_hash_table()
 parse_loot_data()
 create_loot_id_str_hash_table()
 
-air_tile_id = get_tile_id_by_id_str("tile.air")
+air_tile_id = get_tile_id_by_id_str("tile.none")
 grass_tile_id = get_tile_id_by_id_str("tile.grass")
 
-air_wall_id = get_wall_id_by_id_str("wall.air")
+air_wall_id = get_wall_id_by_id_str("wall.none")

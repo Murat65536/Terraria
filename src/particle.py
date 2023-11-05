@@ -1,7 +1,7 @@
 # particle.py
 
 import pygame, random, math
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 import entity_manager

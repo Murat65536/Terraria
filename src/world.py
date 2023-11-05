@@ -478,16 +478,16 @@ def generate_terrain(gen_type, blit_progress=False):
                 else:
                     biome = 2
 
-                tile_value = "tile.air"
-                wall_value = "wall.air"
+                tile_value = "tile.none"
+                wall_value = "wall.none"
 
                 if map_index_y > 350 + random.randint(-5, 5):  # Caverns layer 2
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     if val > 0.55:
-                        tile_value = "tile.air"
-                        wall_value = "wall.air"
+                        tile_value = "tile.none"
+                        wall_value = "wall.none"
                     elif val > 0.1:
-                        tile_value = "tile.air"
+                        tile_value = "tile.none"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     else:
                         tile_value = game_data.biome_tile_vals[biome][0][2]
@@ -497,10 +497,10 @@ def generate_terrain(gen_type, blit_progress=False):
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     val2 = noise_gen.noise2(map_index_x / 30 + noise_offsets[0], map_index_y / 30 + noise_offsets[0])
                     if -0.2 < val < 0.2:
-                        tile_value = "tile.air"
-                        wall_value = "wall.air"
+                        tile_value = "tile.none"
+                        wall_value = "wall.none"
                     elif -0.4 < val < 0.4:
-                        tile_value = "tile.air"
+                        tile_value = "tile.none"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     elif val2 > 0.5:
                         tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -513,7 +513,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val = noise_gen.noise2(map_index_x / 30 + noise_offsets[2], map_index_y / 20 + noise_offsets[2])
                     val2 = noise_gen.noise2(map_index_x / 30 + noise_offsets[0], map_index_y / 30 + noise_offsets[0])
                     if val > 0.3:
-                        tile_value = "tile.air"
+                        tile_value = "tile.none"
                         wall_value = game_data.biome_tile_vals[biome][1][1]
                     elif val2 > 0.3:
                         tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -527,7 +527,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val2 = noise_gen.noise2(map_index_x / 15 + noise_offsets[0], map_index_y / 15 + noise_offsets[0])
 
                     if -0.2 < val < 0.2:
-                        tile_value = "tile.air"
+                        tile_value = "tile.none"
                     elif val2 > -0.75:
                         tile_value = game_data.biome_tile_vals[biome][0][2]
                     else:
@@ -540,7 +540,7 @@ def generate_terrain(gen_type, blit_progress=False):
                     val4 = noise_gen.noise2(map_index_x / 100 + noise_offsets[1], map_index_y / 75 + noise_offsets[1]) + noise_gen.noise2(map_index_x / 20 + noise_offsets[1], map_index_y / 8 + noise_offsets[1]) * 0.2
                     if map_index_y >= val * 5 + 60 + val2 * 30:
                         if -0.15 < val4 < 0.15:
-                            tile_value = "tile.air"
+                            tile_value = "tile.none"
                             wall_value = game_data.biome_tile_vals[biome][1][0]
                         elif val3 > -0.6:
                             tile_value = game_data.biome_tile_vals[biome][0][1]
@@ -552,7 +552,7 @@ def generate_terrain(gen_type, blit_progress=False):
                             tile_value = game_data.biome_tile_vals[biome][0][0]
                             wall_value = game_data.biome_tile_vals[biome][1][0]
                     else:
-                        tile_value = "tile.air"
+                        tile_value = "tile.none"
                 world.tile_data[map_index_x][map_index_y] = [game_data.get_tile_id_by_id_str(tile_value), game_data.get_wall_id_by_id_str(wall_value)]
 
         if blit_progress:

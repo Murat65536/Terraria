@@ -7,7 +7,6 @@ import webbrowser
 import datetime
 from pygame.locals import Rect
 
-from player import Player
 import player
 
 import commons
@@ -135,17 +134,17 @@ def update_menu_buttons():
                 elif menu_button.text == "Changes":
                     commons.GAME_SUB_STATE = "CHANGES"
 
-                elif menu_button.text == "PyGame Page":
-                    entity_manager.client_prompt = prompt.Prompt("browser opened", "PyGame page opened in a new tab.", size=(5, 2))
-                    webbrowser.open("https://www.pygame.org/project/3451")
+                elif menu_button.text == "":
+                    entity_manager.client_prompt = prompt.Prompt("browser opened", "", size=(5, 2))
+                    webbrowser.open("")
 
                 elif menu_button.text == "GitHub Repo":
                     entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
                     webbrowser.open("https://github.com/Murat65536/Terraria")
 
-                elif menu_button.text == "YouTube Channel":
-                    entity_manager.client_prompt = prompt.Prompt("browser opened", "YouTube page opened in a new tab.", size=(5, 2))
-                    webbrowser.open("https://www.youtube.com/channel/UC_7e1qyqA39URIlV89MByug")
+                elif menu_button.text == "":
+                    entity_manager.client_prompt = prompt.Prompt("browser opened", "", size=(5, 2))
+                    webbrowser.open("")
 
                 elif menu_button.text == "Trello Board":
                     entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
@@ -424,9 +423,9 @@ menu_buttons.append(MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 45
 
 menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 25, False))
 
-menu_buttons.append(MenuButton("PyGame Page", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("YouTube Channel", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGEFONT, 24, True))
 
 update_active_menu_buttons()

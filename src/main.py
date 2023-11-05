@@ -187,9 +187,7 @@ def render_stats_text(pos):
     if item is not None:
         if item != last_hovered_item:
             last_hovered_item = item
-            stats_text = pygame.Surface((340, 200))
-            stats_text.fill((255, 0, 255))
-            stats_text.set_colorkey((255, 0, 255))
+            stats_text = pygame.Surface((340, 200), pygame.SRCALPHA)
             
             stats = [shared_methods.outline_text(item.get_name(), shared_methods.get_tier_color(item.get_tier()), commons.DEFAULTFONT)]
 
@@ -756,8 +754,7 @@ LIGHTRENDERDISTANCEY = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCKSIZE) + 
 last_thread_time = 0.2
 last_thread_start = pygame.time.get_ticks()
 
-save_select_surf = pygame.Surface((315, 360))
-save_select_surf.set_colorkey((255, 0, 255))
+save_select_surf = pygame.Surface((315, 360), pygame.SRCALPHA)
 save_select_y_offset = 0
 save_select_y_velocity = 0
 
@@ -992,7 +989,6 @@ while game_running:
                     save_select_y_offset = 0
 
             commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-            save_select_surf.fill((255, 0, 255))
             for i in range(len(commons.PLAYER_SAVE_OPTIONS)): 
                 save_select_surf.blit(commons.PLAYER_SAVE_OPTIONS[i][1], (0, i * 62 + save_select_y_offset))
             commons.screen.blit(save_select_surf, (load_menu_box_left2,  132))
@@ -1070,7 +1066,6 @@ while game_running:
                         save_select_y_offset = 0
                         
                 commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-                save_select_surf.fill((255, 0, 255))
                 for save_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
                     save_select_surf.blit(commons.WORLD_SAVE_OPTIONS[save_option_index][1], (0, save_option_index * 62 + save_select_y_offset))
                 commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
