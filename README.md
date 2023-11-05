@@ -13,4 +13,5 @@
 - You can turn off and on settings in the 'config.txt' file
 - Music and sounds from Terraria, not my own.
 
-![Alt text](./res/images/readme/menu_screen.png?raw=true "Optional Title")
+![Alt text](./res/images/readme/menu_screen.png?raw=true "Menu Screen")
+![Alt text](./res/images/readme/gameplay.png?raw=true "Gameplay")
