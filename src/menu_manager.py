@@ -423,9 +423,9 @@ menu_buttons.append(MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 45
 
 menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 25, False))
 
-# menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-# menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
 menu_buttons.append(MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGEFONT, 24, True))
 
 update_active_menu_buttons()
