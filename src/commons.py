@@ -16,8 +16,8 @@ config = open("config.txt", "r")
 configDataStr = config.readlines()
 configData = []
 for item in configDataStr:
-    item = item.split("=")
-    configData.append(item[1][:-1])
+	item = item.split("=")
+	configData.append(item[1][:-1])
 WINDOW_WIDTH = int(configData[0].split(",")[0])
 WINDOW_HEIGHT = int(configData[0].split(",")[1])
 GRAVITY = 9.8 * BLOCKSIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
@@ -42,9 +42,9 @@ SMOOTHCAM = bool(int(configData[19]))
 DRAWUI = bool(int(configData[20]))
 
 if RUNFULLSCREEN:
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
+	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
 else:
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 font_file_path = "res/fonts/AndyBold.ttf"
 SMALLFONT = pygame.font.Font(font_file_path, 10)
