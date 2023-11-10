@@ -2,7 +2,7 @@
 
 import pygame
 import math
-from pygame.locals import *
+from pygame.locals import BLEND_RGB_ADD
 import math
 
 import commons

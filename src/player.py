@@ -5,10 +5,10 @@ import math
 import random
 import pickle
 import datetime
-from pygame.locals import *
+from pygame.locals import Rect
 
 import game_data
-from game_data import *
+from game_data import TileTag
 
 import commons
 import world
@@ -510,13 +510,10 @@ class Player:
 			inner_dimensions = (int(swing_surface.get_width() *	item_scale),
 								int(swing_surface.get_height() * item_scale))
 			scaled_surface = pygame.transform.scale(swing_surface, inner_dimensions)
-			scaled_surface.set_colorkey()
 			padded_dimensions =	(int(inner_dimensions[0] * 1.414), int(inner_dimensions[1] * 1.414))
-			padded_surface = pygame.Surface(padded_dimensions)
-			padded_surface.fill((255, 0, 255))
+			padded_surface = pygame.Surface(padded_dimensions, pygame.SRCALPHA)
 			padded_surface.blit(scaled_surface,	(int(padded_dimensions[0] *	0.5	- inner_dimensions[0] *	0.5),
 												 int(padded_dimensions[1] *	0.5	- inner_dimensions[1] *	0.5)))
-			padded_surface.set_colorkey((255, 0, 255))
 			self.current_item_swing_image =	padded_surface
 			self.current_item_swing_offset = math.sqrt((inner_dimensions[0]	* 0.5) ** 2	+ (inner_dimensions[1] * 0.5) ** 2) * 0.8
 
@@ -1174,7 +1171,7 @@ class Player:
 					item = commons.ITEM_HOLDING
 				world_override_image = item.get_world_override_image()
 				if world_override_image	is not None:
-					rotated_item_surf =	shared_methods.rotate_surface(world_override_image,	self.arm_out_angle * 180 / math.pi)
+					rotated_item_surf = shared_methods.rotate_surface(world_override_image,	self.arm_out_angle * 180 / math.pi)
 				else:
 					rotated_item_surf =	shared_methods.rotate_surface(item.get_image(),	self.arm_out_angle * 180 / math.pi)
 				if self.direction == 1:
