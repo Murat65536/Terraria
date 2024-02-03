@@ -1,5 +1,3 @@
-# surface_manager.py
-
 import pygame
 import commons
 

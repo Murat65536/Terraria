@@ -8,7 +8,7 @@ import datetime
 from pygame.locals import Rect
 
 import game_data
-from game_data import TileTag
+from game_data import TileTag, ammo_type_item_lists
 
 import commons
 import world
@@ -507,8 +507,7 @@ class Player:
 					swing_surface =	world_override_image
 
 			item_scale = item.get_scale()
-			inner_dimensions = (int(swing_surface.get_width() *	item_scale),
-								int(swing_surface.get_height() * item_scale))
+			inner_dimensions = (int(swing_surface.get_width() * item_scale), int(swing_surface.get_height() * item_scale))
 			scaled_surface = pygame.transform.scale(swing_surface, inner_dimensions)
 			padded_dimensions =	(int(inner_dimensions[0] * 1.414), int(inner_dimensions[1] * 1.414))
 			padded_surface = pygame.Surface(padded_dimensions, pygame.SRCALPHA)

@@ -20,13 +20,13 @@ class ColorPicker:
 		self.border_size = border_size
 		self.surface_resolution = surface_resolution
 		self.colors = [
-		 (255,   0, 255),
-		 (255,   0,   0),
-		 (255, 255,   0),
-		 (  0, 255,   0),
-		 (  0, 255, 255),
-		 (  0,   0, 255),
-		 (255,   0, 255)
+			(255,   0, 255),
+			(255,   0,   0),
+			(255, 255,   0),
+			(  0, 255,   0),
+			(  0, 255, 255),
+			(  0,   0, 255),
+			(255,   0, 255)
 		]
 		self.selected_color = (0, 0, 0)
 		self.selected_x = 0
@@ -99,7 +99,8 @@ class ColorPicker:
 		Draws the color picker's surface and draws the location of the selected color
 	-----------------------------------------------------------------------------------------------------------------"""
 	def draw(self):
-		commons.screen.blit(self.surface, self.position)
+		if (self.surface != None):
+			commons.screen.blit(self.surface, self.position)
 
-		if self.selected_x and self.selected_y is not None:
+		if self.selected_x and self.selected_y != None:
 			pygame.draw.circle(commons.screen, (128, 128, 128), (self.selected_x + self.position[0] + self.border_size, self.selected_y + self.position[1] + self.border_size), 5, 1)

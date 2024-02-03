@@ -10,7 +10,6 @@ import game_data
 from game_data import *
 import world
 
-import surface_manager
 import entity_manager
 import shared_methods
 
@@ -38,7 +37,7 @@ class PhysicsItem:
 		else:
 			self.velocity = velocity
 
-		self.item_scale = 1.25
+		self.item_scale = 0.75
 		self.image = None
 		self.rotated_surf = None
 		self.half_image_size = 0

@@ -348,7 +348,6 @@ def load_menu_world_data():
 	if not os.path.exists(path):
 		os.makedirs(path)
 	possible_loads = os.listdir(path)  # Get filenames
-	commons.WORLD_SAVE_OPTIONS = []
 	for i in range(len(possible_loads)):
 		# TODO Come back to this for date and time functions.
 		if possible_loads[i][-3:] == "dat":  # if it's a dat file

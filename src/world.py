@@ -1,6 +1,3 @@
-# TODO Line 831 will throw an unclear error if there is no image in the tile_data.xml file.
-# world.py
-
 import pygame, random, pickle, datetime, perlin, math
 from pygame.locals import Rect
 
