@@ -332,7 +332,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 									  is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
 
 
-def add_message(text, color, life=5, outline_color=(0, 0, 0)):
+def add_message(text, color, life=5.0, outline_color=(0, 0, 0)):
 	global messages
 	text1 = commons.DEFAULTFONT.render(text, False, color)
 	text2 = commons.DEFAULTFONT.render(text, False, outline_color)

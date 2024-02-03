@@ -763,7 +763,7 @@ while game_running:
 			world_time_seconds = "0" + world_time_seconds
 		# print(world_time_hours + ":" + world_time_minutes + ":" + world_time_seconds)
 		world.world.play_time += commons.DELTA_TIME
-		entity_manager.client_player.play_time += commons.DELTA_TIME
+		entity_manager.client_player.play_time += int(commons.DELTA_TIME)
 
 		evenOlderCamPos = entity_manager.old_camera_position
 
@@ -1051,7 +1051,6 @@ while game_running:
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] = entity_manager.client_color_picker.selected_x
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] = entity_manager.client_color_picker.selected_y
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] = tuple(entity_manager.client_color_picker.selected_color)
-				player.update_player_model_umath.sing_model_data()
 				commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 			
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
@@ -1099,10 +1098,10 @@ while game_running:
 				sys.exit()
 			commons.WAIT_TO_USE = True
 		
-		if event.type == song_end_event:
-			pygame.mixer.music.load("res/sounds/day.mp3")
-			pygame.mixer.music.set_volume(game_data.music_volume)
-			pygame.mixer.music.play()
+		# if event.type == song_end_event:
+		# 	pygame.mixer.music.load("res/sounds/day.mp3")
+		# 	pygame.mixer.music.set_volume(game_data.music_volume)
+		# 	pygame.mixer.music.play()
 
 			# if event.key == K_CAPSLOCK:
 			#	if commons.SHIFT_ACTIVE:
@@ -1202,18 +1201,20 @@ while game_running:
 
 								if tile_id != game_data.air_tile_id:
 									tile_data = game_data.get_tile_by_id(tile_id)
-									if tile_data["@average_color"] != (255, 0, 255):
-										pygame.draw.rect(world_surf, tile_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
-										continue
+									if tile_data != None:
+										if tile_data["@average_color"] != (255, 0, 255):
+											pygame.draw.rect(world_surf, tile_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+											continue
 
 								if wall_id != game_data.air_wall_id:
 									wall_data = game_data.get_wall_by_id(wall_id)
-									if wall_data["@average_color"] != (255, 0, 255):
-										pygame.draw.rect(world_surf, wall_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
-										continue
+									if wall_data != None:
+										if wall_data["@average_color"] != (255, 0, 255):
+											pygame.draw.rect(world_surf, wall_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+											continue
 
 								sky_darken_factor = 1.0 - 0.7 * min(1.0, max(0.0, (tile_y - 55) / 110))
-								color = shared_methods.darken_color((135, 206, 234), sky_darken_factor)
+								color = shared_methods.darken_color((135, 206, 234), int(sky_darken_factor))
 								pygame.draw.rect(world_surf, color, pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
 
 						pygame.image.save(world_surf, path)
