@@ -1016,32 +1016,37 @@ def change_sound_volume(amount):
 def play_sound(sound_id_str):
 	if commons.SOUND:
 		sound_data = get_sound_by_id_str(sound_id_str)
-		sound_index = random.randint(0, len(sound_data["@variations"]) - 1)
-		sound_data["@variations"][sound_index].play()
+		if (sound_data != None):
+			sound_index = random.randint(0, len(sound_data["@variations"]) - 1)
+			sound_data["@variations"][sound_index].play()
 
 
 def play_tile_hit_sfx(tile_id):
 	if commons.SOUND:
 		tile_data = get_tile_by_id(tile_id)
-		play_sound(tile_data["@hit_sound"])
+		if (tile_data != None):
+			play_sound(tile_data["@hit_sound"])
 
 
 def play_tile_place_sfx(tile_id):
 	if commons.SOUND:
 		tile_data = get_tile_by_id(tile_id)
-		play_sound(tile_data["@place_sound"])
+		if (tile_data != None):
+			play_sound(tile_data["@place_sound"])
 
 
 def play_wall_hit_sfx(wall_id):
 	if commons.SOUND:
 		wall_data = get_wall_by_id(wall_id)
-		play_sound(wall_data["@hit_sound"])
+		if(wall_data != None):
+			play_sound(wall_data["@hit_sound"])
 
 
 def play_wall_place_sfx(wall_id):
 	if commons.SOUND:
 		wall_data = get_wall_by_id(wall_id)
-		play_sound(wall_data["@place_sound"])
+		if (wall_data != None):
+			play_sound(wall_data["@place_sound"])
 
 
 class StructureConnectionOrientation(Enum):
