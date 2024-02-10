@@ -21,7 +21,7 @@
 	<li>Sounds are from Terraria</li>
 </ul>
 
-<div>
+<div width="100vw">
 	<img src="/res/images/readme/menu_screen.png?raw=true" width="50%" height="auto" />
 	<img src="/res/images/readme/gameplay.png?raw=true" width="50%" height="auto" />
 </div>
