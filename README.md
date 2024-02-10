@@ -1,3 +1,4 @@
+<div align="center">Terraria</div>
 ### Required modules: 
 - pygame
 - sys
