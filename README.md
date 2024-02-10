@@ -1,4 +1,4 @@
-<div align="center">Terraria</div>
+<h1 align="center">Terraria</h1>
 ### Required modules: 
 - pygame
 - sys
