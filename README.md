@@ -22,4 +22,4 @@
 </ul>
 
 <img src="/res/images/readme/menu_screen.png?raw=true" />
-<img src="/res/images/readme/gameplay?raw=true" />
+<img src="/res/images/readme/gameplay.png?raw=true" />
