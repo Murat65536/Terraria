@@ -38,7 +38,7 @@ def get_on_off(bool_var):
 	Multiplies all three components of a color tuple by a given float
 -----------------------------------------------------------------------------------------------------------------"""
 def darken_color(color, factor=0.6):
-	return color[0] * factor, color[1] * factor, color[2] * factor
+	return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
 
 
 """================================================================================================================= 
@@ -49,7 +49,8 @@ def darken_color(color, factor=0.6):
 -----------------------------------------------------------------------------------------------------------------"""
 def get_block_average_color(tile_id):
 	tile_data = game_data.get_tile_by_id(tile_id)
-	return tile_data["@average_color"]
+	if (tile_data != None):
+		return tile_data["@average_color"]
 
 """================================================================================================================= 
 	shared_methods.get_tier_color -> tuple

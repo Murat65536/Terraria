@@ -129,47 +129,48 @@ class Enemy:
 					if world.tile_in_map(self.block_pos[1] + j, self.block_pos[0] + i):
 						tile_id = world.world.tile_data[self.block_pos[1] + j][self.block_pos[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
-						if TileTag.NOCOLLIDE not in tile_data["@tags"]:
-							block_rect = Rect(commons.BLOCKSIZE * (self.block_pos[1] + j), commons.BLOCKSIZE * (self.block_pos[0] + i), commons.BLOCKSIZE, commons.BLOCKSIZE)
-							if TileTag.PLATFORM in tile_data["@tags"]:
-								platform = True
-							else:
-								platform = False
-							if block_rect.colliderect(int(self.rect.left - 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
-								self.stop_left = True  # Is there a solid block left
-							if block_rect.colliderect(int(self.rect.right + 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
-								self.stop_right = True  # Is there a solid block right
-							if block_rect.colliderect(self.rect):
-								if not self.world_invincible and TileTag.DAMAGING in tile_data["@tags"]:
-									# self.damage(tile_data["@tile_damage"], [tile_data["@tile_damage_name"], "World"])
-									pass
-								
-								delta_x = self.position[0] - block_rect.centerx
-								delta_y = self.position[1] - block_rect.centery
-								if abs(delta_x) > abs(delta_y):
-									if delta_x > 0:
-										if not platform:
-											self.position = (block_rect.right + self.rect.width * 0.5, self.position[1])  # Move enemy right
-											self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
-									else:
-										if not platform:
-											self.position = (block_rect.left - self.rect.width * 0.5, self.position[1])  # Move enemy left
-											self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
+						if (tile_data != None):
+							if TileTag.NOCOLLIDE not in tile_data["@tags"]:
+								block_rect = Rect(commons.BLOCKSIZE * (self.block_pos[1] + j), commons.BLOCKSIZE * (self.block_pos[0] + i), commons.BLOCKSIZE, commons.BLOCKSIZE)
+								if TileTag.PLATFORM in tile_data["@tags"]:
+									platform = True
 								else:
-									if delta_y > 0:
-										if self.velocity[1] < 0:
+									platform = False
+								if block_rect.colliderect(int(self.rect.left - 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
+									self.stop_left = True  # Is there a solid block left
+								if block_rect.colliderect(int(self.rect.right + 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
+									self.stop_right = True  # Is there a solid block right
+								if block_rect.colliderect(self.rect):
+									if not self.world_invincible and TileTag.DAMAGING in tile_data["@tags"]:
+										# self.damage(tile_data["@tile_damage"], [tile_data["@tile_damage_name"], "World"])
+										pass
+									
+									delta_x = self.position[0] - block_rect.centerx
+									delta_y = self.position[1] - block_rect.centery
+									if abs(delta_x) > abs(delta_y):
+										if delta_x > 0:
 											if not platform:
-												if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
-													self.position = (self.position[0], block_rect.bottom + self.rect.height * 0.5)  # Move enemy down
-													self.velocity = (self.velocity[0], 0)  # Stop enemy vertically
+												self.position = (block_rect.right + self.rect.width * 0.5, self.position[1])  # Move enemy right
+												self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
+										else:
+											if not platform:
+												self.position = (block_rect.left - self.rect.width * 0.5, self.position[1])  # Move enemy left
+												self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
 									else:
-										if self.velocity[1] > 0:
-											if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
-												self.position = (self.position[0], block_rect.top - self.rect.height * 0.5 + 1)  # Move enemy up
-												self.velocity = (self.velocity[0] * 0.5, 0)  # Slow down enemy horizontally and stop player vertically
-												self.grounded = True
-												self.moving_right = False
-												self.moving_left = False
+										if delta_y > 0:
+											if self.velocity[1] < 0:
+												if not platform:
+													if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
+														self.position = (self.position[0], block_rect.bottom + self.rect.height * 0.5)  # Move enemy down
+														self.velocity = (self.velocity[0], 0)  # Stop enemy vertically
+										else:
+											if self.velocity[1] > 0:
+												if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
+													self.position = (self.position[0], block_rect.top - self.rect.height * 0.5 + 1)  # Move enemy up
+													self.velocity = (self.velocity[0] * 0.5, 0)  # Slow down enemy horizontally and stop player vertically
+													self.grounded = True
+													self.moving_right = False
+													self.moving_left = False
 
 			self.animate()
 
@@ -320,7 +321,7 @@ class Enemy:
 		commons.screen.blit(surface_manager.slimes[self.enemy_id * 3 + self.animation_frame], (left, top))
 		if self.hp < self.max_hp:
 			hp_float = self.hp / self.max_hp
-			col = (255 * (1 - hp_float), 255 * hp_float, 0)
+			col = (int(255 * (1 - hp_float)), int(255 * hp_float), 0)
 			pygame.draw.rect(commons.screen, shared_methods.darken_color(col), Rect(left, top + 30, self.rect.width, 10), 0)
 			pygame.draw.rect(commons.screen, col, Rect(left + 2, top + 32, (self.rect.width - 4) * hp_float, 6), 0)
 		if commons.HITBOXES:

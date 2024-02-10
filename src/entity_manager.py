@@ -89,8 +89,7 @@ def check_enemy_spawn():
 			val = int(14 - ((client_player.position[1] // commons.BLOCKSIZE) // 30))
 			if val < 1:
 				val = 1
-			if len(enemies) < commons.MAXENEMYSPAWNS + (7 - val * 0.5) and random.randint(1,
-																						  val) == 1:  # Reduce enemy spawns
+			if len(enemies) < commons.MAXENEMYSPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1:  # Reduce enemy spawns
 				spawn_enemy()
 		else:
 			commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
@@ -308,15 +307,14 @@ def spawn_physics_item(item, position, velocity=None, pickup_delay=100):
 
 def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 	ammo_item_data = game_data.get_item_by_id(ammo_item_id)
-
-	total_damage = weapon_item.get_attack_damage() + ammo_item_data["@ammo_damage"]
+	
+	if (ammo_item_data != None):
+		total_damage = weapon_item.get_attack_damage() + ammo_item_data["@ammo_damage"]
+		knockback = weapon_item.get_knockback() * ammo_item_data["@ammo_knockback_mod"]
+		ammo_gravity_mod = ammo_item_data["@ammo_gravity_mod"]
+		ammo_drag = ammo_item_data["@ammo_drag"]
 	
 	speed = weapon_item.get_ranged_projectile_speed()
-	
-	knockback = weapon_item.get_knockback() * ammo_item_data["@ammo_knockback_mod"]
-
-	ammo_gravity_mod = ammo_item_data["@ammo_gravity_mod"]
-	ammo_drag = ammo_item_data["@ammo_drag"]
 
 	for _ in range(weapon_item.get_ranged_num_projectiles()):
 		inaccuracy = 1.0 - weapon_item.get_ranged_accuracy()
@@ -328,8 +326,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 			is_crit = True
 
 		# Hack until we have projectile data loaded from the tool
-		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback,
-									  is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
+		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
 
 
 def add_message(text, color, life=5.0, outline_color=(0, 0, 0)):
@@ -357,7 +354,7 @@ def add_damage_number(pos, val, crit=False, color=None):
 			color = (207, 127, 63)
 
 	t1 = commons.MEDIUMFONT.render(str(int(val)), False, color)
-	t2 = commons.MEDIUMFONT.render(str(int(val)), False, (color[0] * 0.8, color[1] * 0.8, color[2] * 0.8))
+	t2 = commons.MEDIUMFONT.render(str(int(val)), False, (int(color[0] * 0.8), int(color[1] * 0.8), int(color[2] * 0.8)))
 
 	width = t1.get_width() + 2
 	height = t1.get_height() + 2

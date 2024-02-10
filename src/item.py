@@ -50,11 +50,12 @@ class Item:
 
 		# Auto assign prefix
 		if prefix_name is None or prefix_name == "":
-			if auto_assign_prefix and ItemTag.WEAPON in self.xml_item["@tags"]:
-				# 15% chance to be given a prefix if it has a prefix category
-				if len(self.xml_item["@prefixes"]) > 0 and random.random() < 0.85:
-					self.prefix_data = get_random_item_prefix(self.xml_item["@prefixes"][random.randint(0, len(self.xml_item["@prefixes"]) - 1)])
-					self.has_prefix = True
+			if (self.xml_item != None):
+				if auto_assign_prefix and ItemTag.WEAPON in self.xml_item["@tags"]:
+					# 15% chance to be given a prefix if it has a prefix category
+					if len(self.xml_item["@prefixes"]) > 0 and random.random() < 0.85:
+						self.prefix_data = get_random_item_prefix(self.xml_item["@prefixes"][random.randint(0, len(self.xml_item["@prefixes"]) - 1)])
+						self.has_prefix = True
 
 		else:
 			self.assign_prefix(prefix_name)
@@ -65,66 +66,73 @@ class Item:
 		return Item(self.item_id, new_amnt, False, self.get_prefix_name())
 
 	def has_tag(self, tag):
-		if tag in self.xml_item["@tags"]:
-			return True
+		if (self.xml_item != None):
+			if tag in self.xml_item["@tags"]:
+				return True
 		return False
 
 	def get_prefix_name(self):
-		if self.has_prefix:
-			return self.prefix_data[1][0]
+		if (self.prefix_data != None):
+			if self.has_prefix:
+				return self.prefix_data[1][0]
 		return ""
 
 	def get_attack_damage(self):
-		if self.prefix_data is not None:
-			return self.xml_item["@attack_damage"] * (1 + self.prefix_data[1][1])
-		else:
-			return self.xml_item["@attack_damage"]
+		if (self.xml_item != None):
+			if self.prefix_data != None:
+				return self.xml_item["@attack_damage"] * (1 + self.prefix_data[1][1])
+			else:
+				return self.xml_item["@attack_damage"]
 
 	def get_crit_chance(self):
-		if self.prefix_data is not None:
-			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-				return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][2]), 0.0)
+		if (self.xml_item != None):
+			if self.prefix_data != None:
+				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
+					return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][2]), 0.0)
+				else:
+					return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][3]), 0.0)
 			else:
-				return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][3]), 0.0)
-		else:
-			return self.xml_item["@crit_chance"]
+				return self.xml_item["@crit_chance"]
 
 	def get_knockback(self):
-		if self.prefix_data is not None:
-			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-				return self.xml_item["@knockback"] * (1 + self.prefix_data[1][3])
-			elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-				return self.xml_item["@knockback"] * (1 + self.prefix_data[1][4])
+		if (self.xml_item != None):
+			if self.prefix_data != None:
+				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
+					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][3])
+				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
+					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][4])
+				else:
+					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][5])
 			else:
-				return self.xml_item["@knockback"] * (1 + self.prefix_data[1][5])
-		else:
-			return self.xml_item["@knockback"]
+				return self.xml_item["@knockback"]
 
 	def get_tier(self):
-		if self.prefix_data is not None:
-			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-				return min(max(self.xml_item["@tier"] + self.prefix_data[1][4], 0), 10)
-			elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-				return min(max(self.xml_item["@tier"] + self.prefix_data[1][5], 0), 10)
+		if (self.xml_item != None):
+			if self.prefix_data != None:
+				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
+					return min(max(self.xml_item["@tier"] + self.prefix_data[1][4], 0), 10)
+				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
+					return min(max(self.xml_item["@tier"] + self.prefix_data[1][5], 0), 10)
+				else:
+					return min(max(self.xml_item["@tier"] + self.prefix_data[1][6], 0), 10)
 			else:
-				return min(max(self.xml_item["@tier"] + self.prefix_data[1][6], 0), 10)
-		else:
-			return self.xml_item["@tier"]
+				return self.xml_item["@tier"]
 
 	def get_attack_speed(self):
-		if self.prefix_data is not None:
-			return round(self.xml_item["@attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
-		else:
-			return round(self.xml_item["@attack_speed"])
+		if (self.xml_item != None):
+			if self.prefix_data != None:
+				return round(self.xml_item["@attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
+			else:
+				return round(self.xml_item["@attack_speed"])
 
 	def get_scale(self):
-		if self.prefix_data is not None:
+		if self.prefix_data != None:
 			if self.prefix_data[0] == ItemPrefixGroup.MELEE:
 				return 1.0 + self.prefix_data[1][4]
 		return 1.0
 
 	def get_ranged_projectile_speed(self):
-		if self.prefix_data is not None:
+		if self.prefix_data != None:
 			if self.prefix_data[0] == ItemPrefixGroup.RANGED:
 				return self.xml_item["@ranged_projectile_speed"] * (1 + self.prefix_data[1][4])
 		return self.xml_item["@ranged_projectile_speed"]

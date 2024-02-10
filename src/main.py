@@ -18,11 +18,9 @@ import world
 import menu_manager
 import player
 import game_data
-from game_data import TileTag
 import prompt
 import item
 
-# from menu_manager import load_menu_player_data
 # from sound_manager import *
 
 
@@ -605,7 +603,7 @@ def draw_interactable_block_hover():
 		tile_id = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
 		tile_data = game_data.get_tile_by_id(tile_id)
 		if (tile_data != None):
-			if TileTag.CHEST in tile_data["@tags"] or TileTag.CYCLABLE in tile_data["@tags"]:
+			if game_data.TileTag.CHEST in tile_data["@tags"] or game_data.TileTag.CYCLABLE in tile_data["@tags"]:
 				item_data = game_data.get_item_by_id_str(tile_data["@item_id_str"])
 				if (item_data != None):
 					commons.screen.blit(item_data["@image"], commons.MOUSE_POS)
