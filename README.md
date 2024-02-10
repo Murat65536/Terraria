@@ -24,10 +24,10 @@
 <table>
 	<tr>
 		<td>
-			<img src="/res/images/readme/menu_screen.png?raw=true" width="50%" height="auto" />
+			<img src="/res/images/readme/menu_screen.png?raw=true" />
 		</td>
 		<td>
-			<img src="/res/images/readme/gameplay.png?raw=true" width="50%" height="auto" />
+			<img src="/res/images/readme/gameplay.png?raw=true" />
 		</td>
 	</tr>
 </table>
