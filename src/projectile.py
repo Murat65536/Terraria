@@ -57,10 +57,10 @@ class Projectile:
 		drag_factor = 1 + self.drag * commons.DELTA_TIME
 		self.velocity = (self.velocity[0] / drag_factor, self.velocity[1] / drag_factor + commons.GRAVITY * self.gravity * commons.DELTA_TIME)
 
-		self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCKSIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCKSIZE)
+		self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 		self.rect.left = self.position[0] - self.size * 0.5
 		self.rect.top = self.position[1] - self.size * 0.5
-		block_position = (math.floor(self.position[1] // commons.BLOCKSIZE), math.floor(self.position[0] // commons.BLOCKSIZE))
+		block_position = (math.floor(self.position[1] // commons.BLOCK_SIZE), math.floor(self.position[0] // commons.BLOCK_SIZE))
 		if self.trail is not None:
 			if self.trail_tick <= 0:
 				if self.trail == "arrow":
@@ -87,7 +87,7 @@ class Projectile:
 					tile_data = game_data.get_tile_by_id(tile_id)
 					if TileTag.NOCOLLIDE not in tile_data["@tags"]:
 						if TileTag.PLATFORM not in tile_data["@tags"]:
-							block_rect = Rect(commons.BLOCKSIZE * (block_position[1] + j), commons.BLOCKSIZE * (block_position[0] + i), commons.BLOCKSIZE, commons.BLOCKSIZE)
+							block_rect = Rect(commons.BLOCK_SIZE * (block_position[1] + j), commons.BLOCK_SIZE * (block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx
 								delta_y = self.position[1] - block_rect.centery
@@ -121,7 +121,7 @@ class Projectile:
 					color = shared_methods.get_block_average_color(block_hit_tile_id)
 					velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 					velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
-					for i in range(int(4 * commons.PARTICLEDENSITY)):
+					for i in range(int(4 * commons.PARTICLE_DENSITY)):
 						entity_manager.spawn_particle(self.position, color, life=0.5, angle=velocity_angle, spread=0.8, magnitude=velocity_magnitude * random.random() * 0.7, gravity=0, size=8)
 				if self.projectile_type == "Bullet":
 					game_data.play_sound("sound.bullet")

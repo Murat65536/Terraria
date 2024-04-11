@@ -132,40 +132,47 @@ class Item:
 		return 1.0
 
 	def get_ranged_projectile_speed(self):
-		if self.prefix_data != None:
-			if self.prefix_data[0] == ItemPrefixGroup.RANGED:
+		if self.xml_item != None:
+			if self.prefix_data != None and self.prefix_data[0] == ItemPrefixGroup.RANGED:
 				return self.xml_item["@ranged_projectile_speed"] * (1 + self.prefix_data[1][4])
-		return self.xml_item["@ranged_projectile_speed"]
+			return self.xml_item["@ranged_projectile_speed"]
 
 	def get_mana_cost(self):
-		if self.prefix_data is not None:
-			if self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
+		if self.xml_item != None:
+			if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
 				return self.xml_item["@mana_cost"] * (1 + self.prefix_data[1][4])
-		return self.xml_item["@mana_cost"]
+			return self.xml_item["@mana_cost"]
 
 	def get_name(self):
-		if self.has_prefix:
-			return self.get_prefix_name() + " " + self.xml_item["@name"]
-		else:
-			return self.xml_item["@name"]
+		if self.xml_item != None:
+			if self.has_prefix:
+				return self.get_prefix_name() + " " + self.xml_item["@name"]
+			else:
+				return self.xml_item["@name"]
 
 	def get_id_str(self):
-		return self.xml_item["@id_str"]
+		if self.xml_item != None:
+			return self.xml_item["@id_str"]
 
 	def get_ammo_type(self):
-		return self.xml_item["@ammo_type"]
+		if self.xml_item != None:
+			return self.xml_item["@ammo_type"]
 
 	def get_ammo_damage(self):
-		return self.xml_item["@ammo_damage"]
+		if self.xml_item != None:
+			return self.xml_item["@ammo_damage"]
 
 	def get_ammo_drag(self):
-		return self.xml_item["@ammo_drag"]
+		if self.xml_item != None:
+			return self.xml_item["@ammo_drag"]
 
 	def get_ammo_gravity_mod(self):
-		return self.xml_item["@ammo_gravity_mod"]
+		if self.xml_item != None:
+			return self.xml_item["@ammo_gravity_mod"]
 
 	def get_ammo_knockback_mod(self):
-		return self.xml_item["@ammo_knockback_mod"]
+		if self.xml_item != None:
+			return self.xml_item["@ammo_knockback_mod"]
 
 	def assign_prefix(self, prefix_name):
 		self.prefix_data = game_data.find_prefix_data_by_name(prefix_name)
@@ -175,89 +182,113 @@ class Item:
 			self.has_prefix = False
 
 	def get_image(self):
-		image = self.xml_item["@image"]
-		if image is None:
-			return pygame.Surface((32, 32))
-		else:
-			return image
+		if self.xml_item != None:
+			image = self.xml_item["@image"]
+			if image is None:
+				return pygame.Surface((32, 32))
+			else:
+				return image
 
 	def get_item_slot_offset_x(self):
-		try:
-			return self.xml_item["@item_slot_offset_x"]
-		except KeyError:
-			return 8
+		if self.xml_item != None:
+			try:
+				return self.xml_item["@item_slot_offset_x"]
+			except KeyError:
+				return 8
 
 	def get_item_slot_offset_y(self):
-		try:
-			return self.xml_item["@item_slot_offset_y"]
-		except KeyError:
-			return 8
+		if self.xml_item != None:
+			try:
+				return self.xml_item["@item_slot_offset_y"]
+			except KeyError:
+				return 8
 
 	def get_world_override_image(self):
-		try:
-			return self.xml_item["@world_override_image"]
-		except KeyError:
-			return
+		if self.xml_item != None:
+			try:
+				return self.xml_item["@world_override_image"]
+			except KeyError:
+				return
 
 	def get_tile_id_str(self):
-		return self.xml_item["@tile_id_str"]
+		if self.xml_item != None:
+			return self.xml_item["@tile_id_str"]
 
 	def get_wall_id_str(self):
-		return self.xml_item["@wall_id_str"]
+		if self.xml_item != None:
+			return self.xml_item["@wall_id_str"]
 
 	def get_hold_offset(self):
-		return self.xml_item["@hold_offset"]
+		if self.xml_item != None:
+			return self.xml_item["@hold_offset"]
 
 	def get_ranged_projectile_id_str(self):
-		return self.xml_item["@ranged_projectile_id_str"]
+		if self.xml_item != None:
+			return self.xml_item["@ranged_projectile_id_str"]
 
 	def get_ranged_ammo_type(self):
-		return self.xml_item["@ranged_ammo_type"]
+		if self.xml_item != None:
+			return self.xml_item["@ranged_ammo_type"]
 
 	def get_ranged_accuracy(self):
-		return self.xml_item["@ranged_accuracy"]
+		if self.xml_item != None:
+			return self.xml_item["@ranged_accuracy"]
 
 	def get_ranged_num_projectiles(self):
-		return self.xml_item["@ranged_num_projectiles"]
+		if self.xml_item != None:
+			return self.xml_item["@ranged_num_projectiles"]
 
 	def get_pickaxe_power(self):
-		return self.xml_item["@pickaxe_power"]
+		if self.xml_item != None:
+			return self.xml_item["@pickaxe_power"]
 
 	def get_axe_power(self):
-		return self.xml_item["@axe_power"]
+		if self.xml_item != None:
+			return self.xml_item["@axe_power"]
 
 	def get_hammer_power(self):
-		return self.xml_item["@hammer_power"]
+		if self.xml_item != None:
+			return self.xml_item["@hammer_power"]
 
 	def get_grapple_speed(self):
-		return self.xml_item["@grapple_speed"]
+		if self.xml_item != None:
+			return self.xml_item["@grapple_speed"]
 
 	def get_grapple_chain_length(self):
-		return self.xml_item["@grapple_chain_length"]
+		if self.xml_item != None:
+			return self.xml_item["@grapple_chain_length"]
 
 	def get_grapple_max_chains(self):
-		return self.xml_item["@grapple_max_chains"]
+		if self.xml_item != None:
+			return self.xml_item["@grapple_max_chains"]
 
 	def get_grapple_chain_image(self):
-		return self.xml_item["@grapple_chain_image"]
+		if self.xml_item != None:
+			return self.xml_item["@grapple_chain_image"]
 
 	def get_grapple_claw_image(self):
-		return self.xml_item["@grapple_claw_image"]
+		if self.xml_item != None:
+			return self.xml_item["@grapple_claw_image"]
 
 	def get_max_stack(self):
-		return self.xml_item["@max_stack"]
+		if self.xml_item != None:
+			return self.xml_item["@max_stack"]
 
 	def get_buy_price(self):
-		return self.xml_item["@buy_price"]
+		if self.xml_item != None:
+			return self.xml_item["@buy_price"]
 
 	def get_sell_price(self):
-		return self.xml_item["@sell_price"]
+		if self.xml_item != None:
+			return self.xml_item["@sell_price"]
 
 	def get_pickup_sound_id_str(self):
-		return self.xml_item["@pickup_sound"]
+		if self.xml_item != None:
+			return self.xml_item["@pickup_sound"]
 
 	def get_drop_sound_id_str(self):
-		return self.xml_item["@drop_sound"]
+		if self.xml_item != None:
+			return self.xml_item["@drop_sound"]
 
 
 def get_coins_from_int(coin_int):
@@ -281,19 +312,20 @@ def get_coins_from_int(coin_int):
 
 def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 	loot_data = game_data.get_loot_by_id_str(loot_id_str)
-	item_count_range = loot_data["@item_spawn_count_range"]
-	item_count = random.randint(item_count_range[0], item_count_range[1])
-	possible_items = loot_data["@item_list_data"]
+	if loot_data != None:
+		item_count_range = loot_data["@item_spawn_count_range"]
+		item_count = random.randint(item_count_range[0], item_count_range[1])
+		possible_items = loot_data["@item_list_data"]
 
 	spawn_list = []
-	void_indicies = []
+	void_indices = []
 
 	for _ in range(item_count):
 		total_weight = 0
 		possible_item_indices = []
 
 		for possible_item_index in range(len(possible_items)):
-			if possible_item_index not in void_indicies:
+			if possible_item_index not in void_indices:
 				possible_item = possible_items[possible_item_index]
 				if possible_item[2][0] == possible_item[2][1] or possible_item[2][0] < tile_pos[1] < possible_item[2][1]:
 					total_weight += possible_item[1]
@@ -302,7 +334,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 		random_num = random.randint(0, total_weight)
 
 		for possible_item_index in possible_item_indices:
-			if possible_item_index not in void_indicies:
+			if possible_item_index not in void_indices:
 				possible_item = possible_items[possible_item_index]
 				if random_num <= possible_item[1]:
 					random_count = random.randint(possible_item[3][0], possible_item[3][1])
@@ -312,10 +344,11 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 					for item_index in range(len(spawn_list)):
 						if spawn_list[item_index][0] == new_item_id:
 							spawn_list[item_index][1] += random_count
-							max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["@max_stack"]
-							if spawn_list[item_index][1] > max_stack:
-								random_count = spawn_list[item_index][1] - max_stack
-								spawn_list[item_index][1] = max_stack
+							if spawn_list[item_index][0] != None:
+								max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["@max_stack"]
+								if spawn_list[item_index][1] > max_stack:
+									random_count = spawn_list[item_index][1] - max_stack
+									spawn_list[item_index][1] = max_stack
 							else:
 								should_add_instance = False
 
@@ -323,7 +356,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 						spawn_list.append([new_item_id, random_count, possible_item[4]])
 
 						if possible_item[5]:  # Only once
-							void_indicies.append(possible_item_index)
+							void_indices.append(possible_item_index)
 						break
 				else:
 					random_num -= possible_item[1]

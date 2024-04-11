@@ -38,7 +38,7 @@ class Enemy:
 		self.knockback_resist = int(game_data.enemy_data[self.enemy_id][3])
 		self.attack_damage = int(game_data.enemy_data[self.enemy_id][5])
 		self.blood_color = tuple(game_data.enemy_data[self.enemy_id][6])
-		self.rect = Rect(self.position[0] - commons.BLOCKSIZE, self.position[1] - commons.BLOCKSIZE / 1.5, commons.BLOCKSIZE * 2, commons.BLOCKSIZE * 1.5)
+		self.rect = Rect(self.position[0] - commons.BLOCK_SIZE, self.position[1] - commons.BLOCK_SIZE / 1.5, commons.BLOCK_SIZE * 2, commons.BLOCK_SIZE * 1.5)
 		self.grounded = False
 
 		self.stop_left = False
@@ -94,10 +94,10 @@ class Enemy:
 			drag_factor = 1.0 - commons.DELTA_TIME * 4
 
 			self.velocity = (self.velocity[0] * drag_factor, self.velocity[1] * drag_factor)
-			self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCKSIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCKSIZE)
+			self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 			self.rect.left = self.position[0] - self.rect.width * 0.5  # updating rect
 			self.rect.top = self.position[1] - self.rect.height * 0.5
-			self.block_pos = (math.floor(self.position[1] // commons.BLOCKSIZE), math.floor(self.position[0] // commons.BLOCKSIZE))
+			self.block_pos = (math.floor(self.position[1] // commons.BLOCK_SIZE), math.floor(self.position[0] // commons.BLOCK_SIZE))
 			self.grounded = False
 		
 			if self.velocity[0] < 0:
@@ -131,7 +131,7 @@ class Enemy:
 						tile_data = game_data.get_tile_by_id(tile_id)
 						if (tile_data != None):
 							if TileTag.NOCOLLIDE not in tile_data["@tags"]:
-								block_rect = Rect(commons.BLOCKSIZE * (self.block_pos[1] + j), commons.BLOCKSIZE * (self.block_pos[0] + i), commons.BLOCKSIZE, commons.BLOCKSIZE)
+								block_rect = Rect(commons.BLOCK_SIZE * (self.block_pos[1] + j), commons.BLOCK_SIZE * (self.block_pos[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								if TileTag.PLATFORM in tile_data["@tags"]:
 									platform = True
 								else:
@@ -217,7 +217,7 @@ class Enemy:
 						velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 						velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
 
-					for i in range(int(5 * commons.PARTICLEDENSITY)):  # Blood particles
+					for i in range(int(5 * commons.PARTICLE_DENSITY)):  # Blood particles
 						particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
 						entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.5, outline=False)
 			else:
@@ -266,7 +266,7 @@ class Enemy:
 				velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 				velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
 
-				for i in range(int(25 * commons.PARTICLEDENSITY)):  # Blood particles
+				for i in range(int(25 * commons.PARTICLE_DENSITY)):  # Blood particles
 					particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
 					entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.4, outline=False)
 
@@ -296,16 +296,16 @@ class Enemy:
 		Checks if the enemy has gone too far beyond the player's view, if so, return true
 	-----------------------------------------------------------------------------------------------------------------"""
 	def check_despawn(self):
-		if self.position[0] < entity_manager.client_player.position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCKSIZE:
+		if self.position[0] < entity_manager.client_player.position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE:
 			entity_manager.enemies.remove(self)
 			return True
-		elif self.position[0] > entity_manager.client_player.position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCKSIZE:
+		elif self.position[0] > entity_manager.client_player.position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE:
 			entity_manager.enemies.remove(self)
 			return True
-		elif self.position[1] < entity_manager.client_player.position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCKSIZE:
+		elif self.position[1] < entity_manager.client_player.position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE:
 			entity_manager.enemies.remove(self)
 			return True
-		elif self.position[1] > entity_manager.client_player.position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCKSIZE:
+		elif self.position[1] > entity_manager.client_player.position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE:
 			entity_manager.enemies.remove(self)
 			return True
 		return False

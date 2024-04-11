@@ -60,7 +60,7 @@ class Prompt:
 		offset_x = 10
 
 		if self.shop:
-			if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
+			if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POSITION):
 				if not self.shop_hover:
 					self.shop_hover = True
 					game_data.play_sound("sound.menu_select")
@@ -69,7 +69,7 @@ class Prompt:
 			offset_x += 60
 
 		if self.button_1_name is not None:
-			if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
+			if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POSITION):
 				if not self.button_1_hover:
 					self.button_1_hover = True
 					game_data.play_sound("sound.menu_select")
@@ -77,9 +77,9 @@ class Prompt:
 					self.button_1_pressed = True
 			else:
 				self.button_1_hover = False
-			offset_x += commons.DEFAULTFONT.size(self.button_1_name)[0] + 20
+			offset_x += commons.DEFAULT_FONT.size(self.button_1_name)[0] + 20
 
-		if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POS):
+		if Rect(self.left + offset_x, self.bot, 60, 20).collidepoint(commons.MOUSE_POSITION):
 			if not self.close_hover:
 				self.close_hover = True
 				game_data.play_sound("sound.menu_select")
@@ -90,7 +90,7 @@ class Prompt:
 			self.close_hover = False
 			
 		if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
-			if not Rect(self.left, self.top, self.width, self.height).collidepoint(commons.MOUSE_POS):
+			if not Rect(self.left, self.top, self.width, self.height).collidepoint(commons.MOUSE_POSITION):
 				game_data.play_sound("sound.menu_close")
 				self.close = True
 				
@@ -117,18 +117,18 @@ class Prompt:
 			shop_col = (230, 230, 10)
 			if self.shop_hover:
 				shop_col = (255, 255, 255)
-			commons.screen.blit(shared_methods.outline_text("Shop", shop_col, commons.DEFAULTFONT), (self.left + offset_x, self.bot))
+			commons.screen.blit(shared_methods.outline_text("Shop", shop_col, commons.DEFAULT_FONT), (self.left + offset_x, self.bot))
 			offset_x += 60
 
 		if self.button_1_name is not None:
 			button_1_col = (230, 230, 10)
 			if self.button_1_hover:
 				button_1_col = (255, 255, 255)
-			commons.screen.blit(shared_methods.outline_text(self.button_1_name, button_1_col, commons.DEFAULTFONT), (self.left + offset_x, self.bot))
-			offset_x += commons.DEFAULTFONT.size(self.button_1_name)[0] + 20
+			commons.screen.blit(shared_methods.outline_text(self.button_1_name, button_1_col, commons.DEFAULT_FONT), (self.left + offset_x, self.bot))
+			offset_x += commons.DEFAULT_FONT.size(self.button_1_name)[0] + 20
 		close_col = (230, 230, 10)
 
 		if self.close_hover:
 			close_col = (255, 255, 255)
 
-		commons.screen.blit(shared_methods.outline_text("Close", close_col, commons.DEFAULTFONT), (self.left + offset_x, self.bot))
+		commons.screen.blit(shared_methods.outline_text("Close", close_col, commons.DEFAULT_FONT), (self.left + offset_x, self.bot))

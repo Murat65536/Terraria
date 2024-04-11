@@ -48,7 +48,7 @@ class PhysicsItem:
 		self.pickup_delay = pickup_delay
 		self.grounded = False
 
-		self.rect = Rect(position[0] - commons.BLOCKSIZE * 0.5 * self.item_scale, position[1] - commons.BLOCKSIZE * 0.5 * self.item_scale, commons.BLOCKSIZE * self.item_scale * 0.8, commons.BLOCKSIZE * self.item_scale * 0.8)
+		self.rect = Rect(position[0] - commons.BLOCK_SIZE * 0.5 * self.item_scale, position[1] - commons.BLOCK_SIZE * 0.5 * self.item_scale, commons.BLOCK_SIZE * self.item_scale * 0.8, commons.BLOCK_SIZE * self.item_scale * 0.8)
 		
 		self.stationary = False
 		self.time_stationary = 0
@@ -59,7 +59,7 @@ class PhysicsItem:
 		Gives the image an invisible border so that it can be rotated without clipping
 	-----------------------------------------------------------------------------------------------------------------"""
 	def render_image(self):
-		self.image = pygame.transform.scale(self.item.get_image(), (int(commons.BLOCKSIZE * 1.414 * self.item_scale), int(commons.BLOCKSIZE * 1.414 * self.item_scale)))
+		self.image = pygame.transform.scale(self.item.get_image(), (int(commons.BLOCK_SIZE * 1.414 * self.item_scale), int(commons.BLOCK_SIZE * 1.414 * self.item_scale)))
 		self.half_image_size = self.image.get_width() * 0.5
 
 	"""================================================================================================================= 
@@ -103,9 +103,9 @@ class PhysicsItem:
 		
 			drag_factor = 1.0 - commons.DELTA_TIME * 2
 			self.velocity = (self.velocity[0] * drag_factor, self.velocity[1] * drag_factor)
-			self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCKSIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCKSIZE)
+			self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 			self.rect.center = tuple(self.position)
-			self.block_position = (math.floor(self.position[1] // commons.BLOCKSIZE), math.floor(self.position[0] // commons.BLOCKSIZE))
+			self.block_position = (math.floor(self.position[1] // commons.BLOCK_SIZE), math.floor(self.position[0] // commons.BLOCK_SIZE))
 			
 			self.grounded = False
 
@@ -113,7 +113,7 @@ class PhysicsItem:
 		
 		if self.item.item_id not in entity_manager.client_player.un_pickupable_items:
 			if self.pickup_delay <= 0:
-				if abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCKSIZE * 3.5 and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCKSIZE * 3.5:
+				if abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCK_SIZE * 3.5 and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCK_SIZE * 3.5:
 					collide = False
 					self.stationary = False
 					self.time_stationary = 0
@@ -143,7 +143,7 @@ class PhysicsItem:
 						tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
 						if TileTag.NOCOLLIDE not in tile_data["@tags"]:
-							block_rect = Rect(commons.BLOCKSIZE * (self.block_position[1] + j), commons.BLOCKSIZE * (self.block_position[0] + i), commons.BLOCKSIZE, commons.BLOCKSIZE)
+							block_rect = Rect(commons.BLOCK_SIZE * (self.block_position[1] + j), commons.BLOCK_SIZE * (self.block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx
 								delta_y = self.position[1] - block_rect.centery

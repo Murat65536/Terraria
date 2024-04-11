@@ -22,7 +22,7 @@ def load_tile_mask_surfaces():
 		for i in range(13):
 			surf = pygame.Surface((8, 8), pygame.SRCALPHA)
 			surf.blit(tile_mask_image, (-i * 9, -j * 9))
-			surf = pygame.transform.scale(surf, (commons.BLOCKSIZE, commons.BLOCKSIZE))
+			surf = pygame.transform.scale(surf, (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
 			tile_masks.append(surf)
 
 

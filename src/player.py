@@ -157,7 +157,7 @@ class Player:
 		self.invincible	= True
 
 		hp_text_color = (255 *	(1 - self.hp / self.max_hp), 255 * (self.hp	/ self.max_hp),	0)
-		self.hp_text = shared_methods.outline_text(str(self.hp), hp_text_color, commons.DEFAULTFONT, outline_color=(hp_text_color[0]	* 0.5, hp_text_color[1] * 0.5,	hp_text_color[2] *	0.5))
+		self.hp_text = shared_methods.outline_text(str(self.hp), hp_text_color, commons.DEFAULT_FONT, outline_color=(hp_text_color[0]	* 0.5, hp_text_color[1] * 0.5,	hp_text_color[2] *	0.5))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - self.hp - self.hp_text.get_width()	* 0.5
 
 		self.grounded =	True
@@ -248,12 +248,12 @@ class Player:
 			drag_factor	= 1.0 -	commons.DELTA_TIME
 
 			self.velocity =	(self.velocity[0] *	drag_factor, self.velocity[1] *	drag_factor	+ commons.GRAVITY *	commons.DELTA_TIME)
-			self.position =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCKSIZE, self.position[1]	+ self.velocity[1] * commons.DELTA_TIME	* commons.BLOCKSIZE)
+			self.position =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCK_SIZE, self.position[1]	+ self.velocity[1] * commons.DELTA_TIME	* commons.BLOCK_SIZE)
 
 			self.rect.left = self.position[0] -	commons.PLAYER_WIDTH * 0.5	# updating rect
 			self.rect.top =	self.position[1] - commons.PLAYER_HEIGHT * 0.5
 
-			self.block_position	= (math.floor(self.position[1] // commons.BLOCKSIZE), math.floor(self.position[0] // commons.BLOCKSIZE))
+			self.block_position	= (math.floor(self.position[1] // commons.BLOCK_SIZE), math.floor(self.position[0] // commons.BLOCK_SIZE))
 
 			self.grounded =	False
 
@@ -292,9 +292,9 @@ class Player:
 			if pygame.mouse.get_pressed()[0] or pygame.mouse.get_pressed()[2]:
 				use	= False
 				if self.inventory_open:
-					if not Rect(5, 5, 480, 244).collidepoint(commons.MOUSE_POS)	and	not	Rect(commons.WINDOW_WIDTH -	50,	commons.WINDOW_HEIGHT -	20,	50,	20).collidepoint(commons.MOUSE_POS)	and	not	Rect(5,	270, 48, 288).collidepoint(commons.MOUSE_POS):
+					if not Rect(5, 5, 480, 244).collidepoint(commons.MOUSE_POSITION)	and	not	Rect(commons.WINDOW_WIDTH -	50,	commons.WINDOW_HEIGHT -	20,	50,	20).collidepoint(commons.MOUSE_POSITION)	and	not	Rect(5,	270, 48, 288).collidepoint(commons.MOUSE_POSITION):
 						if self.chest_open:
-							if not Rect(245, 265, 240, 192).collidepoint(commons.MOUSE_POS):
+							if not Rect(245, 265, 240, 192).collidepoint(commons.MOUSE_POSITION):
 								use	= True
 						else:
 							use	= True
@@ -315,7 +315,7 @@ class Player:
 							tile_id	= world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 							tile_data =	game_data.get_tile_by_id(tile_id)
 							if TileTag.NOCOLLIDE not in tile_data["@tags"]:
-								block_rect = Rect(commons.BLOCKSIZE	* (self.block_position[1] +	j),	commons.BLOCKSIZE *	(self.block_position[0]	+ i), commons.BLOCKSIZE, commons.BLOCKSIZE)
+								block_rect = Rect(commons.BLOCK_SIZE	* (self.block_position[1] +	j),	commons.BLOCK_SIZE *	(self.block_position[0]	+ i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								is_platform	= False
 								if TileTag.PLATFORM	in tile_data["@tags"]:
 									is_platform	= True
@@ -354,7 +354,7 @@ class Player:
 															collide	= False
 														else:
 															if self.velocity[1]	< 5:
-																if self.position[1]	+ commons.BLOCKSIZE	< block_rect.top:
+																if self.position[1]	+ commons.BLOCK_SIZE	< block_rect.top:
 																	collide	= True
 															else:
 																collide	= True
@@ -429,7 +429,7 @@ class Player:
 						velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 						velocity_magnitude = math.sqrt(self.velocity[0]	** 2 + self.velocity[1]	** 2)
 
-					for	i in range(int(10 *	commons.PARTICLEDENSITY)):	# blood
+					for	i in range(int(10 *	commons.PARTICLE_DENSITY)):	# blood
 						particle_pos = (self.position[0] + random.random() * commons.PLAYER_WIDTH -	commons.PLAYER_WIDTH * 0.5,	self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5)
 						entity_manager.spawn_particle(particle_pos,	(230, 0, 0), life=1, size=10, angle=velocity_angle,	spread=math.pi * 0.2, magnitude=random.random()	* velocity_magnitude, gravity=0.15,	outline=False)
 			else:
@@ -440,7 +440,7 @@ class Player:
 				self.velocity =	(self.velocity[0] +	direction *	remaining_knockback, remaining_knockback * -1.5)
 
 		hp_float = self.hp / self.max_hp
-		self.hp_text = shared_methods.outline_text(str(self.hp), ((1 - hp_float) * 255,	hp_float * 255,	0),	commons.DEFAULTFONT, outline_color=((1	- hp_float)	* 180, hp_float	* 180, 0))
+		self.hp_text = shared_methods.outline_text(str(self.hp), ((1 - hp_float) * 255,	hp_float * 255,	0),	commons.DEFAULT_FONT, outline_color=((1	- hp_float)	* 180, hp_float	* 180, 0))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - hp_float *	100	- self.hp_text.get_width() * 0.5
 
 	"""=================================================================================================================	
@@ -464,7 +464,7 @@ class Player:
 				velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 				velocity_magnitude = math.sqrt(self.velocity[0]	** 2 + self.velocity[1]	** 2)
 
-				for	i in range(int(35 *	commons.PARTICLEDENSITY)):	# more blood
+				for	i in range(int(35 *	commons.PARTICLE_DENSITY)):	# more blood
 					entity_manager.spawn_particle((self.position[0]	+ random.random() *	commons.PLAYER_WIDTH - commons.PLAYER_WIDTH	* 0.5,
 												  self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5),
 												  (230,	0, 0), life=1, angle=velocity_angle, size=10, spread=0.9,
@@ -481,7 +481,7 @@ class Player:
 		self.velocity =	(0,	0)
 		self.alive = True
 		self.hp	= int(self.max_hp)	# reset	hp
-		self.hp_text = shared_methods.outline_text(str(self.hp), (0, 255, 0), commons.DEFAULTFONT, outline_color=(0, 180, 0))
+		self.hp_text = shared_methods.outline_text(str(self.hp), (0, 255, 0), commons.DEFAULT_FONT, outline_color=(0, 180, 0))
 		self.hp_x_position = commons.WINDOW_WIDTH -	10 - 100 - self.hp_text.get_width()	* 0.5
 		self.invincible = True # When you spawn, you are invincible for 3 seconds.
 		self.invincible_timer = 3.0
@@ -639,7 +639,7 @@ class Player:
 						self.arm_animation_frame = 20
 
 		else:
-			if math.sqrt((screen_position_x	- commons.MOUSE_POS[0])	** 2 + (screen_position_y -	commons.MOUSE_POS[1]) ** 2) < commons.BLOCKSIZE	* commons.PLAYER_REACH or commons.CREATIVE:
+			if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
 				tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
 				xml_tile_data =	game_data.get_tile_by_id(tile_dat[0])
@@ -664,11 +664,11 @@ class Player:
 		Uses a screen position and a block item	to place a block in the	world
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	place_block(self, screen_position_x, screen_position_y,	block_item,	is_tile):
-		if math.sqrt((screen_position_x	- commons.MOUSE_POS[0])	** 2 + (screen_position_y -	commons.MOUSE_POS[1]) ** 2) < commons.BLOCKSIZE	* commons.PLAYER_REACH or commons.CREATIVE:
+		if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
 			block_position = commons.TILE_POSITION_MOUSE_HOVERING
 			if world.tile_in_map(block_position[0],	block_position[1]):
 
-				block_rect = Rect(commons.BLOCKSIZE	* block_position[0], commons.BLOCKSIZE * block_position[1] + 1, commons.BLOCKSIZE, commons.BLOCKSIZE)
+				block_rect = Rect(commons.BLOCK_SIZE	* block_position[0], commons.BLOCK_SIZE * block_position[1] + 1, commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 				
 				if not block_rect.colliderect(self.rect):
 					
@@ -769,7 +769,7 @@ class Player:
 
 			game_data.play_sound("sound.swing")
 
-			if math.sqrt((screen_position_x	- commons.MOUSE_POS[0])	** 2 + (screen_position_y -	commons.MOUSE_POS[1]) ** 2) < commons.BLOCKSIZE	* commons.PLAYER_REACH or commons.CREATIVE:
+			if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
 				if world.tile_in_map(block_position[0],	block_position[1]):
 					if tool_item.has_tag(ItemTag.PICKAXE):
@@ -788,14 +788,14 @@ class Player:
 								else:
 									world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.air_tile_id
 
-									entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCKSIZE, (block_position[1]	+ 0.5) * commons.BLOCKSIZE), pickup_delay=10)
+									entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCK_SIZE, (block_position[1]	+ 0.5) * commons.BLOCK_SIZE), pickup_delay=10)
 								world.update_terrain_surface(block_position[0],	block_position[1])
 								color = tile_dat["@average_color"]
 
 								game_data.play_tile_hit_sfx(tile_id)
 								if commons.PARTICLES:
-									for	i in range(int(random.randint(2, 3) * commons.PARTICLEDENSITY)):
-										entity_manager.spawn_particle((block_position[0] * commons.BLOCKSIZE + commons.BLOCKSIZE * 0.5,	block_position[1] *	commons.BLOCKSIZE +	commons.BLOCKSIZE *	0.5), color, size=13, life=1, angle=-math.pi *	0.5, spread=math.pi, gravity=0.05)
+									for	i in range(int(random.randint(2, 3) * commons.PARTICLE_DENSITY)):
+										entity_manager.spawn_particle((block_position[0] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,	block_position[1] *	commons.BLOCK_SIZE +	commons.BLOCK_SIZE *	0.5), color, size=13, life=1, angle=-math.pi *	0.5, spread=math.pi, gravity=0.05)
 
 					elif tool_item.has_tag(ItemTag.HAMMER):
 						wall_id	= world.world.tile_data[block_position[0]][block_position[1]][1]
@@ -804,7 +804,7 @@ class Player:
 								wall_dat = game_data.get_wall_by_id(wall_id)
 
 								item_id	= game_data.get_item_id_by_id_str(wall_dat["@item_id_str"])
-								entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCKSIZE, (block_position[1]	+ 0.5) * commons.BLOCKSIZE), pickup_delay=10)
+								entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCK_SIZE, (block_position[1]	+ 0.5) * commons.BLOCK_SIZE), pickup_delay=10)
 
 								world.world.tile_data[block_position[0]][block_position[1]][1] = game_data.air_wall_id
 
@@ -851,7 +851,7 @@ class Player:
 
 				game_data.play_sound(ranged_weapon_item.xml_item["@use_sound"])
 
-				if commons.MOUSE_POS[0]	< screen_position_x:
+				if commons.MOUSE_POSITION[0]	< screen_position_x:
 					self.direction = 0
 				else:
 					self.direction = 1
@@ -859,12 +859,12 @@ class Player:
 				self.can_use = False
 
 				self.arm_out = True
-				self.arm_out_angle = math.atan2(screen_position_y -	commons.MOUSE_POS[1], abs(screen_position_x	- commons.MOUSE_POS[0]))
+				self.arm_out_angle = math.atan2(screen_position_y -	commons.MOUSE_POSITION[1], abs(screen_position_x	- commons.MOUSE_POSITION[0]))
 
 				self.use_tick =	0
 				self.use_delay = ranged_weapon_item.get_attack_speed() * 0.01
 
-				angle =	math.atan2(commons.MOUSE_POS[1]	- screen_position_y, commons.MOUSE_POS[0] -	screen_position_x)
+				angle =	math.atan2(commons.MOUSE_POSITION[1]	- screen_position_y, commons.MOUSE_POSITION[0] -	screen_position_x)
 
 				source = self.name
 
@@ -1054,7 +1054,7 @@ class Player:
 			if item	is not None:
 				self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * hotbar_index, item.get_item_slot_offset_y()))
 				if item.amnt > 1:
-					self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALLFONT),	(24	+ 48 * hotbar_index, 30))
+					self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * hotbar_index, 30))
 
 	"""=================================================================================================================	
 		player.Player.render_inventory -> void
@@ -1072,7 +1072,7 @@ class Player:
 			if item	is not None:
 				self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.INVENTORY][inventory_index].amnt	> 1:
-					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amnt), (255, 255,	255), commons.SMALLFONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
+					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amnt), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
 	"""=================================================================================================================	
 		player.Player.render_chest -> void
@@ -1090,7 +1090,7 @@ class Player:
 			if item	is not None:
 				self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.CHEST][chest_index].amnt	> 1:
-					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amnt), (255, 255,	255), commons.SMALLFONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
+					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amnt), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
 	"""=================================================================================================================	
 		player.Player.update_inventory_old_slots -> void
@@ -1105,7 +1105,7 @@ class Player:
 				if item	is not None:
 					self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * data[1],	item.get_item_slot_offset_y()))
 					if item.amnt > 1:
-						self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALLFONT),	(24	+ 48 * data[1],	30))
+						self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * data[1],	30))
 			elif data[0] == ItemLocation.INVENTORY:
 				item = self.items[ItemLocation.INVENTORY][data[1]]
 				slot_x = data[1] % 10
@@ -1114,7 +1114,7 @@ class Player:
 				if item	is not None:
 					self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
 					if item.amnt > 1:
-						self.inventory_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALLFONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
+						self.inventory_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 
 			elif data[0] == ItemLocation.CHEST:
 				item = self.items[ItemLocation.CHEST][data[1]]
@@ -1124,7 +1124,7 @@ class Player:
 				if item	is not None:
 					self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
 					if item.amnt > 1:
-						self.chest_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALLFONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
+						self.chest_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 		self.old_inventory_positions = []
 
 	"""=================================================================================================================	
@@ -1328,8 +1328,8 @@ class Player:
 			game_data.play_sound("sound.jump")
 			if commons.PARTICLES:
 				color = shared_methods.get_block_average_color(self.last_block_on)
-				for	i in range(int(random.randint(5, 8) * commons.PARTICLEDENSITY)):
-					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCKSIZE *	1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
+				for	i in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
+					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE *	1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
 			self.velocity =	(self.velocity[0], -50)
 			self.grounded =	False
 

@@ -87,9 +87,9 @@ class ColorPicker:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def update(self):
 		if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
-			if self.rect.collidepoint(commons.MOUSE_POS):
-				self.selected_x = commons.MOUSE_POS[0] - self.position[0] - self.border_size
-				self.selected_y = commons.MOUSE_POS[1] - self.position[1] - self.border_size
+			if self.rect.collidepoint(commons.MOUSE_POSITION):
+				self.selected_x = commons.MOUSE_POSITION[0] - self.position[0] - self.border_size
+				self.selected_y = commons.MOUSE_POSITION[1] - self.position[1] - self.border_size
 				self.selected_color = self.get_color(self.selected_x, self.selected_y)
 				self.selected_color = (self.selected_color[0] * 0.5, self.selected_color[1] * 0.5, self.selected_color[2] * 0.5)
 

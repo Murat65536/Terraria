@@ -86,10 +86,10 @@ def check_enemy_spawn():
 	if not commons.PASSIVE:
 		if commons.ENEMY_SPAWN_TICK <= 0:
 			commons.ENEMY_SPAWN_TICK += 1.0
-			val = int(14 - ((client_player.position[1] // commons.BLOCKSIZE) // 30))
+			val = int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30))
 			if val < 1:
 				val = 1
-			if len(enemies) < commons.MAXENEMYSPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1:  # Reduce enemy spawns
+			if len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1:  # Reduce enemy spawns
 				spawn_enemy()
 		else:
 			commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
@@ -103,21 +103,21 @@ def check_enemy_spawn():
 
 
 def draw_enemy_hover_text():
-	transformed_mouse_pos = (commons.MOUSE_POS[0] + camera_position[0] - commons.WINDOW_WIDTH * 0.5,
-							 commons.MOUSE_POS[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5)
+	transformed_MOUSE_POSITION = (commons.MOUSE_POSITION[0] + camera_position[0] - commons.WINDOW_WIDTH * 0.5,
+							 commons.MOUSE_POSITION[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5)
 	for enemy in enemies:
-		if enemy.rect.collidepoint(transformed_mouse_pos):
-			text1 = commons.MEDIUMFONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
+		if enemy.rect.collidepoint(transformed_MOUSE_POSITION):
+			text1 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
 											   True, (255, 255, 255))
-			text2 = commons.MEDIUMFONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
+			text2 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
 											   True, (0, 0, 0))
 
-			commons.screen.blit(text2, (commons.MOUSE_POS[0] - text2.get_width() * 0.5, commons.MOUSE_POS[1] - 38))
-			commons.screen.blit(text2, (commons.MOUSE_POS[0] - text2.get_width() * 0.5, commons.MOUSE_POS[1] - 42))
-			commons.screen.blit(text2, (commons.MOUSE_POS[0] - text2.get_width() * 0.5 - 2, commons.MOUSE_POS[1] - 40))
-			commons.screen.blit(text2, (commons.MOUSE_POS[0] - text2.get_width() * 0.5 + 2, commons.MOUSE_POS[1] - 40))
+			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5, commons.MOUSE_POSITION[1] - 38))
+			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5, commons.MOUSE_POSITION[1] - 42))
+			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5 - 2, commons.MOUSE_POSITION[1] - 40))
+			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5 + 2, commons.MOUSE_POSITION[1] - 40))
 
-			commons.screen.blit(text1, (commons.MOUSE_POS[0] - text1.get_width() * 0.5, commons.MOUSE_POS[1] - 40))
+			commons.screen.blit(text1, (commons.MOUSE_POSITION[0] - text1.get_width() * 0.5, commons.MOUSE_POSITION[1] - 40))
 			break
 
 
@@ -199,7 +199,7 @@ def update_recent_pickups():
 					recent_pickups[i][3] = (recent_pickups[i][3][0], recent_pickups[i][3][1] - 50 * commons.DELTA_TIME)
 		drag_factor = 1.0 - commons.DELTA_TIME * 10
 		recent_pickups[i][4] = (recent_pickups[i][4][0] * drag_factor, recent_pickups[i][4][1] * drag_factor)
-		recent_pickups[i][3] = (recent_pickups[i][3][0] + recent_pickups[i][4][0] * commons.DELTA_TIME * commons.BLOCKSIZE, recent_pickups[i][3][1] + recent_pickups[i][4][1] * commons.DELTA_TIME * commons.BLOCKSIZE)
+		recent_pickups[i][3] = (recent_pickups[i][3][0] + recent_pickups[i][4][0] * commons.DELTA_TIME * commons.BLOCK_SIZE, recent_pickups[i][3][1] + recent_pickups[i][4][1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 	for item in to_remove:
 		recent_pickups.remove(item)
 
@@ -264,14 +264,14 @@ def spawn_enemy(position=None, enemy_id=None):
 	if client_player is None:
 		return
 	if enemy_id is None:
-		if client_player.position[1] < 200 * commons.BLOCKSIZE:
+		if client_player.position[1] < 200 * commons.BLOCK_SIZE:
 			enemy_id = random.randint(0, 1)
-		elif client_player.position[1] < 300 * commons.BLOCKSIZE:
+		elif client_player.position[1] < 300 * commons.BLOCK_SIZE:
 			enemy_id = random.randint(1, 2)
-		elif client_player.position[1] >= 300 * commons.BLOCKSIZE:
+		elif client_player.position[1] >= 300 * commons.BLOCK_SIZE:
 			enemy_id = random.randint(3, 4)
 	if position is None:
-		player_block_pos = (int(camera_position[0]) // commons.BLOCKSIZE, int(camera_position[1]) // commons.BLOCKSIZE)
+		player_block_pos = (int(camera_position[0]) // commons.BLOCK_SIZE, int(camera_position[1]) // commons.BLOCK_SIZE)
 		for i in range(500):
 			if random.random() < 0.5:
 				x = random.randint(player_block_pos[0] - commons.MAX_ENEMY_SPAWN_TILES_X, player_block_pos[0] - commons.MIN_ENEMY_SPAWN_TILES_X)
@@ -291,7 +291,7 @@ def spawn_enemy(position=None, enemy_id=None):
 						if world.world.tile_data[x][y - 1][0] == game_data.air_tile_id:
 							if world.world.tile_data[x + 1][y][0] == game_data.air_tile_id:
 								if world.world.tile_data[x][y + 1][0] == game_data.air_tile_id:
-									enemies.append(Enemy((x * commons.BLOCKSIZE, y * commons.BLOCKSIZE), enemy_id))
+									enemies.append(Enemy((x * commons.BLOCK_SIZE, y * commons.BLOCK_SIZE), enemy_id))
 									return
 	else:
 		enemies.append(Enemy(position, enemy_id))
@@ -331,10 +331,10 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 
 def add_message(text, color, life=5.0, outline_color=(0, 0, 0)):
 	global messages
-	text1 = commons.DEFAULTFONT.render(text, False, color)
-	text2 = commons.DEFAULTFONT.render(text, False, outline_color)
+	text1 = commons.DEFAULT_FONT.render(text, False, color)
+	text2 = commons.DEFAULT_FONT.render(text, False, outline_color)
 	surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2), pygame.SRCALPHA)
-	if commons.FANCYTEXT:
+	if commons.FANCY_TEXT:
 		surf.blit(text2, (-1, 1))
 		surf.blit(text2, (3, 1))
 		surf.blit(text2, (1, -1))
@@ -353,8 +353,8 @@ def add_damage_number(pos, val, crit=False, color=None):
 		else:
 			color = (207, 127, 63)
 
-	t1 = commons.MEDIUMFONT.render(str(int(val)), False, color)
-	t2 = commons.MEDIUMFONT.render(str(int(val)), False, (int(color[0] * 0.8), int(color[1] * 0.8), int(color[2] * 0.8)))
+	t1 = commons.MEDIUM_FONT.render(str(int(val)), False, color)
+	t2 = commons.MEDIUM_FONT.render(str(int(val)), False, (int(color[0] * 0.8), int(color[1] * 0.8), int(color[2] * 0.8)))
 
 	width = t1.get_width() + 2
 	height = t1.get_height() + 2
@@ -369,7 +369,7 @@ def add_damage_number(pos, val, crit=False, color=None):
 	midx = size * 0.5 - width * 0.5
 	midy = size * 0.5 - height * 0.5
 	
-	if commons.FANCYTEXT:
+	if commons.FANCY_TEXT:
 		surf.blit(t2, (midx - 2, midy))
 		surf.blit(t2, (midx + 2, midy))
 		surf.blit(t2, (midx, midy - 2))
@@ -396,9 +396,9 @@ def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
 			string = item.get_name()
 		else:
 			string = game_data.xml_item_data[item_id]["@name"]
-	size = commons.DEFAULTFONT.size(string)
+	size = commons.DEFAULT_FONT.size(string)
 	size = (size[0] + 2, size[1] + 2)
 	surf = pygame.Surface(size, pygame.SRCALPHA)
-	surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULTFONT), (1, 1))
+	surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULT_FONT), (1, 1))
 	vel = (random.random() * 2 - 1, -50.0)
 	recent_pickups.append([item_id, amnt, surf, pos, vel, 3.0])

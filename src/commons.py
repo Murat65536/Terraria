@@ -1,9 +1,9 @@
 import pygame
 pygame.init()
 
-BLOCKSIZE = 16
-TARGETFPS = 60
-MOUSE_POS = (0, 0)
+BLOCK_SIZE = 16
+TARGET_FPS = 60
+MOUSE_POSITION = (0, 0)
 TILE_POSITION_MOUSE_HOVERING = (0, 0)
 SHIFT_ACTIVE = False
 
@@ -20,46 +20,46 @@ for item in configDataStr:
 	configData.append(item[1][:-1])
 WINDOW_WIDTH = int(configData[0].split(",")[0])
 WINDOW_HEIGHT = int(configData[0].split(",")[1])
-GRAVITY = 9.8 * BLOCKSIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
-RUNFULLSCREEN = bool(int(configData[2]))
+GRAVITY = 9.8 * BLOCK_SIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
+RUN_FULLSCREEN = bool(int(configData[2]))
 PARTICLES = bool(int(configData[3]))
-PARTICLEDENSITY = float(configData[4])
+PARTICLE_DENSITY = float(configData[4])
 MUSIC = bool(int(configData[5]))
 CONFIG_MUSIC_VOLUME = float(configData[6])
 SOUND = bool(int(configData[7]))
 CONFIG_SOUND_VOLUME = float(configData[8])
 CREATIVE = bool(int(configData[9]))
 BACKGROUND = bool(int(configData[10]))
-PARALLAXAMNT = float(configData[11])
+PARALLAX_AMOUNT = float(configData[11])
 PASSIVE = bool(int(configData[12]))
-MAXENEMYSPAWNS = int(configData[13])
-FANCYTEXT = bool(int(configData[14]))
+MAX_ENEMY_SPAWNS = int(configData[13])
+FANCY_TEXT = bool(int(configData[14]))
 HITBOXES = bool(int(configData[15]))
 SPLASHSCREEN = bool(int(configData[16]))
-AUTOSAVEFREQUENCY = float(configData[17])
-EXPERIMENTALLIGHTING = bool(int(configData[18]))
-SMOOTHCAM = bool(int(configData[19]))
-DRAWUI = bool(int(configData[20]))
+AUTO_SAVE_FREQUENCY = float(configData[17])
+EXPERIMENTAL_LIGHTING = bool(int(configData[18]))
+SMOOTH_CAM = bool(int(configData[19]))
+DRAW_UI = bool(int(configData[20]))
 
-if RUNFULLSCREEN:
+if RUN_FULLSCREEN:
 	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
 else:
 	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-font_file_path = "res/fonts/AndyBold.ttf"
-SMALLFONT = pygame.font.Font(font_file_path, 10)
-DEFAULTFONT = pygame.font.Font(font_file_path, 16)
-MEDIUMFONT = pygame.font.Font(font_file_path, 22)
-LARGEFONT = pygame.font.Font(font_file_path, 40)
-XLARGEFONT = pygame.font.Font(font_file_path, 50)
+font_file_path = r"res/fonts/AndyBold.ttf"
+SMALL_FONT = pygame.font.Font(font_file_path, 10)
+DEFAULT_FONT = pygame.font.Font(font_file_path, 16)
+MEDIUM_FONT = pygame.font.Font(font_file_path, 22)
+LARGE_FONT = pygame.font.Font(font_file_path, 40)
+EXTRA_LARGE_FONT = pygame.font.Font(font_file_path, 50)
 
 WAIT_TO_USE = False
 
 ENEMY_SPAWN_TICK = 0
 
-MIN_ENEMY_SPAWN_TILES_X = int((WINDOW_WIDTH // BLOCKSIZE) * 0.5)
+MIN_ENEMY_SPAWN_TILES_X = int((WINDOW_WIDTH // BLOCK_SIZE) * 0.5)
 MAX_ENEMY_SPAWN_TILES_X = int(MIN_ENEMY_SPAWN_TILES_X * 2)
-MIN_ENEMY_SPAWN_TILES_Y = int((WINDOW_HEIGHT // BLOCKSIZE) * 0.5)
+MIN_ENEMY_SPAWN_TILES_Y = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
 MAX_ENEMY_SPAWN_TILES_Y = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 
 PLAYER_DATA = []

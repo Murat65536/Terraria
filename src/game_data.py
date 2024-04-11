@@ -5,6 +5,7 @@ import pygame
 from enum import Enum
 import commons
 import random
+from typing import Any
 
 
 class ItemTag(Enum):
@@ -20,7 +21,7 @@ class ItemTag(Enum):
 	PICKAXE = 9
 	AXE = 10
 	HAMMER = 11
-	GRAPPLE = 12 # TODO The code for the grappling hook is incolmplete.
+	GRAPPLE = 12 # TODO The code for the grappling hook is incomplete.
 	COIN = 13
 
 
@@ -766,7 +767,7 @@ def parse_item_data():
 				item_data["@grapple_claw_image"] = None
 
 
-def get_item_by_id(item_id):
+def get_item_by_id(item_id) -> Any:
 	if item_id < len(xml_item_data):
 		return xml_item_data[item_id]
 
@@ -820,7 +821,7 @@ def parse_tile_data():
 
 		tile_data["@tags"] = make_tile_tag_list(tile_data["@tags"])
 		try:
-			tile_data["@image"] = pygame.image.load(tile_data["@image_path"]).convert_alpha()  # , (commons.BLOCKSIZE, commons.BLOCKSIZE)
+			tile_data["@image"] = pygame.image.load(tile_data["@image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 			if override_average_color:
 				tile_data["@average_color"] = pygame.transform.average_color(tile_data["@image"])
 		except FileNotFoundError:
@@ -834,7 +835,7 @@ def parse_tile_data():
 			tile_data["@multitile_dimensions"] = int_tuple_str_to_int_tuple(tile_data["@multitile_dimensions"])
 			tile_data["@multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["@multitile_required_solids"])
 			try:
-				tile_data["@multitile_image"] = pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha()  # , (commons.BLOCKSIZE * tile_data["@multitile_dimensions"][0], commons.BLOCKSIZE * tile_data["@multitile_dimensions"][1])
+				tile_data["@multitile_image"] = pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["@multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["@multitile_dimensions"][1])
 				if override_average_color:
 					tile_data["@average_color"] = pygame.transform.average_color(tile_data["@multitile_image"])
 			except FileNotFoundError:
@@ -912,7 +913,7 @@ def parse_wall_data():
 			override_average_color = False
 
 		try:
-			wall_data["@image"] = pygame.transform.scale(pygame.image.load(wall_data["@image_path"]).convert_alpha(), (commons.BLOCKSIZE, commons.BLOCKSIZE))
+			wall_data["@image"] = pygame.transform.scale(pygame.image.load(wall_data["@image_path"]).convert_alpha(), (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
 			wall_data["@image"].set_colorkey((255, 0, 255))
 			if override_average_color:
 				wall_data["@average_color"] = pygame.transform.average_color(wall_data["@image"])

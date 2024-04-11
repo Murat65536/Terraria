@@ -57,7 +57,7 @@ class MenuButton:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def update(self):
 		if self.is_button:
-			if self.rect.collidepoint(commons.MOUSE_POS):
+			if self.rect.collidepoint(commons.MOUSE_POSITION):
 				if not self.hovered:
 					game_data.play_sound("sound.menu_select")
 					self.hovered = True
@@ -162,13 +162,14 @@ def update_menu_buttons():
 
 				elif menu_button.text == "New Player":
 					commons.GAME_SUB_STATE = "PLAYERCREATION"
-					commons.PLAYER_MODEL_DATA = [0, 0, [(127, 72, 36), None, None],
-												 [(62, 22, 0), None, None],
-												 [(0, 0, 0), None, None],
-												 [(95, 125, 127), None, None],
-												 [(48, 76, 127), None, None],
-												 [(129, 113, 45), None, None],
-												 [(80, 100, 45), None, None]]
+					commons.PLAYER_MODEL_DATA = [0, 0,
+												[(127, 72, 36), None, None],
+												[(62, 22, 0), None, None],
+												[(0, 0, 0), None, None],
+												[(95, 125, 127), None, None],
+												[(48, 76, 127), None, None],
+												[(129, 113, 45), None, None],
+												[(80, 100, 45), None, None]]
 					commons.PLAYER_MODEL = player.Model(commons.PLAYER_MODEL_DATA[0], commons.PLAYER_MODEL_DATA[1],
 														commons.PLAYER_MODEL_DATA[2][0],
 														commons.PLAYER_MODEL_DATA[3][0],
@@ -325,13 +326,13 @@ def load_menu_player_data():
 		player_data_surf = pygame.Surface((315, 60))
 		player_data_surf.fill((50, 50, 50))
 		pygame.draw.rect(player_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
-		player_data_surf.blit(shared_methods.outline_text(dat[0], (255, 255, 255), commons.DEFAULTFONT), (5, 3))  # Name
-		player_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULTFONT), (5, 20))  # Creation date
-		player_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULTFONT), (5, 40))  # Playtime
-		player_data_surf.blit(shared_methods.outline_text(str(dat[7])[:19], (230, 230, 0), commons.DEFAULTFONT), (80, 20))  # Creation date
-		player_data_surf.blit(shared_methods.outline_text(str(dat[5]) + "HP", (230, 10, 10), commons.DEFAULTFONT, outline_color=(128, 5, 5)), (155, 3))  # hp
-		player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULTFONT, outline_color=(30, 41, 122)), (205, 3))  # mana
-		player_data_surf.blit(shared_methods.outline_text(str(int((dat[6] / 60) // 60)) + ":" + str(int(dat[6] // 60 % 60)).zfill(2) + ":" + str(int(dat[6] % 60)).zfill(2), (230, 230, 0), commons.DEFAULTFONT), (90, 40))  # playtime
+		player_data_surf.blit(shared_methods.outline_text(dat[0], (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # Name
+		player_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
+		player_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
+		player_data_surf.blit(shared_methods.outline_text(str(dat[7])[:19], (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
+		player_data_surf.blit(shared_methods.outline_text(str(dat[5]) + "HP", (230, 10, 10), commons.DEFAULT_FONT, outline_color=(128, 5, 5)), (155, 3))  # hp
+		player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULT_FONT, outline_color=(30, 41, 122)), (205, 3))  # mana
+		player_data_surf.blit(shared_methods.outline_text(str(int((dat[6] / 60) // 60)) + ":" + str(int(dat[6] // 60 % 60)).zfill(2) + ":" + str(int(dat[6] % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
 		sprites = player.render_sprites(dat[1], directions=1, arm_frame_count=1, torso_frame_count=1)
 		player_data_surf.blit(sprites[0][0], (270, 0))
 		player_data_surf.blit(sprites[1][0], (270, 0))
@@ -357,11 +358,11 @@ def load_menu_world_data():
 			world_data_surf.fill((50, 50, 50))
 			pygame.draw.rect(world_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
 
-			world_data_surf.blit(shared_methods.outline_text(world.world.name, (255, 255, 255), commons.DEFAULTFONT), (5, 3))  # name
-			world_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULTFONT), (5, 20))  # Creation date
-			world_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULTFONT), (5, 40))  # Playtime
-			world_data_surf.blit(shared_methods.outline_text(world.world.get_creation_date_string(), (230, 230, 0), commons.DEFAULTFONT), (80, 20))  # Creation date
-			world_data_surf.blit(shared_methods.outline_text(str(int((world.world.play_time / 60) // 60)) + ":" + str(int(world.world.play_time // 60 % 60)).zfill(2) + ":" + str(int(world.world.play_time % 60)).zfill(2), (230, 230, 0), commons.DEFAULTFONT), (90, 40))  # playtime
+			world_data_surf.blit(shared_methods.outline_text(world.world.name, (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # name
+			world_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
+			world_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
+			world_data_surf.blit(shared_methods.outline_text(world.world.get_creation_date_string(), (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
+			world_data_surf.blit(shared_methods.outline_text(str(int((world.world.play_time / 60) // 60)) + ":" + str(int(world.world.play_time // 60 % 60)).zfill(2) + ":" + str(int(world.world.play_time % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
 
 			world_data_surf.blit(surface_manager.misc_gui[10], (260, 7))
 
@@ -371,60 +372,60 @@ def load_menu_world_data():
 """================================================================================================================= 
 	Constructing all buttons used in the game, order in the list matters here
 -----------------------------------------------------------------------------------------------------------------"""
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 30), commons.XLARGEFONT, 25, False, (110, 147, 43), (50, 80, 7)))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 30), commons.EXTRA_LARGE_FONT, 25, False, (110, 147, 43), (50, 80, 7)))
 
-menu_buttons.append(MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGEFONT, 25, True))
+menu_buttons.append(MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, True))
 
-menu_buttons.append(MenuButton("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGEFONT, 25, True))
+menu_buttons.append(MenuButton("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, True))
 
-menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 25, False))
-menu_buttons.append(MenuButton("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGEFONT, 25, False))
+menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
+menu_buttons.append(MenuButton("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, False))
 
-menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 25, False))
-menu_buttons.append(MenuButton("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGEFONT, 25, False))
-menu_buttons.append(MenuButton("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGEFONT, 25, False))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 350), commons.LARGEFONT, 25, False))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 390), commons.LARGEFONT, 25, False))
+menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
+menu_buttons.append(MenuButton("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, False))
+menu_buttons.append(MenuButton("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, False))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 350), commons.LARGE_FONT, 25, False))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 390), commons.LARGE_FONT, 25, False))
 
-menu_buttons.append(MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGEFONT, 24, False))
-menu_buttons.append(MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, False))
+menu_buttons.append(MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, True))
 
-menu_buttons.append(MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGEFONT, 26, True))
-menu_buttons.append(MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGEFONT, 26, True))
+menu_buttons.append(MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, True))
+menu_buttons.append(MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, True))
 
-menu_buttons.append(MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
 
-menu_buttons.append(MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
 
-menu_buttons.append(MenuButton("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGEFONT, 24, False))
-menu_buttons.append(MenuButton("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, False))
+menu_buttons.append(MenuButton("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, True))
 
-menu_buttons.append(MenuButton("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 24, False))
+menu_buttons.append(MenuButton("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, False))
 
-menu_buttons.append(MenuButton("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True, (200, 0, 0), (100, 0, 0)))
+menu_buttons.append(MenuButton("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True, (200, 0, 0), (100, 0, 0)))
 
-menu_buttons.append(MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
 
-menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.XLARGEFONT, 25, False))
+menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
 
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGEFONT, 24, True))
-menu_buttons.append(MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGEFONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
+menu_buttons.append(MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, True))
 
 update_active_menu_buttons()

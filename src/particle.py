@@ -40,7 +40,7 @@ class Particle:
 		drag_factor = 1.0 - commons.DELTA_TIME * 2
 
 		self.velocity = (self.velocity[0] * drag_factor, self.velocity[1] * drag_factor + self.gravity * commons.GRAVITY * commons.DELTA_TIME)
-		self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCKSIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCKSIZE)
+		self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 
 		self.life -= commons.DELTA_TIME  # Change life
 

@@ -108,7 +108,7 @@ def rotate_surface(image, angle):
 -----------------------------------------------------------------------------------------------------------------"""
 def outline_text(string, color, font, outline_color=(0, 0, 0)):
 	text1 = font.render(string, False, color)
-	if commons.FANCYTEXT:
+	if commons.FANCY_TEXT:
 		text2 = font.render(string, False, outline_color)
 		surf = pygame.Surface((text2.get_width() + 2, text2.get_height() + 2))
 		surf.fill((255, 0, 255))
@@ -162,14 +162,14 @@ def create_menu_surface(width, height, body):
 	words = body.split(" ")
 	line_width = 0
 	for word in words:
-		line_width += commons.DEFAULTFONT.size(" " + word)[0]
+		line_width += commons.DEFAULT_FONT.size(" " + word)[0]
 		if line_width > usable_width:
 			line_width = 0
 			lines.append(word)
 		else:
 			lines[-1] += " " + word
 	for i in range(len(lines)):
-		surf.blit(outline_text(lines[i], (255, 255, 255), commons.DEFAULTFONT), (15, 15 + i * 20))
+		surf.blit(outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT), (15, 15 + i * 20))
 	return surf
 
 

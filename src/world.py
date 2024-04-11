@@ -403,8 +403,8 @@ def get_mask_index_from_pos(i, j, tile_id):
 -----------------------------------------------------------------------------------------------------------------"""
 def blit_generation_stage(string):
 	commons.screen.blit(surface_manager.large_backgrounds[1], (0, 0))
-	text1 = shared_methods.outline_text("Generating " + WORLD_NAME, (255, 255, 255), commons.XLARGEFONT)
-	text2 = shared_methods.outline_text(string, (255, 255, 255), commons.LARGEFONT)
+	text1 = shared_methods.outline_text("Generating " + WORLD_NAME, (255, 255, 255), commons.EXTRA_LARGE_FONT)
+	text2 = shared_methods.outline_text(string, (255, 255, 255), commons.LARGE_FONT)
 	commons.screen.blit(text1, (commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5, 120))
 	commons.screen.blit(text2, (commons.WINDOW_WIDTH * 0.5 - text2.get_width() * 0.5, 300))
 	pygame.display.flip()
@@ -423,10 +423,10 @@ def generate_terrain(gen_type, blit_progress=False):
 	biome_border_x_2 = WORLD_SIZE_X * 0.666666
 
 	global border_left, border_right, border_up, border_down
-	border_left = int(commons.BLOCKSIZE)
-	border_right = int(WORLD_SIZE_X * commons.BLOCKSIZE - commons.BLOCKSIZE)
-	border_up = int(commons.BLOCKSIZE * 1.5)
-	border_down = int(WORLD_SIZE_Y * commons.BLOCKSIZE - commons.BLOCKSIZE * 1.5)
+	border_left = int(commons.BLOCK_SIZE)
+	border_right = int(WORLD_SIZE_X * commons.BLOCK_SIZE - commons.BLOCK_SIZE)
+	border_up = int(commons.BLOCK_SIZE * 1.5)
+	border_down = int(WORLD_SIZE_Y * commons.BLOCK_SIZE - commons.BLOCK_SIZE * 1.5)
 
 	world = World()
 
@@ -628,11 +628,11 @@ def generate_terrain(gen_type, blit_progress=False):
 	Renders all tiles in the map to a huge surface
 -----------------------------------------------------------------------------------------------------------------"""
 def create_terrain_surface():
-	# TextureRenderX = (round(entity_manager.client_player.position[0] / commons.BLOCKSIZE, 0) + 100) * commons.BLOCKSIZE
-	# TextureRenderY = (round(entity_manager.client_player.position[1] / commons.BLOCKSIZE, 0) + 100) * commons.BLOCKSIZE
+	# TextureRenderX = (round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
+	# TextureRenderY = (round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
 	global terrain_surface
 	print("Creating Terrain Surface...")
-	terrain_surface = pygame.Surface((WORLD_SIZE_X * commons.BLOCKSIZE, WORLD_SIZE_Y * commons.BLOCKSIZE))
+	terrain_surface = pygame.Surface((WORLD_SIZE_X * commons.BLOCK_SIZE, WORLD_SIZE_Y * commons.BLOCK_SIZE))
 	terrain_surface.fill((255, 0, 255))
 	terrain_surface.set_colorkey((255, 0, 255))
 	for i in range(WORLD_SIZE_X):
@@ -686,7 +686,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 				#for f in range(5):
 				#	for m in range(4):
 				#		if clientWorld.chestData[k][1][f][m] != None:
-				#		entity_manager.SpawnPhysicsItem((i * commons.BLOCKSIZE, j * commons.BLOCKSIZE), clientWorld.chestData[k][1][f][m])
+				#		entity_manager.SpawnPhysicsItem((i * commons.BLOCK_SIZE, j * commons.BLOCK_SIZE), clientWorld.chestData[k][1][f][m])
 
 	if destroy:
 		dimensions = xml_tile_data["@multitile_dimensions"]
@@ -701,7 +701,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 					update_terrain_surface(remove_x, remove_y)
 
 		if drop_items:
-			entity_manager.spawn_physics_item(Item(get_item_id_by_id_str(xml_tile_data["@item_id_str"]), 1), (remove_x * commons.BLOCKSIZE, remove_y * commons.BLOCKSIZE), pickup_delay=10)
+			entity_manager.spawn_physics_item(Item(get_item_id_by_id_str(xml_tile_data["@item_id_str"]), 1), (remove_x * commons.BLOCK_SIZE, remove_y * commons.BLOCK_SIZE), pickup_delay=10)
 
 		if remove_chest_data and chest_data_to_remove != -1:
 			del world.chest_data[chest_data_to_remove]
@@ -816,7 +816,7 @@ def update_terrain_surface(i, j, affect_others=True):
 	tiles_to_update.append((i, j))
 
 	for tile in tiles_to_update:
-		pygame.draw.rect(terrain_surface, (255, 0, 255), Rect(tile[0] * commons.BLOCKSIZE, tile[1] * commons.BLOCKSIZE, commons.BLOCKSIZE, commons.BLOCKSIZE), 0)
+		pygame.draw.rect(terrain_surface, (255, 0, 255), Rect(tile[0] * commons.BLOCK_SIZE, tile[1] * commons.BLOCK_SIZE, commons.BLOCK_SIZE, commons.BLOCK_SIZE), 0)
 		tile_dat = world.tile_data[tile[0]][tile[1]]
 		xml_tile_dat = game_data.get_tile_by_id(tile_dat[0])
 		xml_wall_dat = game_data.get_wall_by_id(tile_dat[1])
@@ -825,8 +825,8 @@ def update_terrain_surface(i, j, affect_others=True):
 			tile_mask_data[tile[0]][tile[1]] = get_mask_index_from_pos(tile[0], tile[1], tile_dat[0])  # Get the mask at i, j and store it in the tile_mask_data array
 
 			if TileTag.MULTITILE in xml_tile_dat["@tags"]:
-				tile_img = pygame.Surface((commons.BLOCKSIZE, commons.BLOCKSIZE)).convert()
-				tile_img.blit(xml_tile_dat["@multitile_image"], (-tile_dat[2][0] * commons.BLOCKSIZE, -tile_dat[2][1] * commons.BLOCKSIZE))
+				tile_img = pygame.Surface((commons.BLOCK_SIZE, commons.BLOCK_SIZE)).convert()
+				tile_img.blit(xml_tile_dat["@multitile_image"], (-tile_dat[2][0] * commons.BLOCK_SIZE, -tile_dat[2][1] * commons.BLOCK_SIZE))
 			else:
 				tile_img = xml_tile_dat["@image"].copy()
 
@@ -842,15 +842,15 @@ def update_terrain_surface(i, j, affect_others=True):
 					wall_tile_mask_data[tile[0]][tile[1]] = tile_mask_data[tile[0]][tile[1]]  # Set the wall mask to the tile mask
 				back_img.blit(surface_manager.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]],  (0,  0),  None,  pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
 				back_img.blit(tile_img, (0, 0))  # Blit the masked block texture to the main surface
-				terrain_surface.blit(back_img, (tile[0] * commons.BLOCKSIZE,  tile[1] * commons.BLOCKSIZE))  # Blit the masked wall surf to the main surf
+				terrain_surface.blit(back_img, (tile[0] * commons.BLOCK_SIZE,  tile[1] * commons.BLOCK_SIZE))  # Blit the masked wall surf to the main surf
 			else:
-				terrain_surface.blit(tile_img, (tile[0] * commons.BLOCKSIZE,  tile[1] * commons.BLOCKSIZE))  # Blit the masked wall surf to the main surf
+				terrain_surface.blit(tile_img, (tile[0] * commons.BLOCK_SIZE,  tile[1] * commons.BLOCK_SIZE))  # Blit the masked wall surf to the main surf
 
 		elif tile_dat[1] != game_data.air_wall_id:  # If there is no block but there is a wall
 			back_img = xml_wall_dat["@image"].copy()  # Get the wall texture
 			wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(tile[0], tile[1], tile_dat[1])  # Get the wall mask
 			back_img.blit(surface_manager.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]], (0, 0), None, pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
-			terrain_surface.blit(back_img, (tile[0] * commons.BLOCKSIZE, tile[1] * commons.BLOCKSIZE))  # Blit the masked wall surf to the main surf
+			terrain_surface.blit(back_img, (tile[0] * commons.BLOCK_SIZE, tile[1] * commons.BLOCK_SIZE))  # Blit the masked wall surf to the main surf
 
 
 """================================================================================================================= 
@@ -1064,18 +1064,18 @@ def is_structure_rect_valid(structure_rect, rect_index_to_ignore=-1):
 def create_grounded_spawn_position():
 	global world
 	block_pos_x = random.randint(20, max(20, WORLD_SIZE_X - 20))
-	world.spawn_position = (commons.BLOCKSIZE * block_pos_x, commons.BLOCKSIZE * 1.5)
+	world.spawn_position = (commons.BLOCK_SIZE * block_pos_x, commons.BLOCK_SIZE * 1.5)
 	for i in range(300):
-		world.spawn_position = (world.spawn_position[0], world.spawn_position[1] + commons.BLOCKSIZE)
-		x1 = int(world.spawn_position[0] - commons.BLOCKSIZE * 0.5) // commons.BLOCKSIZE
-		y = int(world.spawn_position[1] + commons.BLOCKSIZE) // commons.BLOCKSIZE
-		x2 = int(world.spawn_position[0] + commons.BLOCKSIZE * 0.5) // commons.BLOCKSIZE
+		world.spawn_position = (world.spawn_position[0], world.spawn_position[1] + commons.BLOCK_SIZE)
+		x1 = int(world.spawn_position[0] - commons.BLOCK_SIZE * 0.5) // commons.BLOCK_SIZE
+		y = int(world.spawn_position[1] + commons.BLOCK_SIZE) // commons.BLOCK_SIZE
+		x2 = int(world.spawn_position[0] + commons.BLOCK_SIZE * 0.5) // commons.BLOCK_SIZE
 
 		left_tile_dat = game_data.get_tile_by_id(world.tile_data[x1][y][0])
 		right_tile_dat = game_data.get_tile_by_id(world.tile_data[x2][y][0])
 
 		if TileTag.NOCOLLIDE not in left_tile_dat["@tags"] and TileTag.NOCOLLIDE not in right_tile_dat["@tags"]:
-			world.spawnPosition = (world.spawn_position[0], world.spawn_position[1] - commons.BLOCKSIZE * 1.5)
+			world.spawnPosition = (world.spawn_position[0], world.spawn_position[1] - commons.BLOCK_SIZE * 1.5)
 			break
 
 
