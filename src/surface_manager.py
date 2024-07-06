@@ -16,7 +16,7 @@ menu_background = []
 
 def load_tile_mask_surfaces():
 	global tile_masks
-	tile_mask_image = pygame.image.load("res/images/masktileset.png").convert_alpha()
+	tile_mask_image = pygame.image.load("res/images/maskTileset.png").convert_alpha()
 	tile_masks = []
 	for j in range(5):
 		for i in range(13):

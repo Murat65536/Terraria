@@ -722,7 +722,7 @@ load_menu_surf = shared_methods.create_menu_surface(7, 8, "")
 load_menu_box_left1 = commons.WINDOW_WIDTH * 0.5 - 336 * 0.5
 load_menu_box_left2 = commons.WINDOW_WIDTH * 0.5 - 315 * 0.5
 
-menu_logo = pygame.image.load("res/images/logo/Logo.png")
+menu_logo = pygame.image.load("res/images/logo/logo.png")
 
 old_time_milliseconds = pygame.time.get_ticks()
 
