@@ -30,4 +30,5 @@
 <ul>
 	<li>You can turn off and on settings in the 'config.txt' file</li>
 	<li>Sounds are from Terraria</li>
+	<li>Heavy inspiration taken from Fergus Griggs</li>
 </ul>
