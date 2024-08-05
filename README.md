@@ -12,19 +12,8 @@
 	</tr>
 </table>
 <br />
-<h3>Required Modules:</h3>
-<ul>
-	<li>pygame</li>
-	<li>sys</li>
-	<li>math</li>
-	<li>time</li>
-	<li>os</li>
-	<li>random</li>
-	<li>pickle</li>
-	<li>datetime</li>
-	<li>webbrowser</li>
-	<li>xmltodict</li>
-</ul>
+<h3>Install Modules:</h3>
+<p>To install the modules, simply run: <code>pip install -r requirements.txt</code></p>
 
 <h3>Notes:</h3>
 <ul>
