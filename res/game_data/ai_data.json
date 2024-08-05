@@ -1,0 +1,18 @@
+{
+	"ais": {
+		"ai": [
+			{
+				"id": "0",
+				"id_str": "loot.INVALID"
+			},
+			{
+				"id": "1",
+				"id_str": "loot.slime"
+			},
+			{
+				"id": "2",
+				"id_str": "loot.bunny"
+			}
+		]
+	}
+}

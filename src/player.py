@@ -314,18 +314,18 @@ class Player:
 						if self.block_position[1] +	j >= 0:
 							tile_id	= world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 							tile_data =	game_data.get_tile_by_id(tile_id)
-							if TileTag.NOCOLLIDE not in tile_data["@tags"]:
+							if TileTag.NOCOLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE	* (self.block_position[1] +	j),	commons.BLOCK_SIZE *	(self.block_position[0]	+ i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								is_platform	= False
-								if TileTag.PLATFORM	in tile_data["@tags"]:
+								if TileTag.PLATFORM	in tile_data["tags"]:
 									is_platform	= True
 									if block_rect.colliderect(int(self.rect.left - 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
 										self.stop_left = True  # is there a	solid block	left
 									if block_rect.colliderect(int(self.rect.right +	1),	int(self.rect.top +	2),	1, int(self.rect.height	- 4)):
 										self.stop_right	= True	# is there a solid block right
 								if block_rect.colliderect(self.rect):
-									if not self.invincible and TileTag.DAMAGING in tile_data["@tags"]:
-										self.damage(tile_data["@tile_damage"], [tile_data["@tile_damage_name"], "World"])
+									if not self.invincible and TileTag.DAMAGING in tile_data["tags"]:
+										self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
 
 
 									delta_x	= self.position[0] - block_rect.centerx
@@ -642,16 +642,16 @@ class Player:
 			if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
 				tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
-				xml_tile_data =	game_data.get_tile_by_id(tile_dat[0])
-				if TileTag.CHEST in xml_tile_data["@tags"] or TileTag.CYCLABLE in xml_tile_data["@tags"]:
-					if TileTag.MULTITILE in xml_tile_data["@tags"]:
+				json_tile_data =	game_data.get_tile_by_id(tile_dat[0])
+				if TileTag.CHEST in json_tile_data["tags"] or TileTag.CYCLABLE in json_tile_data["tags"]:
+					if TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
 					world.use_special_tile(origin[0], origin[1])
 				
-				if TileTag.CRAFTINGTABLE in xml_tile_data["@tags"]:
-					if TileTag.MULTITILE in xml_tile_data["@tags"]:
+				if TileTag.CRAFTINGTABLE in json_tile_data["tags"]:
+					if TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
@@ -677,56 +677,56 @@ class Player:
 					if is_tile:
 						tile_to_place =	game_data.get_tile_by_id_str(block_item.get_tile_id_str())
 
-						if TileTag.MULTITILE in tile_to_place["@tags"]:
+						if TileTag.MULTITILE in tile_to_place["tags"]:
 							can_place =	True
 
-							tile_dimensions	= tile_to_place["@multitile_dimensions"]
+							tile_dimensions	= tile_to_place["multitile_dimensions"]
 
 							for	x in range(tile_dimensions[0]):
 								for	y in range(tile_dimensions[1]):
 									if not world.world.tile_data[block_position[0] + x][block_position[1] +	y][0] == game_data.air_tile_id:
 										can_place =	False
 
-							required_solids	= tile_to_place["@multitile_required_solids"]
+							required_solids	= tile_to_place["multitile_required_solids"]
 
 							for	i in range(len(required_solids)):
 								tile_id	= world.world.tile_data[block_position[0] +	required_solids[i][0]][block_position[1] + required_solids[i][1]][0]
 								tile_data =	game_data.get_tile_by_id(tile_id)
-								if TileTag.NOCOLLIDE in tile_data["@tags"]:
+								if TileTag.NOCOLLIDE in tile_data["tags"]:
 									can_place =	False
 
 							if can_place:
-								world.place_multitile(block_position[0], block_position[1],	tile_dimensions, tile_to_place["@id"], True)
+								world.place_multitile(block_position[0], block_position[1],	tile_dimensions, tile_to_place["id"], True)
 
-								if TileTag.CHEST in tile_to_place["@tags"]:
+								if TileTag.CHEST in tile_to_place["tags"]:
 									world.world.chest_data.append([block_position, [None for _ in range(20)]])
 
 								block_placed = True
 
-								game_data.play_tile_place_sfx(tile_to_place["@id"])
+								game_data.play_tile_place_sfx(tile_to_place["id"])
 
 						else:
 							if world.world.tile_data[block_position[0]][block_position[1]][0] == game_data.air_tile_id:
 								if world.get_neighbor_count(block_position[0], block_position[1]) >	0:
-									world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place["@id"]
+									world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place["id"]
 
 									if world.tile_in_map(block_position[0],	block_position[1] +	1):
-										if game_data.get_tile_by_id(world.world.tile_data[block_position[0]][block_position[1]][0])["@id_str"] == "tile.grass":
+										if game_data.get_tile_by_id(world.world.tile_data[block_position[0]][block_position[1]][0])["id_str"] == "tile.grass":
 											world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("tile.dirt")
 
 									world.update_terrain_surface(block_position[0],	block_position[1])
 
-									game_data.play_tile_place_sfx(tile_to_place["@id"])
+									game_data.play_tile_place_sfx(tile_to_place["id"])
 									block_placed = True
 					else:
 						if world.world.tile_data[block_position[0]][block_position[1]][1] == game_data.air_wall_id:
 							if world.get_neighbor_count(block_position[0], block_position[1], tile=1) >	0:
 								wall_to_place =	game_data.get_wall_by_id_str(block_item.get_wall_id_str())
 
-								world.world.tile_data[block_position[0]][block_position[1]][1] = int(wall_to_place["@id"])
+								world.world.tile_data[block_position[0]][block_position[1]][1] = int(wall_to_place["id"])
 								world.update_terrain_surface(block_position[0],	block_position[1])
 
-								game_data.play_wall_place_sfx(wall_to_place["@id"])
+								game_data.play_wall_place_sfx(wall_to_place["id"])
 
 								block_placed = True
 
@@ -775,13 +775,13 @@ class Player:
 					if tool_item.has_tag(ItemTag.PICKAXE):
 						tile_id	= world.world.tile_data[block_position[0]][block_position[1]][0]
 						tile_dat = game_data.get_tile_by_id(tile_id)
-						if TileTag.MULTITILE in tile_dat["@tags"]:
+						if TileTag.MULTITILE in tile_dat["tags"]:
 							multitile_origin = world.get_multitile_origin(block_position[0], block_position[1])
 							world.remove_multitile(multitile_origin, True)
 							game_data.play_tile_hit_sfx(tile_id)
 						else:
 							if tile_id != game_data.air_tile_id:
-								item_id	= game_data.get_item_id_by_id_str(tile_dat["@item_id_str"])
+								item_id	= game_data.get_item_id_by_id_str(tile_dat["item_id_str"])
 								# Remove Grass from	dirt
 								if tile_id == game_data.grass_tile_id:
 									world.world.tile_data[block_position[0]][block_position[1]][0] = game_data.get_tile_id_by_id_str("tile.dirt")
@@ -790,7 +790,7 @@ class Player:
 
 									entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCK_SIZE, (block_position[1]	+ 0.5) * commons.BLOCK_SIZE), pickup_delay=10)
 								world.update_terrain_surface(block_position[0],	block_position[1])
-								color = tile_dat["@average_color"]
+								color = tile_dat["average_color"]
 
 								game_data.play_tile_hit_sfx(tile_id)
 								if commons.PARTICLES:
@@ -803,7 +803,7 @@ class Player:
 							if world.get_neighbor_count(block_position[0], block_position[1], tile=1, check_centre_tile=False, check_centre_wall=False)	< 4:
 								wall_dat = game_data.get_wall_by_id(wall_id)
 
-								item_id	= game_data.get_item_id_by_id_str(wall_dat["@item_id_str"])
+								item_id	= game_data.get_item_id_by_id_str(wall_dat["item_id_str"])
 								entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCK_SIZE, (block_position[1]	+ 0.5) * commons.BLOCK_SIZE), pickup_delay=10)
 
 								world.world.tile_data[block_position[0]][block_position[1]][1] = game_data.air_wall_id
@@ -839,7 +839,7 @@ class Player:
 		if self.can_use:
 			ammo_to_use_id = -1
 			ammo_to_use_dat	= None
-			for	item_id	in ammo_type_item_lists[ranged_weapon_item.xml_item["@ranged_ammo_type"]]:
+			for	item_id	in ammo_type_item_lists[ranged_weapon_item.json_item["ranged_ammo_type"]]:
 				item_ammo_slots	= self.find_existing_item_stacks(item_id)
 				if len(item_ammo_slots)	> 0:
 					ammo_to_use_dat	= item_ammo_slots[0]
@@ -849,7 +849,7 @@ class Player:
 			if ammo_to_use_id != -1:
 				self.remove_item((ammo_to_use_dat[0], ammo_to_use_dat[1]), remove_count=1)
 
-				game_data.play_sound(ranged_weapon_item.xml_item["@use_sound"])
+				game_data.play_sound(ranged_weapon_item.json_item["use_sound"])
 
 				if commons.MOUSE_POSITION[0]	< screen_position_x:
 					self.direction = 0
@@ -913,7 +913,7 @@ class Player:
 				existing_slots.pop(0)
 
 			# Free slots
-			free_slots = self.find_free_spaces(item.xml_item["@max_stack"])
+			free_slots = self.find_free_spaces(item.json_item["max_stack"])
 
 			while len(free_slots) >	0 and amnt > 0:  # No stacks left to fill so fill empty	slots
 				# Work out how many	to add to the stack
@@ -1007,7 +1007,7 @@ class Player:
 				item = self.items[ItemLocation.HOTBAR][hotbar_index]
 				if item	is not None:
 					if item.item_id	== item_id:
-						available =	item_data["@max_stack"]	- self.items[ItemLocation.HOTBAR][hotbar_index].amnt
+						available =	item_data["max_stack"]	- self.items[ItemLocation.HOTBAR][hotbar_index].amnt
 						existing_spaces.append([ItemLocation.HOTBAR, hotbar_index, available])
 		
 		if search_inventory:
@@ -1015,7 +1015,7 @@ class Player:
 				item = self.items[ItemLocation.INVENTORY][inventory_index]
 				if item	is not None:
 					if item.item_id	== item_id:
-						available =	item_data["@max_stack"]	- self.items[ItemLocation.INVENTORY][inventory_index].amnt
+						available =	item_data["max_stack"]	- self.items[ItemLocation.INVENTORY][inventory_index].amnt
 						if available > 0:
 							existing_spaces.append([ItemLocation.INVENTORY,	inventory_index, available])
 
@@ -1133,7 +1133,7 @@ class Player:
 		Creates	a list of items	that can be crafted	with the current materials List	structure [item_id,	amnt]
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	update_craftable_items(self):
-		self.items[ItemLocation.CRAFTING_MENU] = [[i + 1, 1] for i in range(len(game_data.xml_item_data) - 1)]
+		self.items[ItemLocation.CRAFTING_MENU] = [[i + 1, 1] for i in range(len(game_data.json_item_data) - 1)]
 
 	"""=================================================================================================================	
 		player.Player.render_craftable_items_surf -> void
@@ -1145,10 +1145,10 @@ class Player:
 		self.craftable_items_surf.fill((255, 0, 255))
 		for	i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
 			self.craftable_items_surf.blit(surface_manager.misc_gui[0],	(0,	i *	48))
-			item_data =	game_data.xml_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
-			image =	item_data["@image"]
+			item_data =	game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
+			image =	item_data["image"]
 			if image is not	None:
-				self.craftable_items_surf.blit(image, (item_data["@item_slot_offset_x"], item_data["@item_slot_offset_y"] +	i *	48))
+				self.craftable_items_surf.blit(image, (item_data["item_slot_offset_x"], item_data["item_slot_offset_y"] +	i *	48))
 
 	"""=================================================================================================================	
 		player.Player.draw -> void

@@ -50,7 +50,7 @@ def darken_color(color, factor=0.6):
 def get_block_average_color(tile_id):
 	tile_data = game_data.get_tile_by_id(tile_id)
 	if (tile_data != None):
-		return tile_data["@average_color"]
+		return tile_data["average_color"]
 
 """================================================================================================================= 
 	shared_methods.get_tier_color -> tuple

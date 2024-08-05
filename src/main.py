@@ -7,11 +7,6 @@ import datetime
 import pygame.locals
 import os
 from typing import List, Any, Tuple
-
-pygame.mixer.pre_init(48000, -16, 2, 1024)
-pygame.init()
-pygame.mixer.init()
-
 import commons
 import shared_methods
 import surface_manager
@@ -23,6 +18,11 @@ import game_data
 import prompt
 import item
 
+pygame.mixer.pre_init(48000, -16, 2, 1024)
+pygame.init()
+pygame.mixer.init()
+
+
 # from sound_manager import *
 
 
@@ -32,7 +32,6 @@ import item
 
 	Moves the background by a set amount, looping back when necessary
 -----------------------------------------------------------------------------------------------------------------"""
-# TODO Come back to see if the commented out section will work.
 def move_parallax(val: Tuple[float, float]) -> None:
 	global parallax_pos
 	parallax_pos = (parallax_pos[0] + val[0], parallax_pos[1] + val[1])
@@ -605,10 +604,10 @@ def draw_interactive_block_hover() -> None:
 		tile_id = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
 		tile_data = game_data.get_tile_by_id(tile_id)
 		if (tile_data != None):
-			if game_data.TileTag.CHEST in tile_data["@tags"] or game_data.TileTag.CYCLABLE in tile_data["@tags"]:
-				item_data = game_data.get_item_by_id_str(tile_data["@item_id_str"])
+			if game_data.TileTag.CHEST in tile_data["tags"] or game_data.TileTag.CYCLABLE in tile_data["tags"]:
+				item_data = game_data.get_item_by_id_str(tile_data["item_id_str"])
 				if (item_data != None):
-					commons.screen.blit(item_data["@image"], commons.MOUSE_POSITION)
+					commons.screen.blit(item_data["image"], commons.MOUSE_POSITION)
 
 
 """================================================================================================================= 
@@ -1200,15 +1199,15 @@ while True:
 								if tile_id != game_data.air_tile_id:
 									tile_data = game_data.get_tile_by_id(tile_id)
 									if tile_data != None:
-										if tile_data["@average_color"] != (255, 0, 255):
-											pygame.draw.rect(world_surf, tile_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+										if tile_data["average_color"] != (255, 0, 255):
+											pygame.draw.rect(world_surf, tile_data["average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
 											continue
 
 								if wall_id != game_data.air_wall_id:
 									wall_data = game_data.get_wall_by_id(wall_id)
 									if wall_data != None:
-										if wall_data["@average_color"] != (255, 0, 255):
-											pygame.draw.rect(world_surf, wall_data["@average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+										if wall_data["average_color"] != (255, 0, 255):
+											pygame.draw.rect(world_surf, wall_data["average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
 											continue
 
 								sky_darken_factor = 1.0 - 0.7 * min(1.0, max(0.0, (tile_y - 55) / 110))

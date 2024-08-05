@@ -41,7 +41,7 @@ def get_random_item_prefix(prefix_category):
 -----------------------------------------------------------------------------------------------------------------"""
 class Item:
 	def __init__(self, item_id, amnt=1, auto_assign_prefix=False, prefix_name=None):
-		self.xml_item = game_data.get_item_by_id(item_id)
+		self.json_item = game_data.get_item_by_id(item_id)
 
 		self.item_id = item_id
 		self.amnt = amnt
@@ -50,11 +50,11 @@ class Item:
 
 		# Auto assign prefix
 		if prefix_name is None or prefix_name == "":
-			if (self.xml_item != None):
-				if auto_assign_prefix and ItemTag.WEAPON in self.xml_item["@tags"]:
+			if (self.json_item != None):
+				if auto_assign_prefix and ItemTag.WEAPON in self.json_item["tags"]:
 					# 15% chance to be given a prefix if it has a prefix category
-					if len(self.xml_item["@prefixes"]) > 0 and random.random() < 0.85:
-						self.prefix_data = get_random_item_prefix(self.xml_item["@prefixes"][random.randint(0, len(self.xml_item["@prefixes"]) - 1)])
+					if len(self.json_item["prefixes"]) > 0 and random.random() < 0.85:
+						self.prefix_data = get_random_item_prefix(self.json_item["prefixes"][random.randint(0, len(self.json_item["prefixes"]) - 1)])
 						self.has_prefix = True
 
 		else:
@@ -66,8 +66,8 @@ class Item:
 		return Item(self.item_id, new_amnt, False, self.get_prefix_name())
 
 	def has_tag(self, tag):
-		if (self.xml_item != None):
-			if tag in self.xml_item["@tags"]:
+		if (self.json_item != None):
+			if tag in self.json_item["tags"]:
 				return True
 		return False
 
@@ -78,52 +78,52 @@ class Item:
 		return ""
 
 	def get_attack_damage(self):
-		if (self.xml_item != None):
+		if (self.json_item != None):
 			if self.prefix_data != None:
-				return self.xml_item["@attack_damage"] * (1 + self.prefix_data[1][1])
+				return self.json_item["attack_damage"] * (1 + self.prefix_data[1][1])
 			else:
-				return self.xml_item["@attack_damage"]
+				return self.json_item["attack_damage"]
 
 	def get_crit_chance(self):
-		if (self.xml_item != None):
+		if (self.json_item != None):
 			if self.prefix_data != None:
 				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][2]), 0.0)
+					return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][2]), 0.0)
 				else:
-					return max(min(1.0, self.xml_item["@crit_chance"] + self.prefix_data[1][3]), 0.0)
+					return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][3]), 0.0)
 			else:
-				return self.xml_item["@crit_chance"]
+				return self.json_item["crit_chance"]
 
 	def get_knockback(self):
-		if (self.xml_item != None):
+		if (self.json_item != None):
 			if self.prefix_data != None:
 				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][3])
+					return self.json_item["knockback"] * (1 + self.prefix_data[1][3])
 				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][4])
+					return self.json_item["knockback"] * (1 + self.prefix_data[1][4])
 				else:
-					return self.xml_item["@knockback"] * (1 + self.prefix_data[1][5])
+					return self.json_item["knockback"] * (1 + self.prefix_data[1][5])
 			else:
-				return self.xml_item["@knockback"]
+				return self.json_item["knockback"]
 
 	def get_tier(self):
-		if (self.xml_item != None):
+		if (self.json_item != None):
 			if self.prefix_data != None:
 				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return min(max(self.xml_item["@tier"] + self.prefix_data[1][4], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1][4], 0), 10)
 				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-					return min(max(self.xml_item["@tier"] + self.prefix_data[1][5], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1][5], 0), 10)
 				else:
-					return min(max(self.xml_item["@tier"] + self.prefix_data[1][6], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1][6], 0), 10)
 			else:
-				return self.xml_item["@tier"]
+				return self.json_item["tier"]
 
 	def get_attack_speed(self):
-		if (self.xml_item != None):
+		if (self.json_item != None):
 			if self.prefix_data != None:
-				return round(self.xml_item["@attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
+				return round(self.json_item["attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
 			else:
-				return round(self.xml_item["@attack_speed"])
+				return round(self.json_item["attack_speed"])
 
 	def get_scale(self):
 		if self.prefix_data != None:
@@ -132,47 +132,47 @@ class Item:
 		return 1.0
 
 	def get_ranged_projectile_speed(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			if self.prefix_data != None and self.prefix_data[0] == ItemPrefixGroup.RANGED:
-				return self.xml_item["@ranged_projectile_speed"] * (1 + self.prefix_data[1][4])
-			return self.xml_item["@ranged_projectile_speed"]
+				return self.json_item["ranged_projectile_speed"] * (1 + self.prefix_data[1][4])
+			return self.json_item["ranged_projectile_speed"]
 
 	def get_mana_cost(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
-				return self.xml_item["@mana_cost"] * (1 + self.prefix_data[1][4])
-			return self.xml_item["@mana_cost"]
+				return self.json_item["mana_cost"] * (1 + self.prefix_data[1][4])
+			return self.json_item["mana_cost"]
 
 	def get_name(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			if self.has_prefix:
-				return self.get_prefix_name() + " " + self.xml_item["@name"]
+				return self.get_prefix_name() + " " + self.json_item["name"]
 			else:
-				return self.xml_item["@name"]
+				return self.json_item["name"]
 
 	def get_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@id_str"]
+		if self.json_item != None:
+			return self.json_item["id_str"]
 
 	def get_ammo_type(self):
-		if self.xml_item != None:
-			return self.xml_item["@ammo_type"]
+		if self.json_item != None:
+			return self.json_item["ammo_type"]
 
 	def get_ammo_damage(self):
-		if self.xml_item != None:
-			return self.xml_item["@ammo_damage"]
+		if self.json_item != None:
+			return self.json_item["ammo_damage"]
 
 	def get_ammo_drag(self):
-		if self.xml_item != None:
-			return self.xml_item["@ammo_drag"]
+		if self.json_item != None:
+			return self.json_item["ammo_drag"]
 
 	def get_ammo_gravity_mod(self):
-		if self.xml_item != None:
-			return self.xml_item["@ammo_gravity_mod"]
+		if self.json_item != None:
+			return self.json_item["ammo_gravity_mod"]
 
 	def get_ammo_knockback_mod(self):
-		if self.xml_item != None:
-			return self.xml_item["@ammo_knockback_mod"]
+		if self.json_item != None:
+			return self.json_item["ammo_knockback_mod"]
 
 	def assign_prefix(self, prefix_name):
 		self.prefix_data = game_data.find_prefix_data_by_name(prefix_name)
@@ -182,113 +182,113 @@ class Item:
 			self.has_prefix = False
 
 	def get_image(self):
-		if self.xml_item != None:
-			image = self.xml_item["@image"]
+		if self.json_item != None:
+			image = self.json_item["image"]
 			if image is None:
 				return pygame.Surface((32, 32))
 			else:
 				return image
 
 	def get_item_slot_offset_x(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			try:
-				return self.xml_item["@item_slot_offset_x"]
+				return self.json_item["item_slot_offset_x"]
 			except KeyError:
 				return 8
 
 	def get_item_slot_offset_y(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			try:
-				return self.xml_item["@item_slot_offset_y"]
+				return self.json_item["item_slot_offset_y"]
 			except KeyError:
 				return 8
 
 	def get_world_override_image(self):
-		if self.xml_item != None:
+		if self.json_item != None:
 			try:
-				return self.xml_item["@world_override_image"]
+				return self.json_item["world_override_image"]
 			except KeyError:
 				return
 
 	def get_tile_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@tile_id_str"]
+		if self.json_item != None:
+			return self.json_item["tile_id_str"]
 
 	def get_wall_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@wall_id_str"]
+		if self.json_item != None:
+			return self.json_item["wall_id_str"]
 
 	def get_hold_offset(self):
-		if self.xml_item != None:
-			return self.xml_item["@hold_offset"]
+		if self.json_item != None:
+			return self.json_item["hold_offset"]
 
 	def get_ranged_projectile_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@ranged_projectile_id_str"]
+		if self.json_item != None:
+			return self.json_item["ranged_projectile_id_str"]
 
 	def get_ranged_ammo_type(self):
-		if self.xml_item != None:
-			return self.xml_item["@ranged_ammo_type"]
+		if self.json_item != None:
+			return self.json_item["ranged_ammo_type"]
 
 	def get_ranged_accuracy(self):
-		if self.xml_item != None:
-			return self.xml_item["@ranged_accuracy"]
+		if self.json_item != None:
+			return self.json_item["ranged_accuracy"]
 
 	def get_ranged_num_projectiles(self):
-		if self.xml_item != None:
-			return self.xml_item["@ranged_num_projectiles"]
+		if self.json_item != None:
+			return self.json_item["ranged_num_projectiles"]
 
 	def get_pickaxe_power(self):
-		if self.xml_item != None:
-			return self.xml_item["@pickaxe_power"]
+		if self.json_item != None:
+			return self.json_item["pickaxe_power"]
 
 	def get_axe_power(self):
-		if self.xml_item != None:
-			return self.xml_item["@axe_power"]
+		if self.json_item != None:
+			return self.json_item["axe_power"]
 
 	def get_hammer_power(self):
-		if self.xml_item != None:
-			return self.xml_item["@hammer_power"]
+		if self.json_item != None:
+			return self.json_item["hammer_power"]
 
 	def get_grapple_speed(self):
-		if self.xml_item != None:
-			return self.xml_item["@grapple_speed"]
+		if self.json_item != None:
+			return self.json_item["grapple_speed"]
 
 	def get_grapple_chain_length(self):
-		if self.xml_item != None:
-			return self.xml_item["@grapple_chain_length"]
+		if self.json_item != None:
+			return self.json_item["grapple_chain_length"]
 
 	def get_grapple_max_chains(self):
-		if self.xml_item != None:
-			return self.xml_item["@grapple_max_chains"]
+		if self.json_item != None:
+			return self.json_item["grapple_max_chains"]
 
 	def get_grapple_chain_image(self):
-		if self.xml_item != None:
-			return self.xml_item["@grapple_chain_image"]
+		if self.json_item != None:
+			return self.json_item["grapple_chain_image"]
 
 	def get_grapple_claw_image(self):
-		if self.xml_item != None:
-			return self.xml_item["@grapple_claw_image"]
+		if self.json_item != None:
+			return self.json_item["grapple_claw_image"]
 
 	def get_max_stack(self):
-		if self.xml_item != None:
-			return self.xml_item["@max_stack"]
+		if self.json_item != None:
+			return self.json_item["max_stack"]
 
 	def get_buy_price(self):
-		if self.xml_item != None:
-			return self.xml_item["@buy_price"]
+		if self.json_item != None:
+			return self.json_item["buy_price"]
 
 	def get_sell_price(self):
-		if self.xml_item != None:
-			return self.xml_item["@sell_price"]
+		if self.json_item != None:
+			return self.json_item["sell_price"]
 
 	def get_pickup_sound_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@pickup_sound"]
+		if self.json_item != None:
+			return self.json_item["pickup_sound"]
 
 	def get_drop_sound_id_str(self):
-		if self.xml_item != None:
-			return self.xml_item["@drop_sound"]
+		if self.json_item != None:
+			return self.json_item["drop_sound"]
 
 
 def get_coins_from_int(coin_int):
@@ -313,9 +313,9 @@ def get_coins_from_int(coin_int):
 def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 	loot_data = game_data.get_loot_by_id_str(loot_id_str)
 	if loot_data != None:
-		item_count_range = loot_data["@item_spawn_count_range"]
+		item_count_range = loot_data["item_spawn_count_range"]
 		item_count = random.randint(item_count_range[0], item_count_range[1])
-		possible_items = loot_data["@item_list_data"]
+		possible_items = loot_data["item_list_data"]
 
 	spawn_list = []
 	void_indices = []
@@ -345,7 +345,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 						if spawn_list[item_index][0] == new_item_id:
 							spawn_list[item_index][1] += random_count
 							if spawn_list[item_index][0] != None:
-								max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["@max_stack"]
+								max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["max_stack"]
 								if spawn_list[item_index][1] > max_stack:
 									random_count = spawn_list[item_index][1] - max_stack
 									spawn_list[item_index][1] = max_stack
@@ -368,7 +368,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 		spawn_list[item_index] = Item(spawn_item_data[0], spawn_item_data[1], auto_assign_prefix=True)
 
 	# Coins
-	random_coin_range = loot_data["@coin_spawn_range"]
+	random_coin_range = loot_data["coin_spawn_range"]
 	random_coin_count = random.randint(random_coin_range[0], random_coin_range[1])
 	coin_items = get_coins_from_int(random_coin_count)
 	for coin_item in coin_items:

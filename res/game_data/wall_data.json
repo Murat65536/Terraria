@@ -1,0 +1,123 @@
+{
+	"walls": {
+		"wall": [
+			{
+				"id": "0",
+				"id_str": "wall.INVALID",
+				"name": "INVALID",
+				"mask_type": "None",
+				"mask_merge_id_strs": "",
+				"image_path": "res/images/walls/",
+				"item_id_str": "item.INVALID",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "1",
+				"id_str": "wall.none",
+				"name": "None",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "",
+				"image_path": "res/images/walls/",
+				"item_id_str": "item.INVALID",
+				"average_color": "auto",
+				"item_count_range": "0,0",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "2",
+				"id_str": "wall.dirt",
+				"name": "Dirt Wall",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.ice,wall.hardened_sand,wall.sandstone,wall.snow,wall.stone,wall.wood",
+				"image_path": "res/images/walls/dirt.png",
+				"item_id_str": "item.dirt_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "3",
+				"id_str": "wall.stone",
+				"name": "Stone",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.snow,wall.wood",
+				"image_path": "res/images/walls/stone.png",
+				"item_id_str": "item.stone_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "4",
+				"id_str": "wall.ice",
+				"name": "Ice",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.snow",
+				"image_path": "res/images/walls/ice.png",
+				"item_id_str": "item.ice_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "5",
+				"id_str": "wall.snow",
+				"name": "Snow",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.ice,wall.sandstone,wall.snow,wall.stone,wall.wood",
+				"image_path": "res/images/walls/snow.png",
+				"item_id_str": "item.snow_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "6",
+				"id_str": "wall.sandstone",
+				"name": "Sandstone",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.hardened_sand,wall.snow",
+				"image_path": "res/images/walls/sandstone.png",
+				"item_id_str": "item.sandstone_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "7",
+				"id_str": "wall.hardened_sand",
+				"name": "Sand",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.sandstone,wall.snow,wall.stone,wall.wood",
+				"image_path": "res/images/walls/hardened_sand.png",
+				"item_id_str": "item.hardened_sand_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			},
+			{
+				"id": "8",
+				"id_str": "wall.wood",
+				"name": "Wood",
+				"mask_type": "Noisy",
+				"mask_merge_id_strs": "wall.dirt,wall.hardened_sand,wall.snow,wall.stone",
+				"image_path": "res/images/walls/wood.png",
+				"item_id_str": "item.wood_wall",
+				"average_color": "auto",
+				"item_count_range": "1,1",
+				"place_sound": "sound.dig",
+				"hit_sound": "sound.dig"
+			}
+		]
+	}
+}

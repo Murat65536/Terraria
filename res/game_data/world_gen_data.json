@@ -1,0 +1,14 @@
+{
+	"world_gens": {
+		"world_gen": [
+			{
+				"id": "0",
+				"id_str": "world_gen.INVALID"
+			},
+			{
+				"id": "1",
+				"id_str": "world_gen.default"
+			}
+		]
+	}
+}

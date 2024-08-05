@@ -1,0 +1,16 @@
+{
+	"entities": {
+		"entity": [
+			{
+				"id": "0",
+				"id_str": "entity.INVALID",
+				"name": "INVALID"
+			},
+			{
+				"id": "1",
+				"id_str": "entity.green_slime",
+				"name": "Green Slime"
+			}
+		]
+	}
+}

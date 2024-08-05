@@ -142,7 +142,7 @@ class PhysicsItem:
 					if world.tile_in_map(self.block_position[1] + j, self.block_position[0] + i):
 						tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
-						if TileTag.NOCOLLIDE not in tile_data["@tags"]:
+						if TileTag.NOCOLLIDE not in tile_data["tags"]:
 							block_rect = Rect(commons.BLOCK_SIZE * (self.block_position[1] + j), commons.BLOCK_SIZE * (self.block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx

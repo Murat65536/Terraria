@@ -1,11 +1,11 @@
 # game_data.py
 
-import xmltodict
 import pygame
 from enum import Enum
 import commons
 import random
 from typing import Any
+import json
 
 
 class ItemTag(Enum):
@@ -151,20 +151,20 @@ biome_tile_vals = [[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wa
 
 platform_blocks = [257]
 
-xml_item_data = []
+json_item_data = []
 item_id_str_hash_table = {}
 ammo_type_item_lists = {}
-xml_tile_data = []
+json_tile_data = []
 tile_id_str_hash_table = {}
 tile_id_light_reduction_lookup = []
 tile_id_light_emission_lookup = []
-xml_wall_data = []
+json_wall_data = []
 wall_id_str_hash_table = {}
-xml_sound_data = []
+json_sound_data = []
 sound_id_str_hash_table = {}
-xml_structure_data = []
+json_structure_data = []
 structure_id_str_hash_table = {}
-xml_loot_data = []
+json_loot_data = []
 loot_id_str_hash_table = {}
 
 sound_volume_multiplier = 1.0
@@ -679,97 +679,98 @@ def find_prefix_data_by_name(prefix_name):
 
 
 def parse_item_data():
-	global xml_item_data
-	xml_read_file = open("res/game_data/item_data.xml", "r")
-	xml_item_data = xmltodict.parse(xml_read_file.read())["items"]["item"]
-	xml_read_file.close()
+	global json_item_data
+	json_read_file = open("res/game_data/item_data.json", "r")
+	json_item_data = json.loads(json_read_file.read())["items"]["item"]
+	# json_item_data = json.loads(json_read_file.read())["items"]["item"]
+	json_read_file.close()
 
-	xml_item_data = sorted(xml_item_data, key=lambda x: int(x["@id"]))
+	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
-	for item_data in xml_item_data:
-		item_data["@id"] = int(item_data["@id"])
-		item_data["@tags"] = make_item_tag_list(item_data["@tags"])
-		item_data["@tier"] = int(item_data["@tier"])
-		item_data["@max_stack"] = int(item_data["@max_stack"])
-		item_data["@buy_price"] = int(item_data["@buy_price"])
-		item_data["@sell_price"] = int(item_data["@sell_price"])
-		item_data["@hold_offset"] = float(item_data["@hold_offset"])
+	for item_data in json_item_data:
+		item_data["id"] = int(item_data["id"])
+		item_data["tags"] = make_item_tag_list(item_data["tags"])
+		item_data["tier"] = int(item_data["tier"])
+		item_data["max_stack"] = int(item_data["max_stack"])
+		item_data["buy_price"] = int(item_data["buy_price"])
+		item_data["sell_price"] = int(item_data["sell_price"])
+		item_data["hold_offset"] = float(item_data["hold_offset"])
 		try:
-			loaded_surf = pygame.image.load(item_data["@image_path"]).convert_alpha()
-			item_data["@image"] = loaded_surf
-			item_data["@item_slot_offset_x"] = int(24 - item_data["@image"].get_width() * 0.5)
-			item_data["@item_slot_offset_y"] = int(24 - item_data["@image"].get_height() * 0.5)
+			loaded_surf = pygame.image.load(item_data["image_path"]).convert_alpha()
+			item_data["image"] = loaded_surf
+			item_data["item_slot_offset_x"] = int(24 - item_data["image"].get_width() * 0.5)
+			item_data["item_slot_offset_y"] = int(24 - item_data["image"].get_height() * 0.5)
 		except FileNotFoundError:
-			item_data["@image"] = None
+			item_data["image"] = None
 		except pygame.error:
-			item_data["@image"] = None
+			item_data["image"] = None
 
-		if ItemTag.WEAPON in item_data["@tags"]:
-			item_data["@attack_speed"] = float(item_data["@attack_speed"])
-			item_data["@attack_damage"] = float(item_data["@attack_damage"])
-			item_data["@knockback"] = float(item_data["@knockback"])
-			item_data["@crit_chance"] = float(item_data["@crit_chance"])
+		if ItemTag.WEAPON in item_data["tags"]:
+			item_data["attack_speed"] = float(item_data["attack_speed"])
+			item_data["attack_damage"] = float(item_data["attack_damage"])
+			item_data["knockback"] = float(item_data["knockback"])
+			item_data["crit_chance"] = float(item_data["crit_chance"])
 			try:
-				loaded_surf = pygame.image.load(item_data["@world_override_image_path"]).convert_alpha()
-				item_data["@world_override_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+				loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
+				item_data["world_override_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
 			except FileNotFoundError:
-				item_data["@world_override_image"] = None
+				item_data["world_override_image"] = None
 			except pygame.error:
-				item_data["@world_override_image"] = None
+				item_data["world_override_image"] = None
 
-			item_data["@prefixes"] = make_item_prefix_list(item_data["@prefixes"])
+			item_data["prefixes"] = make_item_prefix_list(item_data["prefixes"])
 
-		if ItemTag.RANGED in item_data["@tags"]:
-			item_data["@ranged_projectile_speed"] = float(item_data["@ranged_projectile_speed"])
-			item_data["@ranged_accuracy"] = float(item_data["@ranged_accuracy"])
-			item_data["@ranged_num_projectiles"] = int(item_data["@ranged_num_projectiles"])
+		if ItemTag.RANGED in item_data["tags"]:
+			item_data["ranged_projectile_speed"] = float(item_data["ranged_projectile_speed"])
+			item_data["ranged_accuracy"] = float(item_data["ranged_accuracy"])
+			item_data["ranged_num_projectiles"] = int(item_data["ranged_num_projectiles"])
 
-		if ItemTag.MAGICAL in item_data["@tags"]:
-			item_data["@mana_cost"] = int(item_data["@mana_cost"])
+		if ItemTag.MAGICAL in item_data["tags"]:
+			item_data["mana_cost"] = int(item_data["mana_cost"])
 
-		if ItemTag.AMMO in item_data["@tags"]:
-			item_data["@ammo_damage"] = float(item_data["@ammo_damage"])
-			item_data["@ammo_drag"] = float(item_data["@ammo_drag"])
-			item_data["@ammo_gravity_mod"] = float(item_data["@ammo_gravity_mod"])
-			item_data["@ammo_knockback_mod"] = float(item_data["@ammo_knockback_mod"])
+		if ItemTag.AMMO in item_data["tags"]:
+			item_data["ammo_damage"] = float(item_data["ammo_damage"])
+			item_data["ammo_drag"] = float(item_data["ammo_drag"])
+			item_data["ammo_gravity_mod"] = float(item_data["ammo_gravity_mod"])
+			item_data["ammo_knockback_mod"] = float(item_data["ammo_knockback_mod"])
 			try:
-				ammo_type_item_lists[item_data["@ammo_type"]].append(int(item_data["@id"]))
+				ammo_type_item_lists[item_data["ammo_type"]].append(int(item_data["id"]))
 			except KeyError:
-				ammo_type_item_lists[item_data["@ammo_type"]] = [int(item_data["@id"])]
+				ammo_type_item_lists[item_data["ammo_type"]] = [int(item_data["id"])]
 
-		if ItemTag.PICKAXE in item_data["@tags"]:
-			item_data["@pickaxe_power"] = float(item_data["@pickaxe_power"])
+		if ItemTag.PICKAXE in item_data["tags"]:
+			item_data["pickaxe_power"] = float(item_data["pickaxe_power"])
 
-		if ItemTag.AXE in item_data["@tags"]:
-			item_data["@axe_power"] = float(item_data["@axe_power"])
-		if ItemTag.HAMMER in item_data["@tags"]:
-			item_data["@hammer_power"] = float(item_data["@hammer_power"])
+		if ItemTag.AXE in item_data["tags"]:
+			item_data["axe_power"] = float(item_data["axe_power"])
+		if ItemTag.HAMMER in item_data["tags"]:
+			item_data["hammer_power"] = float(item_data["hammer_power"])
 
-		if ItemTag.GRAPPLE in item_data["@tags"]:
-			item_data["@grapple_speed"] = float(item_data["@grapple_speed"])
-			item_data["@grapple_chain_length"] = float(item_data["@grapple_chain_length"])
-			item_data["@grapple_max_chains"] = int(item_data["@grapple_max_chains"])
+		if ItemTag.GRAPPLE in item_data["tags"]:
+			item_data["grapple_speed"] = float(item_data["grapple_speed"])
+			item_data["grapple_chain_length"] = float(item_data["grapple_chain_length"])
+			item_data["grapple_max_chains"] = int(item_data["grapple_max_chains"])
 			try:
-				loaded_surf = pygame.image.load(item_data["@grapple_chain_image_path"]).convert_alpha()
-				item_data["@grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+				loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
+				item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
 			except FileNotFoundError:
-				item_data["@grapple_chain_image"] = None
+				item_data["grapple_chain_image"] = None
 			except pygame.error:
-				item_data["@grapple_chain_image"] = None
+				item_data["grapple_chain_image"] = None
 
 			try:
-				loaded_surf = pygame.image.load(item_data["@grapple_claw_image_path"]).convert_alpha()
-				item_data["@grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
-				item_data["@grapple_claw_image"].set_colorkey((255, 0, 255))
+				loaded_surf = pygame.image.load(item_data["grapple_claw_image_path"]).convert_alpha()
+				item_data["grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+				item_data["grapple_claw_image"].set_colorkey((255, 0, 255))
 			except FileNotFoundError:
-				item_data["@grapple_claw_image"] = None
+				item_data["grapple_claw_image"] = None
 			except pygame.error:
-				item_data["@grapple_claw_image"] = None
+				item_data["grapple_claw_image"] = None
 
 
 def get_item_by_id(item_id) -> Any:
-	if item_id < len(xml_item_data):
-		return xml_item_data[item_id]
+	if item_id < len(json_item_data):
+		return json_item_data[item_id]
 
 
 def get_item_id_by_id_str(item_id_str):
@@ -782,98 +783,93 @@ def get_item_by_id_str(item_id_str):
 
 def create_item_id_str_hash_table():
 	global item_id_str_hash_table
-	for item_index in range(len(xml_item_data)):
-		item_id_str_hash_table[xml_item_data[item_index]["@id_str"]] = item_index
+	for item_index in range(len(json_item_data)):
+		item_id_str_hash_table[json_item_data[item_index]["id_str"]] = item_index
 
 
 def get_ammo_item_ids_for_ammo_type(ammo_type):
 	ammo_item_ids = []
-	for item_data in xml_item_data:
-		if ItemTag.AMMO in item_data["@tags"]:
-			if item_data["@ammo_type"] == ammo_type:
-				ammo_item_ids.append(int(item_data["@id"]))
+	for item_data in json_item_data:
+		if ItemTag.AMMO in item_data["tags"]:
+			if item_data["ammo_type"] == ammo_type:
+				ammo_item_ids.append(int(item_data["id"]))
 
 
 def parse_tile_data():
-	global xml_tile_data
-	xml_read_file = open("res/game_data/tile_data.xml", "r")
-	xml_tile_data = xmltodict.parse(xml_read_file.read())["tiles"]["tile"]
-	xml_read_file.close()
+	global json_tile_data
+	json_read_file = open("res/game_data/tile_data.json", "r")
+	json_tile_data = json.loads(json_read_file.read())["tiles"]["tile"]
+	json_read_file.close()
 
-	xml_tile_data = sorted(xml_tile_data, key=lambda x: int(x["@id"]))
+	json_tile_data = sorted(json_tile_data, key=lambda x: int(x["id"]))
 
-	for tile_data in xml_tile_data:
-		tile_data["@id"] = int(tile_data["@id"])
-		tile_data["@strength"] = float(tile_data["@strength"])
-		tile_data["@strength_type"] = get_tile_strength_type_from_str(tile_data["@strength_type"])
-		tile_data["@mask_type"] = get_tile_mask_type_from_str(tile_data["@mask_type"])
-		tile_data["@mask_merge_id_strs"] = tile_data["@mask_merge_id_strs"].split(",")
-		tile_data["@light_reduction"] = int(tile_data["@light_reduction"])
-		tile_data["@light_emission"] = int(tile_data["@light_emission"])
+	for tile_data in json_tile_data:
+		tile_data["id"] = int(tile_data["id"])
+		tile_data["strength"] = float(tile_data["strength"])
+		tile_data["strength_type"] = get_tile_strength_type_from_str(tile_data["strength_type"])
+		tile_data["mask_type"] = get_tile_mask_type_from_str(tile_data["mask_type"])
+		tile_data["mask_merge_id_strs"] = tile_data["mask_merge_id_strs"].split(",")
+		tile_data["light_reduction"] = int(tile_data["light_reduction"])
+		tile_data["light_emission"] = int(tile_data["light_emission"])
 
-		if tile_data["@average_color"] == "auto":
-			tile_data["@average_color"] = (255, 0, 255)
+		if tile_data["average_color"] == "auto":
+			tile_data["average_color"] = (255, 0, 255)
 			override_average_color = True
 		else:
-			val_array = tile_data["@average_color"].split(",")
-			tile_data["@average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
+			val_array = tile_data["average_color"].split(",")
+			tile_data["average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
 			override_average_color = False
 
-		tile_data["@tags"] = make_tile_tag_list(tile_data["@tags"])
+		tile_data["tags"] = make_tile_tag_list(tile_data["tags"])
 		try:
-			tile_data["@image"] = pygame.image.load(tile_data["@image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
+			tile_data["image"] = pygame.image.load(tile_data["image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 			if override_average_color:
-				tile_data["@average_color"] = pygame.transform.average_color(tile_data["@image"])
+				tile_data["average_color"] = pygame.transform.average_color(tile_data["image"])
 		except FileNotFoundError:
-			tile_data["@image"] = None
+			tile_data["image"] = None
 		except pygame.error:
-			tile_data["@image"] = None
+			tile_data["image"] = None
 
-		tile_data["@item_count_range"] = int_tuple_str_to_int_tuple(tile_data["@item_count_range"])
+		tile_data["item_count_range"] = int_tuple_str_to_int_tuple(tile_data["item_count_range"])
 
-		if TileTag.MULTITILE in tile_data["@tags"]:
-			tile_data["@multitile_dimensions"] = int_tuple_str_to_int_tuple(tile_data["@multitile_dimensions"])
-			tile_data["@multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["@multitile_required_solids"])
-			try:
-				tile_data["@multitile_image"] = pygame.image.load(tile_data["@multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["@multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["@multitile_dimensions"][1])
-				if override_average_color:
-					tile_data["@average_color"] = pygame.transform.average_color(tile_data["@multitile_image"])
-			except FileNotFoundError:
-				tile_data["@multitile_image"] = None
-			except pygame.error:
-				tile_data["@multitile_image"] = None
+		if TileTag.MULTITILE in tile_data["tags"]:
+			tile_data["multitile_dimensions"] = int_tuple_str_to_int_tuple(tile_data["multitile_dimensions"])
+			tile_data["multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["multitile_required_solids"])
+			tile_data["multitile_image"] = pygame.image.load(tile_data["multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["multitile_dimensions"][1])
+			if override_average_color:
+				tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
 
-		if TileTag.CYCLABLE in tile_data["@tags"]:
-			tile_data["@cycle_facing_left_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["@cycle_facing_left_tile_offset"])
-			tile_data["@cycle_facing_right_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["@cycle_facing_right_tile_offset"])
+		if TileTag.CYCLABLE in tile_data["tags"]:
+			tile_data["cycle_facing_left_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["cycle_facing_left_tile_offset"])
+			tile_data["cycle_facing_right_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["cycle_facing_right_tile_offset"])
 
-		if TileTag.DAMAGING in tile_data["@tags"]:
-			tile_data["@tile_damage"] = int(tile_data["@tile_damage"])
+		if TileTag.DAMAGING in tile_data["tags"]:
+			tile_data["tile_damage"] = int(tile_data["tile_damage"])
 
 
 def create_tile_id_str_hash_table():
 	global tile_id_str_hash_table
-	for tile_index in range(len(xml_tile_data)):
-		tile_id_str_hash_table[xml_tile_data[tile_index]["@id_str"]] = tile_index
+	for tile_index in range(len(json_tile_data)):
+		tile_id_str_hash_table[json_tile_data[tile_index]["id_str"]] = tile_index
 
 
 def create_tile_light_reduction_lookup():
 	global tile_id_light_reduction_lookup
 	tile_id_light_reduction_lookup.clear()
-	for tile_index in range(len(xml_tile_data)):
-		tile_id_light_reduction_lookup.append(xml_tile_data[tile_index]["@light_reduction"])
+	for tile_index in range(len(json_tile_data)):
+		tile_id_light_reduction_lookup.append(json_tile_data[tile_index]["light_reduction"])
 
 
 def create_tile_light_emission_lookup():
 	global tile_id_light_emission_lookup
 	tile_id_light_emission_lookup.clear()
-	for tile_index in range(len(xml_tile_data)):
-		tile_id_light_emission_lookup.append(xml_tile_data[tile_index]["@light_emission"])
+	for tile_index in range(len(json_tile_data)):
+		tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
 
 
 def get_tile_by_id(tile_id):
-	if tile_id < len(xml_tile_data):
-		return xml_tile_data[tile_id]
+	if tile_id < len(json_tile_data):
+		return json_tile_data[tile_id]
 
 
 def get_tile_id_by_id_str(tile_id_str):
@@ -886,53 +882,53 @@ def get_tile_by_id_str(tile_id_str):
 
 def get_current_tile_id_str_lookup():
 	tile_id_str_lookup = []
-	for tile in xml_tile_data:
-		tile_id_str_lookup.append(tile["@id_str"])
+	for tile in json_tile_data:
+		tile_id_str_lookup.append(tile["id_str"])
 	return tile_id_str_lookup
 
 
 def parse_wall_data():
-	global xml_wall_data
-	xml_read_file = open("res/game_data/wall_data.xml", "r")
-	xml_wall_data = xmltodict.parse(xml_read_file.read())["walls"]["wall"]
-	xml_read_file.close()
+	global json_wall_data
+	json_read_file = open("res/game_data/wall_data.json", "r")
+	json_wall_data = json.loads(json_read_file.read())["walls"]["wall"]
+	json_read_file.close()
 
-	xml_wall_data = sorted(xml_wall_data, key=lambda x: int(x["@id"]))
+	json_wall_data = sorted(json_wall_data, key=lambda x: int(x["id"]))
 
-	for wall_data in xml_wall_data:
-		wall_data["@id"] = int(wall_data["@id"])
-		wall_data["@mask_type"] = get_tile_mask_type_from_str(wall_data["@mask_type"])
-		wall_data["@mask_merge_id_strs"] = wall_data["@mask_merge_id_strs"].split(",")
+	for wall_data in json_wall_data:
+		wall_data["id"] = int(wall_data["id"])
+		wall_data["mask_type"] = get_tile_mask_type_from_str(wall_data["mask_type"])
+		wall_data["mask_merge_id_strs"] = wall_data["mask_merge_id_strs"].split(",")
 
-		if wall_data["@average_color"] == "auto":
-			wall_data["@average_color"] = (255, 0, 255)
+		if wall_data["average_color"] == "auto":
+			wall_data["average_color"] = (255, 0, 255)
 			override_average_color = True
 		else:
-			val_array = wall_data["@average_color"].split(",")
-			wall_data["@average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
+			val_array = wall_data["average_color"].split(",")
+			wall_data["average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
 			override_average_color = False
 
 		try:
-			wall_data["@image"] = pygame.transform.scale(pygame.image.load(wall_data["@image_path"]).convert_alpha(), (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
-			wall_data["@image"].set_colorkey((255, 0, 255))
+			wall_data["image"] = pygame.transform.scale(pygame.image.load(wall_data["image_path"]).convert_alpha(), (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
+			wall_data["image"].set_colorkey((255, 0, 255))
 			if override_average_color:
-				wall_data["@average_color"] = pygame.transform.average_color(wall_data["@image"])
+				wall_data["average_color"] = pygame.transform.average_color(wall_data["image"])
 
 		except FileNotFoundError:
-			wall_data["@image"] = None
+			wall_data["image"] = None
 		except pygame.error:
-			wall_data["@image"] = None
+			wall_data["image"] = None
 
 
 def create_wall_id_str_hash_table():
 	global wall_id_str_hash_table
-	for wall_index in range(len(xml_wall_data)):
-		wall_id_str_hash_table[xml_wall_data[wall_index]["@id_str"]] = wall_index
+	for wall_index in range(len(json_wall_data)):
+		wall_id_str_hash_table[json_wall_data[wall_index]["id_str"]] = wall_index
 
 
 def get_wall_by_id(wall_id):
-	if wall_id < len(xml_wall_data):
-		return xml_wall_data[wall_id]
+	if wall_id < len(json_wall_data):
+		return json_wall_data[wall_id]
 
 
 def get_wall_id_by_id_str(wall_id_str):
@@ -945,29 +941,29 @@ def get_wall_by_id_str(wall_id_str):
 
 def get_current_wall_id_str_lookup():
 	wall_id_str_lookup = []
-	for wall in xml_wall_data:
-		wall_id_str_lookup.append(wall["@id_str"])
+	for wall in json_wall_data:
+		wall_id_str_lookup.append(wall["id_str"])
 	return wall_id_str_lookup
 
 
 def parse_sound_data():
-	global xml_sound_data
-	xml_read_file = open("res/game_data/sound_data.xml", "r")
-	xml_sound_data = xmltodict.parse(xml_read_file.read())["sounds"]["sound"]
-	xml_read_file.close()
+	global json_sound_data
+	json_read_file = open("res/game_data/sound_data.json", "r")
+	json_sound_data = json.loads(json_read_file.read())["sounds"]["sound"]
+	json_read_file.close()
 
-	xml_sound_data = sorted(xml_sound_data, key=lambda x: int(x["@id"]))
+	json_sound_data = sorted(json_sound_data, key=lambda x: int(x["id"]))
 
-	for sound_data in xml_sound_data:
-		sound_data["@id"] = int(sound_data["@id"])
-		sound_data["@volume"] = float(sound_data["@volume"])
-		sound_data["@variation_paths"] = sound_data["@variation_paths"].split(",")
-		sound_data["@variations"] = []
-		for sound_variation in sound_data["@variation_paths"]:
+	for sound_data in json_sound_data:
+		sound_data["id"] = int(sound_data["id"])
+		sound_data["volume"] = float(sound_data["volume"])
+		sound_data["variation_paths"] = sound_data["variation_paths"].split(",")
+		sound_data["variations"] = []
+		for sound_variation in sound_data["variation_paths"]:
 			try:
 				sound = pygame.mixer.Sound(sound_variation)
-				sound.set_volume(sound_data["@volume"])
-				sound_data["@variations"].append(sound)
+				sound.set_volume(sound_data["volume"])
+				sound_data["variations"].append(sound)
 			except FileNotFoundError:
 				pass
 			except pygame.error:
@@ -976,13 +972,13 @@ def parse_sound_data():
 
 def create_sound_id_str_hash_table():
 	global sound_id_str_hash_table
-	for sound_index in range(len(xml_sound_data)):
-		sound_id_str_hash_table[xml_sound_data[sound_index]["@id_str"]] = sound_index
+	for sound_index in range(len(json_sound_data)):
+		sound_id_str_hash_table[json_sound_data[sound_index]["id_str"]] = sound_index
 
 
 def get_sound_by_id(sound_id):
-	if sound_id < len(xml_sound_data):
-		return xml_sound_data[sound_id]
+	if sound_id < len(json_sound_data):
+		return json_sound_data[sound_id]
 
 
 def get_sound_id_by_id_str(sound_id_str):
@@ -1009,8 +1005,8 @@ def change_sound_volume(amount):
 	sound_volume_multiplier += amount
 	sound_volume_multiplier = max(min(sound_volume_multiplier, 1), 0)
 	if sound_volume_multiplier != volume_before:
-		for sound in xml_sound_data:
-			sound["@sound"].set_volume(sound["@volume"] * sound_volume_multiplier)
+		for sound in json_sound_data:
+			sound["sound"].set_volume(sound["volume"] * sound_volume_multiplier)
 		# entity_manager.add_message("Sound volume set to " + str(round(sound_volume_multiplier, 2)), (255, 223, 10), life=2, outline_color=(80, 70, 3))
 
 
@@ -1018,36 +1014,36 @@ def play_sound(sound_id_str):
 	if commons.SOUND:
 		sound_data = get_sound_by_id_str(sound_id_str)
 		if (sound_data != None):
-			sound_index = random.randint(0, len(sound_data["@variations"]) - 1)
-			sound_data["@variations"][sound_index].play()
+			sound_index = random.randint(0, len(sound_data["variations"]) - 1)
+			sound_data["variations"][sound_index].play()
 
 
 def play_tile_hit_sfx(tile_id):
 	if commons.SOUND:
 		tile_data = get_tile_by_id(tile_id)
 		if (tile_data != None):
-			play_sound(tile_data["@hit_sound"])
+			play_sound(tile_data["hit_sound"])
 
 
 def play_tile_place_sfx(tile_id):
 	if commons.SOUND:
 		tile_data = get_tile_by_id(tile_id)
 		if (tile_data != None):
-			play_sound(tile_data["@place_sound"])
+			play_sound(tile_data["place_sound"])
 
 
 def play_wall_hit_sfx(wall_id):
 	if commons.SOUND:
 		wall_data = get_wall_by_id(wall_id)
 		if(wall_data != None):
-			play_sound(wall_data["@hit_sound"])
+			play_sound(wall_data["hit_sound"])
 
 
 def play_wall_place_sfx(wall_id):
 	if commons.SOUND:
 		wall_data = get_wall_by_id(wall_id)
 		if (wall_data != None):
-			play_sound(wall_data["@place_sound"])
+			play_sound(wall_data["place_sound"])
 
 
 class StructureConnectionOrientation(Enum):
@@ -1058,24 +1054,24 @@ class StructureConnectionOrientation(Enum):
 
 
 def parse_structure_data():
-	global xml_structure_data
-	xml_read_file = open("res/game_data/structure_data.xml", "r")
-	xml_structure_data = xmltodict.parse(xml_read_file.read())["structures"]["structure"]
-	xml_read_file.close()
+	global json_structure_data
+	json_read_file = open("res/game_data/structure_data.json", "r")
+	json_structure_data = json.loads(json_read_file.read())["structures"]["structure"]
+	json_read_file.close()
 
-	xml_structure_data = sorted(xml_structure_data, key=lambda x: int(x["@id"]))
+	json_structure_data = sorted(json_structure_data, key=lambda x: int(x["id"]))
 
-	for structure_data in xml_structure_data:
-		structure_data["@id"] = int(structure_data["@id"])
-		structure_data["@spawn_weight"] = int(structure_data["@spawn_weight"])
-		structure_data["@width"] = int(structure_data["@width"])
-		structure_data["@height"] = int(structure_data["@height"])
+	for structure_data in json_structure_data:
+		structure_data["id"] = int(structure_data["id"])
+		structure_data["spawn_weight"] = int(structure_data["spawn_weight"])
+		structure_data["width"] = int(structure_data["width"])
+		structure_data["height"] = int(structure_data["height"])
 
-		structure_data["@connections"] = []
-		structure_data["@chest_loot"] = []
+		structure_data["connections"] = []
+		structure_data["chest_loot"] = []
 
 		tile_data = []
-		columns = structure_data["@tile_data"].split("|")
+		columns = structure_data["tile_data"].split("|")
 		for column in columns:
 			tile_data.append([])
 			char_index = 0
@@ -1095,7 +1091,7 @@ def parse_structure_data():
 							if data_str_id == 0:
 								tile_data[-1][-1][0] = data_str_split[1]
 							elif data_str_id == 2:
-								structure_data["@chest_loot"].append([(x_pos, y_pos), data_str_split[1]])
+								structure_data["chest_loot"].append([(x_pos, y_pos), data_str_split[1]])
 							elif data_str_id == 3:
 								tile_data[-1][-1][1] = data_str_split[1]
 							elif data_str_id == 1:
@@ -1103,21 +1099,21 @@ def parse_structure_data():
 								tile_data[-1][-1][2] = int(split_str[0]), int(split_str[1])
 							elif data_str_id == 4:
 								connection_data = data_str_split[1].split(",")
-								structure_data["@connections"].append([(x_pos, y_pos), connection_data[0],  get_structure_connection_orientation_from_str(connection_data[1])])
+								structure_data["connections"].append([(x_pos, y_pos), connection_data[0],  get_structure_connection_orientation_from_str(connection_data[1])])
 				char_index += 1
 
-		structure_data["@tile_data"] = tile_data
+		structure_data["tile_data"] = tile_data
 
 
 def create_structure_id_str_hash_table():
 	global structure_id_str_hash_table
-	for structure_index in range(len(xml_structure_data)):
-		structure_id_str_hash_table[xml_structure_data[structure_index]["@id_str"]] = structure_index
+	for structure_index in range(len(json_structure_data)):
+		structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = structure_index
 
 
 def get_structure_by_id(structure_id):
-	if structure_id < len(xml_structure_data):
-		return xml_structure_data[structure_id]
+	if structure_id < len(json_structure_data):
+		return json_structure_data[structure_id]
 
 
 def get_structure_id_by_id_str(structure_id_str):
@@ -1131,10 +1127,10 @@ def get_structure_by_id_str(structure_id_str):
 def find_structures_for_connection(connection_type, connection_orientation):
 	out_connections = []
 	opposite_connection_orientation = get_opposite_structure_connection_orientation(connection_orientation)
-	for structure in xml_structure_data:
-		for connection in structure["@connections"]:
+	for structure in json_structure_data:
+		for connection in structure["connections"]:
 			if connection[1] == connection_type and connection[2] == opposite_connection_orientation:
-				out_connections.append([structure["@id_str"], connection[0]])
+				out_connections.append([structure["id_str"], connection[0]])
 
 	return out_connections
 
@@ -1162,17 +1158,17 @@ def get_structure_connection_orientation_from_str(structure_connection_orientati
 
 
 def parse_loot_data():
-	global xml_loot_data
-	xml_read_file = open("res/game_data/loot_data.xml", "r")
-	xml_loot_data = xmltodict.parse(xml_read_file.read())["lootgroups"]["loot"]
-	xml_read_file.close()
+	global json_loot_data
+	json_read_file = open("res/game_data/loot_data.json", "r")
+	json_loot_data = json.loads(json_read_file.read())["lootgroups"]["loot"]
+	json_read_file.close()
 
-	xml_loot_data = sorted(xml_loot_data, key=lambda x: int(x["@id"]))
+	json_loot_data = sorted(json_loot_data, key=lambda x: int(x["id"]))
 
-	for loot_data in xml_loot_data:
-		loot_data["@id"] = int(loot_data["@id"])
-		loot_data["@item_spawn_count_range"] = int_tuple_str_to_int_tuple(loot_data["@item_spawn_count_range"])
-		possible_item_strs = loot_data["@item_list_data"].split("|")
+	for loot_data in json_loot_data:
+		loot_data["id"] = int(loot_data["id"])
+		loot_data["item_spawn_count_range"] = int_tuple_str_to_int_tuple(loot_data["item_spawn_count_range"])
+		possible_item_strs = loot_data["item_list_data"].split("|")
 		item_list_data = []
 		for possible_item_properties_str in possible_item_strs:
 			possible_item_properties = possible_item_properties_str.split(";")
@@ -1186,20 +1182,20 @@ def parse_loot_data():
 
 			item_list_data.append([possible_item_id_str, possible_item_spawn_weight, possible_item_spawn_depth_range, possible_item_stack_count_range, possible_item_slot_priority, once_per_instance])
 
-		loot_data["@item_list_data"] = item_list_data
+		loot_data["item_list_data"] = item_list_data
 
-		loot_data["@coin_spawn_range"] = int_tuple_str_to_int_tuple(loot_data["@coin_spawn_range"])
+		loot_data["coin_spawn_range"] = int_tuple_str_to_int_tuple(loot_data["coin_spawn_range"])
 
 
 def create_loot_id_str_hash_table():
 	global loot_id_str_hash_table
-	for loot_index in range(len(xml_loot_data)):
-		loot_id_str_hash_table[xml_loot_data[loot_index]["@id_str"]] = loot_index
+	for loot_index in range(len(json_loot_data)):
+		loot_id_str_hash_table[json_loot_data[loot_index]["id_str"]] = loot_index
 
 
 def get_loot_by_id(loot_id):
-	if loot_id < len(xml_loot_data):
-		return xml_loot_data[loot_id]
+	if loot_id < len(json_loot_data):
+		return json_loot_data[loot_id]
 
 
 def get_loot_id_by_id_str(loot_id_str):
