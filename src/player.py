@@ -176,6 +176,9 @@ class Player:
 
 		self.swinging_arm =	False
 		self.should_swing_arm =	False
+
+		self.holding_arm =	False
+		self.should_hold_arm =	False
 		
 		self.last_block_on = 0
 
@@ -190,9 +193,12 @@ class Player:
 		self.arm_out_angle = 0
 		self.swing_angle = 0
 		self.item_swing	= False
+		self.item_extend	= False
 		self.current_item_image	= None
 		self.current_item_swing_image =	None
 		self.current_item_swing_offset = 0
+		self.current_item_extend_image =	None
+		self.current_item_extend_offset = 0
 		self.enemies_hit = []
 
 		self.un_pickupable_items = []
@@ -267,7 +273,9 @@ class Player:
 					self.arm_out = False
 					self.can_use = True
 					self.item_swing	= False
+					self.item_extend = False
 					self.swinging_arm =	False
+					self.holding_arm = False
 				else:
 					self.use_tick += commons.DELTA_TIME
 					if self.use_delay >	0.0001:
@@ -515,6 +523,8 @@ class Player:
 												 int(padded_dimensions[1] *	0.5	- inner_dimensions[1] *	0.5)))
 			self.current_item_swing_image =	padded_surface
 			self.current_item_swing_offset = math.sqrt((inner_dimensions[0]	* 0.5) ** 2	+ (inner_dimensions[1] * 0.5) ** 2) * 0.8
+			self.current_item_extend_image = padded_surface
+			self.current_item_extend_offset = math.sqrt((inner_dimensions[0]	* 0.5) ** 2	+ (inner_dimensions[1] * 0.5) ** 2) * 0.8
 
 	"""=================================================================================================================	
 		player.Player.animate -> void
@@ -558,6 +568,14 @@ class Player:
 					self.arm_animation_frame = math.floor(min(4, 1 + self.use_delta	* 4))
 				else:
 					self.arm_animation_frame = math.floor(min(24, 21 + self.use_delta *	4))
+
+			elif self.holding_arm:
+				if self.direction == 1:
+					# self.arm_animation_frame = math.floor(min(4, 1 + self.use_delta	* 4))
+					self.arm_animation_frame = 2
+				else:
+					# self.arm_animation_frame = math.floor(min(24, 21 + self.use_delta *	4))
+					self.arm_animation_frame = 1
 
 			else:
 				if self.grounded:
@@ -614,6 +632,7 @@ class Player:
 
 		if not right_click:
 			self.should_swing_arm =	False
+			self.should_hold_arm = False
 
 			if item.has_tag(ItemTag.TILE):
 				self.place_block(screen_position_x,	screen_position_y, item, True)
@@ -624,15 +643,26 @@ class Player:
 			elif item.has_tag(ItemTag.PICKAXE) or item.has_tag(ItemTag.HAMMER) or item.has_tag(ItemTag.AXE):
 				self.use_tool(screen_position_x, screen_position_y,	item)
 
-			elif item.has_tag(ItemTag.MELEE):
-				self.use_melee_weapon(item)
+			elif item.has_tag(ItemTag.LONGSWORD):
+				self.use_longsword_weapon(item)
+
+			elif item.has_tag(ItemTag.SHORTSWORD):
+				self.use_shortsword_weapon(item)
 
 			elif item.has_tag(ItemTag.RANGED):
 				self.use_ranged_weapon(screen_position_x, screen_position_y, item)
 
 			if self.should_swing_arm:
 				if not self.swinging_arm:
-					self.swinging_arm =	True
+					self.swinging_arm = True
+					if self.direction == 1:
+						self.arm_animation_frame = 1
+					else:
+						self.arm_animation_frame = 20
+
+			if self.should_hold_arm:
+				if not self.holding_arm:
+					self.holding_arm = True
 					if self.direction == 1:
 						self.arm_animation_frame = 1
 					else:
@@ -732,6 +762,7 @@ class Player:
 
 					if block_placed:
 						self.should_swing_arm =	True
+						self.should_hold_arm = True
 						self.item_swing	= True
 						self.use_delay = 0.2
 						self.use_tick =	0
@@ -813,29 +844,42 @@ class Player:
 								game_data.play_wall_hit_sfx(wall_id)
 
 	"""=================================================================================================================	
-		player.Player.use_melee_weapon -> void
+		player.Player.use_longsword_weapon -> void
 		
-		Swings the given melee weapon item
+		Swings the given longsword weapon item
 	-----------------------------------------------------------------------------------------------------------------"""
-	def	use_melee_weapon(self, melee_weapon_item):
+	def	use_longsword_weapon(self, longsword_weapon_item) -> None:
 		if self.can_use:
 			self.enemies_hit = []
 			self.can_use = False
 			self.use_tick =	0
 			self.use_delta = 0.0
-			self.use_delay = melee_weapon_item.get_attack_speed() *	0.01
+			self.use_delay = longsword_weapon_item.get_attack_speed() *	0.01
 
 			game_data.play_sound("sound.swing")
 
 			self.should_swing_arm =	True
 			self.item_swing	= True
 
+	def	use_shortsword_weapon(self, shortsword_weapon_item) -> None:
+		if self.can_use:
+			self.enemies_hit = []
+			self.can_use = False
+			self.use_tick =	0
+			self.use_delta = 0.0
+			self.use_delay = shortsword_weapon_item.get_attack_speed() *	0.01
+
+			game_data.play_sound("sound.swing")
+
+			self.should_hold_arm =	True
+			self.item_extend = True
+
 	"""=================================================================================================================	
 		player.Player.use_ranged_weapon	-> void
 		
 		Shoots the given ranged	weapon item
 	-----------------------------------------------------------------------------------------------------------------"""
-	def	use_ranged_weapon(self,	screen_position_x, screen_position_y, ranged_weapon_item):
+	def	use_ranged_weapon(self,	screen_position_x, screen_position_y, ranged_weapon_item) -> None:
 		if self.can_use:
 			ammo_to_use_id = -1
 			ammo_to_use_dat	= None
@@ -1197,6 +1241,82 @@ class Player:
 										self.position[1] - self.current_item_swing_image.get_height() *	0.5,
 										self.current_item_swing_image.get_width(),
 										self.current_item_swing_image.get_height())
+					
+					if commons.HITBOXES:
+						hit_rect_screen_x =	hit_rect.x - entity_manager.camera_position[0] + commons.WINDOW_WIDTH *	0.5
+						hit_rect_screen_y =	hit_rect.y - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
+						pygame.draw.rect(commons.screen, (255, 0, 0), Rect(hit_rect_screen_x, hit_rect_screen_y, hit_rect.w, hit_rect.h), 1)
+
+					# Probably should be in update
+					for	enemy in entity_manager.enemies:
+						if enemy.rect.colliderect(hit_rect):
+							if enemy.game_id not in self.enemies_hit:
+								if self.direction == 0:
+									direction =	-1
+								else:
+									direction =	1
+								damage = item.get_attack_damage()
+								if random.random() <= item.get_crit_chance():
+									crit = True
+								else:
+									crit = False
+
+								to_enemy = shared_methods.normalize_vec_2((enemy.position[0] - self.position[0], enemy.position[1] - self.position[1]))
+
+								enemy.damage(damage, ["longsword", "Player"], item.get_knockback(),	direction=direction, crit=crit,	source_velocity=(to_enemy[0] * 30, to_enemy[1] * 30))
+								self.enemies_hit.append(int(enemy.game_id))
+
+				eased_use_delta	= shared_methods.ease_out_zero_to_one(self.use_delta, 1)
+				less_eased_delta = shared_methods.lerp_float(self.use_delta, eased_use_delta, 0.7)
+
+				if self.direction == 1:
+					self.swing_angle = -less_eased_delta * 175 + 85
+				else:
+					self.swing_angle = less_eased_delta	* 175 +	5
+
+				rotated_surface	= shared_methods.rotate_surface(self.current_item_swing_image, self.swing_angle)
+
+				if item	is not None:
+					if item.has_tag(ItemTag.SHORTSWORD):
+						total_offset = commons.PLAYER_ARM_LENGTH + self.current_item_extend_offset * item.get_hold_offset()
+					else:
+						total_offset = commons.PLAYER_ARM_LENGTH + self.current_item_swing_offset *	item.get_hold_offset()
+				else:
+					total_offset = commons.PLAYER_ARM_LENGTH
+
+				# Looking right
+				if self.direction == 1:
+					hand_angle_global_degrees =	shared_methods.lerp_float(-130,	45,	less_eased_delta)
+					hand_angle_global_radians =	hand_angle_global_degrees *	(math.pi / 180)
+					offset_x = math.cos(hand_angle_global_radians) * total_offset -	rotated_surface.get_width()	* 0.5 -	5
+					offset_y = math.sin(hand_angle_global_radians) * total_offset -	rotated_surface.get_height() * 0.5 + 2
+				# Looking left
+				else:
+					hand_angle_global_degrees =	shared_methods.lerp_float(130, -45,	less_eased_delta)
+					hand_angle_global_radians =	hand_angle_global_degrees *	(math.pi / 180)
+					offset_x = -math.cos(hand_angle_global_radians)	* total_offset - rotated_surface.get_width() * 0.5 + 5
+					offset_y = -math.sin(hand_angle_global_radians)	* total_offset - rotated_surface.get_height() *	0.5	+ 2
+
+				commons.screen.blit(rotated_surface, (screen_position_x	+ offset_x,	screen_position_y +	offset_y))
+						
+			elif self.item_extend:
+				print("test")
+				if not commons.IS_HOLDING_ITEM:
+					item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+				else:
+					item = commons.ITEM_HOLDING
+
+				if item	is not None	and	item.has_tag(ItemTag.WEAPON):
+					if self.direction == 1:
+						hit_rect = Rect(self.position[0],
+										self.position[1] - self.current_item_extend_image.get_height() *	0.5,
+										self.current_item_extend_image.get_width(),
+										self.current_item_extend_image.get_height())
+					else:
+						hit_rect = Rect(self.position[0] - self.current_item_extend_image.get_width(),
+										self.position[1] - self.current_item_extend_image.get_height() *	0.5,
+										self.current_item_extend_image.get_width(),
+										self.current_item_extend_image.get_height())
 
 					if commons.HITBOXES:
 						hit_rect_screen_x =	hit_rect.x - entity_manager.camera_position[0] + commons.WINDOW_WIDTH *	0.5
@@ -1219,7 +1339,7 @@ class Player:
 
 								to_enemy = shared_methods.normalize_vec_2((enemy.position[0] - self.position[0], enemy.position[1] - self.position[1]))
 
-								enemy.damage(damage, ["melee", "Player"], item.get_knockback(),	direction=direction, crit=crit,	source_velocity=(to_enemy[0] * 30, to_enemy[1] * 30))
+								enemy.damage(damage, ["shortsword", "Player"], item.get_knockback(),	direction=direction, crit=crit,	source_velocity=(to_enemy[0] * 30, to_enemy[1] * 30))
 								self.enemies_hit.append(int(enemy.game_id))
 
 				eased_use_delta	= shared_methods.ease_out_zero_to_one(self.use_delta, 1)
@@ -1233,7 +1353,10 @@ class Player:
 				rotated_surface	= shared_methods.rotate_surface(self.current_item_swing_image, self.swing_angle)
 
 				if item	is not None:
-					total_offset = commons.PLAYER_ARM_LENGTH + self.current_item_swing_offset *	item.get_hold_offset()
+					if item.has_tag(ItemTag.SHORTSWORD):
+						total_offset = commons.PLAYER_ARM_LENGTH + self.current_item_extend_offset * item.get_hold_offset()
+					else:
+						total_offset = commons.PLAYER_ARM_LENGTH + self.current_item_swing_offset *	item.get_hold_offset()
 				else:
 					total_offset = commons.PLAYER_ARM_LENGTH
 

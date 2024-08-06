@@ -127,7 +127,7 @@ class Item:
 
 	def get_scale(self):
 		if self.prefix_data != None:
-			if self.prefix_data[0] == ItemPrefixGroup.MELEE:
+			if self.prefix_data[0] == ItemPrefixGroup.LONGSWORD or self.prefix_data[0] == ItemPrefixGroup.SHORTSWORD:
 				return 1.0 + self.prefix_data[1][4]
 		return 1.0
 

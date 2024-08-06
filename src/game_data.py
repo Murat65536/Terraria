@@ -14,7 +14,7 @@ class ItemTag(Enum):
 	MATERIAL = 2
 	WEAPON = 3
 	TOOL = 4
-	MELEE = 5
+	LONGSWORD = 5
 	RANGED = 6
 	MAGICAL = 7
 	AMMO = 8
@@ -23,14 +23,16 @@ class ItemTag(Enum):
 	HAMMER = 11
 	GRAPPLE = 12 # TODO The code for the grappling hook is incomplete.
 	COIN = 13
+	SHORTSWORD = 14
 
 
 class ItemPrefixGroup(Enum):
 	UNIVERSAL = 0
 	COMMON = 1
-	MELEE = 2
+	LONGSWORD = 2
 	RANGED = 3
 	MAGICAL = 4
+	SHORTSWORD = 5
 
 
 class TileTag(Enum):
@@ -228,7 +230,27 @@ prefix_data = {
 			[	"Nasty",  0.05,   0.1,	   0.02,	 -0.1,   1],
 		],
 
-	ItemPrefixGroup.MELEE:
+	ItemPrefixGroup.LONGSWORD:
+		[  # ||   Name  |Damage| Speed|Crit Chance| Size |Knockback|Tier||
+			[	"Large",	 0,	 0,		  0,  0.12,		0,   1],
+			[  "Massive",	 0,	 0,		  0,  0.18,		0,   1],
+			["Dangerous",  0.05,	 0,	   0.02,  0.05,		0,   1],
+			[   "Savage",   0.1,	 0,		  0,   0.1,	  0.1,   2],
+			[	"Sharp",  0.15,	 0,		  0,	 0,		0,   1],
+			[   "Pointy",   0.1,	 0,		  0,	 0,		0,   1],
+			[	 "Tiny",	 0,	 0,		  0, -0.18,		0,  -1],
+			[ "Terrible", -0.15,	 0,		  0, -0.13,	-0.15,  -2],
+			[	"Small",	 0,	 0,		  0,  -0.1,		0,  -1],
+			[	 "Dull", -0.15,	 0,		  0,	 0,		0,  -1],
+			[  "Unhappy",	 0,  -0.1,		  0,  -0.1,	 -0.1,  -2],
+			[	"Bulky",  0.05, -0.15,		  0,   0.1,	  0.1,   1],
+			[ "Shameful",  -0.1,	 0,		  0,   0.1,	 -0.2,  -2],
+			[	"Heavy",	 0,  -0.1,		  0,	 0,	 0.15,   0],
+			[	"Light",	 0,  0.15,		  0,	 0,	 -0.1,   0],
+			["Legendary",  0.15,   0.1,	   0.05,   0.1,	 0.15,   2],
+		],
+
+			ItemPrefixGroup.SHORTSWORD:
 		[  # ||   Name  |Damage| Speed|Crit Chance| Size |Knockback|Tier||
 			[	"Large",	 0,	 0,		  0,  0.12,		0,   1],
 			[  "Massive",	 0,	 0,		  0,  0.18,		0,   1],
@@ -666,15 +688,18 @@ def find_prefix_data_by_name(prefix_name):
 	for prefix_dat in prefix_data[ItemPrefixGroup.COMMON]:
 		if prefix_dat[0] == prefix_name:
 			return [ItemPrefixGroup.COMMON, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.MELEE]:
+	for prefix_dat in prefix_data[ItemPrefixGroup.LONGSWORD]:
 		if prefix_dat[0] == prefix_name:
-			return [ItemPrefixGroup.MELEE, prefix_dat]
+			return [ItemPrefixGroup.LONGSWORD, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.RANGED]:
 		if prefix_dat[0] == prefix_name:
 			return [ItemPrefixGroup.RANGED, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.MAGICAL]:
 		if prefix_dat[0] == prefix_name:
 			return [ItemPrefixGroup.MAGICAL, prefix_dat]
+	for prefix_dat in prefix_data[ItemPrefixGroup.SHORTSWORD]:
+		if prefix_dat[0] == prefix_name:
+			return [ItemPrefixGroup.SHORTSWORD, prefix_dat]
 	return None
 
 

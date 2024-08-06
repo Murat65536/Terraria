@@ -209,7 +209,13 @@ def render_stats_text(pos: List[Any]) -> bool:
 						else:
 							color = tuple(bad_color)
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
-				if equipped.prefix_data[0] == item.ItemPrefixGroup.MELEE:
+				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD:
+					if equipped.prefix_data[1][4] != 0:
+						if equipped.prefix_data[1][4] > 0:
+							color = tuple(good_color)
+						else:
+							color = tuple(bad_color)
+				if equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD:
 					if equipped.prefix_data[1][4] != 0:
 						if equipped.prefix_data[1][4] > 0:
 							color = tuple(good_color)
@@ -230,7 +236,7 @@ def render_stats_text(pos: List[Any]) -> bool:
 						else:
 							color = tuple(bad_color)
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
-				if equipped.prefix_data[0] == item.ItemPrefixGroup.MELEE or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
+				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
 					if equipped.prefix_data[1][5] != 0:
 						if equipped.prefix_data[1][5] > 0:
 							color = tuple(good_color)
@@ -1130,7 +1136,7 @@ while True:
 				elif event.key == pygame.K_a:
 					entity_manager.client_player.moving_left = True
 					entity_manager.client_player.animation_frame = random.randint(17, 29)
-					if not entity_manager.client_player.swinging_arm:
+					if not entity_manager.client_player.swinging_arm and not entity_manager.client_player.holding_arm:
 						entity_manager.client_player.arm_animation_frame = random.randint(26, 39)
 					entity_manager.client_player.direction = 0
 				
@@ -1138,7 +1144,7 @@ while True:
 				elif event.key == pygame.K_d:
 					entity_manager.client_player.moving_right = True
 					entity_manager.client_player.animation_frame = random.randint(2, 15)
-					if not entity_manager.client_player.swinging_arm:
+					if not entity_manager.client_player.swinging_arm and not entity_manager.client_player.holding_arm:
 						entity_manager.client_player.arm_animation_frame = random.randint(6, 19)
 					entity_manager.client_player.direction = 1
 
