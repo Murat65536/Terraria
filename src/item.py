@@ -299,13 +299,13 @@ def get_coins_from_int(coin_int):
 
 	item_list = []
 	if plat_coins != 0:
-		item_list.append(Item(game_data.get_item_id_by_id_str("item.coin_platinum"), plat_coins))
+		item_list.append(Item(game_data.get_item_id_by_id_str("item.platinum_coin"), plat_coins))
 	if gold_coins != 0:
-		item_list.append(Item(game_data.get_item_id_by_id_str("item.coin_gold"), gold_coins))
+		item_list.append(Item(game_data.get_item_id_by_id_str("item.gold_coin"), gold_coins))
 	if silver_coins != 0:
-		item_list.append(Item(game_data.get_item_id_by_id_str("item.coin_silver"), silver_coins))
+		item_list.append(Item(game_data.get_item_id_by_id_str("item.silver_coin"), silver_coins))
 	if copper_coins != 0:
-		item_list.append(Item(game_data.get_item_id_by_id_str("item.coin_copper"), copper_coins))
+		item_list.append(Item(game_data.get_item_id_by_id_str("item.copper_coin"), copper_coins))
 
 	return item_list
 

@@ -176,11 +176,11 @@ music_volume_multiplier = 1.0
 #			 Enemy Information
 #
 #			 ||	 Name	 |  Type  |HP |Defense|KB Resist|Damage|	Blood Col   |   Item Drops   | Coin Drops ||
-enemy_data = [[ "Green Slime", "Slime", 14,	  0,	 -0.2,	 6, (10,  200,  10), [("item.gel_blue", 1, 3, 100)], ( 5,  30)],
-			  [  "Blue Slime", "Slime", 25,	  2,		0,	 7, (10,   10, 200), [("item.gel_blue", 1, 3, 100)], (15,  50)],
-			  [   "Red Slime", "Slime", 35,	  4,		0,	12, (200,  10,  10), [("item.gel_blue", 1, 3, 100)], (25,  75)],
-			  ["Purple Slime", "Slime", 40,	  6,	  0.1,	12, (200,  10, 200), [("item.gel_blue", 1, 3, 100)], (35, 110)],
-			  ["Yellow Slime", "Slime", 45,	  7,		0,	15, (200, 150,  10), [("item.gel_blue", 1, 3, 100)], (45, 130)],
+enemy_data = [[ "Green Slime", "Slime", 14,	  0,	 -0.2,	 6, (10,  200,  10), [("item.blue_gel", 1, 3, 100)], ( 5,  30)],
+			  [  "Blue Slime", "Slime", 25,	  2,		0,	 7, (10,   10, 200), [("item.blue_gel", 1, 3, 100)], (15,  50)],
+			  [   "Red Slime", "Slime", 35,	  4,		0,	12, (200,  10,  10), [("item.blue_gel", 1, 3, 100)], (25,  75)],
+			  ["Purple Slime", "Slime", 40,	  6,	  0.1,	12, (200,  10, 200), [("item.blue_gel", 1, 3, 100)], (35, 110)],
+			  ["Yellow Slime", "Slime", 45,	  7,		0,	15, (200, 150,  10), [("item.blue_gel", 1, 3, 100)], (45, 130)],
 			  ]
 
 

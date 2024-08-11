@@ -1029,6 +1029,7 @@ while True:
 						save_select_y_offset = 0
 						
 				commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
+				save_select_surf.fill((0, 0, 0, 0))
 				for save_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
 					save_select_surf.blit(commons.WORLD_SAVE_OPTIONS[save_option_index][1], (0, save_option_index * 62 + save_select_y_offset))
 				commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))

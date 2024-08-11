@@ -97,8 +97,8 @@ class Player:
 		# Set hotbar info
 		if hotbar is None:
 			self.items[ItemLocation.HOTBAR]	= [
-				Item(game_data.get_item_id_by_id_str("item.pickaxe_copper"),	auto_assign_prefix=False),
-				Item(game_data.get_item_id_by_id_str("item.StoneBlock"), amnt=100),
+				Item(game_data.get_item_id_by_id_str("item.copper_pickaxe"),	auto_assign_prefix=False),
+				Item(game_data.get_item_id_by_id_str("item.stone_block"), amnt=100),
 				None,
 				None,
 				None,

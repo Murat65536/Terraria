@@ -6,7 +6,7 @@
 				"id_str": "loot.INVALID",
 				"name": "INVALID",
 				"item_spawn_count_range": "0,0",
-				"item_list_data": "item.DirtBlock;100;0,0;0,0;0;0",
+				"item_list_data": "item.dirt_block;100;0,0;0,0;0;0",
 				"coin_spawn_range": "0,0"
 			},
 			{
@@ -14,7 +14,7 @@
 				"id_str": "loot.pot",
 				"name": "Pot",
 				"item_spawn_count_range": "1,2",
-				"item_list_data": "item.torch;100;0,0;3,15;3;0|item.platform_wood;50;0,0;5,15;3;0|item.spike;50;0,0;2,6;2;0|item.ammo_bullet;25;0,0;5,20;1;0|item.pot;5;0,0;1,1;0;1|item.arrow_wood;35;0,0;7,25;1;0",
+				"item_list_data": "item.torch;100;0,0;3,15;3;0|item.wood_platform;50;0,0;5,15;3;0|item.spike;50;0,0;2,6;2;0|item.musket_ball;25;0,0;5,20;1;0|item.copper_coin;5;0,0;1,1;0;1|item.wood_arrow;35;0,0;7,25;1;0",
 				"coin_spawn_range": "75,150"
 			},
 			{
@@ -22,7 +22,7 @@
 				"id_str": "loot.chest_wood",
 				"name": "Wood Chest",
 				"item_spawn_count_range": "2,6",
-				"item_list_data": "item.musket;100;0,0;1,1;0;1|item.bow_wood;100;0,0;1,1;0;1|item.spell_water_bolt;100;0,0;1,1;0;0|item.arrow_wood;600;0,0;5,20;2;0|item.ammo_bullet;600;0,0;5,20;2;0",
+				"item_list_data": "item.musket;100;0,0;1,1;0;1|item.wood_bow;100;0,0;1,1;0;1|item.water_bolt_spell;100;0,0;1,1;0;0|item.wood_arrow;600;0,0;5,20;2;0|item.musket_ball;600;0,0;5,20;2;0",
 				"coin_spawn_range": "750,2000"
 			},
 			{
@@ -30,7 +30,7 @@
 				"id_str": "loot.chest_gold",
 				"name": "Gold Chest",
 				"item_spawn_count_range": "2,5",
-				"item_list_data": "item.DirtBlock;100;0,0;0,0;0;0",
+				"item_list_data": "item.dirt_block;100;0,0;0,0;0;0",
 				"coin_spawn_range": "5000,15000"
 			}
 		]
