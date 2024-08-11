@@ -181,7 +181,7 @@ def update_menu_buttons():
 					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
 				elif menu_button.text == "Hair Type":
-					if commons.PLAYER_MODEL.hair_id < 166:
+					if commons.PLAYER_MODEL.hair_id < 163:
 						commons.PLAYER_MODEL.hair_id += 1
 					else:
 						commons.PLAYER_MODEL.hair_id = 0
