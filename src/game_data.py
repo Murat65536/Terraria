@@ -722,7 +722,8 @@ def parse_item_data():
 		item_data["hold_offset"] = float(item_data["hold_offset"])
 		try:
 			loaded_surf = pygame.image.load(item_data["image_path"]).convert_alpha()
-			loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height())), loaded_surf.get_height() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height()))))
+			if max(loaded_surf.get_width(), loaded_surf.get_height()) > 32:
+				loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height())), loaded_surf.get_height() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height()))))
 			item_data["image"] = loaded_surf
 			item_data["item_slot_offset_x"] = int(24 - item_data["image"].get_width() * 0.5)
 			item_data["item_slot_offset_y"] = int(24 - item_data["image"].get_height() * 0.5)
