@@ -178,19 +178,36 @@ def create_menu_surface(width, height, body):
 
 	Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
-def color_surface(grey_surf, col):
+def color_surface(gray_surf, col) -> pygame.Surface:
 	if col == ():
 		col = (0, 0, 0)
-	x = grey_surf.get_width()
-	y = grey_surf.get_height()
+	x = gray_surf.get_width()
+	y = gray_surf.get_height()
 	surf = pygame.Surface((x, y))
 	surf.fill((255, 255, 255))
 	surf.set_colorkey((255, 255, 255))  # set the colorkey to white
-	surf.blit(grey_surf, (0, 0))  # create a surf with the given hair and white background
+	surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
 	color = pygame.Surface((x, y))
 	color.fill(col)  # create a blank surf with the color of the hair
 	surf.blit(color, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
 	return surf
+
+"""================================================================================================================= 
+	shared_methods.transparent_color_surface -> pygame.Surface
+
+	Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
+-----------------------------------------------------------------------------------------------------------------"""
+def transparent_color_surface(surf, col):
+	grayscale = (128, 128, 128)
+	colored_surface = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
+	colored_surface.blit(surf, (0, 0), None, pygame.BLEND_RGBA_ADD)
+	grayscale_surface = pygame.Surface(surf.get_size())
+	grayscale_surface.fill(grayscale)
+	colored_surface.blit(grayscale_surface, (0, 0), None, pygame.BLEND_RGB_MULT)
+	color = pygame.Surface(surf.get_size())
+	color.fill(col)
+	colored_surface.blit(color, (0, 0), None, BLEND_RGB_ADD)
+	return colored_surface
 
 
 """================================================================================================================= 

@@ -1125,7 +1125,7 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	render_chest(self):
 		self.chest_image.fill((255,	0, 255))
-		pygame.draw.rect(self.chest_image, (150, 150, 150),	Rect(5,	5, 232,	184), 0)
+		pygame.draw.rect(self.chest_image, (150, 150, 150), Rect(5,	5, 232,	184), 0)
 		for	chest_index	in range(len(self.items[ItemLocation.CHEST])):
 			slot_x = chest_index % 5
 			slot_y = chest_index // 5
@@ -1472,7 +1472,7 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 	sprites	= []
 	arm_sprites	= []
 	for	j in range(directions):	 # for both	directions
-		hair = shared_methods.color_surface(surface_manager.hair[model.hair_id], model.hair_col)
+		hair = shared_methods.transparent_color_surface(surface_manager.new_hair[model.hair_id][0], model.hair_col)
 
 		if j == 1:	# flip if necessary
 			hair = pygame.transform.flip(hair, True, False)
@@ -1481,31 +1481,13 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 		if j == 0:	# flip if necessary
 			torso =	pygame.transform.flip(torso, True, False)
 
-		head = shared_methods.color_surface(surface_manager.hair[9], model.skin_col)
-		pygame.draw.rect(head, (255, 254, 255),	Rect(20, 22, 4, 4),	0)
-		pygame.draw.rect(head, model.eye_col, Rect(22, 22, 2, 4), 0)
+		head = shared_methods.transparent_color_surface(surface_manager.head[0], model.skin_col)
+		# head = shared_methods.color_surface(surface_manager.hair[9], model.skin_col)
+		pygame.draw.rect(head, (255, 254, 255),	Rect(26, 26, 2, 4),	0)
+		pygame.draw.rect(head, model.eye_col, Rect(28, 26, 2, 4), 0)
 
 		if j == 1:	# flip if necessary
 			head = pygame.transform.flip(head, True, False)
-
-		for	i in range(torso_frame_count):	# all animation	frames for one direction
-			body_surf =	pygame.Surface((44,	75))
-			body_surf.fill((255, 0, 255))
-			body_surf.set_colorkey(
-				(255, 0, 255))	# create the surf for the whole	player with	a colorkey	of (255, 0, 255)
-			trousers = shared_methods.color_surface(surface_manager.torsos[i +	1],	model.trouser_col)
-			if j == 0:	# flip if necessary
-				trousers = pygame.transform.flip(trousers, True, False)
-			shoes =	shared_methods.color_surface(surface_manager.torsos[i + 16], model.shoe_col)
-			if j == 0:	# flip if necessary
-				shoes =	pygame.transform.flip(shoes, True, False)
-			body_surf.blit(torso, (0, 4))
-			body_surf.blit(trousers, (0, 4))
-			body_surf.blit(shoes, (0, 4))
-			body_surf.blit(head, (0, 0))
-			body_surf.blit(hair, (0, 0))
-
-			sprites.append(body_surf)
 
 		for	i in range(arm_frame_count):  # all	animation frames for one direction
 			arm_surf = pygame.Surface((44, 75))
@@ -1513,16 +1495,33 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 			arm_surf.set_colorkey((255,	0, 255))
 
 			arms = shared_methods.color_surface(surface_manager.torsos[i +	31], model.under_shirt_col)
-			if j == 0:	# flip if necessary
-				arms = pygame.transform.flip(arms, True, False)
-
 			hands =	shared_methods.color_surface(surface_manager.torsos[i + 51], model.skin_col)
 			if j == 0:	# flip if necessary
+				arms = pygame.transform.flip(arms, True, False)
 				hands =	pygame.transform.flip(hands, True, False)
 
-			arm_surf.blit(arms,	(0,	4))
-			arm_surf.blit(hands, (0, 4))
+			arm_surf.blit(arms,	(1,	5))
+			arm_surf.blit(hands, (1, 5))
 
 			arm_sprites.append(arm_surf)
+		
+		for	i in range(torso_frame_count):	# all animation	frames for one direction
+			body_surf =	pygame.Surface((44,	75))
+			body_surf.fill((255, 0, 255))
+			body_surf.set_colorkey(
+				(255, 0, 255))	# create the surf for the whole	player with	a colorkey	of (255, 0, 255)
+			trousers = shared_methods.color_surface(surface_manager.torsos[i + 1],	model.trouser_col)
+			shoes =	shared_methods.color_surface(surface_manager.torsos[i + 16], model.shoe_col)
+			if j == 0:	# flip if necessary
+				trousers = pygame.transform.flip(trousers, True, False)
+				shoes =	pygame.transform.flip(shoes, True, False)
+			body_surf.blit(torso, (1, 5))
+			body_surf.blit(trousers, (1, 5))
+			body_surf.blit(shoes, (1, 5))
+			body_surf.blit(head, (-4, -4))
+			body_surf.blit(hair, (-4, -4))
+
+			sprites.append(body_surf)
+
 
 	return [sprites, arm_sprites]

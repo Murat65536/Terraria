@@ -1054,6 +1054,7 @@ while True:
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] = entity_manager.client_color_picker.selected_x
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] = entity_manager.client_color_picker.selected_y
 				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] = tuple(entity_manager.client_color_picker.selected_color)
+				player.update_player_model_using_model_data()
 				commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 			
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))

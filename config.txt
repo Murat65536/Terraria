@@ -6,7 +6,7 @@
 (bool)MUSIC = 1
 (bool)MUSIC_VOLUME = 1
 (bool)SOUND = 1
-(bool)SOUND_VOLUME = 0.8
+(bool)SOUND_VOLUME = 0.1
 (bool)CREATIVE = 0
 (bool)BACKGROUND = 1
 (float)PARALLAX_AMOUNT = 0.2

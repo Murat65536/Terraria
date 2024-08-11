@@ -164,7 +164,7 @@ def update_menu_buttons():
 					commons.GAME_SUB_STATE = "PLAYERCREATION"
 					commons.PLAYER_MODEL_DATA = [0, 0,
 												[(127, 72, 36), None, None],
-												[(62, 22, 0), None, None],
+												[(0, 0, 0), None, None],
 												[(0, 0, 0), None, None],
 												[(95, 125, 127), None, None],
 												[(48, 76, 127), None, None],
@@ -181,7 +181,7 @@ def update_menu_buttons():
 					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
 				elif menu_button.text == "Hair Type":
-					if commons.PLAYER_MODEL.hair_id < 8:
+					if commons.PLAYER_MODEL.hair_id < 166:
 						commons.PLAYER_MODEL.hair_id += 1
 					else:
 						commons.PLAYER_MODEL.hair_id = 0

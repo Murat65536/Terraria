@@ -12,6 +12,8 @@ torsos = []
 slimes = []
 large_backgrounds = []
 menu_background = []
+head = []
+new_hair = []
 
 
 def load_tile_mask_surfaces():
@@ -72,6 +74,31 @@ def load_hair_surfaces():
 		surf = pygame.transform.scale(surf, (int(20 * scale), int(24 * scale)))
 		hair.append(surf)
 
+def load_head_surfaces():
+	global head
+	head = []
+	scale = 1.25
+	head_tileset_image = pygame.transform.scale(pygame.image.load("res/images/player/head/head.png").convert_alpha(), (int(40 * scale), int(56 * 20 * scale)))
+	for i in range(20):
+		surf = pygame.Surface((int(40 * scale), int(56 * scale)), pygame.SRCALPHA)
+		surf.blit(head_tileset_image, (0, -i * 56 * scale))
+		surf = pygame.transform.scale(surf, (int(40 * scale), int(56 * scale)))
+		head.append(surf)
+
+def load_new_hair_surfaces():
+	global new_hair
+	new_hair = []
+	scale = 1.25
+	for image in range(164):
+		hair_tileset_image = pygame.transform.scale(pygame.image.load(f"res/images/player/hair/Player_Hair_{image + 1}.png").convert_alpha(), (int(40 * scale), int(56 * 14 * scale)))
+		hair_tileset = []
+		for i in range(14):
+			surf = pygame.Surface((int(40 * scale), int(56 * scale)), pygame.SRCALPHA)
+			surf.blit(hair_tileset_image, (0, -i * 56))
+			surf = pygame.transform.scale(surf, (int(40 * scale), int(56 * scale)))
+			hair_tileset.append(surf)
+		new_hair.append(hair_tileset)
+
 
 def load_torso_surfaces():
 	global torsos
@@ -116,6 +143,8 @@ load_misc_gui_surfaces()
 load_background_surfaces()
 load_projectile_surfaces()
 load_hair_surfaces()
+load_head_surfaces()
+load_new_hair_surfaces()
 load_torso_surfaces()
 load_slime_surfaces()
 compile_background_images()
