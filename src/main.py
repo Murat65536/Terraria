@@ -1351,9 +1351,9 @@ while True:
 							entity_manager.client_player.render_current_item_image()
 							entity_manager.client_player.item_swing = False
 							render_hand_text()
-							game_data.play_sound("sound.menu_select")
 						else:
 							entity_manager.client_player.hotbar_index = 9
+						game_data.play_sound("sound.menu_select")
 
 				if event.button == 5:
 					if entity_manager.client_player.inventory_open:
@@ -1364,9 +1364,9 @@ while True:
 							entity_manager.client_player.render_current_item_image()
 							entity_manager.client_player.item_swing = False
 							render_hand_text()
-							game_data.play_sound("sound.menu_select")
 						else:
 							entity_manager.client_player.hotbar_index = 0
+						game_data.play_sound("sound.menu_select")
 
 		elif commons.GAME_STATE == "MAINMENU":
 
