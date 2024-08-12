@@ -705,7 +705,7 @@ def find_prefix_data_by_name(prefix_name):
 
 def parse_item_data():
 	global json_item_data
-	json_read_file = open("res/game_data/item_data.json", "r")
+	json_read_file = open("assets/game_data/item_data.json", "r")
 	json_item_data = json.loads(json_read_file.read())["items"]["item"]
 	# json_item_data = json.loads(json_read_file.read())["items"]["item"]
 	json_read_file.close()
@@ -824,7 +824,7 @@ def get_ammo_item_ids_for_ammo_type(ammo_type):
 
 def parse_tile_data():
 	global json_tile_data
-	json_read_file = open("res/game_data/tile_data.json", "r")
+	json_read_file = open("assets/game_data/tile_data.json", "r")
 	json_tile_data = json.loads(json_read_file.read())["tiles"]["tile"]
 	json_read_file.close()
 
@@ -916,7 +916,7 @@ def get_current_tile_id_str_lookup():
 
 def parse_wall_data():
 	global json_wall_data
-	json_read_file = open("res/game_data/wall_data.json", "r")
+	json_read_file = open("assets/game_data/wall_data.json", "r")
 	json_wall_data = json.loads(json_read_file.read())["walls"]["wall"]
 	json_read_file.close()
 
@@ -975,7 +975,7 @@ def get_current_wall_id_str_lookup():
 
 def parse_sound_data():
 	global json_sound_data
-	json_read_file = open("res/game_data/sound_data.json", "r")
+	json_read_file = open("assets/game_data/sound_data.json", "r")
 	json_sound_data = json.loads(json_read_file.read())["sounds"]["sound"]
 	json_read_file.close()
 
@@ -1082,7 +1082,7 @@ class StructureConnectionOrientation(Enum):
 
 def parse_structure_data():
 	global json_structure_data
-	json_read_file = open("res/game_data/structure_data.json", "r")
+	json_read_file = open("assets/game_data/structure_data.json", "r")
 	json_structure_data = json.loads(json_read_file.read())["structures"]["structure"]
 	json_read_file.close()
 
@@ -1186,7 +1186,7 @@ def get_structure_connection_orientation_from_str(structure_connection_orientati
 
 def parse_loot_data():
 	global json_loot_data
-	json_read_file = open("res/game_data/loot_data.json", "r")
+	json_read_file = open("assets/game_data/loot_data.json", "r")
 	json_loot_data = json.loads(json_read_file.read())["lootgroups"]["loot"]
 	json_read_file.close()
 

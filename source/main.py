@@ -95,7 +95,7 @@ def run_splash_screen() -> None:
 	while splash_screen_running:
 		commons.DELTA_TIME = (pygame.time.get_ticks() - commons.OLD_TIME_MILLISECONDS) * 0.001
 		commons.OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
-		splashscreen = pygame.image.load(f"res/images/backgrounds/SplashScreens/Splash_{splash_screen_num}.png")
+		splashscreen = pygame.image.load(f"assets/images/backgrounds/SplashScreens/Splash_{splash_screen_num}.png")
 		splashscreen = pygame.transform.scale(splashscreen, (commons.WINDOW_WIDTH, commons.WINDOW_HEIGHT))
 		commons.screen.blit(splashscreen, (0, 0))
 		entity_manager.draw_particles()
@@ -657,7 +657,7 @@ pygame.display.set_caption(r"Terraria")
 song_end_event = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(song_end_event)
 
-ICON = pygame.image.load(r"res/images/favicon/favicon.png")
+ICON = pygame.image.load(r"assets/images/favicon/favicon.png")
 pygame.display.set_icon(ICON)
 
 clock = pygame.time.Clock()
@@ -701,13 +701,13 @@ global_lighting = 255
 
 menu_background_images = []
 menu_background_scroll = {}
-menu_background_num = random.randint(0, len(next(os.walk("res/images/backgrounds/MenuBackgrounds/"))[1]) - 1)
-menu_background_sky = pygame.image.load(f"res/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_0.png").convert_alpha()
+menu_background_num = random.randint(0, len(next(os.walk("assets/images/backgrounds/MenuBackgrounds/"))[1]) - 1)
+menu_background_sky = pygame.image.load(f"assets/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_0.png").convert_alpha()
 menu_background_sky_width = menu_background_sky.get_width()
 menu_background_sky_height = menu_background_sky.get_height()
 
 for i in range(3):
-	menu_background_image = pygame.image.load(f"res/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_{i+1}.png").convert_alpha()
+	menu_background_image = pygame.image.load(f"assets/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_{i+1}.png").convert_alpha()
 	menu_background_images.append(menu_background_image)
 	print(random.randint(0, menu_background_image.get_width()))
 	menu_background_scroll.update({i:random.randint(0, menu_background_image.get_width())})
@@ -727,7 +727,7 @@ load_menu_surf = shared_methods.create_menu_surface(7, 8, "")
 load_menu_box_left1 = commons.WINDOW_WIDTH * 0.5 - 336 * 0.5
 load_menu_box_left2 = commons.WINDOW_WIDTH * 0.5 - 315 * 0.5
 
-menu_logo = pygame.image.load("res/images/logo/logo.png")
+menu_logo = pygame.image.load("assets/images/logo/logo.png")
 
 old_time_milliseconds = pygame.time.get_ticks()
 
@@ -1105,7 +1105,7 @@ while True:
 			commons.WAIT_TO_USE = True
 		
 		# if event.type == song_end_event:
-		# 	pygame.mixer.music.load("res/sounds/day.mp3")
+		# 	pygame.mixer.music.load("assets/sounds/day.mp3")
 		# 	pygame.mixer.music.set_volume(game_data.music_volume)
 		# 	pygame.mixer.music.play()
 
@@ -1198,7 +1198,7 @@ while True:
 						tile_scale = 2
 						size_string = f"{str(world.WORLD_SIZE_X * tile_scale)}x{str(world.WORLD_SIZE_Y * tile_scale)}"
 						date_string = str(datetime.datetime.now()).replace("-", ".").replace(" ", " - ").replace(":", ".")[:-7]
-						path = f"res/images/world_snapshots/{date_string} - {size_string}.png"
+						path = f"assets/images/world_snapshots/{date_string} - {size_string}.png"
 						world_surf = pygame.Surface((tile_scale * world.WORLD_SIZE_X, tile_scale * world.WORLD_SIZE_Y))
 						for tile_x in range(len(world.world.tile_data)):
 							for tile_y in range(len(world.world.tile_data[tile_x])):

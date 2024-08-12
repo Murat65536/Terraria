@@ -1,3 +1,3 @@
 import os
 
-os.system("python src/main.py")
+os.system("python source/main.py")

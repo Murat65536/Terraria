@@ -1438,7 +1438,7 @@ class Player:
 
 		# Save the data	to disk	and	display	a message
 		commons.PLAYER_DATA	= [self.name, self.model, formatted_hotbar,	formatted_inventory, self.hp, self.max_hp, self.play_time, self.creation_date, self.last_played_date]  # Create	player array
-		pickle.dump(commons.PLAYER_DATA, open("res/players/" + self.name + ".player", "wb"))  # Save player	array
+		pickle.dump(commons.PLAYER_DATA, open("assets/players/" + self.name + ".player", "wb"))  # Save player	array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 
 	"""=================================================================================================================	

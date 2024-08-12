@@ -14,7 +14,7 @@ def Initialize():
 
 	if commons.MUSIC:
 		try:
-			pygame.mixer.music.load("res/sounds/day.mp3")
+			pygame.mixer.music.load("assets/sounds/day.mp3")
 			pygame.mixer.music.set_volume(musicVolume)
 			pygame.mixer.music.play()
 			print("Running with music.")
@@ -25,30 +25,30 @@ def Initialize():
 		try:
 			soundVolume = 0.5
 			sounds = []
-			sounds.append(pygame.mixer.Sound("res/sounds/tink_0.wav")); #0
-			sounds.append(pygame.mixer.Sound("res/sounds/tink_1.wav")); #1
-			sounds.append(pygame.mixer.Sound("res/sounds/tink_2.wav")); #2
-			sounds.append(pygame.mixer.Sound("res/sounds/dig_0.wav")); #3
-			sounds.append(pygame.mixer.Sound("res/sounds/dig_1.wav")); #4
-			sounds.append(pygame.mixer.Sound("res/sounds/dig_2.wav")); #5
-			sounds.append(pygame.mixer.Sound("res/sounds/jump.wav")); #6
-			sounds.append(pygame.mixer.Sound("res/sounds/player_Hit_0.wav")); #7 
-			sounds.append(pygame.mixer.Sound("res/sounds/player_Hit_1.wav")); #8
-			sounds.append(pygame.mixer.Sound("res/sounds/player_Hit_2.wav")); #9
-			sounds.append(pygame.mixer.Sound("res/sounds/grass.wav")); #10
-			sounds.append(pygame.mixer.Sound("res/sounds/player_Killed.wav")); #11
-			sounds.append(pygame.mixer.Sound("res/sounds/npc_hit_0.wav")); #12
-			sounds.append(pygame.mixer.Sound("res/sounds/npc_killed_0.wav")); #13
-			sounds.append(pygame.mixer.Sound("res/sounds/grab.wav")); #14
-			sounds.append(pygame.mixer.Sound("res/sounds/run_0.wav")); #15
-			sounds.append(pygame.mixer.Sound("res/sounds/run_1.wav")); #16
-			sounds.append(pygame.mixer.Sound("res/sounds/run_2.wav")); #17
-			sounds.append(pygame.mixer.Sound("res/sounds/coins.wav")); #18
-			sounds.append(pygame.mixer.Sound("res/sounds/menu_Open.wav")); #19
-			sounds.append(pygame.mixer.Sound("res/sounds/menu_Close.wav")); #20
-			sounds.append(pygame.mixer.Sound("res/sounds/chat.wav")); #21
-			sounds.append(pygame.mixer.Sound("res/sounds/door_Opened.wav")); #22
-			sounds.append(pygame.mixer.Sound("res/sounds/door_Closed.wav")); #23
+			sounds.append(pygame.mixer.Sound("assets/sounds/tink_0.wav")); #0
+			sounds.append(pygame.mixer.Sound("assets/sounds/tink_1.wav")); #1
+			sounds.append(pygame.mixer.Sound("assets/sounds/tink_2.wav")); #2
+			sounds.append(pygame.mixer.Sound("assets/sounds/dig_0.wav")); #3
+			sounds.append(pygame.mixer.Sound("assets/sounds/dig_1.wav")); #4
+			sounds.append(pygame.mixer.Sound("assets/sounds/dig_2.wav")); #5
+			sounds.append(pygame.mixer.Sound("assets/sounds/jump.wav")); #6
+			sounds.append(pygame.mixer.Sound("assets/sounds/player_Hit_0.wav")); #7 
+			sounds.append(pygame.mixer.Sound("assets/sounds/player_Hit_1.wav")); #8
+			sounds.append(pygame.mixer.Sound("assets/sounds/player_Hit_2.wav")); #9
+			sounds.append(pygame.mixer.Sound("assets/sounds/grass.wav")); #10
+			sounds.append(pygame.mixer.Sound("assets/sounds/player_Killed.wav")); #11
+			sounds.append(pygame.mixer.Sound("assets/sounds/npc_hit_0.wav")); #12
+			sounds.append(pygame.mixer.Sound("assets/sounds/npc_killed_0.wav")); #13
+			sounds.append(pygame.mixer.Sound("assets/sounds/grab.wav")); #14
+			sounds.append(pygame.mixer.Sound("assets/sounds/run_0.wav")); #15
+			sounds.append(pygame.mixer.Sound("assets/sounds/run_1.wav")); #16
+			sounds.append(pygame.mixer.Sound("assets/sounds/run_2.wav")); #17
+			sounds.append(pygame.mixer.Sound("assets/sounds/coins.wav")); #18
+			sounds.append(pygame.mixer.Sound("assets/sounds/menu_Open.wav")); #19
+			sounds.append(pygame.mixer.Sound("assets/sounds/menu_Close.wav")); #20
+			sounds.append(pygame.mixer.Sound("assets/sounds/chat.wav")); #21
+			sounds.append(pygame.mixer.Sound("assets/sounds/door_Opened.wav")); #22
+			sounds.append(pygame.mixer.Sound("assets/sounds/door_Closed.wav")); #23
 			for sound in sounds:
 				sound.set_volume(soundVolume)
 		except pygame.error:

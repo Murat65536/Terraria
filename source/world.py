@@ -130,11 +130,11 @@ class World:
 			"wall_id_str_lookup": game_data.get_current_wall_id_str_lookup(),
 		}
 
-		pickle.dump(save_map, open("res/worlds/" + str(self.name) + ".dat", "wb"))  # save dat
-		pickle.dump(self.tile_data, open("res/worlds/" + str(self.name) + ".wrld", "wb"))  # save wrld
+		pickle.dump(save_map, open("assets/worlds/" + str(self.name) + ".dat", "wb"))  # save dat
+		pickle.dump(self.tile_data, open("assets/worlds/" + str(self.name) + ".wrld", "wb"))  # save wrld
 
 	def load(self, world_name, load_all=True):
-		save_map = pickle.load(open("res/worlds/" + world_name + ".dat", "rb"))  # open selected save dat file
+		save_map = pickle.load(open("assets/worlds/" + world_name + ".dat", "rb"))  # open selected save dat file
 
 		self.name = save_map["name"]
 		self.creation_date = save_map["creation_date"]
@@ -157,7 +157,7 @@ class World:
 					self.chest_data[chest_data_index][1][loaded_item_data[0]] = item
 
 			# Open selected save wrld file
-			self.tile_data = pickle.load(open("res/worlds/" + world_name + ".wrld", "rb"))
+			self.tile_data = pickle.load(open("assets/worlds/" + world_name + ".wrld", "rb"))
 
 			# And replace the tile and wall values with updated ones
 			tile_id_str_lookup = save_map["tile_id_str_lookup"]

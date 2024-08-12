@@ -46,7 +46,7 @@ if RUN_FULLSCREEN:
 else:
 	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-font_file_path = r"res/fonts/AndyBold.ttf"
+font_file_path = r"assets/fonts/AndyBold.ttf"
 SMALL_FONT = pygame.font.Font(font_file_path, 10)
 DEFAULT_FONT = pygame.font.Font(font_file_path, 16)
 MEDIUM_FONT = pygame.font.Font(font_file_path, 22)

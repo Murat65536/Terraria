@@ -239,7 +239,7 @@ def update_menu_buttons():
 				elif menu_button.text == "Set Player Name":
 					date = datetime.datetime.now()
 					commons.PLAYER_DATA = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
-					pickle.dump(commons.PLAYER_DATA, open("res/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
+					pickle.dump(commons.PLAYER_DATA, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
 					commons.GAME_SUB_STATE = "PLAYERSELECTION"
 					load_menu_player_data()
 
@@ -314,14 +314,14 @@ def draw_menu_buttons():
 	Loads all player save metadata and creates a surface for each one
 -----------------------------------------------------------------------------------------------------------------"""
 def load_menu_player_data():
-	path = "res/players"
+	path = "assets/players"
 	if not os.path.exists(path):
 		os.makedirs(path)
 	possible_loads = os.listdir(path)  # Get filenames
 	commons.PLAYER_SAVE_OPTIONS = []
 
 	for i in range(len(possible_loads)):
-		dat = pickle.load(open("res/players/" + possible_loads[i], "rb"))
+		dat = pickle.load(open("assets/players/" + possible_loads[i], "rb"))
 		possible_loads[i] = possible_loads[i][:-7]
 		player_data_surf = pygame.Surface((315, 60))
 		player_data_surf.fill((50, 50, 50))
@@ -345,7 +345,7 @@ def load_menu_player_data():
 	Loads all world save metadata and creates a surface for each one
 -----------------------------------------------------------------------------------------------------------------"""
 def load_menu_world_data():
-	path = "res/worlds"
+	path = "assets/worlds"
 	if not os.path.exists(path):
 		os.makedirs(path)
 	possible_loads = os.listdir(path)  # Get filenames

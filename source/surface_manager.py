@@ -18,7 +18,7 @@ new_hair = []
 
 def load_tile_mask_surfaces():
 	global tile_masks
-	tile_mask_image = pygame.image.load("res/images/maskTileset.png").convert_alpha()
+	tile_mask_image = pygame.image.load("assets/images/maskTileset.png").convert_alpha()
 	tile_masks = []
 	for j in range(5):
 		for i in range(13):
@@ -31,7 +31,7 @@ def load_tile_mask_surfaces():
 def load_misc_gui_surfaces():
 	global misc_gui
 	misc_gui = []
-	misc_gui_image = pygame.image.load("res/images/miscGUI.png").convert()
+	misc_gui_image = pygame.image.load("assets/images/miscGUI.png").convert()
 	for j in range(1):
 		for i in range(11):
 			surf = pygame.Surface((48, 48))
@@ -42,7 +42,7 @@ def load_misc_gui_surfaces():
 
 def load_background_surfaces():
 	global backgrounds
-	background_image = pygame.image.load("res/images/backgrounds/forest_background.png").convert()
+	background_image = pygame.image.load("assets/images/backgrounds/forest_background.png").convert()
 	backgrounds = []
 	for i in range(9):
 		surf = pygame.Surface((2048, 838))
@@ -52,7 +52,7 @@ def load_background_surfaces():
 
 def load_projectile_surfaces():
 	global projectiles
-	projectile_tileset_image = pygame.image.load("res/images/projectileTileset.png").convert()
+	projectile_tileset_image = pygame.image.load("assets/images/projectileTileset.png").convert()
 	projectiles = []
 	for j in range(10):
 		for i in range(10):
@@ -66,7 +66,7 @@ def load_hair_surfaces():
 	global hair
 	hair = []
 	scale = 2
-	hair_tileset_image = pygame.transform.scale(pygame.image.load("res/images/hairsTileset.png"), (int(22 * 10 * scale), int(24 * scale)))
+	hair_tileset_image = pygame.transform.scale(pygame.image.load("assets/images/hairsTileset.png"), (int(22 * 10 * scale), int(24 * scale)))
 	for i in range(10):
 		surf = pygame.Surface((int(22 * scale), int(24 * scale)))
 		surf.set_colorkey((255, 0, 255))
@@ -78,7 +78,7 @@ def load_head_surfaces():
 	global head
 	head = []
 	scale = 1.25
-	head_tileset_image = pygame.transform.scale(pygame.image.load("res/images/player/head/head.png").convert_alpha(), (int(40 * scale), int(56 * 20 * scale)))
+	head_tileset_image = pygame.transform.scale(pygame.image.load("assets/images/player/head/head.png").convert_alpha(), (int(40 * scale), int(56 * 20 * scale)))
 	for i in range(20):
 		surf = pygame.Surface((int(40 * scale), int(56 * scale)), pygame.SRCALPHA)
 		surf.blit(head_tileset_image, (0, -i * 56 * scale))
@@ -90,7 +90,7 @@ def load_new_hair_surfaces():
 	new_hair = []
 	scale = 1.25
 	for image in range(164):
-		hair_tileset_image = pygame.transform.scale(pygame.image.load(f"res/images/player/hair/Player_Hair_{image + 1}.png").convert_alpha(), (int(40 * scale), int(56 * 14 * scale)))
+		hair_tileset_image = pygame.transform.scale(pygame.image.load(f"assets/images/player/hair/Player_Hair_{image + 1}.png").convert_alpha(), (int(40 * scale), int(56 * 14 * scale)))
 		hair_tileset = []
 		for i in range(14):
 			surf = pygame.Surface((int(40 * scale), int(56 * scale)), pygame.SRCALPHA)
@@ -104,7 +104,7 @@ def load_torso_surfaces():
 	global torsos
 	torsos = []
 	scale = 2
-	torso_tileset_image = pygame.transform.scale(pygame.image.load("res/images/torsoTileset.png"), (int(20 * 19 * scale), int(30 * 4 * scale)))
+	torso_tileset_image = pygame.transform.scale(pygame.image.load("assets/images/torsoTileset.png"), (int(20 * 19 * scale), int(30 * 4 * scale)))
 	for j in range(4):
 		for i in range(19):
 			surf = pygame.Surface((int(20 * scale), int(30 * scale)))
@@ -117,7 +117,7 @@ def load_slime_surfaces():
 	global slimes
 	slimes = []
 	scale = 2
-	slime_tileset_image = pygame.transform.scale(pygame.image.load("res/images/slimeTileset.png"), (int(16 * 3 * scale), int(12 * 5 * scale)))
+	slime_tileset_image = pygame.transform.scale(pygame.image.load("assets/images/slimeTileset.png"), (int(16 * 3 * scale), int(12 * 5 * scale)))
 	for j in range(5):
 		for i in range(3):
 			surf = pygame.Surface((int(16 * scale), int(12 * scale)))
