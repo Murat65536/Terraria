@@ -329,7 +329,7 @@
 				"wall_id_str": "wall.sandstone"
 			},
 			{
-				"id": "23",
+				"id": "21",
 				"id_str": "item.wood_platform",
 				"name": "Wood Platform",
 				"tags": "tile",
@@ -344,7 +344,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "24",
+				"id": "22",
 				"id_str": "item.copper_broadsword",
 				"name": "Copper Broadsword",
 				"tags": "longsword,weapon",
@@ -365,7 +365,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "25",
+				"id": "23",
 				"id_str": "item.excalibur",
 				"name": "Excalibur",
 				"tags": "longsword,weapon",
@@ -386,7 +386,7 @@
 				"hold_offset": "0.9"
 			},
 			{
-				"id": "26",
+				"id": "24",
 				"id_str": "item.wood_broadsword",
 				"name": "Wooden Sword",
 				"tags": "longsword,weapon",
@@ -407,7 +407,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "27",
+				"id": "25",
 				"id_str": "item.wood_bow",
 				"name": "Wooden Bow",
 				"tags": "ranged,weapon,bow",
@@ -433,7 +433,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "28",
+				"id": "26",
 				"id_str": "item.wood_arrow",
 				"name": "Wooden Arrow",
 				"tags": "material,ammo",
@@ -452,7 +452,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "29",
+				"id": "27",
 				"id_str": "item.musket",
 				"name": "Musket",
 				"tags": "ranged,weapon,gun",
@@ -465,7 +465,7 @@
 				"attack_damage": "12",
 				"knockback": "4",
 				"crit_chance": "0.03",
-				"world_override_image_path": "res/images/items/musket.png",
+				"world_override_image_path": "res/images/items/",
 				"prefixes": "common,ranged,universal",
 				"ranged_projectile_id_str": "projectile.bullet",
 				"ranged_ammo_type": "bullet",
@@ -478,7 +478,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "30",
+				"id": "28",
 				"id_str": "item.musket_ball",
 				"name": "Musket Ball",
 				"tags": "material,ammo",
@@ -497,7 +497,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "31",
+				"id": "29",
 				"id_str": "item.copper_coin",
 				"name": "Copper Coin",
 				"tags": "ammo,coin",
@@ -516,7 +516,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "32",
+				"id": "30",
 				"id_str": "item.silver_coin",
 				"name": "Silver Coin",
 				"tags": "ammo,coin",
@@ -535,7 +535,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "33",
+				"id": "31",
 				"id_str": "item.gold_coin",
 				"name": "Gold Coin",
 				"tags": "ammo,coin",
@@ -554,7 +554,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "34",
+				"id": "32",
 				"id_str": "item.platinum_coin",
 				"name": "Platinum Coin",
 				"tags": "ammo,coin",
@@ -573,7 +573,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "35",
+				"id": "33",
 				"id_str": "item.copper_pickaxe",
 				"name": "Copper Pickaxe",
 				"tags": "pickaxe,tool,weapon",
@@ -595,7 +595,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "36",
+				"id": "34",
 				"id_str": "item.copper_hammer",
 				"name": "Copper Hammer",
 				"tags": "hammer,tool,weapon",
@@ -617,7 +617,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "37",
+				"id": "35",
 				"id_str": "item.wood_hammer",
 				"name": "Wood Hammer",
 				"tags": "hammer,tool,weapon",
@@ -639,7 +639,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "38",
+				"id": "36",
 				"id_str": "item.blue_gel",
 				"name": "Blue Gel",
 				"tags": "material",
@@ -653,7 +653,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "39",
+				"id": "37",
 				"id_str": "item.wood_chest",
 				"name": "Wooden Chest",
 				"tags": "tile",
@@ -668,7 +668,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "40",
+				"id": "38",
 				"id_str": "item.workbench",
 				"name": "Workbench",
 				"tags": "tile",
@@ -683,7 +683,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "41",
+				"id": "39",
 				"id_str": "item.wood_door",
 				"name": "Wooden Door",
 				"tags": "tile",
@@ -698,7 +698,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "42",
+				"id": "40",
 				"id_str": "item.torch",
 				"name": "Torch",
 				"tags": "tile",
@@ -713,7 +713,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "43",
+				"id": "41",
 				"id_str": "item.spike",
 				"name": "Spike",
 				"tags": "tile",
@@ -728,7 +728,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "44",
+				"id": "42",
 				"id_str": "item.grappling_hook",
 				"name": "Grappling Hook",
 				"tags": "grapple,tool",
@@ -747,7 +747,7 @@
 				"hold_offset": "0.0"
 			},
 			{
-				"id": "45",
+				"id": "43",
 				"id_str": "item.water_bolt_spell",
 				"name": "Water Bolt",
 				"tier": "3",
@@ -769,7 +769,7 @@
 				"mana_cost": "20"
 			},
 			{
-				"id": "46",
+				"id": "44",
 				"id_str": "item.painting_a",
 				"name": "Painting A",
 				"tier": "3",
@@ -784,7 +784,7 @@
 				"tile_id_str": "tile.painting_a"
 			},
 			{
-				"id": "47",
+				"id": "45",
 				"id_str": "item.painting_b",
 				"name": "Painting B",
 				"tier": "3",
@@ -799,7 +799,7 @@
 				"tile_id_str": "tile.painting_b"
 			},
 			{
-				"id": "48",
+				"id": "46",
 				"id_str": "item.painting_c",
 				"name": "Painting C",
 				"tier": "3",
@@ -814,7 +814,7 @@
 				"tile_id_str": "tile.painting_c"
 			},
 			{
-				"id": "49",
+				"id": "47",
 				"id_str": "item.copper_axe",
 				"name": "Copper Axe",
 				"tags": "axe,tool,weapon",
@@ -836,7 +836,7 @@
 				"hold_offset": "0.8"
 			},
 			{
-				"id": "50",
+				"id": "48",
 				"id_str": "item.iron_shortsword",
 				"name": "Iron Shortsword",
 				"tags": "shortsword,weapon",

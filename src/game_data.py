@@ -187,7 +187,7 @@ enemy_data = [[ "Green Slime", "Slime", 14,	  0,	 -0.2,	 6, (10,  200,  10), [("
 #				 Projectile Information
 #
 #				 ||	 Name	 |   Type  | Damage |Knockback|Bounces|Hitbox Size|  Trail  |  Gravity |Drag Mod|Sound ID |
-projectile_data = [[  "Wooden Arrow",  "Arrow",	 5,		0,	  0,		 13,  "arrow",	   0.5,	   1,	   16],
+projectile_data = [[  "Wooden Arrow",  "Arrow",	 5,		10,	  0,		 13,  "arrow",	   0.5,	   1,	   16],
 				   [   "Musket Ball", "Bullet",	 7,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
 				   [   "Copper Coin", "Bullet",	 1,		2,	  0,		 10, "bullet",	  0.40,	   3,	   17],
 				   [   "Silver Coin", "Bullet",	 3,		2,	  0,		 10, "bullet",	  0.20,	   2,	   17],

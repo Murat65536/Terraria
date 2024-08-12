@@ -96,7 +96,7 @@ def rotate_surface(image, angle):
 	rotated_image = pygame.transform.rotate(image, angle)
 	rotated_rect = original_rect.copy()
 	rotated_rect.center = rotated_image.get_rect().center
-	rotated_image = rotated_image.subsurface(rotated_rect).copy()
+	# rotated_image = rotated_image.subsurface(rotated_rect).copy()
 	return rotated_image
 
 

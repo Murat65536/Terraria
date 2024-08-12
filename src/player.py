@@ -1049,9 +1049,9 @@ class Player:
 		if search_hotbar:
 			for	hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
 				item = self.items[ItemLocation.HOTBAR][hotbar_index]
-				if item	is not None:
+				if item	!= None:
 					if item.item_id	== item_id:
-						available =	item_data["max_stack"]	- self.items[ItemLocation.HOTBAR][hotbar_index].amnt
+						available =	item_data["max_stack"] - self.items[ItemLocation.HOTBAR][hotbar_index].amnt
 						existing_spaces.append([ItemLocation.HOTBAR, hotbar_index, available])
 		
 		if search_inventory:
