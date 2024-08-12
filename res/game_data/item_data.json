@@ -827,7 +827,7 @@
 				"attack_damage": "2",
 				"knockback": "10",
 				"crit_chance": "0.03",
-				"world_override_image_path": "res/images/items/Item_3506.png",
+				"world_override_image_path": "res/images/items/",
 				"prefixes": "common,universal",
 				"axe_power": "55.0",
 				"pickup_sound": "sound.grab",
