@@ -169,7 +169,7 @@ structure_id_str_hash_table = {}
 json_loot_data = []
 loot_id_str_hash_table = {}
 
-sound_volume_multiplier = 1.0
+sound_volume_multiplier = commons.CONFIG_SOUND_VOLUME
 music_volume_multiplier = 1.0
 
 
