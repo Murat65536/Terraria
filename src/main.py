@@ -1322,12 +1322,12 @@ while True:
 				#	 sound_manager.change_music_volume(-0.05)
 				
 				# Sound Volume Up
-				# if event.key == K_RIGHT and commons.SHIFT_ACTIVE:
-				#	 sound_manager.change_sound_volume(0.05)
+				if event.key == pygame.K_RIGHT and commons.SHIFT_ACTIVE:
+					game_data.change_sound_volume(0.05)
 
 				# Sound Volume Down
-				# if event.key == K_LEFT and commons.SHIFT_ACTIVE:
-				#	 sound_manager.change_sound_volume(-0.05)
+				if event.key == pygame.K_LEFT and commons.SHIFT_ACTIVE:
+					game_data.change_sound_volume(-0.05)
 				
 			# Key up Events
 			if event.type == pygame.KEYUP:

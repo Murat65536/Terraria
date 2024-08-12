@@ -1028,21 +1028,21 @@ def change_music_volume(amount):
 
 def change_sound_volume(amount):
 	global sound_volume_multiplier
-	volume_before = sound_volume_multiplier
-	sound_volume_multiplier += amount
-	sound_volume_multiplier = max(min(sound_volume_multiplier, 1), 0)
-	if sound_volume_multiplier != volume_before:
-		for sound in json_sound_data:
-			sound["sound"].set_volume(sound["volume"] * sound_volume_multiplier)
-		# entity_manager.add_message("Sound volume set to " + str(round(sound_volume_multiplier, 2)), (255, 223, 10), life=2, outline_color=(80, 70, 3))
+	
+	if sound_volume_multiplier + amount >= 0 and sound_volume_multiplier + amount <= 2:
+		sound_volume_multiplier += amount
 
 
 def play_sound(sound_id_str):
+	global sound_volume_multiplier
+
 	if commons.SOUND:
 		sound_data = get_sound_by_id_str(sound_id_str)
 		if (sound_data != None):
 			sound_index = random.randint(0, len(sound_data["variations"]) - 1)
-			sound_data["variations"][sound_index].play()
+			sound = sound_data["variations"][sound_index]
+			sound.set_volume(sound_data["volume"] * sound_volume_multiplier)
+			sound.play()
 
 
 def play_tile_hit_sfx(tile_id):
