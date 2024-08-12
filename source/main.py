@@ -709,8 +709,8 @@ menu_background_sky_height = menu_background_sky.get_height()
 for i in range(3):
 	menu_background_image = pygame.image.load(f"res/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_{i+1}.png").convert_alpha()
 	menu_background_images.append(menu_background_image)
-	menu_background_scroll.update({i:0})
-scroll = 0
+	print(random.randint(0, menu_background_image.get_width()))
+	menu_background_scroll.update({i:random.randint(0, menu_background_image.get_width())})
 
 
 LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
