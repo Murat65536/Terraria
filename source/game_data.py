@@ -65,7 +65,7 @@ def make_item_tag_list(item_tags_str):
 	enum_list = []
 	for string in str_list:
 		for tag in ItemTag:
-			if tag.name.lower() == string:
+			if tag.name == string:
 				enum_list.append(tag)
 				break
 	return enum_list
@@ -75,7 +75,7 @@ def make_item_prefix_list(item_prefixes_str):
 	enum_list = []
 	for string in str_list:
 		for prefix in ItemPrefixGroup:
-			if prefix.name.lower() == string:
+			if prefix.name == string:
 				enum_list.append(prefix)
 				break
 	return enum_list
