@@ -322,7 +322,7 @@ class Player:
 						if self.block_position[1] +	j >= 0:
 							tile_id	= world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 							tile_data =	game_data.get_tile_by_id(tile_id)
-							if TileTag.NOCOLLIDE not in tile_data["tags"]:
+							if TileTag.NO_COLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE	* (self.block_position[1] +	j),	commons.BLOCK_SIZE *	(self.block_position[0]	+ i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								is_platform	= False
 								if TileTag.PLATFORM	in tile_data["tags"]:
@@ -680,7 +680,7 @@ class Player:
 						origin = block_position
 					world.use_special_tile(origin[0], origin[1])
 				
-				if TileTag.CRAFTINGTABLE in json_tile_data["tags"]:
+				if TileTag.WORKBENCH in json_tile_data["tags"]:
 					if TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
@@ -722,7 +722,7 @@ class Player:
 							for	i in range(len(required_solids)):
 								tile_id	= world.world.tile_data[block_position[0] +	required_solids[i][0]][block_position[1] + required_solids[i][1]][0]
 								tile_data =	game_data.get_tile_by_id(tile_id)
-								if TileTag.NOCOLLIDE in tile_data["tags"]:
+								if TileTag.NO_COLLIDE in tile_data["tags"]:
 									can_place =	False
 
 							if can_place:

@@ -722,7 +722,7 @@ def use_special_tile(i, j):
 			if world.chest_data[chest_data_index][0] == (i, j):
 				entity_manager.client_player.open_chest(world.chest_data[chest_data_index][1])
 
-	if TileTag.CRAFTINGTABLE in tile_data["tags"]:
+	if TileTag.WORKBENCH in tile_data["tags"]:
 		entity_manager.client_player.crafting_menu_offset_y = 120
 		entity_manager.client_player.update_craftable_items()
 		entity_manager.client_player.render_craftable_items_surf()
@@ -821,7 +821,7 @@ def update_terrain_surface(i, j, affect_others=True):
 		json_tile_dat = game_data.get_tile_by_id(tile_dat[0])
 		json_wall_dat = game_data.get_wall_by_id(tile_dat[1])
 
-		if TileTag.NODRAW not in json_tile_dat["tags"]:
+		if TileTag.NO_DRAW not in json_tile_dat["tags"]:
 			tile_mask_data[tile[0]][tile[1]] = get_mask_index_from_pos(tile[0], tile[1], tile_dat[0])  # Get the mask at i, j and store it in the tile_mask_data array
 
 			if TileTag.MULTITILE in json_tile_dat["tags"]:
@@ -1074,7 +1074,7 @@ def create_grounded_spawn_position():
 		left_tile_dat = game_data.get_tile_by_id(world.tile_data[x1][y][0])
 		right_tile_dat = game_data.get_tile_by_id(world.tile_data[x2][y][0])
 
-		if TileTag.NOCOLLIDE not in left_tile_dat["tags"] and TileTag.NOCOLLIDE not in right_tile_dat["tags"]:
+		if TileTag.NO_COLLIDE not in left_tile_dat["tags"] and TileTag.NO_COLLIDE not in right_tile_dat["tags"]:
 			world.spawnPosition = (world.spawn_position[0], world.spawn_position[1] - commons.BLOCK_SIZE * 1.5)
 			break
 

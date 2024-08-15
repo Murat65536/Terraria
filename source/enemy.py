@@ -130,7 +130,7 @@ class Enemy:
 						tile_id = world.world.tile_data[self.block_pos[1] + j][self.block_pos[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
 						if (tile_data != None):
-							if TileTag.NOCOLLIDE not in tile_data["tags"]:
+							if TileTag.NO_COLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE * (self.block_pos[1] + j), commons.BLOCK_SIZE * (self.block_pos[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								if TileTag.PLATFORM in tile_data["tags"]:
 									platform = True

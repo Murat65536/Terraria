@@ -37,13 +37,13 @@ class ItemPrefixGroup(Enum):
 
 class TileTag(Enum):
 	TRANSPARENT = 0
-	NODRAW = 1
-	NOCOLLIDE = 2
+	NO_DRAW = 1
+	NO_COLLIDE = 2
 	MULTITILE = 3
 	CYCLABLE = 4
 	CHEST = 5
 	BREAKABLE = 6
-	CRAFTINGTABLE = 7
+	WORKBENCH = 7
 	PLATFORM = 8
 	DAMAGING = 9
 
@@ -86,7 +86,7 @@ def make_tile_tag_list(tile_tags_str):
 	enum_list = []
 	for string in str_list:
 		for tag in TileTag:
-			if tag.name.lower() == string:
+			if tag.name == string:
 				enum_list.append(tag)
 				break
 	return enum_list
