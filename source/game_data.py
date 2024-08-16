@@ -61,9 +61,8 @@ class TileMaskType(Enum):
 
 
 def make_item_tag_list(item_tags_str):
-	str_list = item_tags_str.split(",")
 	enum_list = []
-	for string in str_list:
+	for string in item_tags_str:
 		for tag in ItemTag:
 			if tag.name == string:
 				enum_list.append(tag)
@@ -71,9 +70,8 @@ def make_item_tag_list(item_tags_str):
 	return enum_list
 
 def make_item_prefix_list(item_prefixes_str):
-	str_list = item_prefixes_str.split(",")
 	enum_list = []
-	for string in str_list:
+	for string in item_prefixes_str:
 		for prefix in ItemPrefixGroup:
 			if prefix.name == string:
 				enum_list.append(prefix)
@@ -703,76 +701,38 @@ def parse_item_data():
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
 	for item_data in json_item_data:
-		item_data["id"] = int(item_data["id"])
 		item_data["tags"] = make_item_tag_list(item_data["tags"])
-		item_data["tier"] = int(item_data["tier"])
-		item_data["max_stack"] = int(item_data["max_stack"])
-		item_data["buy_price"] = int(item_data["buy_price"])
-		item_data["sell_price"] = int(item_data["sell_price"])
-		item_data["hold_offset"] = float(item_data["hold_offset"])
 		try:
 			loaded_surf = pygame.image.load(item_data["image_path"]).convert_alpha()
 			if max(loaded_surf.get_width(), loaded_surf.get_height()) > 32:
 				loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height())), loaded_surf.get_height() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height()))))
+			# loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width(), loaded_surf.get_height()))
 			item_data["image"] = loaded_surf
 			item_data["item_slot_offset_x"] = int(24 - item_data["image"].get_width() * 0.5)
 			item_data["item_slot_offset_y"] = int(24 - item_data["image"].get_height() * 0.5)
 		except FileNotFoundError:
 			item_data["image"] = None
-		except pygame.error:
-			item_data["image"] = None
 
 		if ItemTag.WEAPON in item_data["tags"]:
-			item_data["attack_speed"] = float(item_data["attack_speed"])
-			item_data["attack_damage"] = float(item_data["attack_damage"])
-			item_data["knockback"] = float(item_data["knockback"])
-			item_data["crit_chance"] = float(item_data["crit_chance"])
 			try:
 				loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
 				item_data["world_override_image"] = pygame.Surface((max(loaded_surf.get_width(), loaded_surf.get_height()), max(loaded_surf.get_width(), loaded_surf.get_height())))
 			except FileNotFoundError:
 				item_data["world_override_image"] = None
-			except pygame.error:
-				item_data["world_override_image"] = None
 
 			item_data["prefixes"] = make_item_prefix_list(item_data["prefixes"])
 
-		if ItemTag.RANGED in item_data["tags"]:
-			item_data["ranged_projectile_speed"] = float(item_data["ranged_projectile_speed"])
-			item_data["ranged_accuracy"] = float(item_data["ranged_accuracy"])
-			item_data["ranged_num_projectiles"] = int(item_data["ranged_num_projectiles"])
-
-		if ItemTag.MAGICAL in item_data["tags"]:
-			item_data["mana_cost"] = int(item_data["mana_cost"])
-
 		if ItemTag.AMMO in item_data["tags"]:
-			item_data["ammo_damage"] = float(item_data["ammo_damage"])
-			item_data["ammo_drag"] = float(item_data["ammo_drag"])
-			item_data["ammo_gravity_mod"] = float(item_data["ammo_gravity_mod"])
-			item_data["ammo_knockback_mod"] = float(item_data["ammo_knockback_mod"])
 			try:
-				ammo_type_item_lists[item_data["ammo_type"]].append(int(item_data["id"]))
+				ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])
 			except KeyError:
-				ammo_type_item_lists[item_data["ammo_type"]] = [int(item_data["id"])]
-
-		if ItemTag.PICKAXE in item_data["tags"]:
-			item_data["pickaxe_power"] = float(item_data["pickaxe_power"])
-
-		if ItemTag.AXE in item_data["tags"]:
-			item_data["axe_power"] = float(item_data["axe_power"])
-		if ItemTag.HAMMER in item_data["tags"]:
-			item_data["hammer_power"] = float(item_data["hammer_power"])
+				ammo_type_item_lists[item_data["ammo_type"]] = [item_data["id"]]
 
 		if ItemTag.GRAPPLE in item_data["tags"]:
-			item_data["grapple_speed"] = float(item_data["grapple_speed"])
-			item_data["grapple_chain_length"] = float(item_data["grapple_chain_length"])
-			item_data["grapple_max_chains"] = int(item_data["grapple_max_chains"])
 			try:
 				loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
 				item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
 			except FileNotFoundError:
-				item_data["grapple_chain_image"] = None
-			except pygame.error:
 				item_data["grapple_chain_image"] = None
 
 			try:
@@ -780,8 +740,6 @@ def parse_item_data():
 				item_data["grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
 				item_data["grapple_claw_image"].set_colorkey((255, 0, 255))
 			except FileNotFoundError:
-				item_data["grapple_claw_image"] = None
-			except pygame.error:
 				item_data["grapple_claw_image"] = None
 
 
