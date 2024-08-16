@@ -11,6 +11,8 @@ import game_data
 import entity_manager
 import menu_manager
 
+import sound_manager
+
 """================================================================================================================= 
 	prompt.Prompt
 
@@ -98,6 +100,7 @@ class Prompt:
 			if self.button_1_pressed:
 				entity_manager.client_player.save()
 				world.save()
+				sound_manager.stop_music()
 				commons.GAME_STATE = "MAINMENU"
 				commons.GAME_SUB_STATE = "MAIN"
 				world.terrain_surface = pygame.Surface((1, 1))

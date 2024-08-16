@@ -17,13 +17,11 @@ import player
 import game_data
 import prompt
 import item
+import sound_manager
 
 pygame.mixer.pre_init(48000, -16, 2, 1024)
 pygame.init()
 pygame.mixer.init()
-
-
-# from sound_manager import *
 
 
 
@@ -1016,6 +1014,7 @@ while True:
 							
 							commons.GAME_STATE = "PLAYING"
 							should_break = True
+							sound_manager.play_music()
 							break
 
 			if not should_break:
