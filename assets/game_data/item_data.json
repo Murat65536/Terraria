@@ -37,7 +37,7 @@
 				"COMMON",
 				"UNIVERSAL"
 			],
-			"pickaxe_power": "40.0",
+			"pickaxe_power": 40.0,
 			"pickup_sound": "sound.grab",
 			"drop_sound": "sound.grab",
 			"use_sound": "sound.swing",
@@ -261,7 +261,7 @@
 			"tile_id_str": "tile.wood",
 			"pickup_sound": "sound.grab",
 			"drop_sound": "sound.grab",
-			"hold_offset": "0.0"
+			"hold_offset": 0.0
 		},
 		{
 			"id": 14,
@@ -907,8 +907,8 @@
 			],
 			"tier": 3,
 			"max_stack": 999,
-			"buy_price": "10000",
-			"sell_price": "750",
+			"buy_price": 10000,
+			"sell_price": 750,
 			"image_path": "assets/images/items/Item_165.png",
 			"pickup_sound": "sound.grab",
 			"drop_sound": "sound.grab",
