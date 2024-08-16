@@ -932,7 +932,6 @@ def parse_sound_data():
 	for sound_data in json_sound_data:
 		sound_data["id"] = int(sound_data["id"])
 		sound_data["volume"] = float(sound_data["volume"])
-		sound_data["variation_paths"] = sound_data["variation_paths"].split(",")
 		sound_data["variations"] = []
 		for sound_variation in sound_data["variation_paths"]:
 			try:
@@ -940,8 +939,6 @@ def parse_sound_data():
 				sound.set_volume(sound_data["volume"])
 				sound_data["variations"].append(sound)
 			except FileNotFoundError:
-				pass
-			except pygame.error:
 				pass
 
 
