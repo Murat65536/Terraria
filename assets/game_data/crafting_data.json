@@ -1,14 +1,12 @@
 {
-	"crafting_recipes": {
-		"crafting_recipe": [
-			{
-				"id": "0",
-				"id_str": "crafting_recipe.INVALID"
-			},
-			{
-				"id": "1",
-				"id_str": "crafting_recipe.work_bench"
-			}
-		]
-	}
+	"crafting_recipe": [
+		{
+			"id": "0",
+			"id_str": "crafting_recipe.INVALID"
+		},
+		{
+			"id": "1",
+			"id_str": "crafting_recipe.work_bench"
+		}
+	]
 }

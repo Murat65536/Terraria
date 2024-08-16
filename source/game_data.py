@@ -179,12 +179,12 @@ music_volume_multiplier = 1.0
 #
 #				 ||	 Name	 |   Type  | Damage |Knockback|Bounces|Hitbox Size|  Trail  |  Gravity |Drag Mod|Sound ID |
 projectile_data = [[  "Wooden Arrow",  "Arrow",	 5,		0,	  0,		 13,  "arrow",	   0.5,	   1,	   16],
-				   [   "Musket Ball", "Bullet",	 7,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
-				   [   "Copper Coin", "Bullet",	 1,		2,	  0,		 10, "bullet",	  0.40,	   3,	   17],
-				   [   "Silver Coin", "Bullet",	 3,		2,	  0,		 10, "bullet",	  0.20,	   2,	   17],
-				   [	 "Gold Coin", "Bullet",	15,		2,	  0,		 10, "bullet",	  0.10,	   1,	   17],
-				   [ "Platinum Coin", "Bullet",	50,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
-				   ]
+					[   "Musket Ball", "Bullet",	 7,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
+					[   "Copper Coin", "Bullet",	 1,		2,	  0,		 10, "bullet",	  0.40,	   3,	   17],
+					[   "Silver Coin", "Bullet",	 3,		2,	  0,		 10, "bullet",	  0.20,	   2,	   17],
+					[	 "Gold Coin", "Bullet",	15,		2,	  0,		 10, "bullet",	  0.10,	   1,	   17],
+					[ "Platinum Coin", "Bullet",	50,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
+				]
 
 
 # Item Prefix Information
@@ -1177,7 +1177,7 @@ def get_structure_connection_orientation_from_str(structure_connection_orientati
 def parse_loot_data():
 	global json_loot_data
 	json_read_file = open("assets/game_data/loot_data.json", "r")
-	json_loot_data = json.loads(json_read_file.read())["lootgroups"]["loot"]
+	json_loot_data = json.loads(json_read_file.read())["loot"]
 	json_read_file.close()
 
 	json_loot_data = sorted(json_loot_data, key=lambda x: int(x["id"]))
@@ -1185,19 +1185,19 @@ def parse_loot_data():
 	for loot_data in json_loot_data:
 		loot_data["id"] = int(loot_data["id"])
 		loot_data["item_spawn_count_range"] = int_tuple_str_to_int_tuple(loot_data["item_spawn_count_range"])
-		possible_item_strs = loot_data["item_list_data"].split("|")
+		possible_item_strs = loot_data["item_list_data"]
 		item_list_data = []
 		for possible_item_properties_str in possible_item_strs:
-			possible_item_properties = possible_item_properties_str.split(";")
 
-			possible_item_id_str = possible_item_properties[0]
-			possible_item_spawn_weight = int(possible_item_properties[1])
-			possible_item_spawn_depth_range = int_tuple_str_to_int_tuple(possible_item_properties[2])
-			possible_item_stack_count_range = int_tuple_str_to_int_tuple(possible_item_properties[3])
-			possible_item_slot_priority = int(possible_item_properties[4])
-			once_per_instance = bool(int(possible_item_properties[5]))
+			possible_item_id_str = possible_item_properties_str["item_id_str"]
+			possible_item_spawn_weight = possible_item_properties_str["item_spawn_weight"]
+			possible_item_spawn_depth_range = tuple(possible_item_properties_str["item_spawn_depth_range"])
+			possible_item_stack_count_range = tuple(possible_item_properties_str["item_stack_count_range"])
+			possible_item_slot_priority = possible_item_properties_str["item_slot_priority"]
+			once_per_instance = possible_item_properties_str["once_per_instance"]
 
 			item_list_data.append([possible_item_id_str, possible_item_spawn_weight, possible_item_spawn_depth_range, possible_item_stack_count_range, possible_item_slot_priority, once_per_instance])
+		print(item_list_data)
 
 		loot_data["item_list_data"] = item_list_data
 
@@ -1230,7 +1230,6 @@ def parse_entity_data():
     json_read_file.close()
     
     json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
-    print(json_entity_data[0]["name"])
 
 def create_entity_id_str_hash_table():
     global entity_id_str_hash_table

@@ -1,38 +1,144 @@
 {
-	"lootgroups": {
-		"loot": [
-			{
-				"id": "0",
-				"id_str": "loot.INVALID",
-				"name": "INVALID",
-				"item_spawn_count_range": "0,0",
-				"item_list_data": "item.dirt_block;100;0,0;0,0;0;0",
-				"coin_spawn_range": "0,0"
-			},
-			{
-				"id": "1",
-				"id_str": "loot.pot",
-				"name": "Pot",
-				"item_spawn_count_range": "1,2",
-				"item_list_data": "item.torch;100;0,0;3,15;3;0|item.wood_platform;50;0,0;5,15;3;0|item.spike;50;0,0;2,6;2;0|item.musket_ball;25;0,0;5,20;1;0|item.copper_coin;5;0,0;1,1;0;1|item.wood_arrow;35;0,0;7,25;1;0",
-				"coin_spawn_range": "75,150"
-			},
-			{
-				"id": "2",
-				"id_str": "loot.chest_wood",
-				"name": "Wood Chest",
-				"item_spawn_count_range": "2,6",
-				"item_list_data": "item.musket;100;0,0;1,1;0;1|item.wood_bow;100;0,0;1,1;0;1|item.water_bolt_spell;100;0,0;1,1;0;0|item.wood_arrow;600;0,0;5,20;2;0|item.musket_ball;600;0,0;5,20;2;0",
-				"coin_spawn_range": "750,2000"
-			},
-			{
-				"id": "3",
-				"id_str": "loot.chest_gold",
-				"name": "Gold Chest",
-				"item_spawn_count_range": "2,5",
-				"item_list_data": "item.dirt_block;100;0,0;0,0;0;0",
-				"coin_spawn_range": "5000,15000"
-			}
-		]
-	}
+	"loot": [
+		{
+			"id": "0",
+			"id_str": "loot.INVALID",
+			"name": "INVALID",
+			"item_spawn_count_range": "0,0",
+			"item_list_data": [
+				{
+					"item_id_str": "item.INVALID",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [0, 0],
+					"item_slot_priority": 0,
+					"once_per_instance": false
+				}
+			],
+			"coin_spawn_range": "0,0"
+		},
+		{
+			"id": "1",
+			"id_str": "loot.pot",
+			"name": "Pot",
+			"item_spawn_count_range": "1,2",
+			"item_list_data": [
+				{
+					"item_id_str": "item.torch",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [3, 15],
+					"item_slot_priority": 3,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.wood_platform",
+					"item_spawn_weight": 50,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [5, 15],
+					"item_slot_priority": 3,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.spike",
+					"item_spawn_weight": 50,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [2, 6],
+					"item_slot_priority": 2,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.musket_ball",
+					"item_spawn_weight": 25,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [5, 20],
+					"item_slot_priority": 1,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.copper_coin",
+					"item_spawn_weight": 5,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [1, 1],
+					"item_slot_priority": 0,
+					"once_per_instance": true
+				},
+				{
+					"item_id_str": "item.wooden_arrow",
+					"item_spawn_weight": 35,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [7, 25],
+					"item_slot_priority": 1,
+					"once_per_instance": false
+				}
+			],
+			"coin_spawn_range": "75,150"
+		},
+		{
+			"id": "2",
+			"id_str": "loot.chest_wood",
+			"name": "Wood Chest",
+			"item_spawn_count_range": "2,6",
+			"item_list_data": [
+				{
+					"item_id_str": "item.musket",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [1, 1],
+					"item_slot_priority": 0,
+					"once_per_instance": true
+				},
+				{
+					"item_id_str": "item.wood_bow",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [1, 1],
+					"item_slot_priority": 0,
+					"once_per_instance": true
+				},
+				{
+					"item_id_str": "item.water_bolt_spell",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [1, 1],
+					"item_slot_priority": 0,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.wooden_arrow",
+					"item_spawn_weight": 600,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [5, 20],
+					"item_slot_priority": 2,
+					"once_per_instance": false
+				},
+				{
+					"item_id_str": "item.musket_ball",
+					"item_spawn_weight": 600,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [5, 20],
+					"item_slot_priority": 2,
+					"once_per_instance": false
+				}
+			],
+			"coin_spawn_range": "750,2000"
+		},
+		{
+			"id": "3",
+			"id_str": "loot.chest_gold",
+			"name": "Gold Chest",
+			"item_spawn_count_range": "2,5",
+			"item_list_data": [
+				{
+					"item_id_str": "item.dirt_block",
+					"item_spawn_weight": 100,
+					"item_spawn_depth_range": [0, 0],
+					"item_stack_count_range": [0, 0],
+					"item_slot_priority": 0,
+					"once_per_instance": false
+				}
+			],
+			"coin_spawn_range": "5000,15000"
+		}
+	]
 }

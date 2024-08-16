@@ -1,150 +1,148 @@
 {
-	"sounds": {
-		"sound": [
-			{
-				"id": "0",
-				"id_str": "sound.INVALID",
-				"variation_paths": "",
-				"volume": "1"
-			},
-			{
-				"id": "1",
-				"id_str": "sound.tink",
-				"variation_paths": "assets/sounds/tink_0.wav,assets/sounds/tink_1.wav,assets/sounds/tink_2.wav",
-				"volume": "1"
-			},
-			{
-				"id": "2",
-				"id_str": "sound.dig",
-				"variation_paths": "assets/sounds/dig_0.wav,assets/sounds/dig_1.wav,assets/sounds/dig_2.wav",
-				"volume": "1"
-			},
-			{
-				"id": "3",
-				"id_str": "sound.jump",
-				"variation_paths": "assets/sounds/jump.wav",
-				"volume": "1"
-			},
-			{
-				"id": "4",
-				"id_str": "sound.player_hurt",
-				"variation_paths": "assets/sounds/player_hit_0.wav,assets/sounds/player_hit_1.wav,assets/sounds/player_hit_2.wav",
-				"volume": "1"
-			},
-			{
-				"id": "5",
-				"id_str": "sound.grass",
-				"variation_paths": "assets/sounds/grass.wav",
-				"volume": "1"
-			},
-			{
-				"id": "6",
-				"id_str": "sound.player_death",
-				"variation_paths": "assets/sounds/player_killed.wav",
-				"volume": "1"
-			},
-			{
-				"id": "7",
-				"id_str": "sound.mirror",
-				"variation_paths": "assets/sounds/mirror.wav",
-				"volume": "1"
-			},
-			{
-				"id": "8",
-				"id_str": "sound.slime_hurt",
-				"variation_paths": "assets/sounds/npc_hit_0.wav",
-				"volume": "1"
-			},
-			{
-				"id": "9",
-				"id_str": "sound.slime_death",
-				"variation_paths": "assets/sounds/npc_killed_0.wav",
-				"volume": "1"
-			},
-			{
-				"id": "10",
-				"id_str": "sound.swing",
-				"variation_paths": "assets/sounds/swing.wav",
-				"volume": "1"
-			},
-			{
-				"id": "11",
-				"id_str": "sound.bow",
-				"variation_paths": "assets/sounds/bow.wav",
-				"volume": "1"
-			},
-			{
-				"id": "12",
-				"id_str": "sound.gun_shot",
-				"variation_paths": "assets/sounds/gun_shot.wav",
-				"volume": "1"
-			},
-			{
-				"id": "13",
-				"id_str": "sound.bullet_hit",
-				"variation_paths": "assets/sounds/bullet_hit.wav",
-				"volume": "1"
-			},
-			{
-				"id": "14",
-				"id_str": "sound.grab",
-				"variation_paths": "assets/sounds/grab.wav",
-				"volume": "1"
-			},
-			{
-				"id": "15",
-				"id_str": "sound.run",
-				"variation_paths": "assets/sounds/run_0.wav,assets/sounds/run_1.wav,assets/sounds/run_2.wav",
-				"volume": "1"
-			},
-			{
-				"id": "16",
-				"id_str": "sound.coins",
-				"variation_paths": "assets/sounds/coins.wav",
-				"volume": "0.3"
-			},
-			{
-				"id": "17",
-				"id_str": "sound.menu_open",
-				"variation_paths": "assets/sounds/menu_open.wav",
-				"volume": "0.3"
-			},
-			{
-				"id": "18",
-				"id_str": "sound.menu_close",
-				"variation_paths": "assets/sounds/menu_close.wav",
-				"volume": "0.3"
-			},
-			{
-				"id": "19",
-				"id_str": "sound.menu_select",
-				"variation_paths": "assets/sounds/menu_select.wav",
-				"volume": "0.3"
-			},
-			{
-				"id": "20",
-				"id_str": "sound.chat",
-				"variation_paths": "assets/sounds/chat.wav",
-				"volume": "0.3"
-			},
-			{
-				"id": "21",
-				"id_str": "sound.door_opened",
-				"variation_paths": "assets/sounds/door_opened.wav",
-				"volume": "1"
-			},
-			{
-				"id": "22",
-				"id_str": "sound.door_closed",
-				"variation_paths": "assets/sounds/door_closed.wav",
-				"volume": "1"
-			},
-			{
-				"id_str": "sound.random_sound",
-				"id": "23",
-				"variation_paths": "assets/sounds/bow.wav,assets/sounds/bullet_hit.wav,assets/sounds/chat.wav,assets/sounds/coins.wav,assets/sounds/day.mp3,assets/sounds/dig_0.wav,assets/sounds/dig_1.wav,assets/sounds/dig_2.wav,assets/sounds/door_closed.wav,assets/sounds/door_opened.wav,assets/sounds/grab.wav,assets/sounds/grass.wav,assets/sounds/gun_shot.wav,assets/sounds/jump.wav,assets/sounds/menu_close.wav,assets/sounds/menu_open.wav,assets/sounds/menu_select.wav,assets/sounds/mirror.wav,assets/sounds/npc_hit_0.wav,assets/sounds/npc_killed_0.wav,assets/sounds/player_hit_0.wav,assets/sounds/player_hit_1.wav,assets/sounds/player_hit_2.wav,assets/sounds/player_killed.wav,assets/sounds/run_0.wav,assets/sounds/run_1.wav,assets/sounds/run_2.wav,assets/sounds/swing.wav,assets/sounds/tink_0.wav,assets/sounds/tink_1.wav,assets/sounds/tink_2.wav",
-				"volume": "1"
-			}
-		]
-	}
+	"sound": [
+		{
+			"id": "0",
+			"id_str": "sound.INVALID",
+			"variation_paths": "",
+			"volume": "1"
+		},
+		{
+			"id": "1",
+			"id_str": "sound.tink",
+			"variation_paths": "assets/sounds/tink_0.wav,assets/sounds/tink_1.wav,assets/sounds/tink_2.wav",
+			"volume": "1"
+		},
+		{
+			"id": "2",
+			"id_str": "sound.dig",
+			"variation_paths": "assets/sounds/dig_0.wav,assets/sounds/dig_1.wav,assets/sounds/dig_2.wav",
+			"volume": "1"
+		},
+		{
+			"id": "3",
+			"id_str": "sound.jump",
+			"variation_paths": "assets/sounds/jump.wav",
+			"volume": "1"
+		},
+		{
+			"id": "4",
+			"id_str": "sound.player_hurt",
+			"variation_paths": "assets/sounds/player_hit_0.wav,assets/sounds/player_hit_1.wav,assets/sounds/player_hit_2.wav",
+			"volume": "1"
+		},
+		{
+			"id": "5",
+			"id_str": "sound.grass",
+			"variation_paths": "assets/sounds/grass.wav",
+			"volume": "1"
+		},
+		{
+			"id": "6",
+			"id_str": "sound.player_death",
+			"variation_paths": "assets/sounds/player_killed.wav",
+			"volume": "1"
+		},
+		{
+			"id": "7",
+			"id_str": "sound.mirror",
+			"variation_paths": "assets/sounds/mirror.wav",
+			"volume": "1"
+		},
+		{
+			"id": "8",
+			"id_str": "sound.slime_hurt",
+			"variation_paths": "assets/sounds/npc_hit_0.wav",
+			"volume": "1"
+		},
+		{
+			"id": "9",
+			"id_str": "sound.slime_death",
+			"variation_paths": "assets/sounds/npc_killed_0.wav",
+			"volume": "1"
+		},
+		{
+			"id": "10",
+			"id_str": "sound.swing",
+			"variation_paths": "assets/sounds/swing.wav",
+			"volume": "1"
+		},
+		{
+			"id": "11",
+			"id_str": "sound.bow",
+			"variation_paths": "assets/sounds/bow.wav",
+			"volume": "1"
+		},
+		{
+			"id": "12",
+			"id_str": "sound.gun_shot",
+			"variation_paths": "assets/sounds/gun_shot.wav",
+			"volume": "1"
+		},
+		{
+			"id": "13",
+			"id_str": "sound.bullet_hit",
+			"variation_paths": "assets/sounds/bullet_hit.wav",
+			"volume": "1"
+		},
+		{
+			"id": "14",
+			"id_str": "sound.grab",
+			"variation_paths": "assets/sounds/grab.wav",
+			"volume": "1"
+		},
+		{
+			"id": "15",
+			"id_str": "sound.run",
+			"variation_paths": "assets/sounds/run_0.wav,assets/sounds/run_1.wav,assets/sounds/run_2.wav",
+			"volume": "1"
+		},
+		{
+			"id": "16",
+			"id_str": "sound.coins",
+			"variation_paths": "assets/sounds/coins.wav",
+			"volume": "0.3"
+		},
+		{
+			"id": "17",
+			"id_str": "sound.menu_open",
+			"variation_paths": "assets/sounds/menu_open.wav",
+			"volume": "0.3"
+		},
+		{
+			"id": "18",
+			"id_str": "sound.menu_close",
+			"variation_paths": "assets/sounds/menu_close.wav",
+			"volume": "0.3"
+		},
+		{
+			"id": "19",
+			"id_str": "sound.menu_select",
+			"variation_paths": "assets/sounds/menu_select.wav",
+			"volume": "0.3"
+		},
+		{
+			"id": "20",
+			"id_str": "sound.chat",
+			"variation_paths": "assets/sounds/chat.wav",
+			"volume": "0.3"
+		},
+		{
+			"id": "21",
+			"id_str": "sound.door_opened",
+			"variation_paths": "assets/sounds/door_opened.wav",
+			"volume": "1"
+		},
+		{
+			"id": "22",
+			"id_str": "sound.door_closed",
+			"variation_paths": "assets/sounds/door_closed.wav",
+			"volume": "1"
+		},
+		{
+			"id_str": "sound.random_sound",
+			"id": "23",
+			"variation_paths": "assets/sounds/bow.wav,assets/sounds/bullet_hit.wav,assets/sounds/chat.wav,assets/sounds/coins.wav,assets/sounds/day.mp3,assets/sounds/dig_0.wav,assets/sounds/dig_1.wav,assets/sounds/dig_2.wav,assets/sounds/door_closed.wav,assets/sounds/door_opened.wav,assets/sounds/grab.wav,assets/sounds/grass.wav,assets/sounds/gun_shot.wav,assets/sounds/jump.wav,assets/sounds/menu_close.wav,assets/sounds/menu_open.wav,assets/sounds/menu_select.wav,assets/sounds/mirror.wav,assets/sounds/npc_hit_0.wav,assets/sounds/npc_killed_0.wav,assets/sounds/player_hit_0.wav,assets/sounds/player_hit_1.wav,assets/sounds/player_hit_2.wav,assets/sounds/player_killed.wav,assets/sounds/run_0.wav,assets/sounds/run_1.wav,assets/sounds/run_2.wav,assets/sounds/swing.wav,assets/sounds/tink_0.wav,assets/sounds/tink_1.wav,assets/sounds/tink_2.wav",
+			"volume": "1"
+		}
+	]
 }

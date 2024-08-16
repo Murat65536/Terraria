@@ -1,18 +1,16 @@
 {
-	"projectiles": {
-		"projectile": [
-			{
-				"id": "0",
-				"id_str": "projectile.INVALID"
-			},
-			{
-				"id": "1",
-				"id_str": "projectile.arrow"
-			},
-			{
-				"id": "2",
-				"id_str": "projectile.bullet"
-			}
-		]
-	}
+	"projectile": [
+		{
+			"id": "0",
+			"id_str": "projectile.INVALID"
+		},
+		{
+			"id": "1",
+			"id_str": "projectile.arrow"
+		},
+		{
+			"id": "2",
+			"id_str": "projectile.bullet"
+		}
+	]
 }
