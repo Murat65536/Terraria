@@ -162,5 +162,6 @@ cython_debug/
 #Custom
 assets/players/
 assets/worlds/
+assets/images/world_snapshots/
 
 __pycache__/

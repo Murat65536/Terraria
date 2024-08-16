@@ -1141,25 +1141,21 @@ def parse_loot_data():
 	json_loot_data = sorted(json_loot_data, key=lambda x: int(x["id"]))
 
 	for loot_data in json_loot_data:
-		loot_data["id"] = int(loot_data["id"])
-		loot_data["item_spawn_count_range"] = int_tuple_str_to_int_tuple(loot_data["item_spawn_count_range"])
 		possible_item_strs = loot_data["item_list_data"]
 		item_list_data = []
 		for possible_item_properties_str in possible_item_strs:
-
-			possible_item_id_str = possible_item_properties_str["item_id_str"]
-			possible_item_spawn_weight = possible_item_properties_str["item_spawn_weight"]
-			possible_item_spawn_depth_range = tuple(possible_item_properties_str["item_spawn_depth_range"])
-			possible_item_stack_count_range = tuple(possible_item_properties_str["item_stack_count_range"])
-			possible_item_slot_priority = possible_item_properties_str["item_slot_priority"]
-			once_per_instance = possible_item_properties_str["once_per_instance"]
-
-			item_list_data.append([possible_item_id_str, possible_item_spawn_weight, possible_item_spawn_depth_range, possible_item_stack_count_range, possible_item_slot_priority, once_per_instance])
-		print(item_list_data)
+			item_list_data.append([
+				possible_item_properties_str["item_id_str"],
+				possible_item_properties_str["item_spawn_weight"],
+				tuple(possible_item_properties_str["item_spawn_depth_range"]),
+				tuple(possible_item_properties_str["item_stack_count_range"]),
+				possible_item_properties_str["item_slot_priority"],
+				possible_item_properties_str["once_per_instance"]
+			])
 
 		loot_data["item_list_data"] = item_list_data
 
-		loot_data["coin_spawn_range"] = int_tuple_str_to_int_tuple(loot_data["coin_spawn_range"])
+		loot_data["coin_spawn_range"] = tuple(loot_data["coin_spawn_range"])
 
 
 def create_loot_id_str_hash_table():

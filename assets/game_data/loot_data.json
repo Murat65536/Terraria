@@ -1,10 +1,10 @@
 {
 	"loot": [
 		{
-			"id": "0",
+			"id": 0,
 			"id_str": "loot.INVALID",
 			"name": "INVALID",
-			"item_spawn_count_range": "0,0",
+			"item_spawn_count_range": [0, 0],
 			"item_list_data": [
 				{
 					"item_id_str": "item.INVALID",
@@ -15,13 +15,13 @@
 					"once_per_instance": false
 				}
 			],
-			"coin_spawn_range": "0,0"
+			"coin_spawn_range": [0, 0]
 		},
 		{
-			"id": "1",
+			"id": 1,
 			"id_str": "loot.pot",
 			"name": "Pot",
-			"item_spawn_count_range": "1,2",
+			"item_spawn_count_range": [1, 2],
 			"item_list_data": [
 				{
 					"item_id_str": "item.torch",
@@ -72,13 +72,13 @@
 					"once_per_instance": false
 				}
 			],
-			"coin_spawn_range": "75,150"
+			"coin_spawn_range": [75, 150]
 		},
 		{
-			"id": "2",
+			"id": 2,
 			"id_str": "loot.chest_wood",
 			"name": "Wood Chest",
-			"item_spawn_count_range": "2,6",
+			"item_spawn_count_range": [2, 6],
 			"item_list_data": [
 				{
 					"item_id_str": "item.musket",
@@ -121,13 +121,13 @@
 					"once_per_instance": false
 				}
 			],
-			"coin_spawn_range": "750,2000"
+			"coin_spawn_range": [750, 2000]
 		},
 		{
-			"id": "3",
+			"id": 3,
 			"id_str": "loot.chest_gold",
 			"name": "Gold Chest",
-			"item_spawn_count_range": "2,5",
+			"item_spawn_count_range": [2, 5],
 			"item_list_data": [
 				{
 					"item_id_str": "item.dirt_block",
@@ -138,7 +138,7 @@
 					"once_per_instance": false
 				}
 			],
-			"coin_spawn_range": "5000,15000"
+			"coin_spawn_range": [5000, 15000]
 		}
 	]
 }
