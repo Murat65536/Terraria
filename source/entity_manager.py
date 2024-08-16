@@ -107,9 +107,9 @@ def draw_enemy_hover_text():
 							 commons.MOUSE_POSITION[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5)
 	for enemy in enemies:
 		if enemy.rect.collidepoint(transformed_MOUSE_POSITION):
-			text1 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
+			text1 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health),
 											   True, (255, 255, 255))
-			text2 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.hp)) + "/" + str(enemy.max_hp),
+			text2 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health),
 											   True, (0, 0, 0))
 
 			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5, commons.MOUSE_POSITION[1] - 38))
@@ -265,11 +265,11 @@ def spawn_enemy(position=None, enemy_id=None):
 		return
 	if enemy_id is None:
 		if client_player.position[1] < 200 * commons.BLOCK_SIZE:
-			enemy_id = random.randint(0, 1)
-		elif client_player.position[1] < 300 * commons.BLOCK_SIZE:
 			enemy_id = random.randint(1, 2)
+		elif client_player.position[1] < 300 * commons.BLOCK_SIZE:
+			enemy_id = random.randint(2, 3)
 		elif client_player.position[1] >= 300 * commons.BLOCK_SIZE:
-			enemy_id = random.randint(3, 4)
+			enemy_id = random.randint(4, 5)
 	if position is None:
 		player_block_pos = (int(camera_position[0]) // commons.BLOCK_SIZE, int(camera_position[1]) // commons.BLOCK_SIZE)
 		for i in range(500):

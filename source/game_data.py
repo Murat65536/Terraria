@@ -168,20 +168,11 @@ json_structure_data = []
 structure_id_str_hash_table = {}
 json_loot_data = []
 loot_id_str_hash_table = {}
+json_entity_data = []
+entity_id_str_hash_table = {}
 
 sound_volume_multiplier = commons.CONFIG_SOUND_VOLUME
 music_volume_multiplier = 1.0
-
-
-#			 Enemy Information
-#
-#			 ||	 Name	 |  Type  |HP |Defense|KB Resist|Damage|	Blood Col   |   Item Drops   | Coin Drops ||
-enemy_data = [[ "Green Slime", "Slime", 14,	  0,	 -0.2,	 6, (10,  200,  10), [("item.blue_gel", 1, 3, 100)], ( 5,  30)],
-			  [  "Blue Slime", "Slime", 25,	  2,		0,	 7, (10,   10, 200), [("item.blue_gel", 1, 3, 100)], (15,  50)],
-			  [   "Red Slime", "Slime", 35,	  4,		0,	12, (200,  10,  10), [("item.blue_gel", 1, 3, 100)], (25,  75)],
-			  ["Purple Slime", "Slime", 40,	  6,	  0.1,	12, (200,  10, 200), [("item.blue_gel", 1, 3, 100)], (35, 110)],
-			  ["Yellow Slime", "Slime", 45,	  7,		0,	15, (200, 150,  10), [("item.blue_gel", 1, 3, 100)], (45, 130)],
-			  ]
 
 
 #				 Projectile Information
@@ -707,7 +698,6 @@ def parse_item_data():
 	global json_item_data
 	json_read_file = open("assets/game_data/item_data.json", "r")
 	json_item_data = json.loads(json_read_file.read())["items"]["item"]
-	# json_item_data = json.loads(json_read_file.read())["items"]["item"]
 	json_read_file.close()
 
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
@@ -1233,6 +1223,20 @@ def get_loot_by_id_str(loot_id_str):
 	return get_loot_by_id(get_loot_id_by_id_str(loot_id_str))
 
 
+def parse_entity_data():
+    global json_entity_data
+    json_read_file = open("assets/game_data/entity_data.json")
+    json_entity_data = json.loads(json_read_file.read())["entities"]["entity"]
+    json_read_file.close()
+    
+    json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
+    print(json_entity_data[0]["name"])
+
+def create_entity_id_str_hash_table():
+    global entity_id_str_hash_table
+    for entity_index in range(len(json_entity_data)):
+        entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = entity_index
+
 parse_item_data()
 create_item_id_str_hash_table()
 
@@ -1252,6 +1256,9 @@ create_structure_id_str_hash_table()
 
 parse_loot_data()
 create_loot_id_str_hash_table()
+
+parse_entity_data()
+create_entity_id_str_hash_table()
 
 air_tile_id = get_tile_id_by_id_str("tile.none")
 grass_tile_id = get_tile_id_by_id_str("tile.grass")

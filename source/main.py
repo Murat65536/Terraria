@@ -709,7 +709,6 @@ menu_background_sky_height = menu_background_sky.get_height()
 for i in range(3):
 	menu_background_image = pygame.image.load(f"assets/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_{i+1}.png").convert_alpha()
 	menu_background_images.append(menu_background_image)
-	print(random.randint(0, menu_background_image.get_width()))
 	menu_background_scroll.update({i:random.randint(0, menu_background_image.get_width())})
 
 

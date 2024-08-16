@@ -4,7 +4,6 @@ import pygame, math, random
 from pygame.locals import Rect
 
 import game_data
-from game_data import *
 
 import commons
 import world
@@ -30,14 +29,14 @@ class Enemy:
 		self.block_pos = (0, 0)
 		self.velocity = (0, 0)
 		self.enemy_id = enemy_id
-		self.name = str(game_data.enemy_data[self.enemy_id][0])
-		self.type = str(game_data.enemy_data[self.enemy_id][1])
-		self.hp = int(game_data.enemy_data[self.enemy_id][2])
-		self.max_hp = int(self.hp)
-		self.defense = int(game_data.enemy_data[self.enemy_id][3])
-		self.knockback_resist = int(game_data.enemy_data[self.enemy_id][3])
-		self.attack_damage = int(game_data.enemy_data[self.enemy_id][5])
-		self.blood_color = tuple(game_data.enemy_data[self.enemy_id][6])
+		self.name = game_data.json_entity_data[self.enemy_id]["name"]
+		self.type = game_data.json_entity_data[self.enemy_id]["type"]
+		self.health = game_data.json_entity_data[self.enemy_id]["health"]
+		self.max_health = self.health
+		self.defense = game_data.json_entity_data[self.enemy_id]["defense"]
+		self.knockback_resistance = game_data.json_entity_data[self.enemy_id]["knockback_resistance"]
+		self.attack_damage = game_data.json_entity_data[self.enemy_id]["attack_damage"]
+		self.color = tuple(game_data.json_entity_data[self.enemy_id]["color"])
 		self.rect = Rect(self.position[0] - commons.BLOCK_SIZE, self.position[1] - commons.BLOCK_SIZE / 1.5, commons.BLOCK_SIZE * 2, commons.BLOCK_SIZE * 1.5)
 		self.grounded = False
 
@@ -130,9 +129,9 @@ class Enemy:
 						tile_id = world.world.tile_data[self.block_pos[1] + j][self.block_pos[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
 						if (tile_data != None):
-							if TileTag.NO_COLLIDE not in tile_data["tags"]:
+							if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE * (self.block_pos[1] + j), commons.BLOCK_SIZE * (self.block_pos[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
-								if TileTag.PLATFORM in tile_data["tags"]:
+								if game_data.TileTag.PLATFORM in tile_data["tags"]:
 									platform = True
 								else:
 									platform = False
@@ -141,19 +140,18 @@ class Enemy:
 								if block_rect.colliderect(int(self.rect.right + 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
 									self.stop_right = True  # Is there a solid block right
 								if block_rect.colliderect(self.rect):
-									if not self.world_invincible and TileTag.DAMAGING in tile_data["tags"]:
+									if not self.world_invincible and game_data.TileTag.DAMAGING in tile_data["tags"]:
 										# self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
 										pass
 									
 									delta_x = self.position[0] - block_rect.centerx
 									delta_y = self.position[1] - block_rect.centery
 									if abs(delta_x) > abs(delta_y):
-										if delta_x > 0:
-											if not platform:
+										if not platform:
+											if delta_x > 0:
 												self.position = (block_rect.right + self.rect.width * 0.5, self.position[1])  # Move enemy right
 												self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
-										else:
-											if not platform:
+											else:
 												self.position = (block_rect.left - self.rect.width * 0.5, self.position[1])  # Move enemy left
 												self.velocity = (0, self.velocity[1])  # Stop enemy horizontally
 									else:
@@ -200,14 +198,14 @@ class Enemy:
 			if crit:
 				value *= 2.0
 
-			self.hp -= value
+			self.health -= value
 
-			if self.hp < 0:
-				self.hp = 0
+			if self.health < 0:
+				self.health = 0
 
 			entity_manager.add_damage_number(self.position, value, crit=crit)
 
-			if self.hp > 0:  # Check if the enemy has died from damage
+			if self.health > 0:  # Check if the enemy has died from damage
 				game_data.play_sound("sound.slime_hurt")
 				if commons.PARTICLES:
 					if source_velocity is not None:
@@ -219,12 +217,12 @@ class Enemy:
 
 					for i in range(int(5 * commons.PARTICLE_DENSITY)):  # Blood particles
 						particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
-						entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.5, outline=False)
+						entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.5, outline=False)
 			else:
 				self.kill(source_velocity)
 
 			if knockback != 0:
-				remaining_knockback = max(0, knockback - self.knockback_resist)
+				remaining_knockback = max(0, knockback - self.knockback_resistance)
 				self.velocity = (self.velocity[0] + direction * remaining_knockback * 3.0, remaining_knockback * -5.0)
 
 	"""================================================================================================================= 
@@ -238,9 +236,9 @@ class Enemy:
 		if self.alive:
 			self.alive = False
 
-			coin_range = game_data.enemy_data[self.enemy_id][8]
+			coin_range = game_data.json_entity_data[self.enemy_id]["coin_drops"]
 			coin_drops = item.get_coins_from_int(random.randint(coin_range[0], coin_range[1]))
-			item_drops = game_data.enemy_data[self.enemy_id][7]
+			item_drops = game_data.json_entity_data[self.enemy_id]["item_drops"]
 
 			for coin_item in coin_drops:
 				entity_manager.spawn_physics_item(coin_item, self.position, pickup_delay=10)
@@ -253,9 +251,9 @@ class Enemy:
 
 			for item_drop in item_drops:
 				if random_number <= item_drop[3]:
-					amnt = random.randint(item_drop[1], item_drop[2])
+					amount = random.randint(item_drop[1], item_drop[2])
 					item_id = game_data.get_item_id_by_id_str(item_drop[0])
-					entity_manager.spawn_physics_item(Item(item_id, amnt), self.position, pickup_delay=10)
+					entity_manager.spawn_physics_item(Item(item_id, amount), self.position, pickup_delay=10)
 				else:
 					random_number -= item_drop[3]
 
@@ -268,7 +266,7 @@ class Enemy:
 
 				for i in range(int(25 * commons.PARTICLE_DENSITY)):  # Blood particles
 					particle_pos = (self.position[0] + random.random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random.random() * self.rect.height - self.rect.height * 0.5)
-					entity_manager.spawn_particle(particle_pos, self.blood_color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.4, outline=False)
+					entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random.random() * velocity_magnitude * 0.4, outline=False)
 
 			game_data.play_sound("sound.slime_death")  # Death sound
 
@@ -318,12 +316,12 @@ class Enemy:
 	def draw(self):
 		left = self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
 		top = self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
-		commons.screen.blit(surface_manager.slimes[self.enemy_id * 3 + self.animation_frame], (left, top))
-		if self.hp < self.max_hp:
-			hp_float = self.hp / self.max_hp
-			col = (int(255 * (1 - hp_float)), int(255 * hp_float), 0)
+		commons.screen.blit(surface_manager.slimes[(self.enemy_id - 1) * 3 + self.animation_frame], (left, top))
+		if self.health < self.max_health:
+			health_float = self.health / self.max_health
+			col = (int(255 * (1 - health_float)), int(255 * health_float), 0)
 			pygame.draw.rect(commons.screen, shared_methods.darken_color(col), Rect(left, top + 30, self.rect.width, 10), 0)
-			pygame.draw.rect(commons.screen, col, Rect(left + 2, top + 32, (self.rect.width - 4) * hp_float, 6), 0)
+			pygame.draw.rect(commons.screen, col, Rect(left + 2, top + 32, (self.rect.width - 4) * health_float, 6), 0)
 		if commons.HITBOXES:
 			pygame.draw.rect(commons.screen, (255, 0, 0), Rect(self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5, self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5, self.rect.width, self.rect.height), 1)
 
