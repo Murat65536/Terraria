@@ -159,5 +159,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-assets/players
-assets/worlds
+#Custom
+assets/players/
+assets/worlds/
+
+__pycache__/
