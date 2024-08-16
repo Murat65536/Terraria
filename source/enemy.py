@@ -245,17 +245,17 @@ class Enemy:
 
 			total_weight = 0
 			for item_drop in item_drops:
-				total_weight += item_drop[3]
+				total_weight += item_drop["item_weight"]
 
 			random_number = random.randint(0, total_weight)
 
 			for item_drop in item_drops:
-				if random_number <= item_drop[3]:
-					amount = random.randint(item_drop[1], item_drop[2])
-					item_id = game_data.get_item_id_by_id_str(item_drop[0])
+				if random_number <= item_drop["item_weight"]:
+					amount = random.randint(item_drop["item_minimum_drops"], item_drop["item_maximum_drops"])
+					item_id = game_data.get_item_id_by_id_str(item_drop["item_name"])
 					entity_manager.spawn_physics_item(Item(item_id, amount), self.position, pickup_delay=10)
 				else:
-					random_number -= item_drop[3]
+					random_number -= item_drop["item_weight"]
 
 			if commons.PARTICLES:
 				if source_velocity is not None:

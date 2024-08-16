@@ -1,5 +1,5 @@
 {
-	"world_gen": [
+	"world_generations": [
 		{
 			"id": "0",
 			"id_str": "world_gen.INVALID"

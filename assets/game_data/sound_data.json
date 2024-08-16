@@ -1,5 +1,5 @@
 {
-	"sound": [
+	"sounds": [
 		{
 			"id": "0",
 			"id_str": "sound.INVALID",
@@ -46,7 +46,7 @@
 			"id": "7",
 			"id_str": "sound.mirror",
 			"variation_paths": "assets/sounds/mirror.wav",
-			"volume": "1"
+			"volume": "0.1"
 		},
 		{
 			"id": "8",

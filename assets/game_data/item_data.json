@@ -1,5 +1,5 @@
 {
-	"item": [
+	"items": [
 		{
 			"id": "0",
 			"name": "INVALID",
@@ -639,7 +639,7 @@
 		},
 		{
 			"id": "36",
-			"id_str": "item.blue_gel",
+			"id_str": "item.gel",
 			"name": "Blue Gel",
 			"tags": "MATERIAL",
 			"image_path": "assets/images/items/Item_23.png",

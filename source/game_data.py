@@ -697,7 +697,7 @@ def find_prefix_data_by_name(prefix_name):
 def parse_item_data():
 	global json_item_data
 	json_read_file = open("assets/game_data/item_data.json", "r")
-	json_item_data = json.loads(json_read_file.read())["item"]
+	json_item_data = json.loads(json_read_file.read())["items"]
 	json_read_file.close()
 
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
@@ -815,7 +815,7 @@ def get_ammo_item_ids_for_ammo_type(ammo_type):
 def parse_tile_data():
 	global json_tile_data
 	json_read_file = open("assets/game_data/tile_data.json", "r")
-	json_tile_data = json.loads(json_read_file.read())["tile"]
+	json_tile_data = json.loads(json_read_file.read())["tiles"]
 	json_read_file.close()
 
 	json_tile_data = sorted(json_tile_data, key=lambda x: int(x["id"]))
@@ -907,7 +907,7 @@ def get_current_tile_id_str_lookup():
 def parse_wall_data():
 	global json_wall_data
 	json_read_file = open("assets/game_data/wall_data.json", "r")
-	json_wall_data = json.loads(json_read_file.read())["wall"]
+	json_wall_data = json.loads(json_read_file.read())["walls"]
 	json_read_file.close()
 
 	json_wall_data = sorted(json_wall_data, key=lambda x: int(x["id"]))
@@ -966,7 +966,7 @@ def get_current_wall_id_str_lookup():
 def parse_sound_data():
 	global json_sound_data
 	json_read_file = open("assets/game_data/sound_data.json", "r")
-	json_sound_data = json.loads(json_read_file.read())["sound"]
+	json_sound_data = json.loads(json_read_file.read())["sounds"]
 	json_read_file.close()
 
 	json_sound_data = sorted(json_sound_data, key=lambda x: int(x["id"]))
@@ -1073,7 +1073,7 @@ class StructureConnectionOrientation(Enum):
 def parse_structure_data():
 	global json_structure_data
 	json_read_file = open("assets/game_data/structure_data.json", "r")
-	json_structure_data = json.loads(json_read_file.read())["structure"]
+	json_structure_data = json.loads(json_read_file.read())["structures"]
 	json_read_file.close()
 
 	json_structure_data = sorted(json_structure_data, key=lambda x: int(x["id"]))
@@ -1226,7 +1226,7 @@ def get_loot_by_id_str(loot_id_str):
 def parse_entity_data():
     global json_entity_data
     json_read_file = open("assets/game_data/entity_data.json")
-    json_entity_data = json.loads(json_read_file.read())["entity"]
+    json_entity_data = json.loads(json_read_file.read())["entities"]
     json_read_file.close()
     
     json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])

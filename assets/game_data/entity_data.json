@@ -1,5 +1,5 @@
 {
-	"entity": [
+	"entities": [
 		{
 			"id": 0,
 			"id_str": "entity.INVALID",
@@ -10,7 +10,14 @@
 			"knockback_resistance": 0,
 			"attack_damage": 0,
 			"color": [0, 0, 0],
-			"item_drops": [["item.INVALID", 0, 0, 0]],
+			"item_drops": [
+				{
+					"item_name": "item.INVALID",
+					"item_minimum_drops": 0,
+					"item_maximum_drops": 0,
+					"item_weight": 0
+				}
+			],
 			"coin_drops": [0, 0]
 		},
 		{
@@ -23,7 +30,14 @@
 			"knockback_resistance": -2,
 			"attack_damage": 6,
 			"color": [10, 200, 10],
-			"item_drops": [["item.blue_gel", 1, 3, 100]],
+			"item_drops": [
+				{
+					"item_name": "item.gel",
+					"item_minimum_drops": 1,
+					"item_maximum_drops": 2,
+					"item_weight": 100
+				}
+			],
 			"coin_drops": [5, 30]
 		},
 		{
@@ -36,7 +50,14 @@
 			"knockback_resistance": 0,
 			"attack_damage": 7,
 			"color": [10, 10, 200],
-			"item_drops": [["item.blue_gel", 1, 3, 100]],
+			"item_drops": [
+				{
+					"item_name": "item.gel",
+					"item_minimum_drops": 1,
+					"item_maximum_drops": 2,
+					"item_weight": 100
+				}
+			],
 			"coin_drops": [15, 50]
 		},
 		{
@@ -49,7 +70,14 @@
 			"knockback_resistance": 0,
 			"attack_damage": 12,
 			"color": [200, 10, 10],
-			"item_drops": [["item.blue_gel", 1, 3, 100]],
+			"item_drops": [
+				{
+					"item_name": "item.gel",
+					"item_minimum_drops": 2,
+					"item_maximum_drops": 5,
+					"item_weight": 100
+				}
+			],
 			"coin_drops": [25, 75]
 		},
 		{
@@ -59,10 +87,17 @@
 			"type": "Slime",
 			"health": 40,
 			"defense": 6,
-			"knockback_resistance": "0.1",
+			"knockback_resistance": 0.1,
 			"attack_damage": 12,
 			"color": [200, 10, 200],
-			"item_drops": [["item.blue_gel", 1, 3, 100]],
+			"item_drops": [
+				{
+					"item_name": "item.gel",
+					"item_minimum_drops": 2,
+					"item_maximum_drops": 5,
+					"item_weight": 100
+				}
+			],
 			"coin_drops": [35, 110]
 		},
 		{
@@ -75,7 +110,14 @@
 			"knockback_resistance": 0,
 			"attack_damage": 15,
 			"color": [200, 150, 10],
-			"item_drops": [["item.blue_gel", 1, 3, 100]],
+			"item_drops": [
+				{
+					"item_name": "item.gel",
+					"item_minimum_drops": 2,
+					"item_maximum_drops": 5,
+					"item_weight": 100
+				}
+			],
 			"coin_drops": [45, 130]
 		}
 	]
