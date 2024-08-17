@@ -3,11 +3,10 @@
 import pygame
 import math
 import random
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 import game_data
-from game_data import *
 import world
 
 import entity_manager
@@ -34,7 +33,7 @@ class Projectile:
 		self.trail = trail
 		self.trail_tick = 0.1
 		self.bounce_num = bounce_num
-		self.size = game_data.projectile_data[projectile_id][5]
+		self.size = 16
 		self.rect = Rect(self.position[0] - self.size * 0.5, self.position[1] - self.size * 0.5, self.size, self.size)
 		self.life = int(max_life)
 		self.gravity = gravity
@@ -85,8 +84,8 @@ class Projectile:
 				if world.tile_in_map(block_position[1] + j, block_position[0] + i):
 					tile_id = world.world.tile_data[block_position[1] + j][block_position[0] + i][0]
 					tile_data = game_data.get_tile_by_id(tile_id)
-					if TileTag.NO_COLLIDE not in tile_data["tags"]:
-						if TileTag.PLATFORM not in tile_data["tags"]:
+					if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
+						if game_data.TileTag.PLATFORM not in tile_data["tags"]:
 							block_rect = Rect(commons.BLOCK_SIZE * (block_position[1] + j), commons.BLOCK_SIZE * (block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx

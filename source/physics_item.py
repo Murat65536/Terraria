@@ -3,17 +3,16 @@
 import pygame
 import math
 import random
-from pygame.locals import *
+from pygame.locals import Rect
 
 import commons
 import game_data
-from game_data import *
+import game_data
 import world
 
 import entity_manager
 import shared_methods
-
-from item import *
+import item
 
 
 """================================================================================================================= 
@@ -124,13 +123,13 @@ class PhysicsItem:
 					if entity_manager.client_player.rect.colliderect(self.rect):
 						item_add_data = entity_manager.client_player.give_item(self.item, amnt=self.item.amnt)
 							
-						if item_add_data[0] == ItemSlotClickResult.GAVE_ALL:
+						if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
 							entity_manager.physics_items.remove(self)
 							entity_manager.add_recent_pickup(self.item.item_id, self.item.amnt, self.item.get_tier(), entity_manager.client_player.position, unique=self.item.has_prefix, item=self.item)
 
 							game_data.play_sound(self.item.get_pickup_sound_id_str())
 							return
-						elif item_add_data[0] == ItemSlotClickResult.GAVE_SOME:
+						elif item_add_data[0] == item.ItemSlotClickResult.GAVE_SOME:
 							self.item.amnt = item_add_data[1]
 						return
 			else:
@@ -142,7 +141,7 @@ class PhysicsItem:
 					if world.tile_in_map(self.block_position[1] + j, self.block_position[0] + i):
 						tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 						tile_data = game_data.get_tile_by_id(tile_id)
-						if TileTag.NO_COLLIDE not in tile_data["tags"]:
+						if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
 							block_rect = Rect(commons.BLOCK_SIZE * (self.block_position[1] + j), commons.BLOCK_SIZE * (self.block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx

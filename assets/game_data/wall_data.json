@@ -4,7 +4,7 @@
 			"id": 0,
 			"id_str": "wall.INVALID",
 			"name": "INVALID",
-			"mask_type": "None",
+			"mask_type": "NONE",
 			"mask_merge_ids": [],
 			"image_path": "assets/images/walls/",
 			"item_id_str": "item.INVALID",
@@ -15,7 +15,7 @@
 			"id": 1,
 			"id_str": "wall.none",
 			"name": "None",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": "",
 			"image_path": "assets/images/walls/",
 			"item_id_str": "item.INVALID",
@@ -27,7 +27,7 @@
 			"id": 2,
 			"id_str": "wall.dirt",
 			"name": "Dirt Wall",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.ice",
@@ -47,7 +47,7 @@
 			"id": 3,
 			"id_str": "wall.stone",
 			"name": "Stone",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.snow",
@@ -63,7 +63,7 @@
 			"id": 4,
 			"id_str": "wall.ice",
 			"name": "Ice",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.snow"
 			],
@@ -77,7 +77,7 @@
 			"id": 5,
 			"id_str": "wall.snow",
 			"name": "Snow",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.ice",
@@ -96,7 +96,7 @@
 			"id": 6,
 			"id_str": "wall.sandstone",
 			"name": "Sandstone",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.hardened_sand",
@@ -112,7 +112,7 @@
 			"id": 7,
 			"id_str": "wall.hardened_sand",
 			"name": "Sand",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.sandstone",
@@ -130,7 +130,7 @@
 			"id": 8,
 			"id_str": "wall.wood",
 			"name": "Wood",
-			"mask_type": "Noisy",
+			"mask_type": "NOISY",
 			"mask_merge_ids": [
 				"wall.dirt",
 				"wall.hardened_sand",

@@ -9,6 +9,7 @@ from pygame.locals import Rect
 
 import game_data
 from game_data import TileTag, ammo_type_item_lists
+from item import ItemLocation, ItemSlotClickResult, ItemTag
 
 import commons
 import world
@@ -16,8 +17,6 @@ import world
 import shared_methods
 import surface_manager
 import entity_manager
-
-from item import *
 
 
 """=================================================================================================================
@@ -39,6 +38,8 @@ def	get_death_message(name,	source):
 	Transfers the data stored in PLAYER_MODEL_DATA to PLAYER_MODEL
 -----------------------------------------------------------------------------------------------------------------"""
 def	update_player_model_using_model_data():
+	assert commons.PLAYER_MODEL is not None
+
 	commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0]
 	commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1]
 	commons.PLAYER_MODEL.skin_col =	commons.PLAYER_MODEL_DATA[2][0]
@@ -75,7 +76,7 @@ class Model:
 -----------------------------------------------------------------------------------------------------------------"""
 class Player:
 	def	__init__(self, position, model,	name="unassigned", hp=0, max_hp=100, hotbar=None, inventory=None, play_time=0, creation_date=None, last_played_date=None):
-		self.position =	position
+		self.position: tuple[int, int] = position
 		self.block_position	= (0, 0)
 		self.model = model
 		self.name =	name
@@ -254,7 +255,7 @@ class Player:
 			drag_factor	= 1.0 -	commons.DELTA_TIME
 
 			self.velocity =	(self.velocity[0] *	drag_factor, self.velocity[1] *	drag_factor	+ commons.GRAVITY *	commons.DELTA_TIME)
-			self.position =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCK_SIZE, self.position[1]	+ self.velocity[1] * commons.DELTA_TIME	* commons.BLOCK_SIZE)
+			self.position =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 
 			self.rect.left = self.position[0] -	commons.PLAYER_WIDTH * 0.5	# updating rect
 			self.rect.top =	self.position[1] - commons.PLAYER_HEIGHT * 0.5
@@ -410,7 +411,7 @@ class Player:
 		
 		Kills the player, adds a death message,	spawns particles, plays	a sound
 	-----------------------------------------------------------------------------------------------------------------"""
-	def	damage(self, value,	source_name, knockback=0, direction=None, source_velocity=None):
+	def	damage(self, value,	source_name, knockback=0, direction=0, source_velocity=None):
 		if not commons.CREATIVE	and	self.alive and not self.invincible:
 			self.invincible	= True
 			self.invincible_timer =	0.35

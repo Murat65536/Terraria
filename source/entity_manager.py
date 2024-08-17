@@ -50,7 +50,7 @@ def create_player():
 	model = commons.PLAYER_DATA[1]
 
 	# Load hotbar
-	hotbar = [None for _ in range(10)]
+	hotbar: list[Item | None] = [None for _ in range(10)]
 	if commons.PLAYER_DATA[2] is not None:
 		for loaded_hotbar_index in range(len(commons.PLAYER_DATA[2])):
 			loaded_item_data = commons.PLAYER_DATA[2][loaded_hotbar_index]
@@ -59,7 +59,7 @@ def create_player():
 			hotbar[loaded_item_data[0]] = item
 
 	# Load inventory
-	inventory = [None for _ in range(40)]
+	inventory: list[Item | None] = [None for _ in range(40)]
 	if commons.PLAYER_DATA[3] is not None:
 		for loaded_inventory_index in range(len(commons.PLAYER_DATA[3])):
 			loaded_item_data = commons.PLAYER_DATA[3][loaded_inventory_index]
@@ -86,6 +86,7 @@ def check_enemy_spawn():
 	if not commons.PASSIVE:
 		if commons.ENEMY_SPAWN_TICK <= 0:
 			commons.ENEMY_SPAWN_TICK += 1.0
+			assert client_player is not None
 			val = int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30))
 			if val < 1:
 				val = 1
@@ -307,7 +308,8 @@ def spawn_physics_item(item, position, velocity=None, pickup_delay=100):
 
 def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 	ammo_item_data = game_data.get_item_by_id(ammo_item_id)
-	
+	print(ammo_item_id)
+
 	if (ammo_item_data != None):
 		total_damage = weapon_item.get_attack_damage() + ammo_item_data["ammo_damage"]
 		knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_mod"]
@@ -366,31 +368,31 @@ def add_damage_number(pos, val, crit=False, color=None):
 
 	surf = pygame.Surface((size, size), pygame.SRCALPHA)
 
-	midx = size * 0.5 - width * 0.5
-	midy = size * 0.5 - height * 0.5
+	midX = size * 0.5 - width * 0.5
+	midY = size * 0.5 - height * 0.5
 	
 	if commons.FANCY_TEXT:
-		surf.blit(t2, (midx - 2, midy))
-		surf.blit(t2, (midx + 2, midy))
-		surf.blit(t2, (midx, midy - 2))
-		surf.blit(t2, (midx, midy + 2))
+		surf.blit(t2, (midX - 2, midY))
+		surf.blit(t2, (midX + 2, midY))
+		surf.blit(t2, (midX, midY - 2))
+		surf.blit(t2, (midX, midY + 2))
 
-	surf.blit(t1, (midx, midy))
+	surf.blit(t1, (midX, midY))
 
 	damage_numbers.append([(pos[0] - camera_position[0] + commons.WINDOW_WIDTH * 0.5,
 							pos[1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5),
 						   (random.random() * 4 - 2, -1 - random.random() * 4), surf, 1.5])
 
 
-def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
+def add_recent_pickup(item_id, amount, tier, pos, unique=False, item=None):
 	global recent_pickups
 	if not unique:
 		for recent_pickup in recent_pickups:
 			if recent_pickup[0] == item_id:
-				amnt += recent_pickup[1]
+				amount += recent_pickup[1]
 				recent_pickups.remove(recent_pickup)
-	if amnt > 1:
-		string = game_data.json_item_data[item_id]["name"] + "(" + str(amnt) + ")"
+	if amount > 1:
+		string = game_data.json_item_data[item_id]["name"] + "(" + str(amount) + ")"
 	else:
 		if item is not None:
 			string = item.get_name()
@@ -401,4 +403,4 @@ def add_recent_pickup(item_id, amnt, tier, pos, unique=False, item=None):
 	surf = pygame.Surface(size, pygame.SRCALPHA)
 	surf.blit(shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULT_FONT), (1, 1))
 	vel = (random.random() * 2 - 1, -50.0)
-	recent_pickups.append([item_id, amnt, surf, pos, vel, 3.0])
+	recent_pickups.append([item_id, amount, surf, pos, vel, 3.0])

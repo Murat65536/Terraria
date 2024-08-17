@@ -111,9 +111,9 @@ def find_next_char_in_string(string, char, start_index):
 # Biome Tile Information
 # [[surface tile,base tile, alt tile],[wall tile, alt wall tile]]
 biome_tile_vals = [[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wall.stone"]],
-				   [["tile.snow", "tile.snow", "tile.ice"], ["wall.snow", "wall.ice"]],
-				   [["tile.sand", "tile.sand", "tile.sandstone"], ["wall.hardened_sand", "wall.sandstone"]]
-				  ]
+	[["tile.snow", "tile.snow", "tile.ice"], ["wall.snow", "wall.ice"]],
+	[["tile.sand", "tile.sand", "tile.sandstone"], ["wall.hardened_sand", "wall.sandstone"]]
+]
 
 platform_blocks = [257]
 
@@ -137,18 +137,6 @@ entity_id_str_hash_table = {}
 
 sound_volume_multiplier = commons.CONFIG_SOUND_VOLUME
 music_volume_multiplier = 1.0
-
-
-#				 Projectile Information
-#
-#				 ||	 Name	 |   Type  | Damage |Knockback|Bounces|Hitbox Size|  Trail  |  Gravity |Drag Mod|Sound ID |
-projectile_data = [[  "Wooden Arrow",  "Arrow",	 5,		0,	  0,		 13,  "arrow",	   0.5,	   1,	   16],
-					[   "Musket Ball", "Bullet",	 7,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
-					[   "Copper Coin", "Bullet",	 1,		2,	  0,		 10, "bullet",	  0.40,	   3,	   17],
-					[   "Silver Coin", "Bullet",	 3,		2,	  0,		 10, "bullet",	  0.20,	   2,	   17],
-					[	 "Gold Coin", "Bullet",	15,		2,	  0,		 10, "bullet",	  0.10,	   1,	   17],
-					[ "Platinum Coin", "Bullet",	50,		2,	  0,		 10, "bullet",	  0.05,	 0.1,	   17],
-				]
 
 
 # Item Prefix Information
@@ -257,21 +245,6 @@ prefix_data = {
 			[ "Mythical",  0.15,  0.1,	   0.05,	 -0.1,	 0.15,   2]
 		]
 }
-
-# (((result,((component1,amnt),(component2,amnt),etc..))#recipe)#bench type)
-crafting_data = [((4, ((10, 1))),
-				 (17, ((4, 10), (2, 10)))),  # inventory/no bench
-				 (),
-				 (),
-				 (),
-				]
-
-
-# Randomly chosen when the player dies
-
-# <p> inserts the players name 
-# <e> inserts the name of the enemy that killed the player
-# <w> inserts the world name
 
 death_lines = {
 	"spike":
@@ -682,6 +655,8 @@ def create_tile_light_emission_lookup():
 def get_tile_by_id(tile_id):
 	if tile_id < len(json_tile_data):
 		return json_tile_data[tile_id]
+	else:
+		raise ValueError("Inserted tile ID greater than maximum tile ID length.")
 
 
 def get_tile_id_by_id_str(tile_id_str):
