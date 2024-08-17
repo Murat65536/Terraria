@@ -80,9 +80,8 @@ def make_item_prefix_list(item_prefixes_str):
 
 
 def make_tile_tag_list(tile_tags_str):
-	str_list = tile_tags_str.split(",")
 	enum_list = []
-	for string in str_list:
+	for string in tile_tags_str:
 		for tag in TileTag:
 			if tag.name == string:
 				enum_list.append(tag)
@@ -779,40 +778,23 @@ def parse_tile_data():
 	json_tile_data = sorted(json_tile_data, key=lambda x: int(x["id"]))
 
 	for tile_data in json_tile_data:
-		tile_data["id"] = int(tile_data["id"])
-		tile_data["strength"] = float(tile_data["strength"])
 		tile_data["strength_type"] = get_tile_strength_type_from_str(tile_data["strength_type"])
 		tile_data["mask_type"] = get_tile_mask_type_from_str(tile_data["mask_type"])
-		tile_data["mask_merge_id_strs"] = tile_data["mask_merge_id_strs"].split(",")
 		tile_data["light_reduction"] = int(tile_data["light_reduction"])
 		tile_data["light_emission"] = int(tile_data["light_emission"])
-
-		if tile_data["average_color"] == "auto":
-			tile_data["average_color"] = (255, 0, 255)
-			override_average_color = True
-		else:
-			val_array = tile_data["average_color"].split(",")
-			tile_data["average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
-			override_average_color = False
 
 		tile_data["tags"] = make_tile_tag_list(tile_data["tags"])
 		try:
 			tile_data["image"] = pygame.image.load(tile_data["image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
-			if override_average_color:
-				tile_data["average_color"] = pygame.transform.average_color(tile_data["image"])
+			tile_data["average_color"] = pygame.transform.average_color(tile_data["image"])
 		except FileNotFoundError:
 			tile_data["image"] = None
 		except pygame.error:
 			tile_data["image"] = None
 
-		tile_data["item_count_range"] = int_tuple_str_to_int_tuple(tile_data["item_count_range"])
-
 		if TileTag.MULTITILE in tile_data["tags"]:
-			tile_data["multitile_dimensions"] = int_tuple_str_to_int_tuple(tile_data["multitile_dimensions"])
-			tile_data["multitile_required_solids"] = int_tuple_list_str_to_int_tuple_list(tile_data["multitile_required_solids"])
 			tile_data["multitile_image"] = pygame.image.load(tile_data["multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["multitile_dimensions"][1])
-			if override_average_color:
-				tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
+			tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
 
 		if TileTag.CYCLABLE in tile_data["tags"]:
 			tile_data["cycle_facing_left_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["cycle_facing_left_tile_offset"])
@@ -873,7 +855,7 @@ def parse_wall_data():
 	for wall_data in json_wall_data:
 		wall_data["id"] = int(wall_data["id"])
 		wall_data["mask_type"] = get_tile_mask_type_from_str(wall_data["mask_type"])
-		wall_data["mask_merge_id_strs"] = wall_data["mask_merge_id_strs"].split(",")
+		wall_data["mask_merge_ids"] = wall_data["mask_merge_ids"].split(",")
 
 		if wall_data["average_color"] == "auto":
 			wall_data["average_color"] = (255, 0, 255)
@@ -1144,16 +1126,12 @@ def parse_loot_data():
 			item_list_data.append([
 				possible_item_properties_str["item_id_str"],
 				possible_item_properties_str["item_spawn_weight"],
-				tuple(possible_item_properties_str["item_spawn_depth_range"]),
-				tuple(possible_item_properties_str["item_stack_count_range"]),
+				possible_item_properties_str["item_spawn_depth_range"],
+				possible_item_properties_str["item_stack_count_range"],
 				possible_item_properties_str["item_slot_priority"],
 				possible_item_properties_str["once_per_instance"]
 			])
-
 		loot_data["item_list_data"] = item_list_data
-
-		loot_data["coin_spawn_range"] = tuple(loot_data["coin_spawn_range"])
-
 
 def create_loot_id_str_hash_table():
 	global loot_id_str_hash_table

@@ -774,7 +774,7 @@ while True:
 		entity_manager.update_particles()
 		entity_manager.update_messages()
 		entity_manager.update_physics_items()
-		entity_manager.check_enemy_spawn() 
+		entity_manager.check_enemy_spawn()
 
 		entity_manager.client_player.update()
 		entity_manager.client_player.animate()

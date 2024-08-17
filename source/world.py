@@ -260,7 +260,7 @@ def check_tile_merge(tile_id_1, tile_id_2):
 	tile_1 = game_data.get_tile_by_id(tile_id_1)
 	tile_2 = game_data.get_tile_by_id(tile_id_2)
 
-	if tile_1["id_str"] in tile_2["mask_merge_id_strs"] or tile_1["id_str"] == tile_2["id_str"]:
+	if tile_1["id_str"] in tile_2["mask_merge_ids"] or tile_1["id_str"] == tile_2["id_str"]:
 		return True
 	return False
 
@@ -274,7 +274,7 @@ def check_wall_merge(wall_id_1, wall_id_2):
 	wall_1 = game_data.get_wall_by_id(wall_id_1)
 	wall_2 = game_data.get_wall_by_id(wall_id_2)
 
-	if wall_1["id_str"] in wall_2["mask_merge_id_strs"] or wall_1["id_str"] == wall_2["id_str"]:
+	if wall_1["id_str"] in wall_2["mask_merge_ids"] or wall_1["id_str"] == wall_2["id_str"]:
 		return True
 	return False
 
