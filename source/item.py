@@ -40,11 +40,11 @@ def get_random_item_prefix(prefix_category):
 	constructed
 -----------------------------------------------------------------------------------------------------------------"""
 class Item:
-	def __init__(self, item_id, amnt=1, auto_assign_prefix=False, prefix_name=None):
+	def __init__(self, item_id, amount=1, auto_assign_prefix=False, prefix_name=None):
 		self.json_item = game_data.get_item_by_id(item_id)
 
 		self.item_id = item_id
-		self.amnt = amnt
+		self.amount = amount
 		self.has_prefix = False
 		self.prefix_data = None
 
@@ -60,10 +60,10 @@ class Item:
 		else:
 			self.assign_prefix(prefix_name)
 
-	def copy(self, new_amnt=None):
-		if new_amnt is None:
-			new_amnt = self.amnt
-		return Item(self.item_id, new_amnt, False, self.get_prefix_name())
+	def copy(self, new_amount=None):
+		if new_amount is None:
+			new_amount = self.amount
+		return Item(self.item_id, new_amount, False, self.get_prefix_name())
 
 	def has_tag(self, tag):
 		if (self.json_item != None):
@@ -78,33 +78,30 @@ class Item:
 		return ""
 
 	def get_attack_damage(self):
-		if (self.json_item != None):
-			if self.prefix_data != None:
-				return self.json_item["attack_damage"] * (1 + self.prefix_data[1][1])
-			else:
-				return self.json_item["attack_damage"]
+		if self.prefix_data != None:
+			return self.json_item["attack_damage"] * (1 + self.prefix_data[1][1])
+		else:
+			return self.json_item["attack_damage"]
 
 	def get_crit_chance(self):
-		if (self.json_item != None):
-			if self.prefix_data != None:
-				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][2]), 0.0)
-				else:
-					return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][3]), 0.0)
+		if self.prefix_data != None:
+			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
+				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][2]), 0.0)
 			else:
-				return self.json_item["crit_chance"]
+				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][3]), 0.0)
+		else:
+			return self.json_item["crit_chance"]
 
 	def get_knockback(self):
-		if (self.json_item != None):
-			if self.prefix_data != None:
-				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return self.json_item["knockback"] * (1 + self.prefix_data[1][3])
-				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-					return self.json_item["knockback"] * (1 + self.prefix_data[1][4])
-				else:
-					return self.json_item["knockback"] * (1 + self.prefix_data[1][5])
+		if self.prefix_data != None:
+			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
+				return self.json_item["knockback"] * (1 + self.prefix_data[1][3])
+			elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
+				return self.json_item["knockback"] * (1 + self.prefix_data[1][4])
 			else:
-				return self.json_item["knockback"]
+				return self.json_item["knockback"] * (1 + self.prefix_data[1][5])
+		else:
+			return self.json_item["knockback"]
 
 	def get_tier(self):
 		if (self.json_item != None):
@@ -119,11 +116,10 @@ class Item:
 				return self.json_item["tier"]
 
 	def get_attack_speed(self):
-		if (self.json_item != None):
-			if self.prefix_data != None:
-				return round(self.json_item["attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
-			else:
-				return round(self.json_item["attack_speed"])
+		if self.prefix_data != None:
+			return round(self.json_item["attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
+		else:
+			return round(self.json_item["attack_speed"])
 
 	def get_scale(self):
 		if self.prefix_data != None:
@@ -163,16 +159,13 @@ class Item:
 			return self.json_item["ammo_damage"]
 
 	def get_ammo_drag(self):
-		if self.json_item != None:
-			return self.json_item["ammo_drag"]
+		return self.json_item["ammo_drag"]
 
 	def get_ammo_gravity_mod(self):
-		if self.json_item != None:
-			return self.json_item["ammo_gravity_mod"]
+		return self.json_item["ammo_gravity_mod"]
 
 	def get_ammo_knockback_mod(self):
-		if self.json_item != None:
-			return self.json_item["ammo_knockback_mod"]
+		return self.json_item["ammo_knockback_mod"]
 
 	def assign_prefix(self, prefix_name):
 		self.prefix_data = game_data.find_prefix_data_by_name(prefix_name)
@@ -368,6 +361,8 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 		spawn_list[item_index] = Item(spawn_item_data[0], spawn_item_data[1], auto_assign_prefix=True)
 
 	# Coins
+	assert loot_data is not None
+
 	random_coin_range = loot_data["coin_spawn_range"]
 	random_coin_count = random.randint(random_coin_range[0], random_coin_range[1])
 	coin_items = get_coins_from_int(random_coin_count)

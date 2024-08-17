@@ -111,9 +111,9 @@ class World:
 				item = chest_data_at_index[1][chest_item_index]
 				if item is not None:
 					if item.prefix_data is None:
-						formatted_chest_data[chest_data_index][1].append([chest_item_index, item.get_id_str(), item.amnt, None])
+						formatted_chest_data[chest_data_index][1].append([chest_item_index, item.get_id_str(), item.amount, None])
 					else:
-						formatted_chest_data[chest_data_index][1].append([chest_item_index, item.get_id_str(), item.amnt, item.get_prefix_name()])
+						formatted_chest_data[chest_data_index][1].append([chest_item_index, item.get_id_str(), item.amount, item.get_prefix_name()])
 
 		save_map = {
 			"name": self.name,
@@ -141,7 +141,7 @@ class World:
 		self.size = save_map["size"]
 		self.gen_type = save_map["gen_type"]
 		self.play_time = save_map["play_time"]
-		self.spawn_position = save_map["spawn_position"]
+		self.spawn_position = (save_map["spawn_position"][0], save_map["spawn_position"][1])
 		formatted_chest_data = save_map["chest_data"]
 
 		if load_all:

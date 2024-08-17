@@ -462,15 +462,15 @@ def draw_inventory_hover_text() -> None:
 		if 0 <= array_index < len(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU]):
 			if pygame.mouse.get_pressed()[0]:  
 				if not commons.IS_HOLDING_ITEM:
-					commons.ITEM_HOLDING = item.Item(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0], amnt=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1], auto_assign_prefix=True)
+					commons.ITEM_HOLDING = item.Item(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0], amount=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1], auto_assign_prefix=True)
 					commons.IS_HOLDING_ITEM = True
 					can_pickup_item = False
 					can_drop_holding = False
 					game_data.play_sound(commons.ITEM_HOLDING.get_pickup_sound_id_str())
 				elif can_drop_holding and commons.ITEM_HOLDING != None:
 					if commons.ITEM_HOLDING.item_id == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]:
-						if commons.ITEM_HOLDING.amnt < commons.ITEM_HOLDING.get_max_stack():
-							commons.ITEM_HOLDING.amnt += entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1]
+						if commons.ITEM_HOLDING.amount < commons.ITEM_HOLDING.get_max_stack():
+							commons.ITEM_HOLDING.amount += entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1]
 							game_data.play_sound("sound.grab")
 			
 			if render_stats_text([item.ItemLocation.CRAFTING_MENU, array_index]) and not commons.IS_HOLDING_ITEM:
@@ -483,14 +483,14 @@ def draw_inventory_hover_text() -> None:
 			# Dropping holding item
 			if can_drop_holding and commons.ITEM_HOLDING is not None:
 				if mouse_buttons[0]:
-					amnt = commons.ITEM_HOLDING.amnt
+					amount = commons.ITEM_HOLDING.amount
 				else:
-					amnt = 1
+					amount = 1
 
 				item_add_data = None
 
 				if mouse_buttons[0] or item_drop_tick <= 0:
-					item_add_data = entity_manager.client_player.give_item(commons.ITEM_HOLDING, amnt, position=pos)
+					item_add_data = entity_manager.client_player.give_item(commons.ITEM_HOLDING, amount, position=pos)
 
 				if item_add_data is not None:
 					can_drop_holding = False
@@ -502,12 +502,12 @@ def draw_inventory_hover_text() -> None:
 							commons.ITEM_HOLDING = None
 							commons.IS_HOLDING_ITEM = False
 						else:
-							commons.ITEM_HOLDING.amnt -= 1
+							commons.ITEM_HOLDING.amount -= 1
 
 					# Dropping some of the items in hand
 					elif item_add_data[0] == item.ItemSlotClickResult.GAVE_SOME:
 						game_data.play_sound(commons.ITEM_HOLDING.get_drop_sound_id_str())
-						commons.ITEM_HOLDING.amnt = int(item_add_data[1])
+						commons.ITEM_HOLDING.amount = int(item_add_data[1])
 
 					# Items are being swapped
 					elif item_add_data[0] == item.ItemSlotClickResult.SWAPPED:
@@ -523,7 +523,7 @@ def draw_inventory_hover_text() -> None:
 					if item_drop_rate <= 0:
 						item_drop_rate = 0
 					item_drop_tick = int(item_drop_rate)
-					if commons.ITEM_HOLDING is not None and commons.ITEM_HOLDING.amnt <= 0:
+					if commons.ITEM_HOLDING is not None and commons.ITEM_HOLDING.amount <= 0:
 						commons.ITEM_HOLDING = None
 						commons.IS_HOLDING_ITEM = False
 				else:
@@ -564,8 +564,8 @@ def draw_inventory_hover_text() -> None:
 def draw_item_holding() -> None:
 	if commons.IS_HOLDING_ITEM and commons.ITEM_HOLDING != None:
 		commons.screen.blit(commons.ITEM_HOLDING.get_image(), (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10))
-		if commons.ITEM_HOLDING.amnt > 1:
-			commons.screen.blit(shared_methods.outline_text(str(commons.ITEM_HOLDING.amnt), (255, 255, 255), commons.SMALL_FONT), (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40))
+		if commons.ITEM_HOLDING.amount > 1:
+			commons.screen.blit(shared_methods.outline_text(str(commons.ITEM_HOLDING.amount), (255, 255, 255), commons.SMALL_FONT), (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40))
 
 
 """================================================================================================================= 
@@ -1174,7 +1174,7 @@ while True:
 				# Respawn Cheats
 				if event.key == pygame.K_r:
 					if commons.SHIFT_ACTIVE:
-						world.world.spawn_position = tuple(entity_manager.client_player.position)
+						world.world.spawn_position = (entity_manager.client_player.position[0], entity_manager.client_player.position[1])
 						entity_manager.add_message(f"Spawn point moved to {str(world.world.spawn_position)}", (255, 223, 10), outline_color=(80, 70, 3))
 					else:
 						if commons.PARTICLES:

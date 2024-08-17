@@ -121,16 +121,17 @@ class PhysicsItem:
 					self.velocity = (self.velocity[0] + math.cos(angle) * 1000 * commons.DELTA_TIME, self.velocity[1] + math.sin(angle) * 1000 * commons.DELTA_TIME)
 					
 					if entity_manager.client_player.rect.colliderect(self.rect):
-						item_add_data = entity_manager.client_player.give_item(self.item, amnt=self.item.amnt)
-							
+						item_add_data = entity_manager.client_player.give_item(self.item, amount=self.item.amount)
+						assert item_add_data is not None
+
 						if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
 							entity_manager.physics_items.remove(self)
-							entity_manager.add_recent_pickup(self.item.item_id, self.item.amnt, self.item.get_tier(), entity_manager.client_player.position, unique=self.item.has_prefix, item=self.item)
+							entity_manager.add_recent_pickup(self.item.item_id, self.item.amount, self.item.get_tier(), entity_manager.client_player.position, unique=self.item.has_prefix, item=self.item)
 
 							game_data.play_sound(self.item.get_pickup_sound_id_str())
 							return
 						elif item_add_data[0] == item.ItemSlotClickResult.GAVE_SOME:
-							self.item.amnt = item_add_data[1]
+							self.item.amount = item_add_data[1]
 						return
 			else:
 				self.pickup_delay -= 1

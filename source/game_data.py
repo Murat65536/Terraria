@@ -577,6 +577,8 @@ def parse_item_data():
 def get_item_by_id(item_id) -> Any:
 	if item_id < len(json_item_data):
 		return json_item_data[item_id]
+	else:
+		raise ValueError("Inserted item ID greater than maximum item ID length.")
 
 
 def get_item_id_by_id_str(item_id_str):
@@ -701,6 +703,8 @@ def create_wall_id_str_hash_table():
 def get_wall_by_id(wall_id):
 	if wall_id < len(json_wall_data):
 		return json_wall_data[wall_id]
+	else:
+		raise ValueError("Inserted wall ID greater than maximum wall ID length.")
 
 
 def get_wall_id_by_id_str(wall_id_str):
@@ -748,6 +752,8 @@ def create_sound_id_str_hash_table():
 def get_sound_by_id(sound_id):
 	if sound_id < len(json_sound_data):
 		return json_sound_data[sound_id]
+	else:
+		raise ValueError("Inserted sound ID greater than maximum sound ID length.")
 
 
 def get_sound_id_by_id_str(sound_id_str):
@@ -882,6 +888,8 @@ def create_structure_id_str_hash_table():
 def get_structure_by_id(structure_id):
 	if structure_id < len(json_structure_data):
 		return json_structure_data[structure_id]
+	else:
+		raise ValueError("Inserted structure ID greater than maximum structure ID length.")
 
 
 def get_structure_id_by_id_str(structure_id_str):
@@ -956,6 +964,8 @@ def create_loot_id_str_hash_table():
 def get_loot_by_id(loot_id):
 	if loot_id < len(json_loot_data):
 		return json_loot_data[loot_id]
+	else:
+		raise ValueError("Inserted loot ID greater than maximum loot ID length.")
 
 
 def get_loot_id_by_id_str(loot_id_str):

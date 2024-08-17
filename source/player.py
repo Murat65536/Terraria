@@ -8,8 +8,7 @@ import datetime
 from pygame.locals import Rect
 
 import game_data
-from game_data import TileTag, ammo_type_item_lists
-from item import ItemLocation, ItemSlotClickResult, ItemTag
+from item import ItemLocation, ItemSlotClickResult, ItemTag, Item
 
 import commons
 import world
@@ -76,7 +75,7 @@ class Model:
 -----------------------------------------------------------------------------------------------------------------"""
 class Player:
 	def	__init__(self, position, model,	name="unassigned", hp=0, max_hp=100, hotbar=None, inventory=None, play_time=0, creation_date=None, last_played_date=None):
-		self.position: tuple[int, int] = position
+		self.position = position
 		self.block_position	= (0, 0)
 		self.model = model
 		self.name =	name
@@ -99,7 +98,7 @@ class Player:
 		if hotbar is None:
 			self.items[ItemLocation.HOTBAR]	= [
 				Item(game_data.get_item_id_by_id_str("item.copper_pickaxe"),	auto_assign_prefix=False),
-				Item(game_data.get_item_id_by_id_str("item.stone_block"), amnt=100),
+				Item(game_data.get_item_id_by_id_str("item.stone_block"), amount=100),
 				None,
 				None,
 				None,
@@ -255,7 +254,7 @@ class Player:
 			drag_factor	= 1.0 -	commons.DELTA_TIME
 
 			self.velocity =	(self.velocity[0] *	drag_factor, self.velocity[1] *	drag_factor	+ commons.GRAVITY *	commons.DELTA_TIME)
-			self.position =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
+			self.position: tuple[float, float] =	(self.position[0] +	self.velocity[0] * commons.DELTA_TIME *	commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
 
 			self.rect.left = self.position[0] -	commons.PLAYER_WIDTH * 0.5	# updating rect
 			self.rect.top =	self.position[1] - commons.PLAYER_HEIGHT * 0.5
@@ -282,18 +281,18 @@ class Player:
 					if self.use_delay >	0.0001:
 						self.use_delta = self.use_tick / self.use_delay
 			
-			if self.velocity[0]	< 0:
-				if self.position[0]	< world.border_left:
+			if self.velocity[0] < 0:
+				if self.position[0] < world.border_left:
 					self.position =	(int(world.border_left), self.position[1])
 			elif self.velocity[0] >	0:
-				if self.position[0]	> world.border_right:
+				if self.position[0] > world.border_right:
 					self.position =	(int(world.border_right), self.position[1])
-			if self.velocity[1]	< 0:
-				if self.position[1]	< world.border_up:
+			if self.velocity[1] < 0:
+				if self.position[1] < world.border_up:
 					self.position =	(self.position[0], int(world.border_up))
 					self.velocity =	(self.velocity[0], 0)
 			elif self.velocity[1] >	0:
-				if self.position[1]	> world.border_down:
+				if self.position[1] > world.border_down:
 					self.position =	(self.position[0], int(world.border_down))
 					self.velocity =	(self.velocity[0], 0)
 					self.grounded =	True
@@ -323,23 +322,23 @@ class Player:
 						if self.block_position[1] +	j >= 0:
 							tile_id	= world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 							tile_data =	game_data.get_tile_by_id(tile_id)
-							if TileTag.NO_COLLIDE not in tile_data["tags"]:
+							if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE	* (self.block_position[1] +	j),	commons.BLOCK_SIZE *	(self.block_position[0]	+ i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								is_platform	= False
-								if TileTag.PLATFORM	in tile_data["tags"]:
+								if game_data.TileTag.PLATFORM	in tile_data["tags"]:
 									is_platform	= True
 									if block_rect.colliderect(int(self.rect.left - 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
 										self.stop_left = True  # is there a	solid block	left
 									if block_rect.colliderect(int(self.rect.right +	1),	int(self.rect.top +	2),	1, int(self.rect.height	- 4)):
 										self.stop_right	= True	# is there a solid block right
 								if block_rect.colliderect(self.rect):
-									if not self.invincible and TileTag.DAMAGING in tile_data["tags"]:
+									if not self.invincible and game_data.TileTag.DAMAGING in tile_data["tags"]:
 										self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
 
 
 									delta_x	= self.position[0] - block_rect.centerx
 									delta_y	= self.position[1] - block_rect.centery
-									if abs(delta_x)	> abs(delta_y):
+									if abs(delta_x) > abs(delta_y):
 										if delta_x > 0:
 											if not is_platform:
 												self.position =	(block_rect.right +	commons.PLAYER_WIDTH * 0.5,	self.position[1])  # Move player right
@@ -350,20 +349,20 @@ class Player:
 												self.velocity =	(0,	self.velocity[1])  # Stop player horizontally
 									else:
 										if delta_y > 0:
-											if self.velocity[1]	< 0:
+											if self.velocity[1] < 0:
 												if not is_platform:
 													if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
 														self.position =	(self.position[0], block_rect.bottom + commons.PLAYER_HEIGHT * 0.5)	 # Move	player down
 														self.velocity =	(self.velocity[0], 0)  # Stop player vertically
 										else:
-											if self.velocity[1]	> 0:
+											if self.velocity[1] > 0:
 												if Rect(self.rect.left + 3, self.rect.top, self.rect.width - 6, self.rect.height).colliderect(block_rect):
 													if is_platform:
 														if self.moving_down:
 															collide	= False
 														else:
-															if self.velocity[1]	< 5:
-																if self.position[1]	+ commons.BLOCK_SIZE	< block_rect.top:
+															if self.velocity[1] < 5:
+																if self.position[1]	+ commons.BLOCK_SIZE < block_rect.top:
 																	collide	= True
 															else:
 																collide	= True
@@ -371,7 +370,7 @@ class Player:
 														collide	= True
 													if collide:
 														if not fall_damaged:
-															if self.velocity[1]	> 58:
+															if self.velocity[1] > 58:
 																damage = int((self.velocity[1] - 57) ** 2)	# Work out fall	damage
 																self.damage(damage,	["falling",	"World"])  # Apply fall	damage once
 																fall_damaged = True
@@ -486,7 +485,7 @@ class Player:
 		Sets the player's position to the world's spawn	point and resets some variables
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	respawn(self):
-		self.position =	tuple(world.world.spawn_position)  # set position to world.world.spawn_point
+		self.position =	world.world.spawn_position  # set position to world.world.spawn_point
 		self.velocity =	(0,	0)
 		self.alive = True
 		self.hp	= int(self.max_hp)	# reset	hp
@@ -537,13 +536,13 @@ class Player:
 			self.animation_tick	+= self.animation_speed
 			if self.grounded:
 				if self.moving_left and not self.moving_right:  # If moving left, cycle through left frames
-					if self.animation_frame	< 29:
+					if self.animation_frame < 29:
 						self.animation_frame += 1
 					else:
 						self.animation_frame = 17
 					return
 				elif self.moving_right and not self.moving_left: # If moving right, cycle through right frames
-					if self.animation_frame	< 14:
+					if self.animation_frame < 14:
 						self.animation_frame += 1
 					else:
 						self.animation_frame = 2
@@ -581,13 +580,13 @@ class Player:
 			else:
 				if self.grounded:
 					if self.moving_left and not self.moving_right:  # If moving left,	cycle through left frames
-						if self.arm_animation_frame	< 38:
+						if self.arm_animation_frame < 38:
 							self.arm_animation_frame += 1
 						else:
 							self.arm_animation_frame = 26
 						return
 					elif self.moving_right and not self.moving_left:	 # If moving right,	cycle through right	frames
-						if self.arm_animation_frame	< 18:
+						if self.arm_animation_frame < 18:
 							self.arm_animation_frame += 1
 						else:
 							self.arm_animation_frame = 6
@@ -618,7 +617,7 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 
 	def	use_item(self, right_click=False):
-		item = None
+		item: Item | None = None
 
 		if commons.IS_HOLDING_ITEM:
 			item = commons.ITEM_HOLDING
@@ -634,6 +633,8 @@ class Player:
 		if not right_click:
 			self.should_swing_arm =	False
 			self.should_hold_arm = False
+
+			assert item is not None
 
 			if item.has_tag(ItemTag.TILE):
 				self.place_block(screen_position_x,	screen_position_y, item, True)
@@ -674,21 +675,20 @@ class Player:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
 				tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
 				json_tile_data =	game_data.get_tile_by_id(tile_dat[0])
-				if TileTag.CHEST in json_tile_data["tags"] or TileTag.CYCLABLE in json_tile_data["tags"]:
-					if TileTag.MULTITILE in json_tile_data["tags"]:
+				if game_data.TileTag.CHEST in json_tile_data["tags"] or game_data.TileTag.CYCLABLE in json_tile_data["tags"]:
+					if game_data.TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
 					world.use_special_tile(origin[0], origin[1])
 				
-				if TileTag.WORKBENCH in json_tile_data["tags"]:
-					if TileTag.MULTITILE in json_tile_data["tags"]:
+				if game_data.TileTag.WORKBENCH in json_tile_data["tags"]:
+					if game_data.TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
 					world.use_special_tile(origin[0], origin[1])
 
-	# TODO Look into the placeblock code.
 	"""=================================================================================================================	
 		player.Player.place_block -> void
 		
@@ -708,7 +708,7 @@ class Player:
 					if is_tile:
 						tile_to_place =	game_data.get_tile_by_id_str(block_item.get_tile_id_str())
 
-						if TileTag.MULTITILE in tile_to_place["tags"]:
+						if game_data.TileTag.MULTITILE in tile_to_place["tags"]:
 							can_place =	True
 
 							tile_dimensions	= tile_to_place["multitile_dimensions"]
@@ -723,13 +723,13 @@ class Player:
 							for	i in range(len(required_solids)):
 								tile_id	= world.world.tile_data[block_position[0] +	required_solids[i][0]][block_position[1] + required_solids[i][1]][0]
 								tile_data =	game_data.get_tile_by_id(tile_id)
-								if TileTag.NO_COLLIDE in tile_data["tags"]:
+								if game_data.TileTag.NO_COLLIDE in tile_data["tags"]:
 									can_place =	False
 
 							if can_place:
 								world.place_multitile(block_position[0], block_position[1],	tile_dimensions, tile_to_place["id"], True)
 
-								if TileTag.CHEST in tile_to_place["tags"]:
+								if game_data.TileTag.CHEST in tile_to_place["tags"]:
 									world.world.chest_data.append([block_position, [None for _ in range(20)]])
 
 								block_placed = True
@@ -771,16 +771,17 @@ class Player:
 						self.can_use = False
 						if not commons.CREATIVE:
 							if not commons.IS_HOLDING_ITEM:
-								self.items[ItemLocation.HOTBAR][self.hotbar_index].amnt	-= 1
+								self.items[ItemLocation.HOTBAR][self.hotbar_index].amount	-= 1
 								dat	= [ItemLocation.HOTBAR,	self.hotbar_index]
 								if dat not in self.old_inventory_positions:
 									self.old_inventory_positions.append(dat)
-								if self.items[ItemLocation.HOTBAR][self.hotbar_index].amnt <= 0:
+								if self.items[ItemLocation.HOTBAR][self.hotbar_index].amount <= 0:
 									self.items[ItemLocation.HOTBAR][self.hotbar_index] = None
 							else:
 								commons.WAIT_TO_USE	= True
-								commons.ITEM_HOLDING.amnt -= 1
-								if commons.ITEM_HOLDING.amnt <= 0:
+								assert commons.ITEM_HOLDING is not None
+								commons.ITEM_HOLDING.amount -= 1
+								if commons.ITEM_HOLDING.amount <= 0:
 									commons.ITEM_HOLDING = None
 									commons.IS_HOLDING_ITEM	= False
 
@@ -807,7 +808,7 @@ class Player:
 					if tool_item.has_tag(ItemTag.PICKAXE):
 						tile_id	= world.world.tile_data[block_position[0]][block_position[1]][0]
 						tile_dat = game_data.get_tile_by_id(tile_id)
-						if TileTag.MULTITILE in tile_dat["tags"]:
+						if game_data.TileTag.MULTITILE in tile_dat["tags"]:
 							multitile_origin = world.get_multitile_origin(block_position[0], block_position[1])
 							world.remove_multitile(multitile_origin, True)
 							game_data.play_tile_hit_sfx(tile_id)
@@ -832,7 +833,7 @@ class Player:
 					elif tool_item.has_tag(ItemTag.HAMMER):
 						wall_id	= world.world.tile_data[block_position[0]][block_position[1]][1]
 						if wall_id != game_data.air_wall_id:
-							if world.get_neighbor_count(block_position[0], block_position[1], tile=1, check_centre_tile=False, check_centre_wall=False)	< 4:
+							if world.get_neighbor_count(block_position[0], block_position[1], tile=1, check_centre_tile=False, check_centre_wall=False) < 4:
 								wall_dat = game_data.get_wall_by_id(wall_id)
 
 								item_id	= game_data.get_item_id_by_id_str(wall_dat["item_id_str"])
@@ -884,14 +885,16 @@ class Player:
 		if self.can_use:
 			ammo_to_use_id = -1
 			ammo_to_use_dat	= None
-			for	item_id	in ammo_type_item_lists[ranged_weapon_item.json_item["ranged_ammo_type"]]:
+			for	item_id	in game_data.ammo_type_item_lists[ranged_weapon_item.json_item["ranged_ammo_type"]]:
 				item_ammo_slots	= self.find_existing_item_stacks(item_id)
-				if len(item_ammo_slots)	> 0:
+				if len(item_ammo_slots) > 0:
 					ammo_to_use_dat	= item_ammo_slots[0]
 					ammo_to_use_id = item_id
 					break
 
 			if ammo_to_use_id != -1:
+				assert ammo_to_use_dat is not None
+
 				self.remove_item((ammo_to_use_dat[0], ammo_to_use_dat[1]), remove_count=1)
 
 				game_data.play_sound(ranged_weapon_item.json_item["use_sound"])
@@ -923,32 +926,32 @@ class Player:
 		Performs an optional search	on the player's	available item spaces to merge the item	with pre-existing stacks or
 		just place it in an empty slot
 	-----------------------------------------------------------------------------------------------------------------"""
-	def	give_item(self,	item, amnt=1, position=None):
+	def	give_item(self,	item, amount=1, position=None):
 		# No position specified
 		if position	is None:
 			is_coin	= item.has_tag(ItemTag.COIN)
 			# Find all suitable	slots
 			existing_slots = self.find_existing_item_stacks(item.item_id)
 			# Slots	that already have the item
-			while len(existing_slots) >	0 and amnt > 0:
+			while len(existing_slots) >	0 and amount > 0:
 				# Work out how many	to add to the stack
 				fill_count = existing_slots[0][2]
-				amnt -= fill_count
-				if amnt	< 0:
-					fill_count += amnt
+				amount -= fill_count
+				if amount < 0:
+					fill_count += amount
 
-				# Increase the amnt	of the chosen slot
-				self.items[existing_slots[0][0]][existing_slots[0][1]].amnt	+= fill_count
+				# Increase the amount	of the chosen slot
+				self.items[existing_slots[0][0]][existing_slots[0][1]].amount	+= fill_count
 
 				# Automatically	craft new coins
 				if is_coin:
-					if self.items[existing_slots[0][0]][existing_slots[0][1]].amnt == self.items[existing_slots[0][0]][existing_slots[0][1]].get_max_stack():
-						if amnt	> 0:
-							self.items[existing_slots[0][0]][existing_slots[0][1]].amnt	= amnt
+					if self.items[existing_slots[0][0]][existing_slots[0][1]].amount == self.items[existing_slots[0][0]][existing_slots[0][1]].get_max_stack():
+						if amount > 0:
+							self.items[existing_slots[0][0]][existing_slots[0][1]].amount	= amount
 						else:
 							self.items[existing_slots[0][0]][existing_slots[0][1]] = None
 						self.give_item(Item(item.item_id + 1))
-						amnt = 0
+						amount = 0
 
 				# Flag the position	for	a surface update
 				dat	= [existing_slots[0][0], existing_slots[0][1]]
@@ -960,15 +963,15 @@ class Player:
 			# Free slots
 			free_slots = self.find_free_spaces(item.json_item["max_stack"])
 
-			while len(free_slots) >	0 and amnt > 0:  # No stacks left to fill so fill empty	slots
+			while len(free_slots) > 0 and amount > 0:  # No stacks left to fill so fill empty	slots
 				# Work out how many	to add to the stack
 				fill_count = free_slots[0][2]
-				amnt -= fill_count
-				if amnt	< 0:
-					fill_count += amnt
+				amount -= fill_count
+				if amount < 0:
+					fill_count += amount
 
 				# Add that number to the free slot
-				self.items[free_slots[0][0]][free_slots[0][1]] = item.copy(new_amnt=fill_count)
+				self.items[free_slots[0][0]][free_slots[0][1]] = item.copy(new_amount=fill_count)
 
 				# Flag the position	for	a surface update
 				dat	= [free_slots[0][0], free_slots[0][1]]
@@ -977,34 +980,34 @@ class Player:
 				# Remove the used data
 				free_slots.remove(free_slots[0])
 
-			if amnt	<= 0:
+			if amount <= 0:
 				return [ItemSlotClickResult.GAVE_ALL]
 			else:
 				if item.item_id	not	in self.un_pickupable_items:
 					self.un_pickupable_items.append(item.item_id)
-				return [ItemSlotClickResult.GAVE_SOME, amnt]
+				return [ItemSlotClickResult.GAVE_SOME, amount]
 
 		# Position specified
 		else:
 			# Slot is free,	add
 			if self.items[position[0]][position[1]]	is None:
-				self.items[position[0]][position[1]] = item.copy(new_amnt=amnt)
+				self.items[position[0]][position[1]] = item.copy(new_amount=amount)
 				return [ItemSlotClickResult.GAVE_ALL]
 
 			# Slot has an item with	the	same Id
 			elif self.items[position[0]][position[1]].item_id == item.item_id:
 				max_stack =	self.items[position[0]][position[1]].get_max_stack()
 				# Item is already at max stack,	swap
-				if self.items[position[0]][position[1]].amnt == max_stack:
+				if self.items[position[0]][position[1]].amount == max_stack:
 					return [ItemSlotClickResult.SWAPPED, self.items[position[0]][position[1]], position[0]]
 
 				else:
-					self.items[position[0]][position[1]].amnt += amnt
+					self.items[position[0]][position[1]].amount += amount
 					# Entire stack cannot be given
-					if self.items[position[0]][position[1]].amnt > max_stack:
-						amnt = self.items[position[0]][position[1]].amnt - max_stack
-						self.items[position[0]][position[1]].amnt =	max_stack
-						return [ItemSlotClickResult.GAVE_SOME, amnt]
+					if self.items[position[0]][position[1]].amount > max_stack:
+						amount = self.items[position[0]][position[1]].amount - max_stack
+						self.items[position[0]][position[1]].amount =	max_stack
+						return [ItemSlotClickResult.GAVE_SOME, amount]
 
 					# Entire stack was given
 					else:
@@ -1025,8 +1028,8 @@ class Player:
 			if remove_count	is None:
 				self.items[position[0]][position[1]] = None
 			else:
-				self.items[position[0]][position[1]].amnt -= remove_count
-				if self.items[position[0]][position[1]].amnt <= 0:
+				self.items[position[0]][position[1]].amount -= remove_count
+				if self.items[position[0]][position[1]].amount <= 0:
 					self.items[position[0]][position[1]] = None
 
 			if position	not	in self.old_inventory_positions:
@@ -1035,7 +1038,7 @@ class Player:
 			if remove_count	is None:
 				return item.copy()
 			else:
-				return item.copy(new_amnt=remove_count)
+				return item.copy(new_amount=remove_count)
 
 	"""=================================================================================================================	
 		player.Player.find_existing_item_stacks	-> existing	space list
@@ -1052,7 +1055,7 @@ class Player:
 				item = self.items[ItemLocation.HOTBAR][hotbar_index]
 				if item	!= None:
 					if item.item_id	== item_id:
-						available =	item_data["max_stack"] - self.items[ItemLocation.HOTBAR][hotbar_index].amnt
+						available =	item_data["max_stack"] - self.items[ItemLocation.HOTBAR][hotbar_index].amount
 						existing_spaces.append([ItemLocation.HOTBAR, hotbar_index, available])
 		
 		if search_inventory:
@@ -1060,7 +1063,7 @@ class Player:
 				item = self.items[ItemLocation.INVENTORY][inventory_index]
 				if item	is not None:
 					if item.item_id	== item_id:
-						available =	item_data["max_stack"]	- self.items[ItemLocation.INVENTORY][inventory_index].amnt
+						available =	item_data["max_stack"]	- self.items[ItemLocation.INVENTORY][inventory_index].amount
 						if available > 0:
 							existing_spaces.append([ItemLocation.INVENTORY,	inventory_index, available])
 
@@ -1098,8 +1101,8 @@ class Player:
 			item = self.items[ItemLocation.HOTBAR][hotbar_index]
 			if item	is not None:
 				self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * hotbar_index, item.get_item_slot_offset_y()))
-				if item.amnt > 1:
-					self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * hotbar_index, 30))
+				if item.amount > 1:
+					self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * hotbar_index, 30))
 
 	"""=================================================================================================================	
 		player.Player.render_inventory -> void
@@ -1116,8 +1119,8 @@ class Player:
 			item = self.items[ItemLocation.INVENTORY][inventory_index]
 			if item	is not None:
 				self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
-				if self.items[ItemLocation.INVENTORY][inventory_index].amnt	> 1:
-					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amnt), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
+				if self.items[ItemLocation.INVENTORY][inventory_index].amount > 1:
+					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
 	"""=================================================================================================================	
 		player.Player.render_chest -> void
@@ -1134,8 +1137,8 @@ class Player:
 			item = self.items[ItemLocation.CHEST][chest_index]
 			if item	is not None:
 				self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
-				if self.items[ItemLocation.CHEST][chest_index].amnt	> 1:
-					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amnt), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
+				if self.items[ItemLocation.CHEST][chest_index].amount > 1:
+					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
 	"""=================================================================================================================	
 		player.Player.update_inventory_old_slots -> void
@@ -1149,8 +1152,8 @@ class Player:
 				self.hotbar_image.blit(surface_manager.misc_gui[0],	(data[1] * 48, 0))
 				if item	is not None:
 					self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * data[1],	item.get_item_slot_offset_y()))
-					if item.amnt > 1:
-						self.hotbar_image.blit(shared_methods.outline_text(str(item.amnt), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * data[1],	30))
+					if item.amount > 1:
+						self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * data[1],	30))
 			elif data[0] == ItemLocation.INVENTORY:
 				item = self.items[ItemLocation.INVENTORY][data[1]]
 				slot_x = data[1] % 10
@@ -1158,8 +1161,8 @@ class Player:
 				self.inventory_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
 				if item	is not None:
 					self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
-					if item.amnt > 1:
-						self.inventory_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
+					if item.amount > 1:
+						self.inventory_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 
 			elif data[0] == ItemLocation.CHEST:
 				item = self.items[ItemLocation.CHEST][data[1]]
@@ -1168,14 +1171,14 @@ class Player:
 				self.chest_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
 				if item	is not None:
 					self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
-					if item.amnt > 1:
-						self.chest_image.blit(shared_methods.outline_text(str(item.amnt), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
+					if item.amount > 1:
+						self.chest_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 		self.old_inventory_positions = []
 
 	"""=================================================================================================================	
 		player.Player.update_craftable_items -> void
 		
-		Creates	a list of items	that can be crafted	with the current materials List	structure [item_id,	amnt]
+		Creates	a list of items	that can be crafted	with the current materials List	structure [item_id,	amount]
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	update_craftable_items(self):
 		self.items[ItemLocation.CRAFTING_MENU] = [[i + 1, 1] for i in range(len(game_data.json_item_data) - 1)]
@@ -1213,9 +1216,10 @@ class Player:
 					item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 				else:
 					item = commons.ITEM_HOLDING
-				world_override_image = item.get_world_override_image()
-				if world_override_image	is not None:
-					rotated_item_surf = shared_methods.rotate_surface(world_override_image,	self.arm_out_angle * 180 / math.pi)
+
+				assert item is not None
+				if item.get_world_override_image()	is not None:
+					rotated_item_surf = shared_methods.rotate_surface(item.get_world_override_image(),	self.arm_out_angle * 180 / math.pi)
 				else:
 					rotated_item_surf =	shared_methods.rotate_surface(item.get_image(),	self.arm_out_angle * 180 / math.pi)
 				if self.direction == 1:
@@ -1232,6 +1236,7 @@ class Player:
 					item = commons.ITEM_HOLDING
 
 				if item	is not None	and	item.has_tag(ItemTag.WEAPON):
+					assert self.current_item_swing_image is not None
 					if self.direction == 1:
 						hit_rect = Rect(self.position[0],
 										self.position[1] - self.current_item_swing_image.get_height() *	0.5,
@@ -1308,6 +1313,7 @@ class Player:
 					item = commons.ITEM_HOLDING
 
 				if item	is not None	and	item.has_tag(ItemTag.WEAPON):
+					assert self.current_item_extend_image is not None
 					if self.direction == 1:
 						hit_rect = Rect(self.position[0],
 										self.position[1] - self.current_item_extend_image.get_height() *	0.5,
@@ -1390,9 +1396,9 @@ class Player:
 		if self.hp > 0:
 			rect = Rect(commons.WINDOW_WIDTH - 10 -	self.hp	* 2, 25, self.hp * 2, 20)
 			hp_float = self.hp / self.max_hp
-			col	= ((1 -	hp_float) *	255, hp_float *	255, 0)
+			col: tuple[int, int, int]	= (int((1 - hp_float) * 255), int((hp_float) * 255), 0)
 			pygame.draw.rect(commons.screen, col, rect,	0)
-			pygame.draw.rect(commons.screen, (col[0] * 0.8,	col[1] * 0.8, 0), rect,	3)
+			pygame.draw.rect(commons.screen, (int(col[0] * 0.8), int(col[1] * 0.8), 0), rect,	3)
 			commons.screen.blit(self.hp_text, (self.hp_x_position, 45))
 
 	"""=================================================================================================================	
@@ -1423,9 +1429,9 @@ class Player:
 			item = self.items[ItemLocation.HOTBAR][item_index]
 			if item	is not None:
 				if item.prefix_data	is None:
-					formatted_hotbar.append([item_index, item.get_id_str(),	item.amnt, None])
+					formatted_hotbar.append([item_index, item.get_id_str(),	item.amount, None])
 				else:
-					formatted_hotbar.append([item_index, item.get_id_str(),	item.amnt, item.get_prefix_name()])
+					formatted_hotbar.append([item_index, item.get_id_str(),	item.amount, item.get_prefix_name()])
 
 		# Convert the items	in the inventory to a less data	heavy format
 		formatted_inventory	= []
@@ -1433,9 +1439,9 @@ class Player:
 			item = self.items[ItemLocation.INVENTORY][item_index]
 			if item	is not None:
 				if item.prefix_data	is None:
-					formatted_inventory.append([item_index,	item.get_id_str(), item.amnt, None])
+					formatted_inventory.append([item_index,	item.get_id_str(), item.amount, None])
 				else:
-					formatted_inventory.append([item_index,	item.get_id_str(), item.amnt, item.get_prefix_name()])
+					formatted_inventory.append([item_index,	item.get_id_str(), item.amount, item.get_prefix_name()])
 
 		# Save the data	to disk	and	display	a message
 		commons.PLAYER_DATA	= [self.name, self.model, formatted_hotbar,	formatted_inventory, self.hp, self.max_hp, self.play_time, self.creation_date, self.last_played_date]  # Create	player array
