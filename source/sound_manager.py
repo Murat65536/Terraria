@@ -55,8 +55,8 @@ def change_sound_volume(amount):
 		sound.set_volume(sound_volume)
 
 def play_music():
-    pygame.mixer.music.play(loops=-1)
+	pygame.mixer.music.play(loops=-1)
 
 def stop_music():
-    pygame.mixer.music.stop()
-    pygame.mixer.music.rewind()
+	pygame.mixer.music.stop()
+	pygame.mixer.music.rewind()

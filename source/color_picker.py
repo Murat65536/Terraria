@@ -20,13 +20,13 @@ class ColorPicker:
 		self.border_size = border_size
 		self.surface_resolution = surface_resolution
 		self.colors = [
-			(255,   0, 255),
-			(255,   0,   0),
-			(255, 255,   0),
-			(  0, 255,   0),
-			(  0, 255, 255),
-			(  0,   0, 255),
-			(255,   0, 255)
+			(255, 0, 255),
+			(255, 0, 0),
+			(255, 255, 0),
+			(0, 255, 0),
+			(0, 255, 255),
+			(0, 0, 255),
+			(255, 0, 255)
 		]
 		self.selected_color = (0, 0, 0)
 		self.selected_x = 0

@@ -89,49 +89,16 @@ def make_tile_tag_list(tile_tags_str):
 	return enum_list
 
 
-def int_tuple_str_to_int_tuple(string):
-	split_string = string.split(",")
-	return int(split_string[0]), int(split_string[1])
-
-
-def float_tuple_str_to_float_tuple(string):
-	split_string = string.split(",")
-	return float(split_string[0]), float(split_string[1])
-
-
-def int_tuple_list_str_to_int_tuple_list(string):
-	tuple_strs = string.split(";")
-	return_list = []
-	for tuple_str in tuple_strs:
-		if tuple_str != "":
-			return_list.append(int_tuple_str_to_int_tuple(tuple_str))
-	return return_list
-
-
-def float_tuple_list_str_to_float_tuple_list(string):
-	tuple_strs = string.split(";")
-	return_list = []
-	for tuple_str in tuple_strs:
-		return_list.append(float_tuple_str_to_float_tuple(tuple_str))
-	return return_list
-
-
 def get_tile_strength_type_from_str(strength_type_string):
-	if strength_type_string == "Pickaxe":
-		return TileStrengthType.PICKAXE
-	elif strength_type_string == "Axe":
-		return TileStrengthType.AXE
-	elif strength_type_string == "Hammer":
-		return TileStrengthType.HAMMER
-	elif strength_type_string == "Damage":
-		return TileStrengthType.DAMAGE
+	for types in TileStrengthType:
+		if types.name == strength_type_string:
+			return types
 
 
 def get_tile_mask_type_from_str(mask_type_string):
-	if mask_type_string == "None":
-		return TileMaskType.NONE
-	elif mask_type_string == "Noisy":
-		return TileMaskType.NOISY
+	for masks in TileMaskType:
+		if masks.name == mask_type_string:
+			return masks
 
 
 def find_next_char_in_string(string, char, start_index):
@@ -796,10 +763,6 @@ def parse_tile_data():
 			tile_data["multitile_image"] = pygame.image.load(tile_data["multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["multitile_dimensions"][1])
 			tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
 
-		if TileTag.CYCLABLE in tile_data["tags"]:
-			tile_data["cycle_facing_left_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["cycle_facing_left_tile_offset"])
-			tile_data["cycle_facing_right_tile_offset"] = int_tuple_str_to_int_tuple(tile_data["cycle_facing_right_tile_offset"])
-
 		if TileTag.DAMAGING in tile_data["tags"]:
 			tile_data["tile_damage"] = int(tile_data["tile_damage"])
 
@@ -855,25 +818,11 @@ def parse_wall_data():
 	for wall_data in json_wall_data:
 		wall_data["id"] = int(wall_data["id"])
 		wall_data["mask_type"] = get_tile_mask_type_from_str(wall_data["mask_type"])
-		wall_data["mask_merge_ids"] = wall_data["mask_merge_ids"].split(",")
-
-		if wall_data["average_color"] == "auto":
-			wall_data["average_color"] = (255, 0, 255)
-			override_average_color = True
-		else:
-			val_array = wall_data["average_color"].split(",")
-			wall_data["average_color"] = (int(val_array[0]), int(val_array[1]), int(val_array[2]))
-			override_average_color = False
-
 		try:
 			wall_data["image"] = pygame.transform.scale(pygame.image.load(wall_data["image_path"]).convert_alpha(), (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
 			wall_data["image"].set_colorkey((255, 0, 255))
-			if override_average_color:
-				wall_data["average_color"] = pygame.transform.average_color(wall_data["image"])
-
+			wall_data["average_color"] = pygame.transform.average_color(wall_data["image"])
 		except FileNotFoundError:
-			wall_data["image"] = None
-		except pygame.error:
 			wall_data["image"] = None
 
 
@@ -1153,17 +1102,17 @@ def get_loot_by_id_str(loot_id_str):
 
 
 def parse_entity_data():
-    global json_entity_data
-    json_read_file = open("assets/game_data/entity_data.json")
-    json_entity_data = json.loads(json_read_file.read())["entities"]
-    json_read_file.close()
-    
-    json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
+	global json_entity_data
+	json_read_file = open("assets/game_data/entity_data.json")
+	json_entity_data = json.loads(json_read_file.read())["entities"]
+	json_read_file.close()
+	
+	json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
 
 def create_entity_id_str_hash_table():
-    global entity_id_str_hash_table
-    for entity_index in range(len(json_entity_data)):
-        entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = entity_index
+	global entity_id_str_hash_table
+	for entity_index in range(len(json_entity_data)):
+		entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = entity_index
 
 parse_item_data()
 create_item_id_str_hash_table()

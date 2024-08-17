@@ -106,7 +106,7 @@
 			"variation_paths": [
 				"assets/sounds/gun_shot.wav"
 			],
-			"volume": "1"
+			"volume": "0.2"
 		},
 		{
 			"id": "13",
