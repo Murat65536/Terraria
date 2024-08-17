@@ -1,7 +1,7 @@
 {
 	"walls": [
 		{
-			"id": "0",
+			"id": 0,
 			"id_str": "wall.INVALID",
 			"name": "INVALID",
 			"mask_type": "None",
@@ -12,7 +12,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "1",
+			"id": 1,
 			"id_str": "wall.none",
 			"name": "None",
 			"mask_type": "Noisy",
@@ -24,7 +24,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "2",
+			"id": 2,
 			"id_str": "wall.dirt",
 			"name": "Dirt Wall",
 			"mask_type": "Noisy",
@@ -44,7 +44,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "3",
+			"id": 3,
 			"id_str": "wall.stone",
 			"name": "Stone",
 			"mask_type": "Noisy",
@@ -60,7 +60,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "4",
+			"id": 4,
 			"id_str": "wall.ice",
 			"name": "Ice",
 			"mask_type": "Noisy",
@@ -74,7 +74,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "5",
+			"id": 5,
 			"id_str": "wall.snow",
 			"name": "Snow",
 			"mask_type": "Noisy",
@@ -93,7 +93,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "6",
+			"id": 6,
 			"id_str": "wall.sandstone",
 			"name": "Sandstone",
 			"mask_type": "Noisy",
@@ -109,7 +109,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "7",
+			"id": 7,
 			"id_str": "wall.hardened_sand",
 			"name": "Sand",
 			"mask_type": "Noisy",
@@ -127,7 +127,7 @@
 			"hit_sound": "sound.dig"
 		},
 		{
-			"id": "8",
+			"id": 8,
 			"id_str": "wall.wood",
 			"name": "Wood",
 			"mask_type": "Noisy",

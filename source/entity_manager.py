@@ -16,7 +16,7 @@ from enemy import Enemy
 from particle import Particle
 from projectile import Projectile
 from physics_item import PhysicsItem
-from color_picker import ColorPicker
+from color_picker import COLOR_PICKER
 from item import Item
 
 
@@ -30,7 +30,7 @@ recent_pickups = []
 
 client_player = None
 client_prompt = None
-client_color_picker = ColorPicker((int(commons.WINDOW_WIDTH * 0.5 - 155),  190),  300,  300)
+client_color_picker = COLOR_PICKER((int(commons.WINDOW_WIDTH * 0.5 - 155),  190),  300,  300)
 
 camera_position = (0, 0)
 old_camera_position = (0, 0)

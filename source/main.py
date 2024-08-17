@@ -925,7 +925,7 @@ while True:
 		if commons.GAME_SUB_STATE == "MAIN":
 			commons.screen.blit(menu_logo, (commons.WINDOW_WIDTH * 0.5 - menu_logo.get_width() * 0.5, 20))
 
-		elif commons.GAME_SUB_STATE == "PLAYERSELECTION":
+		elif commons.GAME_SUB_STATE == "PLAYER_SELECTION":
 			if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE: 
 				if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
 					for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
@@ -934,8 +934,8 @@ while True:
 							commons.PLAYER_DATA = commons.PLAYER_SAVE_OPTIONS[i][0]
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
-							commons.GAME_SUB_STATE = "WORLDSELECTION"
-							commons.GAME_SUB_STATE_STACK.append("PLAYERSELECTION")
+							commons.GAME_SUB_STATE = "WORLD_SELECTION"
+							commons.GAME_SUB_STATE_STACK.append("PLAYER_SELECTION")
 							menu_manager.update_active_menu_buttons()
 							save_select_y_offset = 0
 							
@@ -953,11 +953,11 @@ while True:
 				save_select_surf.blit(commons.PLAYER_SAVE_OPTIONS[i][1], (0, i * 62 + save_select_y_offset))
 			commons.screen.blit(save_select_surf, (load_menu_box_left2,  132))
 
-		elif commons.GAME_SUB_STATE == "PLAYERCREATION":
+		elif commons.GAME_SUB_STATE == "PLAYER_CREATION":
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "WORLDSELECTION":
+		elif commons.GAME_SUB_STATE == "WORLD_SELECTION":
 			should_break = False
 			if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
 				if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
@@ -1036,17 +1036,17 @@ while True:
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "WORLDNAMING":
+		elif commons.GAME_SUB_STATE == "WORLD_NAMING":
 			text = shared_methods.outline_text(f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT)
 			commons.screen.blit(text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175))
 
-		elif commons.GAME_SUB_STATE == "PLAYERNAMING":
+		elif commons.GAME_SUB_STATE == "PLAYER_NAMING":
 			text = shared_methods.outline_text(f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT)
 			commons.screen.blit(text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175))
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "COLORPICKER":
+		elif commons.GAME_SUB_STATE == "COLOR_PICKER":
 
 			entity_manager.client_color_picker.update()
 
@@ -1368,18 +1368,18 @@ while True:
 
 		elif commons.GAME_STATE == "MAINMENU":
 
-			if commons.GAME_SUB_STATE == "PLAYERSELECTION" or commons.GAME_SUB_STATE == "WORLDSELECTION":
+			if commons.GAME_SUB_STATE == "PLAYER_SELECTION" or commons.GAME_SUB_STATE == "WORLD_SELECTION":
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 4:
 						save_select_y_velocity += 3
 					if event.button == 5:
 						save_select_y_velocity -= 3
 
-			elif commons.GAME_SUB_STATE == "PLAYERNAMING" or commons.GAME_SUB_STATE == "WORLDNAMING":
+			elif commons.GAME_SUB_STATE == "PLAYER_NAMING" or commons.GAME_SUB_STATE == "WORLD_NAMING":
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_BACKSPACE:
 						commons.TEXT_INPUT = commons.TEXT_INPUT[:-1]
-					elif (len(commons.TEXT_INPUT) <= 15 and commons.GAME_SUB_STATE == "PLAYERNAMING") or (len(commons.TEXT_INPUT) <= 27 and commons.GAME_SUB_STATE == "WORLDNAMING"):
+					elif (len(commons.TEXT_INPUT) <= 15 and commons.GAME_SUB_STATE == "PLAYER_NAMING") or (len(commons.TEXT_INPUT) <= 27 and commons.GAME_SUB_STATE == "WORLD_NAMING"):
 						commons.TEXT_INPUT += event.unicode
 	pygame.display.flip()
 	clock.tick(commons.TARGET_FPS)

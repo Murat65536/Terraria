@@ -16,7 +16,15 @@
 			"width": "7",
 			"height": "7",
 			"spawn_weight": "0",
-			"tile_data": "--[0:tile.stone]----|-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]|[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]|[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]|--[0:tile.stone]----"
+			"tile_data": [
+				"--[0:tile.stone]----",
+				"-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
+				"[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]",
+				"--[0:tile.stone]----"
+			]
 		},
 		{
 			"id": "2",
@@ -25,7 +33,13 @@
 			"width": "5",
 			"height": "10",
 			"spawn_weight": "400",
-			"tile_data": "-[0:tile.stone][3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]|[0:tile.none]--[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[3:wall.wood][3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]|-[0:tile.none;3:wall.wood][3:wall.wood]-[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.stone]-[3:wall.stone][0:tile.stone][3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"-[0:tile.stone][3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]",
+				"[0:tile.none]--[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[3:wall.wood][3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
+				"-[0:tile.none;3:wall.wood][3:wall.wood]-[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.stone]-[3:wall.stone][0:tile.stone][3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "3",
@@ -34,7 +48,13 @@
 			"width": "5",
 			"height": "9",
 			"spawn_weight": "500",
-			"tile_data": "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "4",
@@ -43,7 +63,15 @@
 			"width": "7",
 			"height": "9",
 			"spawn_weight": "100",
-			"tile_data": "----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "5",
@@ -52,7 +80,15 @@
 			"width": "7",
 			"height": "9",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]|----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "6",
@@ -61,7 +97,20 @@
 			"width": "12",
 			"height": "7",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;2:loot.pot;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.stone][1:0,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-"
+			"tile_data": [
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;2:loot.pot;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.stone][1:0,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-"
+			]
 		},
 		{
 			"id": "7",
@@ -70,7 +119,20 @@
 			"width": "12",
 			"height": "7",
 			"spawn_weight": "100",
-			"tile_data": "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.stone][1:0,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.stone][1:0,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "8",
@@ -79,7 +141,22 @@
 			"width": "14",
 			"height": "7",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]|--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "9",
@@ -88,7 +165,22 @@
 			"width": "14",
 			"height": "7",
 			"spawn_weight": "100",
-			"tile_data": "--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--"
+			"tile_data": [
+				"--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--"
+			]
 		},
 		{
 			"id": "10",
@@ -97,7 +189,25 @@
 			"width": "17",
 			"height": "6",
 			"spawn_weight": "100",
-			"tile_data": "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			"tile_data": [
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.torch;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]"
+			]
 		},
 		{
 			"id": "11",
@@ -106,7 +216,25 @@
 			"width": "17",
 			"height": "14",
 			"spawn_weight": "100",
-			"tile_data": "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------|-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------"
+			"tile_data": [
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Left][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_thick_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][1:-1,0;3:wall.stone][1:-1,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;2:loot.chest_wood;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_gray;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
+				"-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------"
+			]
 		},
 		{
 			"id": "12",
@@ -115,7 +243,13 @@
 			"width": "5",
 			"height": "10",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone]--[3:wall.stone][0:tile.stone]-|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][3:wall.wood][0:tile.none]-[3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][0:tile.none][3:wall.wood]--|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none]-[0:tile.none;3:wall.wood]-[0:tile.none;3:wall.wood]-|[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone][0:tile.stone;3:wall.stone]-[3:wall.stone]-"
+			"tile_data": [
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone]--[3:wall.stone][0:tile.stone]-",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][3:wall.wood][0:tile.none]-[3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][0:tile.none][3:wall.wood]--",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none]-[0:tile.none;3:wall.wood]-[0:tile.none;3:wall.wood]-",
+				"[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone][0:tile.stone;3:wall.stone]-[3:wall.stone]-"
+			]
 		},
 		{
 			"id": "13",
@@ -124,7 +258,13 @@
 			"width": "5",
 			"height": "5",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.tree_canopy_a;1:0,0;2:loot.chest_wood][1:0,-1][1:0,-2][1:0,-3][1:0,-4]|[1:-1,0][1:-1,-1][1:-1,-2][1:-1,-3][1:-1,-4]|[1:-2,0][1:-2,-1][1:-2,-2][1:-2,-3][1:-2,-4;4:tree_trunk,Down]|[1:-3,0][1:-3,-1][1:-3,-2][1:-3,-3][1:-3,-4]|[1:-4,0][1:-4,-1][1:-4,-2][1:-4,-3][1:-4,-4]"
+			"tile_data": [
+				"[0:tile.tree_canopy_a;1:0,0;2:loot.chest_wood][1:0,-1][1:0,-2][1:0,-3][1:0,-4]",
+				"[1:-1,0][1:-1,-1][1:-1,-2][1:-1,-3][1:-1,-4]",
+				"[1:-2,0][1:-2,-1][1:-2,-2][1:-2,-3][1:-2,-4;4:tree_trunk,Down]",
+				"[1:-3,0][1:-3,-1][1:-3,-2][1:-3,-3][1:-3,-4]",
+				"[1:-4,0][1:-4,-1][1:-4,-2][1:-4,-3][1:-4,-4]"
+			]
 		},
 		{
 			"id": "14",
@@ -133,7 +273,9 @@
 			"width": "1",
 			"height": "2",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"
+			"tile_data": [
+				"[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"
+			]
 		},
 		{
 			"id": "15",
@@ -142,7 +284,13 @@
 			"width": "5",
 			"height": "3",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]|-[0:tile.leaves]-|[0:tile.leaves][0:tile.leaves][0:tile.leaves]|[0:tile.leaves][0:tile.leaves][0:tile.leaves]|[0:tile.leaves][0:tile.leaves][0:tile.leaves]"
+			"tile_data": [
+				"[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]",
+				"-[0:tile.leaves]-",
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]"
+			]
 		},
 		{
 			"id": "16",
@@ -151,7 +299,13 @@
 			"width": "5",
 			"height": "3",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.leaves][0:tile.leaves][0:tile.leaves]|[0:tile.leaves][0:tile.leaves][0:tile.leaves]|[0:tile.leaves][0:tile.leaves][0:tile.leaves]|-[0:tile.leaves]-|[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]"
+			"tile_data": [
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
+				"[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
+				"-[0:tile.leaves]-",
+				"[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]"
+			]
 		},
 		{
 			"id": "17",
@@ -160,7 +314,11 @@
 			"width": "3",
 			"height": "2",
 			"spawn_weight": "100",
-			"tile_data": "-[0:tile.trunk]|[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_root,Down]|-[0:tile.trunk]"
+			"tile_data": [
+				"-[0:tile.trunk]",
+				"[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_root,Down]",
+				"-[0:tile.trunk]"
+			]
 		},
 		{
 			"id": "18",
@@ -169,7 +327,14 @@
 			"width": "6",
 			"height": "5",
 			"spawn_weight": "100",
-			"tile_data": "--[0:tile.trunk]-[0:tile.trunk]|-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]|[0:tile.trunk;4:tree_root,Up][0:tile.trunk][0:tile.trunk]--|--[0:tile.trunk]--|-[0:tile.trunk]-[0:tile.trunk]-|---[0:tile.trunk][0:tile.trunk]"
+			"tile_data": [
+				"--[0:tile.trunk]-[0:tile.trunk]",
+				"-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]",
+				"[0:tile.trunk;4:tree_root,Up][0:tile.trunk][0:tile.trunk]--",
+				"--[0:tile.trunk]--",
+				"-[0:tile.trunk]-[0:tile.trunk]-",
+				"---[0:tile.trunk][0:tile.trunk]"
+			]
 		},
 		{
 			"id": "19",
@@ -178,7 +343,14 @@
 			"width": "6",
 			"height": "6",
 			"spawn_weight": "100",
-			"tile_data": "-[0:tile.trunk]----|--[0:tile.trunk][0:tile.trunk]--|[0:tile.trunk;4:tree_root,Up][0:tile.trunk][0:tile.trunk]-[0:tile.trunk][0:tile.trunk]|--[0:tile.trunk][0:tile.trunk]--|--[0:tile.trunk]-[0:tile.trunk]-|-[0:tile.trunk]-[0:tile.trunk]--"
+			"tile_data": [
+				"-[0:tile.trunk]----",
+				"--[0:tile.trunk][0:tile.trunk]--",
+				"[0:tile.trunk;4:tree_root,Up][0:tile.trunk][0:tile.trunk]-[0:tile.trunk][0:tile.trunk]",
+				"--[0:tile.trunk][0:tile.trunk]--",
+				"--[0:tile.trunk]-[0:tile.trunk]-",
+				"-[0:tile.trunk]-[0:tile.trunk]--"
+			]
 		},
 		{
 			"id": "20",
@@ -187,70 +359,198 @@
 			"width": "7",
 			"height": "9",
 			"spawn_weight": "100",
-			"tile_data": "---[0:tile.trunk]--[0:tile.trunk]--|-[0:tile.trunk]--[0:tile.trunk][0:tile.trunk]---|--[0:tile.trunk][0:tile.trunk][0:tile.trunk]-[0:tile.trunk][0:tile.trunk][0:tile.trunk]|[0:tile.trunk;4:tree_root,Up][0:tile.trunk]-[0:tile.trunk][0:tile.chest_wood;1:0,0;2:loot.chest_wood][1:0,-1][0:tile.trunk]--|-[0:tile.trunk][0:tile.trunk][0:tile.trunk][1:-1,0][1:-1,-1][0:tile.trunk]--|[0:tile.trunk]-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]-[0:tile.trunk]-|---[0:tile.trunk]--[0:tile.trunk]-[0:tile.trunk]"
+			"tile_data": [
+				"---[0:tile.trunk]--[0:tile.trunk]--",
+				"-[0:tile.trunk]--[0:tile.trunk][0:tile.trunk]---",
+				"--[0:tile.trunk][0:tile.trunk][0:tile.trunk]-[0:tile.trunk][0:tile.trunk][0:tile.trunk]",
+				"[0:tile.trunk;4:tree_root,Up][0:tile.trunk]-[0:tile.trunk][0:tile.chest_wood;1:0,0;2:loot.chest_wood][1:0,-1][0:tile.trunk]--",
+				"-[0:tile.trunk][0:tile.trunk][0:tile.trunk][1:-1,0][1:-1,-1][0:tile.trunk]--",
+				"[0:tile.trunk]-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]-[0:tile.trunk]-",
+				"---[0:tile.trunk]--[0:tile.trunk]-[0:tile.trunk]"
+			]
 		},
 		{
 			"id": "21",
-			"id_str": "structure.undergound_cabin_a",
-			"name": "Undergound Cabin A",
+			"id_str": "structure.underground_cabin_a",
+			"name": "Underground Cabin A",
 			"width": "20",
 			"height": "8",
 			"spawn_weight": "10",
-			"tile_data": "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_brown;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]|--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-|-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-|--[0:tile.none][0:tile.none][0:tile.none][0:tile.none]--"
+			"tile_data": [
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_brown;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
+				"-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
+				"--[0:tile.none][0:tile.none][0:tile.none][0:tile.none]--"
+			]
 		},
 		{
 			"id": "22",
-			"id_str": "structure.undergound_cabin_b",
-			"name": "Undergound Cabin B",
+			"id_str": "structure.underground_cabin_b",
+			"name": "Underground Cabin B",
 			"width": "20",
 			"height": "8",
 			"spawn_weight": "100",
-			"tile_data": "---[0:tile.none][0:tile.none][0:tile.none]--|--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-|---[0:tile.none][0:tile.none][0:tile.none][0:tile.none]-|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]"
+			"tile_data": [
+				"---[0:tile.none][0:tile.none][0:tile.none]--",
+				"--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
+				"---[0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]"
+			]
 		},
 		{
 			"id": "23",
-			"id_str": "structure.undergound_cabin_c",
-			"name": "Undergound Cabin C",
+			"id_str": "structure.underground_cabin_c",
+			"name": "Underground Cabin C",
 			"width": "14",
 			"height": "17",
 			"spawn_weight": "10",
-			"tile_data": "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|--[0:tile.none][0:tile.none][0:tile.wood][0:tile.none][0:tile.none][0:tile.none][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------|-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------|--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]---------"
+			"tile_data": [
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"--[0:tile.none][0:tile.none][0:tile.wood][0:tile.none][0:tile.none][0:tile.none][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
+				"-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
+				"--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]---------"
+			]
 		},
 		{
 			"id": "24",
-			"id_str": "structure.undergound_cabin_d",
-			"name": "Undergound Cabin D",
+			"id_str": "structure.underground_cabin_d",
+			"name": "Underground Cabin D",
 			"width": "16",
 			"height": "11",
 			"spawn_weight": "100",
-			"tile_data": "------[0:tile.none][0:tile.none][0:tile.none][0:tile.none]-|-----[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]|----[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]|---[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]|---[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.platform_wood][0:tile.none]-|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]--"
+			"tile_data": [
+				"------[0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
+				"-----[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]",
+				"----[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]",
+				"---[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]",
+				"---[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.platform_wood][0:tile.none]-",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]--"
+			]
 		},
 		{
 			"id": "25",
-			"id_str": "structure.undergound_cabin_e",
-			"name": "Undergound Cabin E",
+			"id_str": "structure.underground_cabin_e",
+			"name": "Underground Cabin E",
 			"width": "17",
 			"height": "9",
 			"spawn_weight": "35",
-			"tile_data": "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]"
+			"tile_data": [
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_a;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.chest_wood;1:0,0;2:loot.chest_wood;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]"
+			]
 		},
 		{
 			"id": "26",
-			"id_str": "structure.undergound_cabin_f",
-			"name": "Undergound Cabin F",
+			"id_str": "structure.underground_cabin_f",
+			"name": "Underground Cabin F",
 			"width": "13",
 			"height": "8",
 			"spawn_weight": "100",
-			"tile_data": "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]"
+			"tile_data": [
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]"
+			]
 		},
 		{
 			"id": "27",
-			"id_str": "structure.undergound_cabin_g",
-			"name": "Undergound Cabin G",
+			"id_str": "structure.underground_cabin_g",
+			"name": "Underground Cabin G",
 			"width": "13",
 			"height": "15",
 			"spawn_weight": "20",
-			"tile_data": "-------[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]|-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.platform_wood;3:wall.wood]|-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]|-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]|[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]"
+			"tile_data": [
+				"-------[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_thick_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_b;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:underground_cabin,Down]",
+				"-------[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.crafting_table_wood;1:0,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood;4:underground_cabin,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][1:-1,0;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.painting_c;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_gray;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
+				"[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]"
+			]
 		}
 	]
 }

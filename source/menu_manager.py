@@ -125,7 +125,7 @@ def update_menu_buttons():
 				temp_game_sub_state = commons.GAME_SUB_STATE
 
 				if menu_button.text == "Single Player":
-					commons.GAME_SUB_STATE = "PLAYERSELECTION"
+					commons.GAME_SUB_STATE = "PLAYER_SELECTION"
 					load_menu_player_data()
 
 				elif menu_button.text == "Settings":
@@ -161,7 +161,7 @@ def update_menu_buttons():
 					commons.GAME_SUB_STATE = commons.GAME_SUB_STATE_STACK.pop()
 
 				elif menu_button.text == "New Player":
-					commons.GAME_SUB_STATE = "PLAYERCREATION"
+					commons.GAME_SUB_STATE = "PLAYER_CREATION"
 					commons.PLAYER_MODEL_DATA = [0, 0,
 												[(127, 72, 36), None, None],
 												[(0, 0, 0), None, None],
@@ -189,34 +189,34 @@ def update_menu_buttons():
 					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
 				elif menu_button.text == "Hair Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 3
 
 				elif menu_button.text == "Eye Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 4
 
 				elif menu_button.text == "Skin Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 2
 
 				elif menu_button.text == "Clothes":
 					commons.GAME_SUB_STATE = "CLOTHES"
 
 				elif menu_button.text == "Shirt Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 5
 
 				elif menu_button.text == "Undershirt Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 6
 
 				elif menu_button.text == "Trouser Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 7
 
 				elif menu_button.text == "Shoe Color":
-					commons.GAME_SUB_STATE = "COLORPICKER"
+					commons.GAME_SUB_STATE = "COLOR_PICKER"
 					commons.PLAYER_MODEL_COLOR_INDEX = 8
 
 				elif menu_button.text == "Randomize":
@@ -233,39 +233,39 @@ def update_menu_buttons():
 					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
 				elif menu_button.text == "Create":
-					commons.GAME_SUB_STATE = "PLAYERNAMING"
+					commons.GAME_SUB_STATE = "PLAYER_NAMING"
 					commons.TEXT_INPUT = ""
 
 				elif menu_button.text == "Set Player Name":
 					date = datetime.datetime.now()
 					commons.PLAYER_DATA = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
 					pickle.dump(commons.PLAYER_DATA, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
-					commons.GAME_SUB_STATE = "PLAYERSELECTION"
+					commons.GAME_SUB_STATE = "PLAYER_SELECTION"
 					load_menu_player_data()
 
 				elif menu_button.text == "New World":
-					commons.GAME_SUB_STATE = "WORLDCREATION"
+					commons.GAME_SUB_STATE = "WORLD_CREATION"
 
 				elif menu_button.text == "Tiny (100x350)":
-					commons.GAME_SUB_STATE = "WORLDNAMING"
+					commons.GAME_SUB_STATE = "WORLD_NAMING"
 					commons.TEXT_INPUT = ""
 					world.WORLD_SIZE_X = 100
 					world.WORLD_SIZE_Y = 350
 
 				elif menu_button.text == "Small (200x400)":
-					commons.GAME_SUB_STATE = "WORLDNAMING"
+					commons.GAME_SUB_STATE = "WORLD_NAMING"
 					commons.TEXT_INPUT = ""
 					world.WORLD_SIZE_X = 200
 					world.WORLD_SIZE_Y = 400
 
 				elif menu_button.text == "Medium (400x450)":
-					commons.GAME_SUB_STATE = "WORLDNAMING"
+					commons.GAME_SUB_STATE = "WORLD_NAMING"
 					commons.TEXT_INPUT = ""
 					world.WORLD_SIZE_X = 400
 					world.WORLD_SIZE_Y = 450
 
 				elif menu_button.text == "Large (700x550)":
-					commons.GAME_SUB_STATE = "WORLDNAMING"
+					commons.GAME_SUB_STATE = "WORLD_NAMING"
 					commons.TEXT_INPUT = ""
 					world.WORLD_SIZE_X = 700
 					world.WORLD_SIZE_Y = 550
@@ -274,10 +274,10 @@ def update_menu_buttons():
 					world.WORLD_NAME = commons.TEXT_INPUT
 					world.generate_terrain("DEFAULT", blit_progress=True)
 					world.save()
-					commons.GAME_SUB_STATE = "WORLDSELECTION"
+					commons.GAME_SUB_STATE = "WORLD_SELECTION"
 					load_menu_player_data()
 
-				if commons.GAME_SUB_STATE == "COLORPICKER":
+				if commons.GAME_SUB_STATE == "COLOR_PICKER":
 					if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
 						entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
 					entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]

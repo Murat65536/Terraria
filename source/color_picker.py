@@ -7,11 +7,11 @@ import commons
 
 
 """================================================================================================================= 
-	color_picker.ColorPicker
+	color_picker.COLOR_PICKER
 
 	Stores information about a color picker
 -----------------------------------------------------------------------------------------------------------------"""
-class ColorPicker:
+class COLOR_PICKER:
 	def __init__(self, position, width, height, border_size=5, surface_resolution=0.5):
 		self.position = position
 		self.width = width
@@ -36,7 +36,7 @@ class ColorPicker:
 		self.rect = Rect(self.position[0] + self.border_size, self.position[1] + self.border_size, width, height)
 
 	"""================================================================================================================= 
-		color_picker.ColorPicker.render_surface -> void
+		color_picker.COLOR_PICKER.render_surface -> void
 
 		Uses canvas and border size info to render the color picker surface 
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -54,7 +54,7 @@ class ColorPicker:
 		self.surface.blit(surf, (self.border_size, self.border_size))
 
 	"""================================================================================================================= 
-		color_picker.ColorPicker.get_color -> tuple
+		color_picker.COLOR_PICKER.get_color -> tuple
 
 		Generates the color of the surface at a given location
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -81,7 +81,7 @@ class ColorPicker:
 		return tuple(col)
 
 	"""================================================================================================================= 
-		color_picker.ColorPicker.update -> void
+		color_picker.COLOR_PICKER.update -> void
 
 		If the mouse is clicked over the color picker, update the selected color and location
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -94,7 +94,7 @@ class ColorPicker:
 				self.selected_color = (self.selected_color[0] * 0.5, self.selected_color[1] * 0.5, self.selected_color[2] * 0.5)
 
 	"""================================================================================================================= 
-		color_picker.ColorPicker.draw -> void
+		color_picker.COLOR_PICKER.draw -> void
 
 		Draws the color picker's surface and draws the location of the selected color
 	-----------------------------------------------------------------------------------------------------------------"""

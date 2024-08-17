@@ -595,7 +595,7 @@ def generate_terrain(gen_type, blit_progress=False):
 					break
 
 		for i in range(math.ceil((WORLD_SIZE_X * WORLD_SIZE_Y) / 15000)):
-			spawn_structure(random.randint(50, WORLD_SIZE_X - 50), random.randint(100, WORLD_SIZE_Y - 50), "structure.undergound_cabin_a", (4, 0), True, check_placement_validity=True)
+			spawn_structure(random.randint(50, WORLD_SIZE_X - 50), random.randint(100, WORLD_SIZE_Y - 50), "structure.underground_cabin_a", (4, 0), True, check_placement_validity=True)
 
 		if blit_progress:
 			blit_generation_stage("Growing Trees")
