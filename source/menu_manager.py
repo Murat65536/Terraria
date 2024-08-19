@@ -180,185 +180,156 @@ def update_menu_buttons():
 					text.clicked = False
 
 					temp_game_sub_state = commons.game_sub_state
-					# TODO Continue adding more enums and linking the buttons to them instead of the text. Also make the menu buttons able to be in any order.
-					# Note: Since detection is occurring with the function parameter instead of the text parameter, the back button will need to be placed for every menu. This may allow for the game_sub_state_stack to be removed, significantly decreasing the complexity.
-					if text.function == MenuButtons.SINGLE_PLAYER:
-						commons.game_sub_state = "PLAYER_SELECTION"
-						load_menu_player_data()
-
-					elif text.function == MenuButtons.CREDITS:
-						commons.game_sub_state = "CREDITS"
-
-					elif text.function == MenuButtons.CHANGES:
-						commons.game_sub_state = "CHANGES"
-
-					elif text.function == MenuButtons.SETTINGS:
-						commons.game_sub_state = "SETTINGS"
-
-					elif text.function == MenuButtons.EXIT:
-						pygame.quit()
-						sys.exit()
-					
-					elif text.function == PlayerSelectionButtons.NEW_PLAYER:
-						commons.game_sub_state = "PLAYER_CREATION"
-						commons.PLAYER_MODEL_DATA = [0, 0,
-													[(127, 72, 36), None, None],
-													[(0, 0, 0), None, None],
-													[(0, 0, 0), None, None],
-													[(95, 125, 127), None, None],
-													[(48, 76, 127), None, None],
-													[(129, 113, 45), None, None],
-													[(80, 100, 45), None, None]]
-						commons.PLAYER_MODEL = player.Model(commons.PLAYER_MODEL_DATA[0], commons.PLAYER_MODEL_DATA[1],
-															commons.PLAYER_MODEL_DATA[2][0],
-															commons.PLAYER_MODEL_DATA[3][0],
-															commons.PLAYER_MODEL_DATA[4][0],
-															commons.PLAYER_MODEL_DATA[5][0],
-															commons.PLAYER_MODEL_DATA[6][0],
-															commons.PLAYER_MODEL_DATA[7][0],
-															commons.PLAYER_MODEL_DATA[8][0])
-						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
-
-					elif text.function == PlayerSelectionButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-					
-					elif text.function == PlayerCreationButtons.HAIR_TYPE:
-						assert commons.PLAYER_MODEL is not None
-						if commons.PLAYER_MODEL.hair_id < 163:
-							commons.PLAYER_MODEL.hair_id += 1
-						else:
-							commons.PLAYER_MODEL.hair_id = 0
-						commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
-						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
-
-					elif text.function == PlayerCreationButtons.HAIR_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 3
-
-					elif text.function == PlayerCreationButtons.EYE_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 4
-
-					elif text.function == PlayerCreationButtons.SKIN_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 2
-
-					elif text.function == PlayerCreationButtons.CLOTHES:
-						commons.game_sub_state = "CLOTHES"
-
-
-					elif text.function == PlayerCreationButtons.CREATE:
-						commons.game_sub_state = "PLAYER_NAMING"
-						commons.TEXT_INPUT = ""
-
-					elif text.function == PlayerCreationButtons.RANDOMIZE:
-						commons.PLAYER_MODEL_DATA = [0, random.randint(0, 8),
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None]
-						]
-						player.update_player_model_using_model_data()
-						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
-
-					elif text.function == PlayerCreationButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-					
-					elif text.function == ColorPickerButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == ClothesButtons.SHIRT_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 5
-
-					elif text.function == ClothesButtons.UNDERSHIRT_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 6
-
-					elif text.function == ClothesButtons.TROUSER_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 7
-
-					elif text.function == ClothesButtons.SHOE_COLOR:
-						commons.game_sub_state = "COLOR_PICKER"
-						commons.PLAYER_MODEL_COLOR_INDEX = 8
-
-					elif text.function == ClothesButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == PlayerNamingButtons.SET_NAME:
-						date = datetime.datetime.now()
-						commons.player_data = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
-						pickle.dump(commons.player_data, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
-						commons.game_sub_state = "PLAYER_SELECTION"
-						load_menu_player_data()
-
-					elif text.function == PlayerNamingButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == WorldSelectionButtons.NEW_WORLD:
-						commons.game_sub_state = "WORLD_CREATION"
-
-					elif text.function == WorldSelectionButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == WorldCreationButtons.TINY:
-						commons.game_sub_state = "WORLD_NAMING"
-						commons.TEXT_INPUT = ""
-						world.WORLD_SIZE_X = 100
-						world.WORLD_SIZE_Y = 350
-
-					elif text.function == WorldCreationButtons.SMALL:
-						commons.game_sub_state = "WORLD_NAMING"
-						commons.TEXT_INPUT = ""
-						world.WORLD_SIZE_X = 200
-						world.WORLD_SIZE_Y = 400
-
-					elif text.function == WorldCreationButtons.MEDIUM:
-						commons.game_sub_state = "WORLD_NAMING"
-						commons.TEXT_INPUT = ""
-						world.WORLD_SIZE_X = 400
-						world.WORLD_SIZE_Y = 450
-
-					elif text.function == WorldCreationButtons.LARGE:
-						commons.game_sub_state = "WORLD_NAMING"
-						commons.TEXT_INPUT = ""
-						world.WORLD_SIZE_X = 700
-						world.WORLD_SIZE_Y = 550
-
-					elif text.function == WorldCreationButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == WorldNamingButtons.SET_NAME:
-						world.SET_NAME = commons.TEXT_INPUT
-						world.generate_terrain("DEFAULT", blit_progress=True)
-						world.save()
-						commons.game_sub_state = "WORLD_SELECTION"
-						load_menu_player_data()
-
-					elif text.function == WorldNamingButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == CreditsButton.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-
-					elif text.function == ChangesButtons.GITHUB:
-						entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
-						webbrowser.open("https://github.com/Murat65536/Terraria")
-
-					elif text.function == ChangesButtons.TRELLO:
-						entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
-						webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
-					
-					elif text.function == ChangesButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
-					
-					elif text.function == SettingsButtons.BACK:
-						commons.game_sub_state = commons.game_sub_state_stack.pop()
+					# TODO Attempt to remove game_sub_state_stack 
+					match text.function:
+						case MenuButtons.SINGLE_PLAYER:
+							commons.game_sub_state = "PLAYER_SELECTION"
+							load_menu_player_data()
+						case MenuButtons.CREDITS:
+							commons.game_sub_state = "CREDITS"
+						case MenuButtons.CHANGES:
+							commons.game_sub_state = "CHANGES"
+						case MenuButtons.SETTINGS:
+							commons.game_sub_state = "SETTINGS"
+						case MenuButtons.EXIT:
+							pygame.quit()
+							sys.exit()
+						case PlayerSelectionButtons.NEW_PLAYER:
+							commons.game_sub_state = "PLAYER_CREATION"
+							commons.PLAYER_MODEL_DATA = [
+								0,
+								0,
+								[(127, 72, 36), None, None],
+								[(0, 0, 0), None, None],
+								[(0, 0, 0), None, None],
+								[(95, 125, 127), None, None],
+								[(48, 76, 127), None, None],
+								[(129, 113, 45), None, None],
+								[(80, 100, 45), None, None]
+							]
+							commons.PLAYER_MODEL = player.Model(
+								commons.PLAYER_MODEL_DATA[0],
+								commons.PLAYER_MODEL_DATA[1],
+								commons.PLAYER_MODEL_DATA[2][0],
+								commons.PLAYER_MODEL_DATA[3][0],
+								commons.PLAYER_MODEL_DATA[4][0],
+								commons.PLAYER_MODEL_DATA[5][0],
+								commons.PLAYER_MODEL_DATA[6][0],
+								commons.PLAYER_MODEL_DATA[7][0],
+								commons.PLAYER_MODEL_DATA[8][0]
+							)
+							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+						case PlayerSelectionButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case PlayerCreationButtons.HAIR_TYPE:
+							assert commons.PLAYER_MODEL is not None
+							if commons.PLAYER_MODEL.hair_id < 163:
+								commons.PLAYER_MODEL.hair_id += 1
+							else:
+								commons.PLAYER_MODEL.hair_id = 0
+							commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
+							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+						case PlayerCreationButtons.HAIR_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 3
+						case PlayerCreationButtons.EYE_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 4
+						case PlayerCreationButtons.SKIN_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 2
+						case PlayerCreationButtons.CLOTHES:
+							commons.game_sub_state = "CLOTHES"
+						case PlayerCreationButtons.CREATE:
+							commons.game_sub_state = "PLAYER_NAMING"
+							commons.TEXT_INPUT = ""
+						case PlayerCreationButtons.RANDOMIZE:
+							commons.PLAYER_MODEL_DATA = [
+								0,
+								random.randint(0, 8),
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None]
+							]
+							player.update_player_model_using_model_data()
+							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+						case PlayerCreationButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case ColorPickerButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case ClothesButtons.SHIRT_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 5
+						case ClothesButtons.UNDERSHIRT_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 6
+						case ClothesButtons.TROUSER_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 7
+						case ClothesButtons.SHOE_COLOR:
+							commons.game_sub_state = "COLOR_PICKER"
+							commons.PLAYER_MODEL_COLOR_INDEX = 8
+						case ClothesButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case PlayerNamingButtons.SET_NAME:
+							date = datetime.datetime.now()
+							commons.player_data = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
+							pickle.dump(commons.player_data, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
+							commons.game_sub_state = "PLAYER_SELECTION"
+							load_menu_player_data()
+						case PlayerNamingButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case WorldSelectionButtons.NEW_WORLD:
+							commons.game_sub_state = "WORLD_CREATION"
+						case WorldSelectionButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case WorldCreationButtons.TINY:
+							commons.game_sub_state = "WORLD_NAMING"
+							commons.TEXT_INPUT = ""
+							world.WORLD_SIZE_X = 100
+							world.WORLD_SIZE_Y = 350
+						case WorldCreationButtons.SMALL:
+							commons.game_sub_state = "WORLD_NAMING"
+							commons.TEXT_INPUT = ""
+							world.WORLD_SIZE_X = 200
+							world.WORLD_SIZE_Y = 400
+						case WorldCreationButtons.MEDIUM:
+							commons.game_sub_state = "WORLD_NAMING"
+							commons.TEXT_INPUT = ""
+							world.WORLD_SIZE_X = 400
+							world.WORLD_SIZE_Y = 450
+						case WorldCreationButtons.LARGE:
+							commons.game_sub_state = "WORLD_NAMING"
+							commons.TEXT_INPUT = ""
+							world.WORLD_SIZE_X = 700
+							world.WORLD_SIZE_Y = 550
+						case WorldCreationButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case WorldNamingButtons.SET_NAME:
+							world.WORLD_NAME = commons.TEXT_INPUT
+							world.generate_terrain("DEFAULT", blit_progress=True)
+							world.save()
+							commons.game_sub_state = "WORLD_SELECTION"
+							load_menu_player_data()
+						case WorldNamingButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case CreditsButton.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case ChangesButtons.GITHUB:
+							entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
+							webbrowser.open("https://github.com/Murat65536/Terraria")
+						case ChangesButtons.TRELLO:
+							entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
+							webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
+						case ChangesButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
+						case SettingsButtons.BACK:
+							commons.game_sub_state = commons.game_sub_state_stack.pop()
 
 					if commons.game_sub_state == "COLOR_PICKER":
 						if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
