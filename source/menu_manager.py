@@ -179,8 +179,6 @@ def update_menu_buttons():
 				if text.clicked:
 					text.clicked = False
 
-					temp_game_sub_state = commons.game_sub_state
-					# TODO Attempt to remove game_sub_state_stack 
 					match text.function:
 						case MenuButtons.SINGLE_PLAYER:
 							commons.game_sub_state = "PLAYER_SELECTION"
@@ -220,7 +218,7 @@ def update_menu_buttons():
 							)
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 						case PlayerSelectionButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "MAIN"
 						case PlayerCreationButtons.HAIR_TYPE:
 							assert commons.PLAYER_MODEL is not None
 							if commons.PLAYER_MODEL.hair_id < 163:
@@ -259,9 +257,9 @@ def update_menu_buttons():
 							player.update_player_model_using_model_data()
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 						case PlayerCreationButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "PLAYER_SELECTION"
 						case ColorPickerButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "PLAYER_CREATION"
 						case ClothesButtons.SHIRT_COLOR:
 							commons.game_sub_state = "COLOR_PICKER"
 							commons.PLAYER_MODEL_COLOR_INDEX = 5
@@ -275,7 +273,7 @@ def update_menu_buttons():
 							commons.game_sub_state = "COLOR_PICKER"
 							commons.PLAYER_MODEL_COLOR_INDEX = 8
 						case ClothesButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "PLAYER_CREATION"
 						case PlayerNamingButtons.SET_NAME:
 							date = datetime.datetime.now()
 							commons.player_data = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
@@ -283,11 +281,11 @@ def update_menu_buttons():
 							commons.game_sub_state = "PLAYER_SELECTION"
 							load_menu_player_data()
 						case PlayerNamingButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "PLAYER_CREATION"
 						case WorldSelectionButtons.NEW_WORLD:
 							commons.game_sub_state = "WORLD_CREATION"
 						case WorldSelectionButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "PLAYER_SELECTION"
 						case WorldCreationButtons.TINY:
 							commons.game_sub_state = "WORLD_NAMING"
 							commons.TEXT_INPUT = ""
@@ -309,7 +307,7 @@ def update_menu_buttons():
 							world.WORLD_SIZE_X = 700
 							world.WORLD_SIZE_Y = 550
 						case WorldCreationButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "WORLD_SELECTION"
 						case WorldNamingButtons.SET_NAME:
 							world.WORLD_NAME = commons.TEXT_INPUT
 							world.generate_terrain("DEFAULT", blit_progress=True)
@@ -317,9 +315,9 @@ def update_menu_buttons():
 							commons.game_sub_state = "WORLD_SELECTION"
 							load_menu_player_data()
 						case WorldNamingButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "WORLD_CREATION"
 						case CreditsButton.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "MAIN"
 						case ChangesButtons.GITHUB:
 							entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
 							webbrowser.open("https://github.com/Murat65536/Terraria")
@@ -327,26 +325,15 @@ def update_menu_buttons():
 							entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
 							webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
 						case ChangesButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "MAIN"
 						case SettingsButtons.BACK:
-							commons.game_sub_state = commons.game_sub_state_stack.pop()
+							commons.game_sub_state = "MAIN"
 
 					if commons.game_sub_state == "COLOR_PICKER":
 						if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
 							entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
 						entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
 						entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
-
-					# Update last game sub state variable is the sub state changed
-					if temp_game_sub_state != commons.game_sub_state:
-						if text.text != "Back":
-							commons.game_sub_state_stack.append(temp_game_sub_state)
-
-						if text.function == PlayerNamingButtons.SET_NAME:
-							commons.game_sub_state_stack = commons.game_sub_state_stack[:1]
-
-						if text.function == WorldNamingButtons.SET_NAME:
-							commons.game_sub_state_stack = commons.game_sub_state_stack[:2]
 
 					update_active_menu_buttons()
 

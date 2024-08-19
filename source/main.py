@@ -935,7 +935,6 @@ while True:
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
 							commons.game_sub_state = "WORLD_SELECTION"
-							commons.game_sub_state_stack.append("PLAYER_SELECTION")
 							menu_manager.update_active_menu_buttons()
 							save_select_y_offset = 0
 							

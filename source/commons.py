@@ -11,7 +11,6 @@ SHIFT_ACTIVE: bool = False
 
 game_state: str = "MAINMENU"
 game_sub_state: str = "MAIN"
-game_sub_state_stack: list[str] = []
 
 # Config loading
 config: TextIO = open("config.txt", "r")
