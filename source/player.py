@@ -1024,7 +1024,7 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	remove_item(self, position,	remove_count=None):
 		item = self.items[position[0]][position[1]]
-		if item	is not None:
+		if item is not None:
 			if remove_count	is None:
 				self.items[position[0]][position[1]] = None
 			else:
@@ -1061,7 +1061,7 @@ class Player:
 		if search_inventory:
 			for	inventory_index	in range(len(self.items[ItemLocation.INVENTORY])):
 				item = self.items[ItemLocation.INVENTORY][inventory_index]
-				if item	is not None:
+				if item is not None:
 					if item.item_id	== item_id:
 						available =	item_data["max_stack"]	- self.items[ItemLocation.INVENTORY][inventory_index].amount
 						if available > 0:
@@ -1099,7 +1099,7 @@ class Player:
 		for	hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
 			self.hotbar_image.blit(surface_manager.misc_gui[0],	(48	* hotbar_index,	0))
 			item = self.items[ItemLocation.HOTBAR][hotbar_index]
-			if item	is not None:
+			if item is not None:
 				self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * hotbar_index, item.get_item_slot_offset_y()))
 				if item.amount > 1:
 					self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * hotbar_index, 30))
@@ -1117,7 +1117,7 @@ class Player:
 			slot_y = inventory_index // 10
 			self.inventory_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.INVENTORY][inventory_index]
-			if item	is not None:
+			if item is not None:
 				self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.INVENTORY][inventory_index].amount > 1:
 					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
@@ -1135,7 +1135,7 @@ class Player:
 			slot_y = chest_index // 5
 			self.chest_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.CHEST][chest_index]
-			if item	is not None:
+			if item is not None:
 				self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.CHEST][chest_index].amount > 1:
 					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
@@ -1150,7 +1150,7 @@ class Player:
 			if data[0] == ItemLocation.HOTBAR:
 				item = self.items[ItemLocation.HOTBAR][data[1]]
 				self.hotbar_image.blit(surface_manager.misc_gui[0],	(data[1] * 48, 0))
-				if item	is not None:
+				if item is not None:
 					self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * data[1],	item.get_item_slot_offset_y()))
 					if item.amount > 1:
 						self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * data[1],	30))
@@ -1159,7 +1159,7 @@ class Player:
 				slot_x = data[1] % 10
 				slot_y = data[1] // 10
 				self.inventory_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
-				if item	is not None:
+				if item is not None:
 					self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
 					if item.amount > 1:
 						self.inventory_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
@@ -1169,7 +1169,7 @@ class Player:
 				slot_x = data[1] % 5
 				slot_y = data[1] // 5
 				self.chest_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
-				if item	is not None:
+				if item is not None:
 					self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
 					if item.amount > 1:
 						self.chest_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
@@ -1444,8 +1444,8 @@ class Player:
 					formatted_inventory.append([item_index,	item.get_id_str(), item.amount, item.get_prefix_name()])
 
 		# Save the data	to disk	and	display	a message
-		commons.PLAYER_DATA	= [self.name, self.model, formatted_hotbar,	formatted_inventory, self.hp, self.max_hp, self.play_time, self.creation_date, self.last_played_date]  # Create	player array
-		pickle.dump(commons.PLAYER_DATA, open("assets/players/" + self.name + ".player", "wb"))  # Save player	array
+		commons.player_data	= [self.name, self.model, formatted_hotbar,	formatted_inventory, self.hp, self.max_hp, self.play_time, self.creation_date, self.last_played_date]  # Create	player array
+		pickle.dump(commons.player_data, open("assets/players/" + self.name + ".player", "wb"))  # Save player	array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 
 	"""=================================================================================================================	

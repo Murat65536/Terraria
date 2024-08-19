@@ -40,38 +40,38 @@ camera_position_difference = (0, 0)
 """================================================================================================================= 
 	entity_manager.create_player -> void
 
-	Sets the client player to a new player instance created with the data in PLAYER_DATA
+	Sets the client player to a new player instance created with the data in player_data
 -----------------------------------------------------------------------------------------------------------------"""
 
 
 def create_player():
 	global client_player
-	name = commons.PLAYER_DATA[0]
-	model = commons.PLAYER_DATA[1]
+	name = commons.player_data[0]
+	model = commons.player_data[1]
 
 	# Load hotbar
 	hotbar: list[Item | None] = [None for _ in range(10)]
-	if commons.PLAYER_DATA[2] is not None:
-		for loaded_hotbar_index in range(len(commons.PLAYER_DATA[2])):
-			loaded_item_data = commons.PLAYER_DATA[2][loaded_hotbar_index]
+	if commons.player_data[2] is not None:
+		for loaded_hotbar_index in range(len(commons.player_data[2])):
+			loaded_item_data = commons.player_data[2][loaded_hotbar_index]
 			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
 			item.assign_prefix(loaded_item_data[3])
 			hotbar[loaded_item_data[0]] = item
 
 	# Load inventory
 	inventory: list[Item | None] = [None for _ in range(40)]
-	if commons.PLAYER_DATA[3] is not None:
-		for loaded_inventory_index in range(len(commons.PLAYER_DATA[3])):
-			loaded_item_data = commons.PLAYER_DATA[3][loaded_inventory_index]
+	if commons.player_data[3] is not None:
+		for loaded_inventory_index in range(len(commons.player_data[3])):
+			loaded_item_data = commons.player_data[3][loaded_inventory_index]
 			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
 			item.assign_prefix(loaded_item_data[3])
 			inventory[loaded_item_data[0]] = item
 
-	hp = commons.PLAYER_DATA[4]
-	max_hp = commons.PLAYER_DATA[5]
-	play_time = commons.PLAYER_DATA[6]
-	creation_date = commons.PLAYER_DATA[7]
-	last_played_date = commons.PLAYER_DATA[8]
+	hp = commons.player_data[4]
+	max_hp = commons.player_data[5]
+	play_time = commons.player_data[6]
+	creation_date = commons.player_data[7]
+	last_played_date = commons.player_data[8]
 	client_player = Player((0, 0), model, name=name, hotbar=hotbar, inventory=inventory, hp=hp, max_hp=max_hp, play_time=play_time, creation_date=creation_date, last_played_date=last_played_date)
 
 
@@ -308,13 +308,11 @@ def spawn_physics_item(item, position, velocity=None, pickup_delay=100):
 
 def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 	ammo_item_data = game_data.get_item_by_id(ammo_item_id)
-	print(ammo_item_id)
 
-	if (ammo_item_data != None):
-		total_damage = weapon_item.get_attack_damage() + ammo_item_data["ammo_damage"]
-		knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_mod"]
-		ammo_gravity_mod = ammo_item_data["ammo_gravity_mod"]
-		ammo_drag = ammo_item_data["ammo_drag"]
+	total_damage = weapon_item.get_attack_damage() + ammo_item_data["ammo_damage"]
+	knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_mod"]
+	ammo_gravity_mod = ammo_item_data["ammo_gravity_mod"]
+	ammo_drag = ammo_item_data["ammo_drag"]
 	
 	speed = weapon_item.get_ranged_projectile_speed()
 

@@ -101,8 +101,8 @@ class Prompt:
 				entity_manager.client_player.save()
 				world.save()
 				sound_manager.stop_music()
-				commons.GAME_STATE = "MAINMENU"
-				commons.GAME_SUB_STATE = "MAIN"
+				commons.game_state = "MAINMENU"
+				commons.game_sub_state = "MAIN"
 				world.terrain_surface = pygame.Surface((1, 1))
 				menu_manager.update_active_menu_buttons()
 				self.close = True

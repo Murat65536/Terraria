@@ -744,7 +744,7 @@ while True:
 	else:
 		commons.SHIFT_ACTIVE = False
 
-	if commons.GAME_STATE == "PLAYING":
+	if commons.game_state == "PLAYING":
 		# TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
 		base_zero_to_one_float = math.sin(datetime.timedelta(seconds = entity_manager.client_player.play_time) / datetime.timedelta(hours=1) / 0.4 * 6) * 0.5 + 0.5
 		smoothed_zero_to_one_float = shared_methods.smooth_zero_to_one(base_zero_to_one_float, 0)
@@ -915,27 +915,27 @@ while True:
 		else:
 			auto_save_tick -= commons.DELTA_TIME
 
-	elif commons.GAME_STATE == "MAINMENU":
+	elif commons.game_state == "MAINMENU":
 		draw_menu_background_sky()
 		draw_menu_background()
 		for i in range(len(menu_background_scroll)):
-			menu_background_scroll[i] += 0.2
+			menu_background_scroll[i] += 10 * commons.DELTA_TIME
 		menu_manager.update_menu_buttons()
 		menu_manager.draw_menu_buttons()
-		if commons.GAME_SUB_STATE == "MAIN":
+		if commons.game_sub_state == "MAIN":
 			commons.screen.blit(menu_logo, (commons.WINDOW_WIDTH * 0.5 - menu_logo.get_width() * 0.5, 20))
 
-		elif commons.GAME_SUB_STATE == "PLAYER_SELECTION":
+		elif commons.game_sub_state == "PLAYER_SELECTION":
 			if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE: 
 				if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
 					for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
 						if pygame.Rect(load_menu_box_left2, 132 + i * 62 + save_select_y_offset, 315, 60).collidepoint(commons.MOUSE_POSITION):
 							commons.WAIT_TO_USE = True
-							commons.PLAYER_DATA = commons.PLAYER_SAVE_OPTIONS[i][0]
+							commons.player_data = commons.PLAYER_SAVE_OPTIONS[i][0]
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
-							commons.GAME_SUB_STATE = "WORLD_SELECTION"
-							commons.GAME_SUB_STATE_STACK.append("PLAYER_SELECTION")
+							commons.game_sub_state = "WORLD_SELECTION"
+							commons.game_sub_state_stack.append("PLAYER_SELECTION")
 							menu_manager.update_active_menu_buttons()
 							save_select_y_offset = 0
 							
@@ -953,11 +953,11 @@ while True:
 				save_select_surf.blit(commons.PLAYER_SAVE_OPTIONS[i][1], (0, i * 62 + save_select_y_offset))
 			commons.screen.blit(save_select_surf, (load_menu_box_left2,  132))
 
-		elif commons.GAME_SUB_STATE == "PLAYER_CREATION":
+		elif commons.game_sub_state == "PLAYER_CREATION":
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "WORLD_SELECTION":
+		elif commons.game_sub_state == "WORLD_SELECTION":
 			should_break = False
 			if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
 				if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
@@ -1012,7 +1012,7 @@ while True:
 									else:
 										map_light[map_index_x][map_index_y] = 0
 							
-							commons.GAME_STATE = "PLAYING"
+							commons.game_state = "PLAYING"
 							should_break = True
 							sound_manager.play_music()
 							break
@@ -1032,21 +1032,21 @@ while True:
 					save_select_surf.blit(commons.WORLD_SAVE_OPTIONS[save_option_index][1], (0, save_option_index * 62 + save_select_y_offset))
 				commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
 
-		elif commons.GAME_SUB_STATE == "CLOTHES":
+		elif commons.game_sub_state == "CLOTHES":
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "WORLD_NAMING":
+		elif commons.game_sub_state == "WORLD_NAMING":
 			text = shared_methods.outline_text(f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT)
 			commons.screen.blit(text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175))
 
-		elif commons.GAME_SUB_STATE == "PLAYER_NAMING":
+		elif commons.game_sub_state == "PLAYER_NAMING":
 			text = shared_methods.outline_text(f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT)
 			commons.screen.blit(text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175))
 			commons.screen.blit(commons.PLAYER_FRAMES[0][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[0][0].get_width() * 0.5, 100))
 			commons.screen.blit(commons.PLAYER_FRAMES[1][0], (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES[1][0].get_width() * 0.5, 100))
 
-		elif commons.GAME_SUB_STATE == "COLOR_PICKER":
+		elif commons.game_sub_state == "COLOR_PICKER":
 
 			entity_manager.client_color_picker.update()
 
@@ -1078,7 +1078,7 @@ while True:
 			fps_tick -= commons.DELTA_TIME
 		commons.screen.blit(fps_text, (commons.WINDOW_WIDTH - fps_text.get_width(), 0))
 
-	# Reset some variables when the mousebutton is lifted
+	# Reset some variables when the mouse button is lifted
 	if not pygame.mouse.get_pressed()[0]:
 		if commons.WAIT_TO_USE and not pygame.mouse.get_pressed()[2]:
 			commons.WAIT_TO_USE = False
@@ -1093,7 +1093,7 @@ while True:
 			
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
-			if commons.GAME_STATE == "PLAYING":
+			if commons.game_state == "PLAYING":
 				entity_manager.client_player.inventory_open = False
 				entity_manager.client_player.chest_open = False
 				entity_manager.client_prompt = prompt.Prompt("Exit", game_data.exit_messages[random.randint(0, len(game_data.exit_messages) - 1)], button_1_name="Yep", size=(6, 2))
@@ -1113,7 +1113,7 @@ while True:
 			#	else:
 			#		commons.SHIFT_ACTIVE = True
 
-		if commons.GAME_STATE == "PLAYING":
+		if commons.game_state == "PLAYING":
 			# print(round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
 			if event.type == pygame.KEYDOWN:
 				# Toggle Inventory
@@ -1222,7 +1222,7 @@ while True:
 								pygame.draw.rect(world_surf, color, pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
 
 						pygame.image.save(world_surf, path)
-						entity_manager.add_message(f"World Snapshotshot Saved to: '{path}'", (255, 223, 10), outline_color=(80, 70, 3))
+						entity_manager.add_message(f"World Snapshot Saved to: '{path}'", (255, 223, 10), outline_color=(80, 70, 3))
 
 				# Gravity Reverse Cheat
 				if event.key == pygame.K_g:
@@ -1366,20 +1366,20 @@ while True:
 							entity_manager.client_player.hotbar_index = 0
 						game_data.play_sound("sound.menu_select")
 
-		elif commons.GAME_STATE == "MAINMENU":
+		elif commons.game_state == "MAINMENU":
 
-			if commons.GAME_SUB_STATE == "PLAYER_SELECTION" or commons.GAME_SUB_STATE == "WORLD_SELECTION":
+			if commons.game_sub_state == "PLAYER_SELECTION" or commons.game_sub_state == "WORLD_SELECTION":
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 4:
 						save_select_y_velocity += 3
 					if event.button == 5:
 						save_select_y_velocity -= 3
 
-			elif commons.GAME_SUB_STATE == "PLAYER_NAMING" or commons.GAME_SUB_STATE == "WORLD_NAMING":
+			elif commons.game_sub_state == "PLAYER_NAMING" or commons.game_sub_state == "WORLD_NAMING":
 				if event.type == pygame.KEYDOWN:
 					if event.key == pygame.K_BACKSPACE:
 						commons.TEXT_INPUT = commons.TEXT_INPUT[:-1]
-					elif (len(commons.TEXT_INPUT) <= 15 and commons.GAME_SUB_STATE == "PLAYER_NAMING") or (len(commons.TEXT_INPUT) <= 27 and commons.GAME_SUB_STATE == "WORLD_NAMING"):
+					elif (len(commons.TEXT_INPUT) <= 15 and commons.game_sub_state == "PLAYER_NAMING") or (len(commons.TEXT_INPUT) <= 27 and commons.game_sub_state == "WORLD_NAMING"):
 						commons.TEXT_INPUT += event.unicode
 	pygame.display.flip()
 	clock.tick(commons.TARGET_FPS)

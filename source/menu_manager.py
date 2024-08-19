@@ -6,7 +6,7 @@ import pickle
 import webbrowser
 import datetime
 from pygame.locals import Rect
-
+from enum import Enum
 import player
 
 import commons
@@ -18,7 +18,72 @@ import entity_manager
 import surface_manager
 import shared_methods
 
-menu_buttons = []
+
+class Type(Enum):
+	TEXT = 1,
+	BUTTON = 2
+
+class MenuButtons(Enum):
+	SINGLE_PLAYER = 1,
+	CREDITS = 2,
+	CHANGES = 3,
+	SETTINGS = 4,
+	EXIT = 5
+
+class PlayerSelectionButtons(Enum):
+	NEW_PLAYER = 1,
+	BACK = 2
+
+class PlayerCreationButtons(Enum):
+	HAIR_TYPE = 1,
+	HAIR_COLOR = 2,
+	EYE_COLOR = 3,
+	SKIN_COLOR = 4,
+	CLOTHES = 5,
+	CREATE = 6,
+	RANDOMIZE = 7,
+	BACK = 8
+
+class ColorPickerButtons(Enum):
+	BACK = 1
+
+class ClothesButtons(Enum):
+	SHIRT_COLOR = 1,
+	UNDERSHIRT_COLOR = 2,
+	TROUSER_COLOR = 3,
+	SHOE_COLOR = 4,
+	BACK = 5
+
+class PlayerNamingButtons(Enum):
+	SET_NAME = 1,
+	BACK = 2
+
+class WorldSelectionButtons(Enum):
+	NEW_WORLD = 1,
+	BACK = 2
+
+class WorldCreationButtons(Enum):
+	TINY = 1,
+	SMALL = 2,
+	MEDIUM = 3,
+	LARGE = 4,
+	BACK = 5
+
+class WorldNamingButtons(Enum):
+	SET_NAME = 1,
+	BACK = 2
+
+class CreditsButton(Enum):
+	BACK = 1
+
+class ChangesButtons(Enum):
+	GITHUB = 1,
+	TRELLO = 2,
+	BACK = 3
+
+class SettingsButtons(Enum):
+	BACK = 1
+
 
 
 """================================================================================================================= 
@@ -28,26 +93,19 @@ menu_buttons = []
 	table
 -----------------------------------------------------------------------------------------------------------------"""
 class MenuButton:
-	def __init__(self, text, position, font, click_sound_id, is_button, color=(153, 153, 153), outline_color=(0, 0, 0)):
+	def __init__(self, text: str, position: tuple[float, float], font, click_sound_id, type: Type, color=(153, 153, 153), outline_color=(0, 0, 0), function=None):
 		self.text = text
 		self.position = position
-
-		self.is_button = is_button
-
+		self.type = type
 		self.color = color
-
+		self.function = function
 		self.text_surface = shared_methods.outline_text(text, self.color, font, outline_color)
-
-		if self.is_button:
+		if self.type == Type.BUTTON:
 			self.alt_text_surface = shared_methods.outline_text(text, (255, 255, 0), font)
-
 		self.rect = Rect(self.position[0] - self.text_surface.get_width() * 0.5, self.position[1] - self.text_surface.get_height() * 0.5, self.text_surface.get_width(), self.text_surface.get_height())
-
 		self.hovered = False
 		self.clicked = False
-
 		self.click_sound_id = click_sound_id
-
 		self.active = False
 
 	"""================================================================================================================= 
@@ -56,7 +114,7 @@ class MenuButton:
 		Checks to see if the mouse is interacting with the button instance, performing all the related logic
 	-----------------------------------------------------------------------------------------------------------------"""
 	def update(self):
-		if self.is_button:
+		if self.type == Type.BUTTON:
 			if self.rect.collidepoint(commons.MOUSE_POSITION):
 				if not self.hovered:
 					game_data.play_sound("sound.menu_select")
@@ -95,18 +153,16 @@ class MenuButton:
 	and data in the 'active_menu_buttons' table
 -----------------------------------------------------------------------------------------------------------------"""
 def update_active_menu_buttons():
-	for menuButton in menu_buttons:
-		menuButton.active = False
-
-	for i in range(len(game_data.active_menu_buttons)):
-		if commons.GAME_SUB_STATE == game_data.active_menu_buttons[i][0]:
-			for j in range(len(game_data.active_menu_buttons[i]) - 1):
-				menu_buttons[game_data.active_menu_buttons[i][j + 1]].active = True
+	for menu in active_menu_buttons:
+		for text in active_menu_buttons[menu]:
+			text.active = False
+	
+	for menu in active_menu_buttons:
+		if commons.game_sub_state == menu:
+			for text in active_menu_buttons[menu]:
+				text.active = True
 			break
 
-	# On menu
-	#if commons.GAME_SUB_STATE == "MAIN":
-		
 
 
 """================================================================================================================= 
@@ -115,186 +171,213 @@ def update_active_menu_buttons():
 	Calls update on all active button instances, handles unique button press logic
 -----------------------------------------------------------------------------------------------------------------"""
 def update_menu_buttons():
-	for menu_button in menu_buttons:
-		if menu_button.active:
-			menu_button.update()
+	for menu in active_menu_buttons:
+		for text in active_menu_buttons[menu]:
+			if text.active:
+				text.update()
 
-			if menu_button.clicked:
-				menu_button.clicked = False
+				if text.clicked:
+					text.clicked = False
 
-				temp_game_sub_state = commons.GAME_SUB_STATE
+					temp_game_sub_state = commons.game_sub_state
+					# TODO Continue adding more enums and linking the buttons to them instead of the text. Also make the menu buttons able to be in any order.
+					# Note: Since detection is occurring with the function parameter instead of the text parameter, the back button will need to be placed for every menu. This may allow for the game_sub_state_stack to be removed, significantly decreasing the complexity.
+					if text.function == MenuButtons.SINGLE_PLAYER:
+						commons.game_sub_state = "PLAYER_SELECTION"
+						load_menu_player_data()
 
-				if menu_button.text == "Single Player":
-					commons.GAME_SUB_STATE = "PLAYER_SELECTION"
-					load_menu_player_data()
+					elif text.function == MenuButtons.CREDITS:
+						commons.game_sub_state = "CREDITS"
 
-				elif menu_button.text == "Settings":
-					commons.GAME_SUB_STATE = "SETTINGS"
+					elif text.function == MenuButtons.CHANGES:
+						commons.game_sub_state = "CHANGES"
 
-				elif menu_button.text == "Changes":
-					commons.GAME_SUB_STATE = "CHANGES"
+					elif text.function == MenuButtons.SETTINGS:
+						commons.game_sub_state = "SETTINGS"
 
-				elif menu_button.text == "":
-					entity_manager.client_prompt = prompt.Prompt("browser opened", "", size=(5, 2))
-					webbrowser.open("")
+					elif text.function == MenuButtons.EXIT:
+						pygame.quit()
+						sys.exit()
+					
+					elif text.function == PlayerSelectionButtons.NEW_PLAYER:
+						commons.game_sub_state = "PLAYER_CREATION"
+						commons.PLAYER_MODEL_DATA = [0, 0,
+													[(127, 72, 36), None, None],
+													[(0, 0, 0), None, None],
+													[(0, 0, 0), None, None],
+													[(95, 125, 127), None, None],
+													[(48, 76, 127), None, None],
+													[(129, 113, 45), None, None],
+													[(80, 100, 45), None, None]]
+						commons.PLAYER_MODEL = player.Model(commons.PLAYER_MODEL_DATA[0], commons.PLAYER_MODEL_DATA[1],
+															commons.PLAYER_MODEL_DATA[2][0],
+															commons.PLAYER_MODEL_DATA[3][0],
+															commons.PLAYER_MODEL_DATA[4][0],
+															commons.PLAYER_MODEL_DATA[5][0],
+															commons.PLAYER_MODEL_DATA[6][0],
+															commons.PLAYER_MODEL_DATA[7][0],
+															commons.PLAYER_MODEL_DATA[8][0])
+						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
-				elif menu_button.text == "GitHub Repo":
-					entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
-					webbrowser.open("https://github.com/Murat65536/Terraria")
+					elif text.function == PlayerSelectionButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
+					
+					elif text.function == PlayerCreationButtons.HAIR_TYPE:
+						assert commons.PLAYER_MODEL is not None
+						if commons.PLAYER_MODEL.hair_id < 163:
+							commons.PLAYER_MODEL.hair_id += 1
+						else:
+							commons.PLAYER_MODEL.hair_id = 0
+						commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
+						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
-				elif menu_button.text == "":
-					entity_manager.client_prompt = prompt.Prompt("browser opened", "", size=(5, 2))
-					webbrowser.open("")
+					elif text.function == PlayerCreationButtons.HAIR_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 3
 
-				elif menu_button.text == "Trello Board":
-					entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
-					webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
+					elif text.function == PlayerCreationButtons.EYE_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 4
 
-				elif menu_button.text == "Credits":
-					commons.GAME_SUB_STATE = "CREDITS"
+					elif text.function == PlayerCreationButtons.SKIN_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 2
 
-				elif menu_button.text == "Exit":
-					pygame.quit()
-					sys.exit()
+					elif text.function == PlayerCreationButtons.CLOTHES:
+						commons.game_sub_state = "CLOTHES"
 
-				elif menu_button.text == "Back":
-					commons.GAME_SUB_STATE = commons.GAME_SUB_STATE_STACK.pop()
 
-				elif menu_button.text == "New Player":
-					commons.GAME_SUB_STATE = "PLAYER_CREATION"
-					commons.PLAYER_MODEL_DATA = [0, 0,
-												[(127, 72, 36), None, None],
-												[(0, 0, 0), None, None],
-												[(0, 0, 0), None, None],
-												[(95, 125, 127), None, None],
-												[(48, 76, 127), None, None],
-												[(129, 113, 45), None, None],
-												[(80, 100, 45), None, None]]
-					commons.PLAYER_MODEL = player.Model(commons.PLAYER_MODEL_DATA[0], commons.PLAYER_MODEL_DATA[1],
-														commons.PLAYER_MODEL_DATA[2][0],
-														commons.PLAYER_MODEL_DATA[3][0],
-														commons.PLAYER_MODEL_DATA[4][0],
-														commons.PLAYER_MODEL_DATA[5][0],
-														commons.PLAYER_MODEL_DATA[6][0],
-														commons.PLAYER_MODEL_DATA[7][0],
-														commons.PLAYER_MODEL_DATA[8][0])
-					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+					elif text.function == PlayerCreationButtons.CREATE:
+						commons.game_sub_state = "PLAYER_NAMING"
+						commons.TEXT_INPUT = ""
 
-				elif menu_button.text == "Hair Type":
-					if commons.PLAYER_MODEL.hair_id < 163:
-						commons.PLAYER_MODEL.hair_id += 1
-					else:
-						commons.PLAYER_MODEL.hair_id = 0
-					commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
-					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+					elif text.function == PlayerCreationButtons.RANDOMIZE:
+						commons.PLAYER_MODEL_DATA = [0, random.randint(0, 8),
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
+							[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None]
+						]
+						player.update_player_model_using_model_data()
+						commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 
-				elif menu_button.text == "Hair Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 3
+					elif text.function == PlayerCreationButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
+					
+					elif text.function == ColorPickerButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				elif menu_button.text == "Eye Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 4
+					elif text.function == ClothesButtons.SHIRT_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 5
 
-				elif menu_button.text == "Skin Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 2
+					elif text.function == ClothesButtons.UNDERSHIRT_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 6
 
-				elif menu_button.text == "Clothes":
-					commons.GAME_SUB_STATE = "CLOTHES"
+					elif text.function == ClothesButtons.TROUSER_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 7
 
-				elif menu_button.text == "Shirt Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 5
+					elif text.function == ClothesButtons.SHOE_COLOR:
+						commons.game_sub_state = "COLOR_PICKER"
+						commons.PLAYER_MODEL_COLOR_INDEX = 8
 
-				elif menu_button.text == "Undershirt Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 6
+					elif text.function == ClothesButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				elif menu_button.text == "Trouser Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 7
+					elif text.function == PlayerNamingButtons.SET_NAME:
+						date = datetime.datetime.now()
+						commons.player_data = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
+						pickle.dump(commons.player_data, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
+						commons.game_sub_state = "PLAYER_SELECTION"
+						load_menu_player_data()
 
-				elif menu_button.text == "Shoe Color":
-					commons.GAME_SUB_STATE = "COLOR_PICKER"
-					commons.PLAYER_MODEL_COLOR_INDEX = 8
+					elif text.function == PlayerNamingButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				elif menu_button.text == "Randomize":
-					commons.PLAYER_MODEL_DATA = [0, random.randint(0, 8),
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-												 [(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None]]
-					player.update_player_model_using_model_data()
-					commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+					elif text.function == WorldSelectionButtons.NEW_WORLD:
+						commons.game_sub_state = "WORLD_CREATION"
 
-				elif menu_button.text == "Create":
-					commons.GAME_SUB_STATE = "PLAYER_NAMING"
-					commons.TEXT_INPUT = ""
+					elif text.function == WorldSelectionButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				elif menu_button.text == "Set Player Name":
-					date = datetime.datetime.now()
-					commons.PLAYER_DATA = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
-					pickle.dump(commons.PLAYER_DATA, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
-					commons.GAME_SUB_STATE = "PLAYER_SELECTION"
-					load_menu_player_data()
+					elif text.function == WorldCreationButtons.TINY:
+						commons.game_sub_state = "WORLD_NAMING"
+						commons.TEXT_INPUT = ""
+						world.WORLD_SIZE_X = 100
+						world.WORLD_SIZE_Y = 350
 
-				elif menu_button.text == "New World":
-					commons.GAME_SUB_STATE = "WORLD_CREATION"
+					elif text.function == WorldCreationButtons.SMALL:
+						commons.game_sub_state = "WORLD_NAMING"
+						commons.TEXT_INPUT = ""
+						world.WORLD_SIZE_X = 200
+						world.WORLD_SIZE_Y = 400
 
-				elif menu_button.text == "Tiny (100x350)":
-					commons.GAME_SUB_STATE = "WORLD_NAMING"
-					commons.TEXT_INPUT = ""
-					world.WORLD_SIZE_X = 100
-					world.WORLD_SIZE_Y = 350
+					elif text.function == WorldCreationButtons.MEDIUM:
+						commons.game_sub_state = "WORLD_NAMING"
+						commons.TEXT_INPUT = ""
+						world.WORLD_SIZE_X = 400
+						world.WORLD_SIZE_Y = 450
 
-				elif menu_button.text == "Small (200x400)":
-					commons.GAME_SUB_STATE = "WORLD_NAMING"
-					commons.TEXT_INPUT = ""
-					world.WORLD_SIZE_X = 200
-					world.WORLD_SIZE_Y = 400
+					elif text.function == WorldCreationButtons.LARGE:
+						commons.game_sub_state = "WORLD_NAMING"
+						commons.TEXT_INPUT = ""
+						world.WORLD_SIZE_X = 700
+						world.WORLD_SIZE_Y = 550
 
-				elif menu_button.text == "Medium (400x450)":
-					commons.GAME_SUB_STATE = "WORLD_NAMING"
-					commons.TEXT_INPUT = ""
-					world.WORLD_SIZE_X = 400
-					world.WORLD_SIZE_Y = 450
+					elif text.function == WorldCreationButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				elif menu_button.text == "Large (700x550)":
-					commons.GAME_SUB_STATE = "WORLD_NAMING"
-					commons.TEXT_INPUT = ""
-					world.WORLD_SIZE_X = 700
-					world.WORLD_SIZE_Y = 550
+					elif text.function == WorldNamingButtons.SET_NAME:
+						world.SET_NAME = commons.TEXT_INPUT
+						world.generate_terrain("DEFAULT", blit_progress=True)
+						world.save()
+						commons.game_sub_state = "WORLD_SELECTION"
+						load_menu_player_data()
 
-				elif menu_button.text == "Set World Name":
-					world.WORLD_NAME = commons.TEXT_INPUT
-					world.generate_terrain("DEFAULT", blit_progress=True)
-					world.save()
-					commons.GAME_SUB_STATE = "WORLD_SELECTION"
-					load_menu_player_data()
+					elif text.function == WorldNamingButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				if commons.GAME_SUB_STATE == "COLOR_PICKER":
-					if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
-						entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
-					entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
-					entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
+					elif text.function == CreditsButton.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-				# Update last game sub state variable is the sub state changed
-				if temp_game_sub_state != commons.GAME_SUB_STATE:
-					if menu_button.text != "Back":
-						commons.GAME_SUB_STATE_STACK.append(temp_game_sub_state)
+					elif text.function == ChangesButtons.GITHUB:
+						entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
+						webbrowser.open("https://github.com/Murat65536/Terraria")
 
-					if menu_button.text == "Set Player Name":
-						commons.GAME_SUB_STATE_STACK = commons.GAME_SUB_STATE_STACK[:1]
+					elif text.function == ChangesButtons.TRELLO:
+						entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
+						webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
+					
+					elif text.function == ChangesButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
+					
+					elif text.function == SettingsButtons.BACK:
+						commons.game_sub_state = commons.game_sub_state_stack.pop()
 
-					if menu_button.text == "Set World Name":
-						commons.GAME_SUB_STATE_STACK = commons.GAME_SUB_STATE_STACK[:2]
+					if commons.game_sub_state == "COLOR_PICKER":
+						if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
+							entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
+						entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
+						entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
 
-				update_active_menu_buttons()
+					# Update last game sub state variable is the sub state changed
+					if temp_game_sub_state != commons.game_sub_state:
+						if text.text != "Back":
+							commons.game_sub_state_stack.append(temp_game_sub_state)
+
+						if text.function == PlayerNamingButtons.SET_NAME:
+							commons.game_sub_state_stack = commons.game_sub_state_stack[:1]
+
+						if text.function == WorldNamingButtons.SET_NAME:
+							commons.game_sub_state_stack = commons.game_sub_state_stack[:2]
+
+					update_active_menu_buttons()
 
 
 """================================================================================================================= 
@@ -303,9 +386,10 @@ def update_menu_buttons():
 	Calls draw on all active button instances
 -----------------------------------------------------------------------------------------------------------------"""
 def draw_menu_buttons():
-	for menuButton in menu_buttons:
-		if menuButton.active:
-			menuButton.draw()
+	for menu in active_menu_buttons:
+		for text in active_menu_buttons[menu]:
+			if text.active:
+				text.draw()
 
 
 """================================================================================================================= 
@@ -351,7 +435,6 @@ def load_menu_world_data():
 	possible_loads = os.listdir(path)  # Get filenames
 	commons.WORLD_SAVE_OPTIONS = []
 	for i in range(len(possible_loads)):
-		# TODO Come back to this for date and time functions.
 		if possible_loads[i][-3:] == "dat":  # if it's a dat file
 			world.load(possible_loads[i][:-4], load_all=False)
 
@@ -369,64 +452,77 @@ def load_menu_world_data():
 
 			commons.WORLD_SAVE_OPTIONS.append([world.world.name, world_data_surf])
 
-
-"""================================================================================================================= 
-	Constructing all buttons used in the game, order in the list matters here
------------------------------------------------------------------------------------------------------------------"""
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 30), commons.EXTRA_LARGE_FONT, 25, False, (110, 147, 43), (50, 80, 7)))
-
-menu_buttons.append(MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, True))
-
-menu_buttons.append(MenuButton("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, True))
-
-menu_buttons.append(MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
-menu_buttons.append(MenuButton("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, False))
-
-menu_buttons.append(MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
-menu_buttons.append(MenuButton("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, False))
-menu_buttons.append(MenuButton("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, False))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 350), commons.LARGE_FONT, 25, False))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 390), commons.LARGE_FONT, 25, False))
-
-menu_buttons.append(MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, False))
-menu_buttons.append(MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, True))
-
-menu_buttons.append(MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, True))
-menu_buttons.append(MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, True))
-
-menu_buttons.append(MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
-
-menu_buttons.append(MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
-
-menu_buttons.append(MenuButton("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, False))
-menu_buttons.append(MenuButton("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, True))
-
-menu_buttons.append(MenuButton("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, False))
-
-menu_buttons.append(MenuButton("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True, (200, 0, 0), (100, 0, 0)))
-
-menu_buttons.append(MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, True))
-
-menu_buttons.append(MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, False))
-
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, True))
-menu_buttons.append(MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, True))
+active_menu_buttons = {
+	"MAIN": [
+		MenuButton("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.SINGLE_PLAYER),
+		MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.CREDITS),
+		MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.CHANGES),
+		MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.SETTINGS),
+		MenuButton("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, Type.BUTTON, function=MenuButtons.EXIT)
+	],
+	"PLAYER_SELECTION": [
+		MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
+		MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerSelectionButtons.NEW_PLAYER),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerSelectionButtons.BACK)
+	],
+	"PLAYER_CREATION": [
+		MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.HAIR_TYPE),
+		MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.HAIR_COLOR),
+		MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.EYE_COLOR),
+		MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.SKIN_COLOR),
+		MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CLOTHES),
+		MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CREATE),
+		MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.RANDOMIZE),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerCreationButtons.BACK)
+	],
+	"COLOR_PICKER": [
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ColorPickerButtons.BACK)
+	],
+	"CLOTHES": [
+		MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHIRT_COLOR),
+		MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.UNDERSHIRT_COLOR),
+		MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.TROUSER_COLOR),
+		MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHOE_COLOR),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ClothesButtons.BACK)
+	],
+	"PLAYER_NAMING": [
+		MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerNamingButtons.SET_NAME),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerNamingButtons.BACK)
+	],
+	"WORLD_SELECTION": [
+		MenuButton("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
+		MenuButton("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldSelectionButtons.NEW_WORLD),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldSelectionButtons.BACK)
+	],
+	"WORLD_CREATION": [
+		MenuButton("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, Type.TEXT),
+		MenuButton("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.TINY),
+		MenuButton("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.SMALL),
+		MenuButton("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.MEDIUM),
+		MenuButton("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, (200, 0, 0), (100, 0, 0), function=WorldCreationButtons.LARGE),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldCreationButtons.BACK)
+	],
+	"WORLD_NAMING": [
+		MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldNamingButtons.SET_NAME),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldNamingButtons.BACK)
+	],
+	"CREDITS": [
+		MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuButton("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuButton("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=CreditsButton.BACK)
+	],
+	"CHANGES": [
+		MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.GITHUB),
+		MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.TRELLO),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ChangesButtons.BACK)
+	],
+	"SETTINGS": [
+		MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuButton("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=SettingsButtons.BACK)
+	]
+}
 
 update_active_menu_buttons()

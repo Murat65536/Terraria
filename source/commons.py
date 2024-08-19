@@ -1,74 +1,76 @@
 import pygame
+from typing import TextIO, Union
+from datetime import datetime
 pygame.init()
 
-BLOCK_SIZE = 16
-TARGET_FPS = 60
-MOUSE_POSITION = (0, 0)
-TILE_POSITION_MOUSE_HOVERING = (0, 0)
-SHIFT_ACTIVE = False
+BLOCK_SIZE: int = 16
+TARGET_FPS: int = 60
+MOUSE_POSITION: tuple[int, int] = (0, 0)
+TILE_POSITION_MOUSE_HOVERING: tuple[int, int] = (0, 0)
+SHIFT_ACTIVE: bool = False
 
-GAME_STATE = "MAINMENU"
-GAME_SUB_STATE = "MAIN"
-GAME_SUB_STATE_STACK = []
+game_state: str = "MAINMENU"
+game_sub_state: str = "MAIN"
+game_sub_state_stack: list[str] = []
 
 # Config loading
-config = open("config.txt", "r")
-configDataStr = config.readlines()
-configData = []
+config: TextIO = open("config.txt", "r")
+configDataStr: list[str] = config.readlines()
+configData: list[str] = []
 for item in configDataStr:
 	item = item.split("=")
 	configData.append(item[1][:-1])
-WINDOW_WIDTH = int(configData[0].split(",")[0])
-WINDOW_HEIGHT = int(configData[0].split(",")[1])
-GRAVITY = 9.8 * BLOCK_SIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
-RUN_FULLSCREEN = bool(int(configData[2]))
-PARTICLES = bool(int(configData[3]))
-PARTICLE_DENSITY = float(configData[4])
-MUSIC = bool(int(configData[5]))
-CONFIG_MUSIC_VOLUME = float(configData[6])
-SOUND = bool(int(configData[7]))
-CONFIG_SOUND_VOLUME = float(configData[8])
-CREATIVE = bool(int(configData[9]))
-BACKGROUND = bool(int(configData[10]))
-PARALLAX_AMOUNT = float(configData[11])
-PASSIVE = bool(int(configData[12]))
-MAX_ENEMY_SPAWNS = int(configData[13])
-FANCY_TEXT = bool(int(configData[14]))
-HITBOXES = bool(int(configData[15]))
-SPLASHSCREEN = bool(int(configData[16]))
-AUTO_SAVE_FREQUENCY = float(configData[17])
-EXPERIMENTAL_LIGHTING = bool(int(configData[18]))
-SMOOTH_CAM = bool(int(configData[19]))
-DRAW_UI = bool(int(configData[20]))
+WINDOW_WIDTH: int = int(configData[0].split(",")[0])
+WINDOW_HEIGHT: int = int(configData[0].split(",")[1])
+GRAVITY: float = 9.8 * BLOCK_SIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
+RUN_FULLSCREEN: bool = bool(int(configData[2]))
+PARTICLES: bool = bool(int(configData[3]))
+PARTICLE_DENSITY: float = float(configData[4])
+MUSIC: bool = bool(int(configData[5]))
+CONFIG_MUSIC_VOLUME: float = float(configData[6])
+SOUND: bool = bool(int(configData[7]))
+CONFIG_SOUND_VOLUME: float = float(configData[8])
+CREATIVE: bool = bool(int(configData[9]))
+BACKGROUND: bool = bool(int(configData[10]))
+PARALLAX_AMOUNT: float = float(configData[11])
+PASSIVE: bool = bool(int(configData[12]))
+MAX_ENEMY_SPAWNS: int = int(configData[13])
+FANCY_TEXT: bool = bool(int(configData[14]))
+HITBOXES: bool = bool(int(configData[15]))
+SPLASHSCREEN: bool = bool(int(configData[16]))
+AUTO_SAVE_FREQUENCY: float = float(configData[17])
+EXPERIMENTAL_LIGHTING: bool = bool(int(configData[18]))
+SMOOTH_CAM: bool = bool(int(configData[19]))
+DRAW_UI: bool = bool(int(configData[20]))
 
 if RUN_FULLSCREEN:
 	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.FULLSCREEN)
 else:
 	screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-font_file_path = r"assets/fonts/AndyBold.ttf"
-SMALL_FONT = pygame.font.Font(font_file_path, 10)
-DEFAULT_FONT = pygame.font.Font(font_file_path, 16)
-MEDIUM_FONT = pygame.font.Font(font_file_path, 22)
-LARGE_FONT = pygame.font.Font(font_file_path, 40)
-EXTRA_LARGE_FONT = pygame.font.Font(font_file_path, 50)
+font_file_path: str = r"assets/fonts/AndyBold.ttf"
+SMALL_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 10)
+DEFAULT_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 16)
+MEDIUM_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 22)
+LARGE_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 40)
+EXTRA_LARGE_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 50)
 
-WAIT_TO_USE = False
+WAIT_TO_USE: bool = False
 
-ENEMY_SPAWN_TICK = 0
+ENEMY_SPAWN_TICK: int = 0
 
-MIN_ENEMY_SPAWN_TILES_X = int((WINDOW_WIDTH // BLOCK_SIZE) * 0.5)
-MAX_ENEMY_SPAWN_TILES_X = int(MIN_ENEMY_SPAWN_TILES_X * 2)
-MIN_ENEMY_SPAWN_TILES_Y = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
-MAX_ENEMY_SPAWN_TILES_Y = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
+MIN_ENEMY_SPAWN_TILES_X: int = int((WINDOW_WIDTH // BLOCK_SIZE) * 0.5)
+MAX_ENEMY_SPAWN_TILES_X: int = int(MIN_ENEMY_SPAWN_TILES_X * 2)
+MIN_ENEMY_SPAWN_TILES_Y: int = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
+MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 
-PLAYER_DATA = []
+player_data: list[Union[str, object, list[list[int | str]], list[list[int | str]], int, int, int, datetime, datetime]] = ["", None, None, None, 0, 0, 0, None, None]
 
-PLAYER_WIDTH = 26
-PLAYER_HEIGHT = 48
-PLAYER_ARM_LENGTH = 20
+PLAYER_WIDTH: int = 26
+PLAYER_HEIGHT: int = 48
+PLAYER_ARM_LENGTH: int = 20
 
-PLAYER_MODEL_DATA = []
+PLAYER_MODEL_DATA: list[int | list[tuple[int, int, int] | None]] = []
 PLAYER_MODEL = None
 PLAYER_FRAMES = []
 PLAYER_REACH = 8

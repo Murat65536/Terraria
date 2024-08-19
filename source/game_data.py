@@ -485,21 +485,6 @@ exit_messages = [
 	"You're just gonna play for two seconds then leave?",
 ]
 
-active_menu_buttons = [
-	["MAIN", 0, 2, 3, 4, 5, 6],
-	["SETTINGS", 0, 1, 7, 8],
-	["CREDITS", 0, 1, 9, 10, 11, 12, 13],
-	["PLAYER_SELECTION", 0, 1, 14, 15],
-	["PLAYER_CREATION", 0, 1, 16, 17, 18, 19, 20, 21, 22],
-	["COLOR_PICKER", 0, 1],
-	["CLOTHES", 0, 1, 23, 24, 25, 26],
-	["PLAYER_NAMING", 0, 1, 27],
-	["WORLD_SELECTION", 0, 1, 28, 29],
-	["WORLD_CREATION", 0, 1, 30, 31, 32, 33, 34],
-	["WORLD_NAMING", 0, 1, 35],
-	["CHANGES", 0, 1, 36, 37, 38, 39, 40],
-]
-
 
 def find_prefix_data_by_name(prefix_name):
 	for prefix_dat in prefix_data[ItemPrefixGroup.UNIVERSAL]:

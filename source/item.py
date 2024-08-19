@@ -305,10 +305,9 @@ def get_coins_from_int(coin_int):
 
 def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
 	loot_data = game_data.get_loot_by_id_str(loot_id_str)
-	if loot_data != None:
-		item_count_range = loot_data["item_spawn_count_range"]
-		item_count = random.randint(item_count_range[0], item_count_range[1])
-		possible_items = loot_data["item_list_data"]
+	item_count_range = loot_data["item_spawn_count_range"]
+	item_count = random.randint(item_count_range[0], item_count_range[1])
+	possible_items = loot_data["item_list_data"]
 
 	spawn_list = []
 	void_indices = []

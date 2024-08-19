@@ -57,6 +57,6 @@ class Particle:
 	def draw(self):
 		rect = Rect(self.position[0] - self.size * 0.5 - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
 					self.position[1] - self.size * 0.5 - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5, self.size, self.size)
-		pygame.draw.rect(commons.screen, self.color, rect, 0)  # Draw 2 rects for each particle (fill and outline)
+		pygame.draw.rect(commons.screen, self.color, rect, 0)  # Draw 2 rectangles for each particle (fill and outline)
 		if self.outline:
 			pygame.draw.rect(commons.screen, (0, 0, 0), rect, 1)

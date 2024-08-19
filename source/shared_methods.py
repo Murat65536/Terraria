@@ -9,8 +9,6 @@ import commons
 import surface_manager
 import game_data
 
-from game_data import TileTag
-
 """================================================================================================================= 
 	shared_methods.normalize_vec_2 -> tuple
 

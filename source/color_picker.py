@@ -12,7 +12,7 @@ import commons
 	Stores information about a color picker
 -----------------------------------------------------------------------------------------------------------------"""
 class COLOR_PICKER:
-	def __init__(self, position, width, height, border_size=5, surface_resolution=0.5):
+	def __init__(self, position: tuple[int, int], width: int, height: int, border_size: int=5, surface_resolution: float=0.5):
 		self.position = position
 		self.width = width
 		self.height = height
@@ -49,7 +49,7 @@ class COLOR_PICKER:
 		surf = pygame.Surface((int(self.width * self.surface_resolution), int(self.height * self.surface_resolution)))
 		for j in range(int(self.height * self.surface_resolution)):
 			for i in range(int(self.width * self.surface_resolution)):
-				surf.set_at((i, j), self.get_color(i / self.surface_resolution, j / self.surface_resolution))
+				surf.set_at((i, j), self.get_color(int(i / self.surface_resolution), int(j / self.surface_resolution)))
 		surf = pygame.transform.scale(surf, (self.width, self.height))
 		self.surface.blit(surf, (self.border_size, self.border_size))
 
@@ -58,7 +58,7 @@ class COLOR_PICKER:
 
 		Generates the color of the surface at a given location
 	-----------------------------------------------------------------------------------------------------------------"""
-	def get_color(self, i, j):
+	def get_color(self, i: int, j: int):
 		base_color_index = int(i // self.section_width)  # Color to the left of the point
 		next_color_index = (base_color_index + 1)  # Color to the right of the point
 		blend = (i % self.section_width) / self.section_width
@@ -99,8 +99,8 @@ class COLOR_PICKER:
 		Draws the color picker's surface and draws the location of the selected color
 	-----------------------------------------------------------------------------------------------------------------"""
 	def draw(self):
-		if (self.surface != None):
+		if self.surface != None:
 			commons.screen.blit(self.surface, self.position)
 
-		if self.selected_x and self.selected_y != None:
+		if self.selected_x != None and self.selected_y != None:
 			pygame.draw.circle(commons.screen, (128, 128, 128), (self.selected_x + self.position[0] + self.border_size, self.selected_y + self.position[1] + self.border_size), 5, 1)

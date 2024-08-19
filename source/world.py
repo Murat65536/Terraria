@@ -34,7 +34,7 @@ WORLD_NAME = ""
 grass_grow_delay = 2.5
 grass_grow_tick = grass_grow_delay
 
-structure_rects = []
+structure_rectangles = []
 
 
 class WorldSize(Enum):
@@ -690,6 +690,8 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 
 	if destroy:
 		dimensions = json_tile_data["multitile_dimensions"]
+		remove_x = 0
+		remove_y = 0
 
 		for x in range(dimensions[0]):
 			for y in range(dimensions[1]):
@@ -959,9 +961,9 @@ def spawn_structure(pos_x, pos_y, structure_id_str, structure_connection_positio
 		if not is_structure_rect_valid(structure_rect):
 			return
 
-	global structure_rects
-	structure_rects.append(structure_rect)
-	current_structure_index = len(structure_rects) - 1
+	global structure_rectangles
+	structure_rectangles.append(structure_rect)
+	current_structure_index = len(structure_rectangles) - 1
 
 	# Remove multitile and chest data
 	for x in range(structure_data["width"]):
@@ -1040,15 +1042,15 @@ def spawn_structure(pos_x, pos_y, structure_id_str, structure_connection_positio
 """================================================================================================================= 
 	world.is_structure_rect_valid -> bool
 
-	Checks if a given rect is within the map rect and does not overlap with any other structure rects
+	Checks if a given rect is within the map rect and does not overlap with any other structure rectangles
 -----------------------------------------------------------------------------------------------------------------"""
 def is_structure_rect_valid(structure_rect, rect_index_to_ignore=-1):
 	if structure_rect.x >= 0 and structure_rect.x + structure_rect.w < WORLD_SIZE_X and structure_rect.y >= 0 and structure_rect.y + structure_rect.h < WORLD_SIZE_Y:
 		is_valid = True
 
-		for rect_index in range(len(structure_rects)):
+		for rect_index in range(len(structure_rectangles)):
 			if rect_index != rect_index_to_ignore:
-				union_rect = structure_rect.clip(structure_rects[rect_index])
+				union_rect = structure_rect.clip(structure_rectangles[rect_index])
 				if union_rect.w > 1 and union_rect.h > 1:
 					is_valid = False
 

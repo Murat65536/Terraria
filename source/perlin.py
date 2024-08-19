@@ -1,19 +1,17 @@
-"""Perlin noise -- pure python implementation"""
-
-__version__ = '$Id: perlin.py 521 2008-12-15 03:03:52Z casey.duncan $'
-
 from math import floor, fmod, sqrt
 from random import randint
 
 # 3D Gradient vectors
-_GRAD3 = ((1,1,0),(-1,1,0),(1,-1,0),(-1,-1,0), 
+_GRAD3 = (
+    (1,1,0),(-1,1,0),(1,-1,0),(-1,-1,0), 
 	(1,0,1),(-1,0,1),(1,0,-1),(-1,0,-1), 
 	(0,1,1),(0,-1,1),(0,1,-1),(0,-1,-1),
 	(1,1,0),(0,-1,1),(-1,1,0),(0,-1,-1),
 ) 
 
 # 4D Gradient vectors
-_GRAD4 = ((0,1,1,1), (0,1,1,-1), (0,1,-1,1), (0,1,-1,-1), 
+_GRAD4 = (
+    (0,1,1,1), (0,1,1,-1), (0,1,-1,1), (0,1,-1,-1), 
 	(0,-1,1,1), (0,-1,1,-1), (0,-1,-1,1), (0,-1,-1,-1), 
 	(1,0,1,1), (1,0,1,-1), (1,0,-1,1), (1,0,-1,-1), 
 	(-1,0,1,1), (-1,0,1,-1), (-1,0,-1,1), (-1,0,-1,-1), 
@@ -59,7 +57,6 @@ class BaseNoise:
 		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180)
 
 	period = len(permutation)
-
 	# Double permutation array so we don't need to wrap
 	permutation = permutation * 2
 
@@ -74,13 +71,13 @@ class BaseNoise:
 		table with period elements. The period determines the (integer)
 		interval that the noise repeats, which is useful for creating tiled
 		textures.  period should be a power-of-two, though this is not
-		enforced. Note that the speed of the noise algorithm is indpendent of
+		enforced. Note that the speed of the noise algorithm is independent of
 		the period size, though larger periods mean a larger table, which
 		consume more memory.
 
 		A permutation table consisting of an iterable sequence of whole
 		numbers can be specified directly. This should have a power-of-two
-		length. Typical permutation tables are a sequnce of unique integers in
+		length. Typical permutation tables are a sequence of unique integers in
 		the range [0,period) in random order, though other arrangements could
 		prove useful, they will not be "pure" simplex noise. The largest
 		element in the sequence must be no larger than period-1.
@@ -299,7 +296,7 @@ def grad3(hash, x, y, z):
 
 
 class TileableNoise(BaseNoise):
-	"""Tileable implemention of Perlin "improved" noise. This
+	"""Tileable implementation of Perlin "improved" noise. This
 	is based on the reference implementation published here:
 	
 	http://mrl.nyu.edu/~perlin/noise/
