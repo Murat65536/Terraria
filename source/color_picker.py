@@ -2,16 +2,17 @@
 
 import pygame
 from pygame.locals import Rect
+from typing import Annotated
 
 import commons
 
 
 """================================================================================================================= 
-	color_picker.COLOR_PICKER
+	color_picker.ColorPicker
 
 	Stores information about a color picker
 -----------------------------------------------------------------------------------------------------------------"""
-class COLOR_PICKER:
+class ColorPicker:
 	def __init__(self, position: tuple[int, int], width: int, height: int, border_size: int=5, surface_resolution: float=0.5):
 		self.position = position
 		self.width = width
@@ -28,7 +29,9 @@ class COLOR_PICKER:
 			(0, 0, 255),
 			(255, 0, 255)
 		]
-		self.selected_color = (0, 0, 0)
+		self.selected_red: int = 0
+		self.selected_green: int = 0
+		self.selected_blue: int = 0
 		self.selected_x = 0
 		self.selected_y = height
 		self.surface = None
@@ -36,7 +39,7 @@ class COLOR_PICKER:
 		self.rect = Rect(self.position[0] + self.border_size, self.position[1] + self.border_size, width, height)
 
 	"""================================================================================================================= 
-		color_picker.COLOR_PICKER.render_surface -> void
+		color_picker.ColorPicker.render_surface -> void
 
 		Uses canvas and border size info to render the color picker surface 
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -54,17 +57,17 @@ class COLOR_PICKER:
 		self.surface.blit(surf, (self.border_size, self.border_size))
 
 	"""================================================================================================================= 
-		color_picker.COLOR_PICKER.get_color -> tuple
+		color_picker.ColorPicker.get_color -> tuple
 
 		Generates the color of the surface at a given location
 	-----------------------------------------------------------------------------------------------------------------"""
-	def get_color(self, i: int, j: int):
+	def get_color(self, i: int, j: int) -> tuple[int, int, int]:
 		base_color_index = int(i // self.section_width)  # Color to the left of the point
 		next_color_index = (base_color_index + 1)  # Color to the right of the point
 		blend = (i % self.section_width) / self.section_width
 		shade = 1 - j / self.height
 
-		col = [0, 0, 0]
+		col: list[int] = [0, 0, 0]
 
 		for index in range(3):
 			base_color_channel = int(self.colors[base_color_index][index])
@@ -78,10 +81,10 @@ class COLOR_PICKER:
 				channel = int(channel * (0.5 - new_shade) * 2 + 255 * new_shade * 2)
 
 			col[index] = channel
-		return tuple(col)
+		return (col[0], col[1], col[2])
 
 	"""================================================================================================================= 
-		color_picker.COLOR_PICKER.update -> void
+		color_picker.ColorPicker.update -> void
 
 		If the mouse is clicked over the color picker, update the selected color and location
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -90,11 +93,13 @@ class COLOR_PICKER:
 			if self.rect.collidepoint(commons.MOUSE_POSITION):
 				self.selected_x = commons.MOUSE_POSITION[0] - self.position[0] - self.border_size
 				self.selected_y = commons.MOUSE_POSITION[1] - self.position[1] - self.border_size
-				self.selected_color = self.get_color(self.selected_x, self.selected_y)
-				self.selected_color = (self.selected_color[0] * 0.5, self.selected_color[1] * 0.5, self.selected_color[2] * 0.5)
+				self.selected_red, self.selected_green, self.selected_blue = self.get_color(self.selected_x, self.selected_y)
+				self.selected_red = int(self.selected_red * 0.5)
+				self.selected_green = int(self.selected_green * 0.5)
+				self.selected_blue = int(self.selected_blue * 0.5)
 
 	"""================================================================================================================= 
-		color_picker.COLOR_PICKER.draw -> void
+		color_picker.ColorPicker.draw -> void
 
 		Draws the color picker's surface and draws the location of the selected color
 	-----------------------------------------------------------------------------------------------------------------"""

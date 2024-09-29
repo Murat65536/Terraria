@@ -23,7 +23,7 @@ class Type(Enum):
 	TEXT = 1,
 	BUTTON = 2
 
-class MenuButtons(Enum):
+class TitleScreenButtons(Enum):
 	SINGLE_PLAYER = 1,
 	CREDITS = 2,
 	CHANGES = 3,
@@ -87,12 +87,12 @@ class SettingsButtons(Enum):
 
 
 """================================================================================================================= 
-	menu_manager.MenuButton
+	menu_manager.MenuObject
 
 	Stores information about a single button, the visibility of a given button is set by the active_menu_buttons
 	table
 -----------------------------------------------------------------------------------------------------------------"""
-class MenuButton:
+class MenuObject:
 	def __init__(self, text: str, position: tuple[float, float], font, click_sound_id, type: Type, color=(153, 153, 153), outline_color=(0, 0, 0), function=None):
 		self.text = text
 		self.position = position
@@ -109,7 +109,7 @@ class MenuButton:
 		self.active = False
 
 	"""================================================================================================================= 
-		menu_manager.MenuButton.update -> void
+		menu_manager.MenuObject.update -> void
 
 		Checks to see if the mouse is interacting with the button instance, performing all the related logic
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -131,7 +131,7 @@ class MenuButton:
 				self.clicked = False
 
 	"""================================================================================================================= 
-		menu_manager.MenuButton.draw -> void
+		menu_manager.MenuObject.draw -> void
 
 		Draws the button's text surface or alt_text_surface depending on the hover state of the button
 	-----------------------------------------------------------------------------------------------------------------"""
@@ -180,41 +180,41 @@ def update_menu_buttons():
 					text.clicked = False
 
 					match text.function:
-						case MenuButtons.SINGLE_PLAYER:
+						case TitleScreenButtons.SINGLE_PLAYER:
 							commons.game_sub_state = "PLAYER_SELECTION"
 							load_menu_player_data()
-						case MenuButtons.CREDITS:
+						case TitleScreenButtons.CREDITS:
 							commons.game_sub_state = "CREDITS"
-						case MenuButtons.CHANGES:
+						case TitleScreenButtons.CHANGES:
 							commons.game_sub_state = "CHANGES"
-						case MenuButtons.SETTINGS:
+						case TitleScreenButtons.SETTINGS:
 							commons.game_sub_state = "SETTINGS"
-						case MenuButtons.EXIT:
+						case TitleScreenButtons.EXIT:
 							pygame.quit()
 							sys.exit()
 						case PlayerSelectionButtons.NEW_PLAYER:
 							commons.game_sub_state = "PLAYER_CREATION"
 							commons.PLAYER_MODEL_DATA = [
-								0,
-								0,
-								[(127, 72, 36), None, None],
-								[(0, 0, 0), None, None],
-								[(0, 0, 0), None, None],
-								[(95, 125, 127), None, None],
-								[(48, 76, 127), None, None],
-								[(129, 113, 45), None, None],
-								[(80, 100, 45), None, None]
+								[0],
+								[0],
+								[127, 72, 36, None, None],
+								[0, 0, 0, None, None],
+								[0, 0, 0, None, None],
+								[95, 125, 127, None, None],
+								[48, 76, 127, None, None],
+								[129, 113, 45, None, None],
+								[80, 100, 45, None, None]
 							]
 							commons.PLAYER_MODEL = player.Model(
-								commons.PLAYER_MODEL_DATA[0],
-								commons.PLAYER_MODEL_DATA[1],
-								commons.PLAYER_MODEL_DATA[2][0],
-								commons.PLAYER_MODEL_DATA[3][0],
-								commons.PLAYER_MODEL_DATA[4][0],
-								commons.PLAYER_MODEL_DATA[5][0],
-								commons.PLAYER_MODEL_DATA[6][0],
-								commons.PLAYER_MODEL_DATA[7][0],
-								commons.PLAYER_MODEL_DATA[8][0]
+								commons.PLAYER_MODEL_DATA[0][0],
+								commons.PLAYER_MODEL_DATA[1][0],
+								(commons.PLAYER_MODEL_DATA[2][0], commons.PLAYER_MODEL_DATA[2][1], commons.PLAYER_MODEL_DATA[2][2]),
+								(commons.PLAYER_MODEL_DATA[3][0], commons.PLAYER_MODEL_DATA[3][1], commons.PLAYER_MODEL_DATA[3][2]),
+								(commons.PLAYER_MODEL_DATA[4][0], commons.PLAYER_MODEL_DATA[4][1], commons.PLAYER_MODEL_DATA[4][2]),
+								(commons.PLAYER_MODEL_DATA[5][0], commons.PLAYER_MODEL_DATA[5][1], commons.PLAYER_MODEL_DATA[5][2]),
+								(commons.PLAYER_MODEL_DATA[6][0], commons.PLAYER_MODEL_DATA[6][1], commons.PLAYER_MODEL_DATA[6][2]),
+								(commons.PLAYER_MODEL_DATA[7][0], commons.PLAYER_MODEL_DATA[7][1], commons.PLAYER_MODEL_DATA[7][2]),
+								(commons.PLAYER_MODEL_DATA[8][0], commons.PLAYER_MODEL_DATA[8][1], commons.PLAYER_MODEL_DATA[8][2])
 							)
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 						case PlayerSelectionButtons.BACK:
@@ -225,7 +225,7 @@ def update_menu_buttons():
 								commons.PLAYER_MODEL.hair_id += 1
 							else:
 								commons.PLAYER_MODEL.hair_id = 0
-							commons.PLAYER_MODEL_DATA[1] = commons.PLAYER_MODEL.hair_id
+							commons.PLAYER_MODEL_DATA[1][0] = commons.PLAYER_MODEL.hair_id
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 						case PlayerCreationButtons.HAIR_COLOR:
 							commons.game_sub_state = "COLOR_PICKER"
@@ -330,10 +330,12 @@ def update_menu_buttons():
 							commons.game_sub_state = "MAIN"
 
 					if commons.game_sub_state == "COLOR_PICKER":
-						if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None:
-							entity_manager.client_color_picker.selected_color = tuple(commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0])
-						entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
-						entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
+						if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] is not None or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] is not None:
+							entity_manager.client_color_picker.selected_red = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0]
+							entity_manager.client_color_picker.selected_green = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
+							entity_manager.client_color_picker.selected_blue = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
+							entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][3]
+							entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][4]
 
 					update_active_menu_buttons()
 
@@ -412,74 +414,74 @@ def load_menu_world_data():
 
 active_menu_buttons = {
 	"MAIN": [
-		MenuButton("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.SINGLE_PLAYER),
-		MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.CREDITS),
-		MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.CHANGES),
-		MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, Type.BUTTON, function=MenuButtons.SETTINGS),
-		MenuButton("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, Type.BUTTON, function=MenuButtons.EXIT)
+		MenuObject("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.SINGLE_PLAYER),
+		MenuObject("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.CREDITS),
+		MenuObject("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.CHANGES),
+		MenuObject("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.SETTINGS),
+		MenuObject("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, Type.BUTTON, function=TitleScreenButtons.EXIT)
 	],
 	"PLAYER_SELECTION": [
-		MenuButton("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
-		MenuButton("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerSelectionButtons.NEW_PLAYER),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerSelectionButtons.BACK)
+		MenuObject("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
+		MenuObject("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerSelectionButtons.NEW_PLAYER),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerSelectionButtons.BACK)
 	],
 	"PLAYER_CREATION": [
-		MenuButton("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.HAIR_TYPE),
-		MenuButton("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.HAIR_COLOR),
-		MenuButton("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.EYE_COLOR),
-		MenuButton("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.SKIN_COLOR),
-		MenuButton("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CLOTHES),
-		MenuButton("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CREATE),
-		MenuButton("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.RANDOMIZE),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerCreationButtons.BACK)
+		MenuObject("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.HAIR_TYPE),
+		MenuObject("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.HAIR_COLOR),
+		MenuObject("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.EYE_COLOR),
+		MenuObject("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.SKIN_COLOR),
+		MenuObject("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CLOTHES),
+		MenuObject("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CREATE),
+		MenuObject("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.RANDOMIZE),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerCreationButtons.BACK)
 	],
 	"COLOR_PICKER": [
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ColorPickerButtons.BACK)
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ColorPickerButtons.BACK)
 	],
 	"CLOTHES": [
-		MenuButton("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHIRT_COLOR),
-		MenuButton("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.UNDERSHIRT_COLOR),
-		MenuButton("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.TROUSER_COLOR),
-		MenuButton("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHOE_COLOR),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ClothesButtons.BACK)
+		MenuObject("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHIRT_COLOR),
+		MenuObject("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.UNDERSHIRT_COLOR),
+		MenuObject("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.TROUSER_COLOR),
+		MenuObject("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHOE_COLOR),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ClothesButtons.BACK)
 	],
 	"PLAYER_NAMING": [
-		MenuButton("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerNamingButtons.SET_NAME),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerNamingButtons.BACK)
+		MenuObject("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerNamingButtons.SET_NAME),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerNamingButtons.BACK)
 	],
 	"WORLD_SELECTION": [
-		MenuButton("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
-		MenuButton("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldSelectionButtons.NEW_WORLD),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldSelectionButtons.BACK)
+		MenuObject("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
+		MenuObject("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldSelectionButtons.NEW_WORLD),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldSelectionButtons.BACK)
 	],
 	"WORLD_CREATION": [
-		MenuButton("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, Type.TEXT),
-		MenuButton("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.TINY),
-		MenuButton("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.SMALL),
-		MenuButton("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.MEDIUM),
-		MenuButton("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, (200, 0, 0), (100, 0, 0), function=WorldCreationButtons.LARGE),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldCreationButtons.BACK)
+		MenuObject("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, Type.TEXT),
+		MenuObject("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.TINY),
+		MenuObject("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.SMALL),
+		MenuObject("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.MEDIUM),
+		MenuObject("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, (200, 0, 0), (100, 0, 0), function=WorldCreationButtons.LARGE),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldCreationButtons.BACK)
 	],
 	"WORLD_NAMING": [
-		MenuButton("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldNamingButtons.SET_NAME),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldNamingButtons.BACK)
+		MenuObject("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldNamingButtons.SET_NAME),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldNamingButtons.BACK)
 	],
 	"CREDITS": [
-		MenuButton("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-		MenuButton("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, Type.TEXT),
-		MenuButton("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, Type.TEXT),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=CreditsButton.BACK)
+		MenuObject("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuObject("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuObject("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=CreditsButton.BACK)
 	],
 	"CHANGES": [
-		MenuButton("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-		MenuButton("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.GITHUB),
-		MenuButton("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.TRELLO),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ChangesButtons.BACK)
+		MenuObject("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuObject("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.GITHUB),
+		MenuObject("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.TRELLO),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ChangesButtons.BACK)
 	],
 	"SETTINGS": [
-		MenuButton("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-		MenuButton("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, Type.TEXT),
-		MenuButton("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=SettingsButtons.BACK)
+		MenuObject("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
+		MenuObject("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, Type.TEXT),
+		MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=SettingsButtons.BACK)
 	]
 }
 

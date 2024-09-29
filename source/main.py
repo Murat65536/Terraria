@@ -915,7 +915,7 @@ while True:
 		else:
 			auto_save_tick -= commons.DELTA_TIME
 
-	elif commons.game_state == "MAINMENU":
+	elif commons.game_state == "MAIN_MENU":
 		draw_menu_background_sky()
 		draw_menu_background()
 		for i in range(len(menu_background_scroll)):
@@ -931,6 +931,7 @@ while True:
 					for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
 						if pygame.Rect(load_menu_box_left2, 132 + i * 62 + save_select_y_offset, 315, 60).collidepoint(commons.MOUSE_POSITION):
 							commons.WAIT_TO_USE = True
+							print(commons.PLAYER_SAVE_OPTIONS)
 							commons.player_data = commons.PLAYER_SAVE_OPTIONS[i][0]
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
@@ -1050,9 +1051,11 @@ while True:
 			entity_manager.client_color_picker.update()
 
 			if entity_manager.client_color_picker.selected_x is not None and entity_manager.client_color_picker.selected_y is not None:
-				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] = entity_manager.client_color_picker.selected_x
-				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] = entity_manager.client_color_picker.selected_y
-				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] = tuple(entity_manager.client_color_picker.selected_color)
+				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] = entity_manager.client_color_picker.selected_red
+				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] = entity_manager.client_color_picker.selected_green
+				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] = entity_manager.client_color_picker.selected_blue
+				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][3] = entity_manager.client_color_picker.selected_x 
+				commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][4] = entity_manager.client_color_picker.selected_y
 				player.update_player_model_using_model_data()
 				commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
 			
@@ -1365,7 +1368,7 @@ while True:
 							entity_manager.client_player.hotbar_index = 0
 						game_data.play_sound("sound.menu_select")
 
-		elif commons.game_state == "MAINMENU":
+		elif commons.game_state == "MAIN_MENU":
 
 			if commons.game_sub_state == "PLAYER_SELECTION" or commons.game_sub_state == "WORLD_SELECTION":
 				if event.type == pygame.MOUSEBUTTONDOWN:

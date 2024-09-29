@@ -39,15 +39,15 @@ def	get_death_message(name,	source):
 def	update_player_model_using_model_data():
 	assert commons.PLAYER_MODEL is not None
 
-	commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0]
-	commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1]
-	commons.PLAYER_MODEL.skin_col =	commons.PLAYER_MODEL_DATA[2][0]
-	commons.PLAYER_MODEL.hair_col =	commons.PLAYER_MODEL_DATA[3][0]
-	commons.PLAYER_MODEL.eye_col = commons.PLAYER_MODEL_DATA[4][0]
-	commons.PLAYER_MODEL.shirt_col = commons.PLAYER_MODEL_DATA[5][0]
-	commons.PLAYER_MODEL.under_shirt_col = commons.PLAYER_MODEL_DATA[6][0]
-	commons.PLAYER_MODEL.trouser_col = commons.PLAYER_MODEL_DATA[7][0]
-	commons.PLAYER_MODEL.shoe_col =	commons.PLAYER_MODEL_DATA[8][0]
+	commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0][0]
+	commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1][0]
+	commons.PLAYER_MODEL.skin_col =	(commons.PLAYER_MODEL_DATA[2][0], commons.PLAYER_MODEL_DATA[2][1], commons.PLAYER_MODEL_DATA[2][2])
+	commons.PLAYER_MODEL.hair_col =	(commons.PLAYER_MODEL_DATA[3][0], commons.PLAYER_MODEL_DATA[3][1], commons.PLAYER_MODEL_DATA[3][2])
+	commons.PLAYER_MODEL.eye_col = (commons.PLAYER_MODEL_DATA[4][0], commons.PLAYER_MODEL_DATA[4][1], commons.PLAYER_MODEL_DATA[4][2])
+	commons.PLAYER_MODEL.shirt_col = (commons.PLAYER_MODEL_DATA[5][0], commons.PLAYER_MODEL_DATA[5][1], commons.PLAYER_MODEL_DATA[5][2])
+	commons.PLAYER_MODEL.under_shirt_col = (commons.PLAYER_MODEL_DATA[6][0], commons.PLAYER_MODEL_DATA[6][1], commons.PLAYER_MODEL_DATA[6][2])
+	commons.PLAYER_MODEL.trouser_col = (commons.PLAYER_MODEL_DATA[7][0], commons.PLAYER_MODEL_DATA[7][1], commons.PLAYER_MODEL_DATA[7][2])
+	commons.PLAYER_MODEL.shoe_col =	(commons.PLAYER_MODEL_DATA[8][0], commons.PLAYER_MODEL_DATA[8][1], commons.PLAYER_MODEL_DATA[8][2])
 
 
 """=================================================================================================================	
