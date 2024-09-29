@@ -1,4 +1,4 @@
-import pygame, random, pickle, datetime, perlin, math
+import pygame, random, pickle, perlin, math
 from pygame.locals import Rect
 
 import commons
@@ -13,6 +13,7 @@ from enum import Enum
 
 from game_data import TileTag, TileMaskType, get_item_id_by_id_str, find_structures_for_connection
 
+from datetime import datetime
 
 WORLD_SIZE_X = 0
 WORLD_SIZE_Y = 0
@@ -36,6 +37,10 @@ grass_grow_tick = grass_grow_delay
 
 structure_rectangles = []
 
+tile_mask_data: list[list[int]] = []
+wall_tile_mask_data: list[list[int]] = []
+
+leaf_tile: int = 0
 
 class WorldSize(Enum):
 	TINY = 0
@@ -83,8 +88,8 @@ class MaskType(Enum):
 class World:
 	def __init__(self):
 		self.name = ""
-		self.creation_date = None
-		self.last_played_date = None
+		self.creation_date: datetime | None = None
+		self.last_played_date: datetime | None = None
 		self.size = WorldSize.TINY
 		self.type = WorldType.NORMAL
 		self.gen_type = WorldGenType.DEFAULT
@@ -175,9 +180,10 @@ class World:
 """================================================================================================================= 
 	World save and load functions
 
-	Using pickle serialisation, they save/load all necessary info
+	Using pickle serialization, they save/load all necessary info
 -----------------------------------------------------------------------------------------------------------------"""
 def save():
+	assert world is not None
 	world.save()
 	entity_manager.add_message("Saved World: " + world.name + "!", (255, 255, 255))
 
@@ -211,6 +217,7 @@ def tile_in_map(i, j, width=1):
 	Used to work out if a block can be placed at a position based on neighbors
 -----------------------------------------------------------------------------------------------------------------"""
 def get_neighbor_count(i, j, tile=0, check_adjacent=True, check_centre_tile=True, check_centre_wall=True):
+	assert world is not None
 	if commons.CREATIVE:
 		return 1
 	neighbor_count = 0
@@ -358,6 +365,7 @@ def get_mask_type_from_index(index):
 	Returns the index of the mask for the wall at a given position
 -----------------------------------------------------------------------------------------------------------------"""
 def get_wall_mask_index_from_pos(i, j, wall_id):
+	assert world is not None
 	merge_blocks = [1, 1, 1, 1]
 	if i > 0:
 		if not check_wall_merge(world.tile_data[i - 1][j][1], wall_id):
@@ -380,6 +388,7 @@ def get_wall_mask_index_from_pos(i, j, wall_id):
 	Returns the index of the mask for the block at a given position
 -----------------------------------------------------------------------------------------------------------------"""
 def get_mask_index_from_pos(i, j, tile_id):
+	assert world is not None
 	merge_blocks = [1, 1, 1, 1]
 	if i > 0:
 		if not check_tile_merge(world.tile_data[i - 1][j][0], tile_id):
@@ -433,7 +442,7 @@ def generate_terrain(gen_type, blit_progress=False):
 	world.tile_data = [[[game_data.air_tile_id, game_data.air_wall_id] for _ in range(WORLD_SIZE_Y)] for _ in range(WORLD_SIZE_X)]
 	world.tile_mask_data = [[[-1, -1] for _ in range(WORLD_SIZE_Y)] for _ in range(WORLD_SIZE_X)]
 
-	date = datetime.datetime.now()
+	date = datetime.now()
 
 	world.name = WORLD_NAME
 	world.creation_date = date
@@ -646,6 +655,7 @@ def create_terrain_surface():
 	Place a multitile of the given id and dimensions at the given pos
 -----------------------------------------------------------------------------------------------------------------"""
 def place_multitile(top_left_x, top_left_y, dimensions, tile_id, update_surface):
+	assert world is not None
 	for x in range(dimensions[0]):
 		for y in range(dimensions[1]):
 			world.tile_data[top_left_x + x][top_left_y + y][0] = tile_id
@@ -660,6 +670,7 @@ def place_multitile(top_left_x, top_left_y, dimensions, tile_id, update_surface)
 	Get the origin of a multitile
 -----------------------------------------------------------------------------------------------------------------"""
 def get_multitile_origin(x, y):
+	assert world is not None
 	tile_data = world.tile_data[x][y]
 	return x - tile_data[2][0], y - tile_data[2][1]
 
@@ -670,6 +681,7 @@ def get_multitile_origin(x, y):
 	Uses special tile relative data to remove all tiles associated with a special tile at a given position
 -----------------------------------------------------------------------------------------------------------------"""
 def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, update_surface=True):
+	assert world is not None
 	tile_data = world.tile_data[top_left_pos[0]][top_left_pos[1]]
 	json_tile_data = game_data.get_tile_by_id(tile_data[0])
 	destroy = True
@@ -716,6 +728,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 -----------------------------------------------------------------------------------------------------------------"""
 def use_special_tile(i, j):
 	global world
+	assert world is not None
 	tile_id = world.tile_data[i][j][0]
 	tile_data = game_data.get_tile_by_id(tile_id)
 
@@ -786,7 +799,7 @@ def use_special_tile(i, j):
 						world.tile_data[i + x][j + y].pop(2)
 						update_terrain_surface(i + x, j + y)
 			else:
-				world.world.tile_data[i][j][0] = game_data.air_tile_id
+				world.tile_data[i][j][0] = game_data.air_tile_id
 
 			# Place the new one
 			for x in range(tile_cycle_dimensions[0]):
@@ -805,6 +818,7 @@ def use_special_tile(i, j):
 -----------------------------------------------------------------------------------------------------------------"""
 def update_terrain_surface(i, j, affect_others=True):
 	global terrain_surface
+	assert world is not None
 	tiles_to_update = []
 	if affect_others:
 		if i > 0:
@@ -862,6 +876,7 @@ def update_terrain_surface(i, j, affect_others=True):
 -----------------------------------------------------------------------------------------------------------------"""
 def create_vein(i, j, tile_id, size):
 	global world
+	assert world is not None
 	if tile_in_map(i, j):
 		if world.tile_data[i][j][0] != game_data.air_tile_id and world.tile_data[i][j][0] != tile_id and size > 0:
 			if random.randint(1, 10) == 1:
@@ -879,7 +894,8 @@ def create_vein(i, j, tile_id, size):
 	Spawns a tree at the given location and with the given height
 -----------------------------------------------------------------------------------------------------------------"""
 def create_tree(i, j, height):
-	global world
+	global world, leaf_tile
+	assert world is not None
 
 	trunk_tile_id = game_data.get_tile_id_by_id_str("tile.trunk")
 	snow_leaves_tile_id = game_data.get_tile_id_by_id_str("tile.leaves_snow")
@@ -945,6 +961,7 @@ def create_tree(i, j, height):
 -----------------------------------------------------------------------------------------------------------------"""
 def spawn_structure(pos_x, pos_y, structure_id_str, structure_connection_position=None, allow_connection_connecting_from=False, remaining_parts=20, check_placement_validity=False):
 	global world
+	assert world is not None
 
 	structure_data = game_data.get_structure_by_id_str(structure_id_str)
 	structure_world_top_left = (pos_x, pos_y)
@@ -1065,6 +1082,7 @@ def is_structure_rect_valid(structure_rect, rect_index_to_ignore=-1):
 -----------------------------------------------------------------------------------------------------------------"""
 def create_grounded_spawn_position():
 	global world
+	assert world is not None
 	block_pos_x = random.randint(20, max(20, WORLD_SIZE_X - 20))
 	world.spawn_position = (commons.BLOCK_SIZE * block_pos_x, commons.BLOCK_SIZE * 1.5)
 	for i in range(300):
@@ -1077,7 +1095,7 @@ def create_grounded_spawn_position():
 		right_tile_dat = game_data.get_tile_by_id(world.tile_data[x2][y][0])
 
 		if TileTag.NO_COLLIDE not in left_tile_dat["tags"] and TileTag.NO_COLLIDE not in right_tile_dat["tags"]:
-			world.spawnPosition = (world.spawn_position[0], world.spawn_position[1] - commons.BLOCK_SIZE * 1.5)
+			world.spawn_position = (world.spawn_position[0], world.spawn_position[1] - commons.BLOCK_SIZE * 1.5)
 			break
 
 
@@ -1103,6 +1121,7 @@ def check_grow_grass():
 -----------------------------------------------------------------------------------------------------------------"""
 def grow_grass():
 	global world
+	assert world is not None
 	for i in range(int(WORLD_SIZE_X * 0.05)):
 		random_x = random.randint(0, WORLD_SIZE_X - 1)
 		for j in range(110):
@@ -1120,6 +1139,7 @@ def grow_grass():
 -----------------------------------------------------------------------------------------------------------------"""
 def spawn_pot(pos_x, pos_y):
 	global world
+	assert world is not None
 	viable_blocks = 0
 	for i in range(50):
 		if tile_in_map(pos_x, pos_y):

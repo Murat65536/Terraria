@@ -177,6 +177,7 @@ class PhysicsItem:
 			velocity_angle = int(min(self.velocity[0], 10) * 50)
 
 		if not self.stationary or self.rotated_surf is None:
+			assert self.image is not None
 			self.rotated_surf = shared_methods.rotate_surface(self.image.copy(), velocity_angle)
 			commons.screen.blit(self.rotated_surf, (self.rect.centerx - self.half_image_size - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
 									  self.rect.centery - self.half_image_size - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5))

@@ -276,7 +276,7 @@ def update_menu_buttons():
 							commons.game_sub_state = "PLAYER_CREATION"
 						case PlayerNamingButtons.SET_NAME:
 							date = datetime.datetime.now()
-							commons.player_data = [commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date]  # Create player array
+							commons.player_data = (commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date)  # Create player array
 							pickle.dump(commons.player_data, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
 							commons.game_sub_state = "PLAYER_SELECTION"
 							load_menu_player_data()

@@ -931,8 +931,8 @@ while True:
 					for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
 						if pygame.Rect(load_menu_box_left2, 132 + i * 62 + save_select_y_offset, 315, 60).collidepoint(commons.MOUSE_POSITION):
 							commons.WAIT_TO_USE = True
-							print(commons.PLAYER_SAVE_OPTIONS)
-							commons.player_data = commons.PLAYER_SAVE_OPTIONS[i][0]
+							print(commons.PLAYER_SAVE_OPTIONS[i][0])
+							commons.player_data = tuple(commons.PLAYER_SAVE_OPTIONS[i][0])
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
 							commons.game_sub_state = "WORLD_SELECTION"

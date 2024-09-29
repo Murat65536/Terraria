@@ -42,7 +42,7 @@ _G3 = 1.0 / 6.0
 class BaseNoise:
 	"""Noise abstract base class"""
 
-	permutation = (151,160,137,91,90,15, 
+	permutation: tuple[int, ...] = (151,160,137,91,90,15, 
 		131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23, 
 		190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33, 
 		88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166, 
@@ -302,7 +302,7 @@ class TileableNoise(BaseNoise):
 	http://mrl.nyu.edu/~perlin/noise/
 	"""
 
-	def noise3(self, x, y, z, repeat, base=0.0):
+	def noise3(self, x, y, z, repeat, base=0):
 		"""Tileable 3D noise.
 		
 		repeat specifies the integer interval in each dimension 
@@ -326,13 +326,13 @@ class TileableNoise(BaseNoise):
 		fy = y**3 * (y * (y * 6 - 15) + 10)
 		fz = z**3 * (z * (z * 6 - 15) + 10)
 
-		perm = self.permutation
-		A = perm[i]
-		AA = perm[A + j]
-		AB = perm[A + jj]
-		B = perm[ii]
-		BA = perm[B + j]
-		BB = perm[B + jj]
+		perm: tuple[int, ...] = self.permutation
+		A: int = perm[i]
+		AA: int = perm[A + j]
+		AB: int = perm[A + jj]
+		B: int = perm[ii]
+		BA: int = perm[B + j]
+		BB: int = perm[B + jj]
 		
 		return lerp(fz, lerp(fy, lerp(fx, grad3(perm[AA + k], x, y, z),
 										  grad3(perm[BA + k], x - 1, y, z)),

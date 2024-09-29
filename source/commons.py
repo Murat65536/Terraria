@@ -63,8 +63,7 @@ MAX_ENEMY_SPAWN_TILES_X: int = int(MIN_ENEMY_SPAWN_TILES_X * 2)
 MIN_ENEMY_SPAWN_TILES_Y: int = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
 MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 
-# TODO Convert to tuple for better typing
-player_data: list[Union[str, object, list[list[int | str]], list[list[int | str]], int, int, int, datetime, datetime]] = []
+player_data: tuple[str, object, list, list, int, int, int, datetime, datetime]
 
 PLAYER_WIDTH: int = 26
 PLAYER_HEIGHT: int = 48
