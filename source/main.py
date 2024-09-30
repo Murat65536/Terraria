@@ -660,8 +660,6 @@ pygame.display.set_icon(ICON)
 
 clock = pygame.time.Clock()
 
-commons.DEFAULT_PLAYER_MODEL = player.Model(0, 0, (127, 72, 36), (62, 22, 0), (0, 0, 0), (95, 125, 127), (48, 76, 127), (129, 113, 45), (80,  100,  45))
-
 if commons.SPLASHSCREEN:
 	run_splash_screen()
 	
@@ -746,15 +744,15 @@ while True:
 
 	if commons.game_state == "PLAYING":
 		# TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
-		base_zero_to_one_float = math.sin(datetime.timedelta(seconds = entity_manager.client_player.play_time) / datetime.timedelta(hours=1) / 0.4 * 6) * 0.5 + 0.5
+		base_zero_to_one_float = math.sin(datetime.timedelta(seconds = entity_manager.client_player.playtime) / datetime.timedelta(hours=1) / 0.4 * 6) * 0.5 + 0.5
 		smoothed_zero_to_one_float = shared_methods.smooth_zero_to_one(base_zero_to_one_float, 0)
 		smoothed_zero_to_one_float = smoothed_zero_to_one_float * 0.75 + 0.25
 		commons.CURRENT_SKY_LIGHTING = int(smoothed_zero_to_one_float * global_lighting) # Global lighting is 17. 15 minutes of day and 9 minutes of night. 17*15=255.
 	
 	
-		world_time_hours = str(int((world.world.play_time / 60) // 60))
-		world_time_minutes = str(int(world.world.play_time // 60 % 60))
-		world_time_seconds = str(int(world.world.play_time % 60))
+		world_time_hours = str(int((world.world.playtime / 60) // 60))
+		world_time_minutes = str(int(world.world.playtime // 60 % 60))
+		world_time_seconds = str(int(world.world.playtime % 60))
 		if len(world_time_hours) == 1:
 			world_time_hours = f"0{world_time_hours}"
 		if len(world_time_minutes) == 1:
@@ -762,8 +760,8 @@ while True:
 		if len(world_time_seconds) == 1:
 			world_time_seconds = f"0{world_time_seconds}"
 		# print(f"{world_time_hours} : {world_time_minutes} : {world_time_seconds}")
-		world.world.play_time += commons.DELTA_TIME
-		entity_manager.client_player.play_time += int(commons.DELTA_TIME)
+		world.world.playtime += commons.DELTA_TIME
+		entity_manager.client_player.playtime += int(commons.DELTA_TIME)
 
 		evenOlderCamPos = entity_manager.old_camera_position
 
@@ -931,8 +929,15 @@ while True:
 					for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
 						if pygame.Rect(load_menu_box_left2, 132 + i * 62 + save_select_y_offset, 315, 60).collidepoint(commons.MOUSE_POSITION):
 							commons.WAIT_TO_USE = True
-							print(commons.PLAYER_SAVE_OPTIONS[i][0])
-							commons.player_data = tuple(commons.PLAYER_SAVE_OPTIONS[i][0])
+							commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[i][0]["name"]
+							commons.PLAYER_DATA["model"] = commons.PLAYER_SAVE_OPTIONS[i][0]["model"]
+							commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hotbar"]
+							commons.PLAYER_DATA["inventory"] = commons.PLAYER_SAVE_OPTIONS[i][0]["inventory"]
+							commons.PLAYER_DATA["hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hp"]
+							commons.PLAYER_DATA["max_hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["max_hp"]
+							commons.PLAYER_DATA["playtime"] = commons.PLAYER_SAVE_OPTIONS[i][0]["playtime"]
+							commons.PLAYER_DATA["creation_date"] = commons.PLAYER_SAVE_OPTIONS[i][0]["creation_date"]
+							commons.PLAYER_DATA["last_played_date"] = commons.PLAYER_SAVE_OPTIONS[i][0]["last_played_date"]
 							menu_manager.load_menu_world_data()
 							game_data.play_sound("sound.menu_open")
 							commons.game_sub_state = "WORLD_SELECTION"

@@ -4,9 +4,9 @@ import pygame
 import math
 import random
 from pygame.locals import Rect
+from item import Item
 
 import commons
-import game_data
 import game_data
 import world
 
@@ -21,14 +21,14 @@ import item
 	Holds all the information required to update and draw a single PhysicsItem (An item that can collide with tiles)
 -----------------------------------------------------------------------------------------------------------------"""
 class PhysicsItem:
-	def __init__(self, item, position, velocity=None, pickup_delay=100):
+	def __init__(self, item: Item, position: tuple[float, float], velocity: tuple[float, float]=(0, 0), pickup_delay: int=100):
 		
 		self.item = item
 
 		self.position = position
 		self.block_position = (0, 0)
 
-		if velocity is None:
+		if velocity == (0, 0):
 			#angle = -random.random() * math.pi
 			#init_speed = random.random() * 10 + 10
 			#self.velocity = (math.cos(angle) * init_speed, math.sin(angle) * init_speed)

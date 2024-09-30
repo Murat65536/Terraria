@@ -197,13 +197,13 @@ def update_menu_buttons():
 							commons.PLAYER_MODEL_DATA = [
 								[0],
 								[0],
-								[127, 72, 36, None, None],
-								[0, 0, 0, None, None],
-								[0, 0, 0, None, None],
-								[95, 125, 127, None, None],
-								[48, 76, 127, None, None],
-								[129, 113, 45, None, None],
-								[80, 100, 45, None, None]
+								[127, 72, 36, 0, 0],
+								[0, 0, 0, 0, 0],
+								[0, 0, 0, 0, 0],
+								[95, 125, 127, 0, 0],
+								[48, 76, 127, 0, 0],
+								[129, 113, 45, 0, 0],
+								[80, 100, 45, 0, 0]
 							]
 							commons.PLAYER_MODEL = player.Model(
 								commons.PLAYER_MODEL_DATA[0][0],
@@ -245,14 +245,14 @@ def update_menu_buttons():
 							commons.PLAYER_MODEL_DATA = [
 								0,
 								random.randint(0, 8),
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), None, None]
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
+								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0]
 							]
 							player.update_player_model_using_model_data()
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
@@ -276,8 +276,16 @@ def update_menu_buttons():
 							commons.game_sub_state = "PLAYER_CREATION"
 						case PlayerNamingButtons.SET_NAME:
 							date = datetime.datetime.now()
-							commons.player_data = (commons.TEXT_INPUT, commons.PLAYER_MODEL, None, None, 100, 100, 0, date, date)  # Create player array
-							pickle.dump(commons.player_data, open("assets/players/" + commons.TEXT_INPUT + ".player", "wb"))  # Save player array
+							commons.PLAYER_DATA["name"] = commons.TEXT_INPUT
+							commons.PLAYER_DATA["model"] = commons.PLAYER_MODEL
+							commons.PLAYER_DATA["hotbar"] = []
+							commons.PLAYER_DATA["inventory"] = []
+							commons.PLAYER_DATA["hp"] = 100
+							commons.PLAYER_DATA["max_hp"] = 100
+							commons.PLAYER_DATA["playtime"] = 0
+							commons.PLAYER_DATA["creation_date"] = date
+							commons.PLAYER_DATA["last_played_date"] = date
+							pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{commons.TEXT_INPUT}.player", "wb"))  # Save player array
 							commons.game_sub_state = "PLAYER_SELECTION"
 							load_menu_player_data()
 						case PlayerNamingButtons.BACK:
@@ -370,14 +378,14 @@ def load_menu_player_data():
 		player_data_surf = pygame.Surface((315, 60))
 		player_data_surf.fill((50, 50, 50))
 		pygame.draw.rect(player_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
-		player_data_surf.blit(shared_methods.outline_text(dat[0], (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # Name
+		player_data_surf.blit(shared_methods.outline_text(dat["name"], (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # Name
 		player_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
 		player_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
-		player_data_surf.blit(shared_methods.outline_text(str(dat[7])[:19], (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
-		player_data_surf.blit(shared_methods.outline_text(str(dat[5]) + "HP", (230, 10, 10), commons.DEFAULT_FONT, outline_color=(128, 5, 5)), (155, 3))  # hp
+		player_data_surf.blit(shared_methods.outline_text(str(dat["creation_date"])[:19], (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
+		player_data_surf.blit(shared_methods.outline_text(str(dat["hp"]) + "HP", (230, 10, 10), commons.DEFAULT_FONT, outline_color=(128, 5, 5)), (155, 3))  # hp
 		player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULT_FONT, outline_color=(30, 41, 122)), (205, 3))  # mana
-		player_data_surf.blit(shared_methods.outline_text(str(int((dat[6] / 60) // 60)) + ":" + str(int(dat[6] // 60 % 60)).zfill(2) + ":" + str(int(dat[6] % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
-		sprites = player.render_sprites(dat[1], directions=1, arm_frame_count=1, torso_frame_count=1)
+		player_data_surf.blit(shared_methods.outline_text(str(int((dat["playtime"] / 60) // 60)) + ":" + str(int(dat["playtime"] // 60 % 60)).zfill(2) + ":" + str(int(dat["playtime"] % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
+		sprites = player.render_sprites(dat["model"], directions=1, arm_frame_count=1, torso_frame_count=1)
 		player_data_surf.blit(sprites[0][0], (270, 0))
 		player_data_surf.blit(sprites[1][0], (270, 0))
 		commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
@@ -406,11 +414,11 @@ def load_menu_world_data():
 			world_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
 			world_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
 			world_data_surf.blit(shared_methods.outline_text(world.world.get_creation_date_string(), (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
-			world_data_surf.blit(shared_methods.outline_text(str(int((world.world.play_time / 60) // 60)) + ":" + str(int(world.world.play_time // 60 % 60)).zfill(2) + ":" + str(int(world.world.play_time % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
+			world_data_surf.blit(shared_methods.outline_text(str(int((world.world.playtime / 60) // 60)) + ":" + str(int(world.world.playtime // 60 % 60)).zfill(2) + ":" + str(int(world.world.playtime % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
 
 			world_data_surf.blit(surface_manager.misc_gui[10], (260, 7))
 
-			commons.WORLD_SAVE_OPTIONS.append([world.world.name, world_data_surf])
+			commons.WORLD_SAVE_OPTIONS.append((world.world.name, world_data_surf))
 
 active_menu_buttons = {
 	"MAIN": [

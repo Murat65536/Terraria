@@ -20,11 +20,11 @@ from color_picker import ColorPicker
 from item import Item
 
 
-enemies = []
-particles = []
-projectiles = []
-physics_items = []
-messages = []
+enemies: list[Enemy] = []
+particles: list[Particle] = []
+projectiles: list[Projectile] = []
+physics_items: list[PhysicsItem] = []
+messages: list[tuple[pygame.Surface, float]] = []
 damage_numbers = []
 recent_pickups = []
 
@@ -40,39 +40,39 @@ camera_position_difference = (0, 0)
 """================================================================================================================= 
 	entity_manager.create_player -> void
 
-	Sets the client player to a new player instance created with the data in player_data
+	Sets the client player to a new player instance created with the data in PLAYER_DATA
 -----------------------------------------------------------------------------------------------------------------"""
 
 
 def create_player():
 	global client_player
-	name = commons.player_data[0]
-	model = commons.player_data[1]
+	name = commons.PLAYER_DATA["name"]
+	model = commons.PLAYER_DATA["model"]
 
 	# Load hotbar
 	hotbar: list[Item | None] = [None for _ in range(10)]
-	if commons.player_data[2] is not None:
-		for loaded_hotbar_index in range(len(commons.player_data[2])):
-			loaded_item_data = commons.player_data[2][loaded_hotbar_index]
+	if commons.PLAYER_DATA["hotbar"] == []:
+		for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
+			loaded_item_data = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
 			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
 			item.assign_prefix(loaded_item_data[3])
 			hotbar[loaded_item_data[0]] = item
 
 	# Load inventory
 	inventory: list[Item | None] = [None for _ in range(40)]
-	if commons.player_data[3] is not None:
-		for loaded_inventory_index in range(len(commons.player_data[3])):
-			loaded_item_data = commons.player_data[3][loaded_inventory_index]
+	if commons.PLAYER_DATA["inventory"] == []:
+		for loaded_inventory_index in range(len(commons.PLAYER_DATA["inventory"])):
+			loaded_item_data = commons.PLAYER_DATA["inventory"][loaded_inventory_index]
 			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
 			item.assign_prefix(loaded_item_data[3])
 			inventory[loaded_item_data[0]] = item
 
-	hp = commons.player_data[4]
-	max_hp = commons.player_data[5]
-	play_time = commons.player_data[6]
-	creation_date = commons.player_data[7]
-	last_played_date = commons.player_data[8]
-	client_player = Player((0, 0), model, name=name, hotbar=hotbar, inventory=inventory, hp=hp, max_hp=max_hp, play_time=play_time, creation_date=creation_date, last_played_date=last_played_date)
+	hp = commons.PLAYER_DATA["hp"]
+	max_hp = commons.PLAYER_DATA["max_hp"]
+	playtime = commons.PLAYER_DATA["playtime"]
+	creation_date = commons.PLAYER_DATA["creation_date"]
+	last_played_date = commons.PLAYER_DATA["last_played_date"]
+	client_player = Player((0, 0), model, name=name, hotbar=hotbar, inventory=inventory, hp=hp, max_hp=max_hp, playtime=playtime, creation_date=creation_date, last_played_date=last_played_date)
 
 
 """================================================================================================================= 
@@ -108,10 +108,8 @@ def draw_enemy_hover_text():
 							 commons.MOUSE_POSITION[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5)
 	for enemy in enemies:
 		if enemy.rect.collidepoint(transformed_MOUSE_POSITION):
-			text1 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health),
-											   True, (255, 255, 255))
-			text2 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health),
-											   True, (0, 0, 0))
+			text1 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health), True, (255, 255, 255))
+			text2 = commons.MEDIUM_FONT.render(enemy.name + ": " + str(math.ceil(enemy.health)) + "/" + str(enemy.max_health), True, (0, 0, 0))
 
 			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5, commons.MOUSE_POSITION[1] - 38))
 			commons.screen.blit(text2, (commons.MOUSE_POSITION[0] - text2.get_width() * 0.5, commons.MOUSE_POSITION[1] - 42))
@@ -169,8 +167,7 @@ def update_projectiles():
 def update_messages():
 	global messages
 	for message in messages:
-		message[1] -= commons.DELTA_TIME
-		if message[1] <= 0:
+		if message[1] - commons.DELTA_TIME <= 0:
 			messages.remove(message)
 
 
@@ -298,11 +295,11 @@ def spawn_enemy(position=None, enemy_id=None):
 		enemies.append(Enemy(position, enemy_id))
 
 
-def spawn_particle(position, color, life=2.0, magnitude=1.0, size=5, angle=None, spread=math.pi / 4, gravity=0.25, velocity=None, outline=False):
+def spawn_particle(position: tuple[float, float], color: tuple[int, int, int], life: float=2.0, magnitude: float=1.0, size: int=5, angle: float=0, spread: float=math.pi / 4, gravity: float=0.25, velocity: float=0, outline: bool=False):
 	particles.append(Particle(position, color, life, magnitude, size, angle, spread, gravity, velocity, outline))
 
 
-def spawn_physics_item(item, position, velocity=None, pickup_delay=100):
+def spawn_physics_item(item: Item, position: tuple[float, float], velocity: tuple[float, float]=(0, 0), pickup_delay: int=100):
 	physics_items.append(PhysicsItem(item, position, velocity, pickup_delay))
 
 
@@ -329,7 +326,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
 
 
-def add_message(text, color, life=5.0, outline_color=(0, 0, 0)):
+def add_message(text: str, color: tuple[int, int, int], life: float=5.0, outline_color: tuple[int, int, int]=(0, 0, 0)):
 	global messages
 	text1 = commons.DEFAULT_FONT.render(text, False, color)
 	text2 = commons.DEFAULT_FONT.render(text, False, outline_color)
@@ -341,13 +338,13 @@ def add_message(text, color, life=5.0, outline_color=(0, 0, 0)):
 		surf.blit(text2, (1, 3))
 
 	surf.blit(text1, (1, 1))
-	messages.insert(0, [surf, life])
+	messages.insert(0, (surf, life))
 
 
-def add_damage_number(pos, val, crit=False, color=None):
+def add_damage_number(pos: tuple[float, float], val: float, crit: bool=False, color: tuple[int, int, int]=(0, 0, 0)):
 	global damage_numbers
 
-	if color is None:
+	if color == (0, 0, 0):
 		if crit:
 			color = (246, 97, 28)
 		else:

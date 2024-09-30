@@ -174,13 +174,15 @@ class Item:
 		else:
 			self.has_prefix = False
 
-	def get_image(self):
+	def get_image(self) -> pygame.Surface:
 		if self.json_item != None:
 			image = self.json_item["image"]
 			if image is None:
 				return pygame.Surface((32, 32))
 			else:
 				return image
+		else:
+			raise ValueError("Item image is not set.")
 
 	def get_item_slot_offset_x(self):
 		if self.json_item != None:
@@ -284,13 +286,13 @@ class Item:
 			return self.json_item["drop_sound"]
 
 
-def get_coins_from_int(coin_int):
-	plat_coins = coin_int // 1000000
-	gold_coins = (coin_int // 10000) % 100
-	silver_coins = (coin_int // 100) % 100
-	copper_coins = coin_int % 100
+def get_coins_from_int(coin_int: int) -> list[Item]:
+	plat_coins: int = coin_int // 1000000
+	gold_coins: int = (coin_int // 10000) % 100
+	silver_coins: int = (coin_int // 100) % 100
+	copper_coins: int = coin_int % 100
 
-	item_list = []
+	item_list: list[Item] = []
 	if plat_coins != 0:
 		item_list.append(Item(game_data.get_item_id_by_id_str("item.platinum_coin"), plat_coins))
 	if gold_coins != 0:

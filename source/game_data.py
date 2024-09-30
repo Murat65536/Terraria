@@ -4,7 +4,7 @@ import pygame
 from enum import Enum
 import commons
 import random
-from typing import Any
+from typing import Any, TypedDict
 import json
 
 
@@ -58,6 +58,25 @@ class TileStrengthType(Enum):
 class TileMaskType(Enum):
 	NONE = 0
 	NOISY = 1
+
+class TileData(TypedDict):
+	id: int
+	id_str: str
+	name: str
+	strength: float
+	strength_type: TileStrengthType
+	mask_type: TileMaskType
+	mask_merge_ids: list[str]
+	light_reduction: int
+	light_emission: int
+	average_color: tuple[int, int, int, int]
+	tags: list[TileTag]
+	image_path: str
+	item_id_str: str
+	item_count_range: list[int]
+	place_sound: str
+	hit_sound: str
+	image: pygame.Surface
 
 
 def make_item_tag_list(item_tags_str):
@@ -118,9 +137,9 @@ biome_tile_vals = [[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wa
 platform_blocks = [257]
 
 json_item_data = []
-item_id_str_hash_table = {}
+item_id_str_hash_table: dict[str, int] = {}
 ammo_type_item_lists = {}
-json_tile_data = []
+json_tile_data: list[TileData] = []
 tile_id_str_hash_table = {}
 tile_id_light_reduction_lookup = []
 tile_id_light_emission_lookup = []
@@ -566,7 +585,7 @@ def get_item_by_id(item_id) -> Any:
 		raise ValueError("Inserted item ID greater than maximum item ID length.")
 
 
-def get_item_id_by_id_str(item_id_str):
+def get_item_id_by_id_str(item_id_str: str) -> int:
 	return item_id_str_hash_table[item_id_str]
 
 
@@ -639,7 +658,7 @@ def create_tile_light_emission_lookup():
 		tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
 
 
-def get_tile_by_id(tile_id):
+def get_tile_by_id(tile_id: int) -> TileData:
 	if tile_id < len(json_tile_data):
 		return json_tile_data[tile_id]
 	else:
@@ -766,7 +785,7 @@ def change_sound_volume(amount):
 		sound_volume_multiplier += amount
 
 
-def play_sound(sound_id_str):
+def play_sound(sound_id_str: str) -> None:
 	global sound_volume_multiplier
 
 	if commons.SOUND:

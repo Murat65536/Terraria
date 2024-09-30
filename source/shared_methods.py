@@ -35,7 +35,7 @@ def get_on_off(bool_var):
 
 	Multiplies all three components of a color tuple by a given float
 -----------------------------------------------------------------------------------------------------------------"""
-def darken_color(color, factor=0.6):
+def darken_color(color: tuple[int, int, int], factor: float=0.6):
 	return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
 
 

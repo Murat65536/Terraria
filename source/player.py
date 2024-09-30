@@ -37,7 +37,7 @@ def	get_death_message(name,	source):
 	Transfers the data stored in PLAYER_MODEL_DATA to PLAYER_MODEL
 -----------------------------------------------------------------------------------------------------------------"""
 def	update_player_model_using_model_data():
-	assert commons.PLAYER_MODEL is not None
+	assert commons.PLAYER_MODEL is Model
 
 	commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0][0]
 	commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1][0]
@@ -74,7 +74,7 @@ class Model:
 	Performs physics and renders a player within the current world
 -----------------------------------------------------------------------------------------------------------------"""
 class Player:
-	def	__init__(self, position, model,	name="unassigned", hp=0, max_hp=100, hotbar=None, inventory=None, play_time=0, creation_date=None, last_played_date=None):
+	def	__init__(self, position, model,	name="unassigned", hp=0, max_hp=100, hotbar=None, inventory=None, playtime=0, creation_date=None, last_played_date=None):
 		self.position = position
 		self.block_position	= (0, 0)
 		self.model = model
@@ -119,7 +119,7 @@ class Player:
 			self.items[ItemLocation.INVENTORY] = inventory
 
 		# Save stats
-		self.play_time = play_time
+		self.playtime = playtime
 
 		date = datetime.datetime.now()
 
@@ -410,7 +410,7 @@ class Player:
 		
 		Kills the player, adds a death message,	spawns particles, plays	a sound
 	-----------------------------------------------------------------------------------------------------------------"""
-	def	damage(self, value,	source_name, knockback=0, direction=0, source_velocity=None):
+	def	damage(self, value: int, source_name: tuple[str, str], knockback: int=0, direction: int=0, source_velocity: tuple[float, float]=(0, 0)) -> None:
 		if not commons.CREATIVE	and	self.alive and not self.invincible:
 			self.invincible	= True
 			self.invincible_timer =	0.35
@@ -430,7 +430,7 @@ class Player:
 				game_data.play_sound("sound.player_hurt")  # hurt sound
 
 				if commons.PARTICLES:
-					if source_velocity is not None:
+					if source_velocity != (0, 0):
 						velocity_angle = math.atan2(self.velocity[1] + source_velocity[0], self.velocity[0]	+ source_velocity[1])
 						velocity_magnitude = math.sqrt((self.velocity[0] + source_velocity[0]) ** 2	+ (self.velocity[1]	+ source_velocity[1]) ** 2)
 					else:
@@ -1439,13 +1439,21 @@ class Player:
 			item = self.items[ItemLocation.INVENTORY][item_index]
 			if item	is not None:
 				if item.prefix_data	is None:
-					formatted_inventory.append([item_index,	item.get_id_str(), item.amount, None])
+					formatted_inventory.append((item_index,	item.get_id_str(), item.amount, ""))
 				else:
-					formatted_inventory.append([item_index,	item.get_id_str(), item.amount, item.get_prefix_name()])
+					formatted_inventory.append((item_index,	item.get_id_str(), item.amount, item.get_prefix_name()))
 
 		# Save the data	to disk	and	display	a message
-		commons.player_data	= [self.name, self.model, formatted_hotbar,	formatted_inventory, self.hp, self.max_hp, self.play_time, self.creation_date, self.last_played_date]  # Create	player array
-		pickle.dump(commons.player_data, open("assets/players/" + self.name + ".player", "wb"))  # Save player	array
+		commons.PLAYER_DATA["name"] = self.name
+		commons.PLAYER_DATA["model"] = self.model
+		commons.PLAYER_DATA["hotbar"] = formatted_hotbar
+		commons.PLAYER_DATA["inventory"] = formatted_inventory
+		commons.PLAYER_DATA["hp"] = self.hp
+		commons.PLAYER_DATA["max_hp"] = self.max_hp
+		commons.PLAYER_DATA["playtime"] = self.playtime
+		commons.PLAYER_DATA["creation_date"] = self.creation_date
+		commons.PLAYER_DATA["last_played_date"] = self.last_played_date
+		pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player	array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 
 	"""=================================================================================================================	

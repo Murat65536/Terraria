@@ -1,19 +1,19 @@
 import pygame
 import commons
 
-tile_masks = []
-misc_gui = []
-backgrounds = []
-walls = []
-projectiles = []
-hair = []
-special_tiles = []
-torsos = []
-slimes = []
-large_backgrounds = []
-menu_background = []
-head = []
-new_hair = []
+tile_masks: list[pygame.Surface] = []
+misc_gui: list[pygame.Surface] = []
+backgrounds: list[pygame.Surface] = []
+walls: list[pygame.Surface] = []
+projectiles: list[pygame.Surface] = []
+hair: list[pygame.Surface] = []
+special_tiles: list[pygame.Surface] = []
+torsos: list[pygame.Surface] = []
+slimes: list[pygame.Surface] = []
+large_backgrounds: list[pygame.Surface] = []
+menu_background: list[pygame.Surface] = []
+head: list[pygame.Surface] = []
+new_hair: list[list[pygame.Surface]] = []
 
 
 def load_tile_mask_surfaces():
@@ -91,7 +91,7 @@ def load_new_hair_surfaces():
 	scale = 1.25
 	for image in range(164):
 		hair_tileset_image = pygame.transform.scale(pygame.image.load(f"assets/images/player/hair/Player_Hair_{image + 1}.png").convert_alpha(), (int(40 * scale), int(56 * 14 * scale)))
-		hair_tileset = []
+		hair_tileset: list[pygame.Surface] = []
 		for i in range(14):
 			surf = pygame.Surface((int(40 * scale), int(56 * scale)), pygame.SRCALPHA)
 			surf.blit(hair_tileset_image, (0, -i * 56))

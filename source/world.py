@@ -94,10 +94,10 @@ class World:
 		self.type = WorldType.NORMAL
 		self.gen_type = WorldGenType.DEFAULT
 		self.state_flags = {}
-		self.play_time = 0
+		self.playtime = 0
 		self.spawn_position = (0, 0)
 		self.chest_data = []
-		self.tile_data = []
+		self.tile_data: list[list[list[int]]] = []
 		self.tile_mask_data = []
 
 	def get_creation_date_string(self):
@@ -128,24 +128,24 @@ class World:
 			"type": self.type,
 			"gen_type": self.gen_type,
 			"state_flags": self.state_flags,
-			"play_time": self.play_time,
+			"playtime": self.playtime,
 			"spawn_position": self.spawn_position,
 			"chest_data": formatted_chest_data,
 			"tile_id_str_lookup": game_data.get_current_tile_id_str_lookup(),
 			"wall_id_str_lookup": game_data.get_current_wall_id_str_lookup(),
 		}
 
-		pickle.dump(save_map, open("assets/worlds/" + str(self.name) + ".dat", "wb"))  # save dat
-		pickle.dump(self.tile_data, open("assets/worlds/" + str(self.name) + ".wrld", "wb"))  # save wrld
+		pickle.dump(save_map, open(f"assets/worlds/{self.name}.dat", "wb"))  # save dat
+		pickle.dump(self.tile_data, open(f"assets/worlds/{self.name}.wrld", "wb"))  # save wrld
 
 	def load(self, world_name, load_all=True):
-		save_map = pickle.load(open("assets/worlds/" + world_name + ".dat", "rb"))  # open selected save dat file
+		save_map = pickle.load(open(f"assets/worlds/{world_name}.dat", "rb"))  # open selected save dat file
 
 		self.name = save_map["name"]
 		self.creation_date = save_map["creation_date"]
 		self.size = save_map["size"]
 		self.gen_type = save_map["gen_type"]
-		self.play_time = save_map["play_time"]
+		self.playtime = save_map["playtime"]
 		self.spawn_position = (save_map["spawn_position"][0], save_map["spawn_position"][1])
 		formatted_chest_data = save_map["chest_data"]
 
@@ -162,7 +162,7 @@ class World:
 					self.chest_data[chest_data_index][1][loaded_item_data[0]] = item
 
 			# Open selected save wrld file
-			self.tile_data = pickle.load(open("assets/worlds/" + world_name + ".wrld", "rb"))
+			self.tile_data = pickle.load(open(f"assets/worlds/{world_name}.wrld", "rb"))
 
 			# And replace the tile and wall values with updated ones
 			tile_id_str_lookup = save_map["tile_id_str_lookup"]
@@ -185,8 +185,7 @@ class World:
 def save():
 	assert world is not None
 	world.save()
-	entity_manager.add_message("Saved World: " + world.name + "!", (255, 255, 255))
-
+	entity_manager.add_message(f"Saved World: {world.name}!", (255, 255, 255))
 
 def load(world_name, load_all=True):
 	global world
@@ -199,14 +198,8 @@ def load(world_name, load_all=True):
 
 	Checks if the given position falls within the map
 -----------------------------------------------------------------------------------------------------------------"""
-def tile_in_map(i, j, width=1):
-	if i < -1 + width:
-		return False
-	if j < -1 + width:
-		return False
-	if i > WORLD_SIZE_X - width:
-		return False
-	if j > WORLD_SIZE_Y - width:
+def tile_in_map(i: int, j: int, width: int=1) -> bool:
+	if i < -1 + width or i > WORLD_SIZE_X - width or j < -1 + width or j > WORLD_SIZE_Y - width:
 		return False
 	return True
 

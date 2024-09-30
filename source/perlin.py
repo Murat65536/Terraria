@@ -1,36 +1,39 @@
 from math import floor, fmod, sqrt
 from random import randint
+from typing import Any
 
 # 3D Gradient vectors
 _GRAD3 = (
-    (1,1,0),(-1,1,0),(1,-1,0),(-1,-1,0), 
-	(1,0,1),(-1,0,1),(1,0,-1),(-1,0,-1), 
-	(0,1,1),(0,-1,1),(0,1,-1),(0,-1,-1),
-	(1,1,0),(0,-1,1),(-1,1,0),(0,-1,-1),
+    (1, 1, 0), (-1, 1, 0), (1, -1, 0), (-1, -1, 0), 
+	(1, 0, 1), (-1, 0, 1), (1, 0, -1), (-1, 0, -1), 
+	(0, 1, 1), (0,- 1, 1), (0, 1, -1), (0, -1, -1),
+	(1, 1, 0), (0,- 1, 1), (-1 ,1, 0), (0, -1, -1)
 ) 
 
 # 4D Gradient vectors
 _GRAD4 = (
-    (0,1,1,1), (0,1,1,-1), (0,1,-1,1), (0,1,-1,-1), 
-	(0,-1,1,1), (0,-1,1,-1), (0,-1,-1,1), (0,-1,-1,-1), 
-	(1,0,1,1), (1,0,1,-1), (1,0,-1,1), (1,0,-1,-1), 
-	(-1,0,1,1), (-1,0,1,-1), (-1,0,-1,1), (-1,0,-1,-1), 
-	(1,1,0,1), (1,1,0,-1), (1,-1,0,1), (1,-1,0,-1), 
-	(-1,1,0,1), (-1,1,0,-1), (-1,-1,0,1), (-1,-1,0,-1), 
-	(1,1,1,0), (1,1,-1,0), (1,-1,1,0), (1,-1,-1,0), 
-	(-1,1,1,0), (-1,1,-1,0), (-1,-1,1,0), (-1,-1,-1,0))
+    (0, 1, 1, 1), (0, 1, 1, -1), (0, 1, -1, 1), (0, 1, -1, -1), 
+	(0, -1, 1, 1), (0, -1, 1, -1), (0, -1, -1, 1), (0, -1, -1, -1), 
+	(1, 0, 1, 1), (1, 0, 1, -1), (1, 0, -1, 1), (1, 0, -1, -1), 
+	(-1, 0, 1, 1), (-1, 0, 1, -1), (-1, 0, -1, 1), (-1, 0, -1, -1), 
+	(1, 1, 0, 1), (1, 1, 0, -1), (1, -1, 0, 1), (1, -1, 0, -1), 
+	(-1, 1, 0, 1), (-1, 1, 0, -1), (-1, -1, 0, 1), (-1, -1, 0, -1), 
+	(1, 1, 1, 0), (1, 1, -1, 0), (1, -1, 1, 0), (1, -1, -1, 0), 
+	(-1, 1, 1, 0), (-1, 1, -1, 0), (-1, -1, 1, 0), (-1, -1, -1, 0)
+)
 
 # A lookup table to traverse the simplex around a given point in 4D. 
 # Details can be found where this table is used, in the 4D noise method. 
 _SIMPLEX = (
-	(0,1,2,3),(0,1,3,2),(0,0,0,0),(0,2,3,1),(0,0,0,0),(0,0,0,0),(0,0,0,0),(1,2,3,0), 
-	(0,2,1,3),(0,0,0,0),(0,3,1,2),(0,3,2,1),(0,0,0,0),(0,0,0,0),(0,0,0,0),(1,3,2,0), 
-	(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0), 
-	(1,2,0,3),(0,0,0,0),(1,3,0,2),(0,0,0,0),(0,0,0,0),(0,0,0,0),(2,3,0,1),(2,3,1,0), 
-	(1,0,2,3),(1,0,3,2),(0,0,0,0),(0,0,0,0),(0,0,0,0),(2,0,3,1),(0,0,0,0),(2,1,3,0), 
-	(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0),(0,0,0,0), 
-	(2,0,1,3),(0,0,0,0),(0,0,0,0),(0,0,0,0),(3,0,1,2),(3,0,2,1),(0,0,0,0),(3,1,2,0), 
-	(2,1,0,3),(0,0,0,0),(0,0,0,0),(0,0,0,0),(3,1,0,2),(0,0,0,0),(3,2,0,1),(3,2,1,0))
+	(0, 1, 2, 3), (0, 1, 3, 2), (0, 0, 0, 0), (0, 2, 3, 1), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (1, 2, 3, 0), 
+	(0, 2, 1, 3), (0, 0, 0, 0), (0, 3, 1, 2), (0, 3, 2, 1), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (1, 3, 2, 0), 
+	(0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), 
+	(1, 2, 0, 3), (0, 0, 0, 0), (1, 3, 0, 2), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (2, 3, 0, 1), (2, 3, 1, 0), 
+	(1, 0, 2, 3), (1, 0, 3, 2), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (2, 0, 3, 1), (0, 0, 0, 0), (2, 1, 3, 0), 
+	(0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), 
+	(2, 0, 1, 3), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (3, 0, 1, 2), (3, 0, 2, 1), (0, 0, 0, 0), (3, 1, 2, 0), 
+	(2, 1, 0, 3), (0, 0, 0, 0), (0, 0, 0, 0), (0, 0, 0, 0), (3, 1, 0, 2), (0, 0, 0, 0), (3, 2, 0, 1), (3, 2, 1, 0)
+)
 
 # Simplex skew constants
 _F2 = 0.5 * (sqrt(3.0) - 1.0)
@@ -42,7 +45,8 @@ _G3 = 1.0 / 6.0
 class BaseNoise:
 	"""Noise abstract base class"""
 
-	permutation: tuple[int, ...] = (151,160,137,91,90,15, 
+	permutation: tuple[int, ...] = (
+		151,160,137,91,90,15, 
 		131,13,201,95,96,53,194,233,7,225,140,36,103,30,69,142,8,99,37,240,21,10,23, 
 		190,6,148,247,120,234,75,0,26,197,62,94,252,219,203,117,35,11,32,57,177,33, 
 		88,237,149,56,87,174,20,125,136,171,168,68,175,74,165,71,134,139,48,27,166, 
@@ -54,15 +58,16 @@ class BaseNoise:
 		129,22,39,253,9,98,108,110,79,113,224,232,178,185,112,104,218,246,97,228, 
 		251,34,242,193,238,210,144,12,191,179,162,241, 81,51,145,235,249,14,239,107, 
 		49,192,214,31,181,199,106,157,184,84,204,176,115,121,50,45,127,4,150,254, 
-		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180)
+		138,236,205,93,222,114,67,29,24,72,243,141,128,195,78,66,215,61,156,180
+	)
 
-	period = len(permutation)
+	period: int = len(permutation)
 	# Double permutation array so we don't need to wrap
 	permutation = permutation * 2
 
 	randint_function = randint
 
-	def __init__(self, period=None, permutation_table=None, randint_function=None):
+	def __init__(self, period: int | None=None, permutation_table: Any=None, randint_function: Any=None):
 		"""Initialize the noise generator. With no arguments, the default
 		period and permutation table are used (256). The default permutation
 		table generates the exact same noise pattern each time.
@@ -104,7 +109,7 @@ class BaseNoise:
 			self.permutation = tuple(permutation_table) * 2
 			self.period = len(permutation_table)
 
-	def randomize(self, period=None):
+	def randomize(self, period: int | None=None):
 		"""Randomize the permutation table used by the noise functions. This
 		makes them generate a different noise pattern for the same inputs.
 		"""
@@ -146,7 +151,7 @@ class SimplexNoise(BaseNoise):
 	* Simplex noise is easy to implement in hardware."
 	"""
 
-	def noise2(self, x, y):
+	def noise2(self, x: float, y: float) -> float:
 		"""2D Perlin simplex noise. 
 		
 		Return a floating point value from -1 to 1 for the given x, y coordinate. 
@@ -199,7 +204,7 @@ class SimplexNoise(BaseNoise):
 
 		return noise * 70.0 # scale noise to [-1, 1]
 
-	def noise3(self, x, y, z):
+	def noise3(self, x: float, y: float, z: float) -> float:
 		"""3D Perlin simplex noise. 
 		
 		Return a floating point value from -1 to 1 for the given x, y, z coordinate. 
@@ -287,10 +292,10 @@ class SimplexNoise(BaseNoise):
 		return noise * 32.0
 
 
-def lerp(t, a, b):
+def lerp(t: float, a: float, b: float) -> float:
 	return a + t * (b - a)
 
-def grad3(hash, x, y, z):
+def grad3(hash: int, x: float, y: float, z: float) -> float:
 	g = _GRAD3[hash % 16]
 	return x*g[0] + y*g[1] + z*g[2]
 
@@ -302,7 +307,7 @@ class TileableNoise(BaseNoise):
 	http://mrl.nyu.edu/~perlin/noise/
 	"""
 
-	def noise3(self, x, y, z, repeat, base=0):
+	def noise3(self, x: float, y: float, z: float, repeat: int, base: int=0) -> float:
 		"""Tileable 3D noise.
 		
 		repeat specifies the integer interval in each dimension 

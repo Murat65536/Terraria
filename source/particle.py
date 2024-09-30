@@ -13,7 +13,7 @@ import entity_manager
 	Holds all the information required to update and draw a single particle
 -----------------------------------------------------------------------------------------------------------------"""
 class Particle:
-	def __init__(self, position, color, life, magnitude, size, angle, spread, gravity, velocity=None, outline=True):
+	def __init__(self, position, color, life, magnitude, size, angle, spread, gravity, velocity=0, outline=True):
 		self.position = position
 		self.life = life + (random.random() * life * 0.1 - life * 0.05)  # How long it lasts for (randomized slightly)
 		self.initLife = self.life
@@ -21,8 +21,8 @@ class Particle:
 		self.size = size + random.random() * size * 0.1 - size * 0.05  # How large it will be (randomized slightly)
 		self.initSize = self.size
 		self.outline = outline
-		if velocity is None:
-			if angle is None:
+		if velocity == 0:
+			if angle == 0:
 				angle = random.random() * math.pi * 2 - math.pi  # Random angle
 			else:
 				angle += random.random() * spread - spread * 0.5  # Set angle + random spread in set range

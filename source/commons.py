@@ -1,5 +1,5 @@
 import pygame
-from typing import TextIO, Union
+from typing import TextIO, TypedDict
 from datetime import datetime
 pygame.init()
 
@@ -63,30 +63,38 @@ MAX_ENEMY_SPAWN_TILES_X: int = int(MIN_ENEMY_SPAWN_TILES_X * 2)
 MIN_ENEMY_SPAWN_TILES_Y: int = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
 MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 
-player_data: tuple[str, object, list, list, int, int, int, datetime, datetime]
+class PlayerData(TypedDict):
+	name: str
+	model: object
+	hotbar: list[tuple[int, str, int, str]]
+	inventory: list[tuple[int, str, int, str]]
+	hp: int
+	max_hp: int
+	playtime: int
+	creation_date: datetime
+	last_played_date: datetime
+
+PLAYER_DATA: PlayerData = {"name": "", "model": None, "hotbar": [(0, "", 0, "")], "inventory": [(0, "", 0, "")], "hp": 0, "max_hp": 0, "playtime": 0, "creation_date": datetime(1, 1, 1), "last_played_date": datetime(1, 1, 1)}
+PLAYER_SAVE_OPTIONS: list[list[PlayerData]] = []
 
 PLAYER_WIDTH: int = 26
 PLAYER_HEIGHT: int = 48
 PLAYER_ARM_LENGTH: int = 20
 
 PLAYER_MODEL_DATA: list[list[int]] = []
-PLAYER_MODEL = None
-PLAYER_FRAMES = []
-PLAYER_REACH = 8
+PLAYER_MODEL: object = None
+PLAYER_FRAMES: list[list[pygame.Surface]] = []
+PLAYER_REACH: int = 8
 PLAYER_MODEL_COLOR_INDEX: int = 0
-TEXT_INPUT = ""
+TEXT_INPUT: str = ""
 
-DEFAULT_PLAYER_MODEL = None
+IS_HOLDING_ITEM: bool = False
+ITEM_HOLDING: object = None
 
-IS_HOLDING_ITEM = False
-ITEM_HOLDING = None
 
-PLAYER_SAVE_OPTIONS = []
+OLD_TIME_MILLISECONDS: int = pygame.time.get_ticks()
+DELTA_TIME: int = 0
 
-OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
-DELTA_TIME = 0
+CURRENT_SKY_LIGHTING: int = 255
 
-CURRENT_SKY_LIGHTING = 255
-CURRENT_TIME_STATE = None
-
-WORLD_SAVE_OPTIONS = []
+WORLD_SAVE_OPTIONS: list[tuple[str, pygame.Surface]] = []

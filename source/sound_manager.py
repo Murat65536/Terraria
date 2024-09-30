@@ -1,13 +1,13 @@
 #sound_manager.py
 
-import pygame, random
+import pygame
 
 import commons
 import entity_manager
 
 music_volume = commons.CONFIG_MUSIC_VOLUME
 sound_volume = commons.CONFIG_SOUND_VOLUME
-sounds = []
+sounds: list[pygame.mixer.Sound] = []
 
 if commons.MUSIC:
 	pygame.mixer.music.load("assets/sounds/day.mp3")
@@ -40,23 +40,23 @@ if commons.SOUND:
 	for sound in sounds:
 		sound.set_volume(sound_volume)
 
-def change_music_volume(amount):
+def change_music_volume(amount: float) -> None:
 	global music_volume
 	music_volume += amount
 	music_volume = max(min(music_volume, 1), 0)
 	pygame.mixer.music.set_volume(music_volume)
 	entity_manager.add_message("Music volume set to " + str(round(music_volume, 2)),  (255, 223, 10), outline_color= (80, 70, 3))
 
-def change_sound_volume(amount):
+def change_sound_volume(amount: float) -> None:
 	global sound_volume
 	sound_volume += amount
 	sound_volume = max(min(sound_volume, 1), 0)
 	for sound in sounds:
 		sound.set_volume(sound_volume)
 
-def play_music():
+def play_music() -> None:
 	pygame.mixer.music.play(loops=-1)
 
-def stop_music():
+def stop_music() -> None:
 	pygame.mixer.music.stop()
 	pygame.mixer.music.rewind()
