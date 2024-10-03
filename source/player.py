@@ -24,7 +24,7 @@ import entity_manager
 	Uses the player's name,	the	thing that killed them,	and	the	worlds name	to generate	a random death message
 -----------------------------------------------------------------------------------------------------------------"""
 def	get_death_message(name,	source):
-	string = game_data.death_lines[source[0]][random.randint(0,	len(game_data.death_lines[source[0]]) -	1)]
+	string = game_data.DEATH_LINES[source[0]][random.randint(0,	len(game_data.DEATH_LINES[source[0]]) -	1)]
 	string = string.replace("<p>", name)
 	string = string.replace("<w>", world.world.name)
 	string = string.replace("<e>", source[1])
@@ -1453,7 +1453,7 @@ class Player:
 		commons.PLAYER_DATA["playtime"] = self.playtime
 		commons.PLAYER_DATA["creation_date"] = self.creation_date
 		commons.PLAYER_DATA["last_played_date"] = self.last_played_date
-		pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player	array
+		pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 
 	"""=================================================================================================================	

@@ -232,7 +232,7 @@ def draw_projectiles():
 def draw_messages():
 	for i in range(len(messages)):
 		if messages[i][1] < 1.0:
-			messages[i][0].set_alpha((messages[i][1] / 1.0) * 255)
+			messages[i][0].set_alpha(int(messages[i][1] * 255))
 		commons.screen.blit(messages[i][0], (10, commons.WINDOW_HEIGHT - 25 - i * 20))
 
 

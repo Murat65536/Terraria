@@ -4,9 +4,7 @@ import pygame
 from enum import Enum
 import commons
 import random
-from typing import Any, TypedDict
-import json
-
+from typing import Any, TypedDict, NotRequired
 
 class ItemTag(Enum):
 	TILE = 0
@@ -59,28 +57,19 @@ class TileMaskType(Enum):
 	NONE = 0
 	NOISY = 1
 
-class TileData(TypedDict):
-	id: int
-	id_str: str
+class PrefixData(TypedDict):
 	name: str
-	strength: float
-	strength_type: TileStrengthType
-	mask_type: TileMaskType
-	mask_merge_ids: list[str]
-	light_reduction: int
-	light_emission: int
-	average_color: tuple[int, int, int, int]
-	tags: list[TileTag]
-	image_path: str
-	item_id_str: str
-	item_count_range: list[int]
-	place_sound: str
-	hit_sound: str
-	image: pygame.Surface
+	damage: float
+	speed: float
+	crit_chance: float
+	size: NotRequired[float]
+	velocity: NotRequired[float]
+	mana_cost: NotRequired[float]
+	knockback: float
+	tier: int
 
-
-def make_item_tag_list(item_tags_str):
-	enum_list = []
+def make_item_tag_list(item_tags_str: list[str]):
+	enum_list: list[ItemTag] = []
 	for string in item_tags_str:
 		for tag in ItemTag:
 			if tag.name == string:
@@ -88,8 +77,8 @@ def make_item_tag_list(item_tags_str):
 				break
 	return enum_list
 
-def make_item_prefix_list(item_prefixes_str):
-	enum_list = []
+def make_item_prefix_list(item_prefixes_str: list[str]):
+	enum_list: list[ItemPrefixGroup] = []
 	for string in item_prefixes_str:
 		for prefix in ItemPrefixGroup:
 			if prefix.name == string:
@@ -98,8 +87,8 @@ def make_item_prefix_list(item_prefixes_str):
 	return enum_list
 
 
-def make_tile_tag_list(tile_tags_str):
-	enum_list = []
+def make_tile_tag_list(tile_tags_str: list[str]):
+	enum_list: list[TileTag] = []
 	for string in tile_tags_str:
 		for tag in TileTag:
 			if tag.name == string:
@@ -108,19 +97,19 @@ def make_tile_tag_list(tile_tags_str):
 	return enum_list
 
 
-def get_tile_strength_type_from_str(strength_type_string):
+def get_tile_strength_type_from_str(strength_type_string: str):
 	for types in TileStrengthType:
 		if types.name == strength_type_string:
 			return types
 
 
-def get_tile_mask_type_from_str(mask_type_string):
+def get_tile_mask_type_from_str(mask_type_string: str):
 	for masks in TileMaskType:
 		if masks.name == mask_type_string:
 			return masks
 
 
-def find_next_char_in_string(string, char, start_index):
+def find_next_char_in_string(string: str, char: str, start_index: int):
 	for char_index in range(start_index, len(string)):
 		if string[char_index] == char:
 			return char_index
@@ -129,143 +118,140 @@ def find_next_char_in_string(string, char, start_index):
 
 # Biome Tile Information
 # [[surface tile,base tile, alt tile],[wall tile, alt wall tile]]
-biome_tile_vals = [[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wall.stone"]],
+biome_tile_vals: list[list[list[str]]] = [
+	[["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wall.stone"]],
 	[["tile.snow", "tile.snow", "tile.ice"], ["wall.snow", "wall.ice"]],
 	[["tile.sand", "tile.sand", "tile.sandstone"], ["wall.hardened_sand", "wall.sandstone"]]
 ]
 
-platform_blocks = [257]
+platform_blocks: list[int] = [257]
 
-json_item_data = []
+json_item_data: list[commons.ItemData] = []
 item_id_str_hash_table: dict[str, int] = {}
-ammo_type_item_lists = {}
-json_tile_data: list[TileData] = []
-tile_id_str_hash_table = {}
-tile_id_light_reduction_lookup = []
-tile_id_light_emission_lookup = []
-json_wall_data = []
-wall_id_str_hash_table = {}
-json_sound_data = []
-sound_id_str_hash_table = {}
-json_structure_data = []
-structure_id_str_hash_table = {}
-json_loot_data = []
-loot_id_str_hash_table = {}
-json_entity_data = []
-entity_id_str_hash_table = {}
 
-sound_volume_multiplier = commons.CONFIG_SOUND_VOLUME
-music_volume_multiplier = 1.0
+ammo_type_item_lists: dict[str, list[int]] = {}
+
+json_tile_data: list[commons.TileData] = []
+tile_id_str_hash_table: dict[str, int] = {}
+tile_id_light_reduction_lookup: list[int] = []
+tile_id_light_emission_lookup: list[int] = []
+
+json_wall_data: list[commons.WallData] = []
+wall_id_str_hash_table: dict[str, int] = {}
+
+json_sound_data: list[commons.SoundData] = []
+sound_id_str_hash_table: dict[str, int] = {}
+
+json_structure_data: list[commons.StructureData] = []
+structure_id_str_hash_table: dict[str, int] = {}
+
+json_loot_data: list[commons.LootData] = []
+loot_id_str_hash_table: dict[str, int] = {}
+
+json_entity_data: list[commons.EntityData] = []
+entity_id_str_hash_table: dict[str, int] = {}
+
+sound_volume_multiplier: float = commons.CONFIG_SOUND_VOLUME
+music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
 
 
 # Item Prefix Information
-prefix_data = {
-	ItemPrefixGroup.UNIVERSAL:
-		[  # ||   Name   |Damage|Speed|Crit Chance|Knockback|Tier||
-			[	  "Keen",	 0,	0,	 0,		0,   1],
-			[  "Superior",   0.1,	0,  0.03,	  0.1,   2],
-			[  "Forceful",	 0,	0,	 0,	 0.15,   1],
-			[	"Broken",  -0.3,	0,	 0,	 -0.2,  -2],
-			[   "Damaged", -0.15,	0,	 0,		0,  -1],
-			[	"Shoddy",  -0.1,	0,	 0,	-0.15,  -2],
-			[   "Hurtful",   0.1,	0,	 0,		0,   1],
-			[	"Strong",	 0,	0,	 0,	 0.15,   1],
-			["Unpleasant",  0.05,	0,	 0,	 0.15,   2],
-			[	  "Weak",	 0,	0,	 0,	 -0.2,  -1],
-			[  "Ruthless",  0.18,	0,	 0,	 -0.1,   1],
-			[	 "Godly",  0.15,	0,  0.05,	 0.15,   2],
-			[   "Demonic",  0.15,	0,  0.05,		0,   2],
-			[   "Zealous",	 0,	0,  0.05,		0,   1],
+prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
+	ItemPrefixGroup.UNIVERSAL: [
+			{"name": "Keen", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
+			{"name": "Superior", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "knockback": 0.1, "tier": 2},
+			{"name": "Forceful", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 1},
+			{"name": "Broken", "damage": -0.3, "speed": 0, "crit_chance": 0, "knockback": -0.2, "tier": -2},
+			{"name": "Damaged", "damage": -0.15, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": -1},
+			{"name": "Shoddy", "damage": -0.1, "speed": 0, "crit_chance": 0, "knockback": -0.15, "tier": -2},
+			{"name": "Hurtful", "damage": 0.1, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
+			{"name": "Strong", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 1},
+			{"name": "Unpleasant", "damage": 0.05, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 2},
+			{"name": "Weak", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": -0.2, "tier": -1},
+			{"name": "Ruthless", "damage": 0.18, "speed": 0, "crit_chance": 0, "knockback": -0.1, "tier": 1},
+			{"name": "Godly", "damage": 0.15, "speed": 0, "crit_chance": 0.05, "knockback": 0.15, "tier": 2},
+			{"name": "Demonic", "damage": 0.15, "speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 2},
+			{"name": "Zealous","damage": 0,"speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 1}
 		],
-
-	ItemPrefixGroup.COMMON:
-		[  # ||   Name  |Damage| Speed|Crit Chance|Knockback|Tier||
-			[	"Quick",	 0,   0.1,		  0,		0,   1],
-			[   "Deadly",   0.1,   0.1,		  0,		0,   2],
-			[	"Agile",	 0,   0.1,	   0.03,		0,   1],
-			[   "Nimble",	 0,  0.05,		  0,		0,   1],
-			["Murderous", -0.07,  0.06,	   0.03,		0,   2],
-			[	 "Slow",	 0, -0.15,		  0,		0,  -1],
-			[ "Sluggish",	 0,  -0.2,		  0,		0,  -2],
-			[	 "Lazy",	 0, -0.08,		  0,		0,  -1],
-			[ "Annoying",  -0.2, -0.15,		  0,		0,  -2],
-			[	"Nasty",  0.05,   0.1,	   0.02,	 -0.1,   1],
+	ItemPrefixGroup.COMMON: [
+			{"name": "Quick", "damage": 0, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 1},
+			{"name": "Deadly","damage": 0.1, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 2},
+			{"name": "Agile", "damage": 0, "speed": 0.1, "crit_chance": 0.03, "knockback": 0, "tier": 1},
+			{"name": "Nimble", "damage": 0, "speed": 0.05, "crit_chance": 0, "knockback": 0, "tier": 1},
+			{"name": "Murderous", "damage": -0.07, "speed": 0.06, "crit_chance": 0.03, "knockback": 0, "tier": 2},
+			{"name": "Slow", "damage": 0, "speed": -0.15, "crit_chance": 0, "knockback": 0, "tier": -1},
+			{"name": "Sluggish", "damage": 0,  "speed": -0.2, "crit_chance": 0, "knockback": 0, "tier": -2},
+			{"name": "Lazy", "damage": 0, "speed": -0.08, "crit_chance": 0, "knockback": 0, "tier": -1},
+			{"name": "Annoying", "damage": -0.2, "speed": -0.15, "crit_chance": 0, "knockback": 0, "tier": -2},
+			{"name": "Nasty", "damage": 0.05, "speed": 0.1, "crit_chance": 0.02, "knockback": -0.1, "tier": 1},
 		],
-
-	ItemPrefixGroup.LONGSWORD:
-		[  # ||   Name  |Damage| Speed|Crit Chance| Size |Knockback|Tier||
-			[	"Large",	 0,	 0,		  0,  0.12,		0,   1],
-			[  "Massive",	 0,	 0,		  0,  0.18,		0,   1],
-			["Dangerous",  0.05,	 0,	   0.02,  0.05,		0,   1],
-			[   "Savage",   0.1,	 0,		  0,   0.1,	  0.1,   2],
-			[	"Sharp",  0.15,	 0,		  0,	 0,		0,   1],
-			[   "Pointy",   0.1,	 0,		  0,	 0,		0,   1],
-			[	 "Tiny",	 0,	 0,		  0, -0.18,		0,  -1],
-			[ "Terrible", -0.15,	 0,		  0, -0.13,	-0.15,  -2],
-			[	"Small",	 0,	 0,		  0,  -0.1,		0,  -1],
-			[	 "Dull", -0.15,	 0,		  0,	 0,		0,  -1],
-			[  "Unhappy",	 0,  -0.1,		  0,  -0.1,	 -0.1,  -2],
-			[	"Bulky",  0.05, -0.15,		  0,   0.1,	  0.1,   1],
-			[ "Shameful",  -0.1,	 0,		  0,   0.1,	 -0.2,  -2],
-			[	"Heavy",	 0,  -0.1,		  0,	 0,	 0.15,   0],
-			[	"Light",	 0,  0.15,		  0,	 0,	 -0.1,   0],
-			["Legendary",  0.15,   0.1,	   0.05,   0.1,	 0.15,   2],
+	ItemPrefixGroup.LONGSWORD: [
+			{"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
+			{"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
+			{"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
+			{"name": "Savage", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 2},
+			{"name": "Sharp", "damage": 0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
+			{"name": "Pointy", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
+			{"name": "Tiny", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.18, "knockback": 0, "tier": -1},
+			{"name": "Terrible", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": -0.13, "knockback": -0.15, "tier": -2},
+			{"name": "Small", "damage": 0,	 "speed": 0, "crit_chance": 0, "size": -0.1, "knockback": 0, "tier": -1},
+			{"name": "Dull", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": -1},
+			{"name": "Unhappy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": -0.1, "knockback": -0.1, "tier": -2},
+			{"name": "Bulky", "damage": 0.05, "speed": -0.15, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 1},
+			{"name": "Shameful", "damage": -0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": -0.2, "tier": -2},
+			{"name": "Heavy", "damage": 0,  "speed": -0.1, "crit_chance": 0, "size": 0, "knockback": 0.15, "tier": 0},
+			{"name": "Light", "damage": 0,  "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
+			{"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2}
 		],
-
-			ItemPrefixGroup.SHORTSWORD:
-		[  # ||   Name  |Damage| Speed|Crit Chance| Size |Knockback|Tier||
-			[	"Large",	 0,	 0,		  0,  0.12,		0,   1],
-			[  "Massive",	 0,	 0,		  0,  0.18,		0,   1],
-			["Dangerous",  0.05,	 0,	   0.02,  0.05,		0,   1],
-			[   "Savage",   0.1,	 0,		  0,   0.1,	  0.1,   2],
-			[	"Sharp",  0.15,	 0,		  0,	 0,		0,   1],
-			[   "Pointy",   0.1,	 0,		  0,	 0,		0,   1],
-			[	 "Tiny",	 0,	 0,		  0, -0.18,		0,  -1],
-			[ "Terrible", -0.15,	 0,		  0, -0.13,	-0.15,  -2],
-			[	"Small",	 0,	 0,		  0,  -0.1,		0,  -1],
-			[	 "Dull", -0.15,	 0,		  0,	 0,		0,  -1],
-			[  "Unhappy",	 0,  -0.1,		  0,  -0.1,	 -0.1,  -2],
-			[	"Bulky",  0.05, -0.15,		  0,   0.1,	  0.1,   1],
-			[ "Shameful",  -0.1,	 0,		  0,   0.1,	 -0.2,  -2],
-			[	"Heavy",	 0,  -0.1,		  0,	 0,	 0.15,   0],
-			[	"Light",	 0,  0.15,		  0,	 0,	 -0.1,   0],
-			["Legendary",  0.15,   0.1,	   0.05,   0.1,	 0.15,   2],
+			ItemPrefixGroup.SHORTSWORD: [
+			{"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
+			{"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
+			{"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
+			{"name": "Savage", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 2},
+			{"name": "Sharp", "damage": 0.15, "speed": 0, "crit_chance": 0,	"size": 0, "knockback": 0, "tier": 1},
+			{"name": "Pointy", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
+			{"name": "Tiny", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.18, "knockback": 0, "tier": -1},
+			{"name": "Terrible", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": -0.13, "knockback": -0.15, "tier": -2},
+			{"name": "Small", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.1, "knockback": 0, "tier": -1},
+			{"name": "Dull", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": -1},
+			{"name": "Unhappy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": -0.1, "knockback": -0.1, "tier": -2},
+			{"name": "Bulky", "damage": 0.05, "speed": -0.15, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 1},
+			{"name": "Shameful", "damage": -0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": -0.2, "tier": -2},
+			{"name": "Heavy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": 0, "knockback": 0.15, "tier": 0},
+			{"name": "Light", "damage": 0, "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
+			{"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2},
 		],
-
-	ItemPrefixGroup.RANGED:
-		[  # ||	Name	| Damage  |Speed|Crit Chance|Velocity|Knockback|Tier||
-			[	 "Sighted",	  0.1,	0,	   0.03,	   0,		0,   1],
-			[	   "Rapid",		0, 0.15,		  0,	 0.1,		0,   2],
-			[	   "Hasty",		0,  0.1,		  0,	0.15,		0,   2],
-			["Intimidating",		0,	0,		  0,	0.05,	 0.15,   2],
-			[	  "Deadly",	  0.1, 0.05,	   0.02,	0.05,	 0.05,   2],
-			[	 "Staunch",	  0.1,	0,		  0,	   0,	 0.15,   2],
-			[	   "Awful",	-0.15,	0,		  0,	-0.1,	 -0.1,  -2],
-			[   "Lethargic",		0, 0.15,		  0,	-0.1,		0,  -2],
-			[	 "Awkward",		0, -0.1,		  0,	   0,	 -0.2,  -2],
-			[	"Powerful",	 0.15, -0.1,	   0.01,	   0,		0,   1],
-			[   "Frenzying",	-0.15, 0.15,		  0,	   0,		0,   0],
-			[	  "Unreal",	 0.15,  0.1,	   0.05,	 0.1,	 0.15,   2],
+	ItemPrefixGroup.RANGED: [
+			{"name": "Sighted", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "velocity": 0, "knockback": 0, "tier": 1},
+			{"name": "Rapid", "damage": 0, "speed": 0.15, "crit_chance": 0, "velocity": 0.1, "knockback": 0, "tier": 2},
+			{"name": "Hasty", "damage": 0, "speed": 0.1, "crit_chance": 0,	"velocity": 0.15, "knockback": 0, "tier": 2},
+			{"name": "Intimidating", "damage": 0, "speed": 0, "crit_chance": 0,	"velocity": 0.05, "knockback": 0.15, "tier": 2},
+			{"name": "Deadly", "damage": 0.1, "speed": 0.05, "crit_chance": 0.02, "velocity": 0.05, "knockback": 0.05, "tier": 2},
+			{"name": "Staunch", "damage": 0.1, "speed": 0, "crit_chance": 0, "velocity": 0,	 "knockback": 0.15, "tier": 2},
+			{"name": "Awful", "damage": -0.15, "speed": 0, "crit_chance": 0, "velocity": -0.1, "knockback": -0.1, "tier": -2},
+			{"name": "Lethargic", "damage": 0, "speed": 0.15, "crit_chance": 0, "velocity": -0.1, "knockback": 0, "tier": -2},
+			{"name": "Awkward", "damage": 0, "speed": -0.1,	"crit_chance": 0, "velocity": 0, "knockback": -0.2, "tier": -2},
+			{"name": "Powerful", "damage": 0.15, "speed": -0.1, "crit_chance": 0.01, "velocity": 0, "knockback": 0, "tier": 1},
+			{"name": "Frenzying", "damage": -0.15, "speed": 0.15, "crit_chance": 0, "velocity": 0, "knockback": 0, "tier": 0},
+			{"name": "Unreal", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "velocity": 0.1, "knockback": 0.15, "tier": 2},
 		],
-
-	ItemPrefixGroup.MAGICAL:
-		[  # ||  Name   |Damage|Speed|Crit Chance|Mana Cost|Knockback|Tier||
-			[   "Mystic",   0.1,	0,		  0,	-0.15,		0,   2],
-			[	"Adept",	 0,	0,		  0,	-0.15,		0,   1],
-			["Masterful",  0.15,	0,		  0,	 -0.2,	 0.05,   2],
-			[	"Inept",	 0,	0,		  0,	  0.1,		0,  -1],
-			[ "Ignorant",  -0.1,	0,		  0,	  0.2,		0,  -2],
-			[ "Deranged",  -0.1,	0,		  0,		0,	 -0.1,  -1],
-			[  "Intense",   0.1,	0,		  0,	 0.15,		0,  -1],
-			[	"Taboo",	 0,  0.1,		  0,	  0.1,	  0.1,   1],
-			["Celestial",   0.1, -0.1,		  0,	 -0.1,	  0.1,   1],
-			[  "Furious",  0.15,	0,		  0,	  0.2,	 0.15,   1],
-			[	"Manic",  -0.1,  0.1,		  0,	 -0.1,		0,   1],
-			[ "Mythical",  0.15,  0.1,	   0.05,	 -0.1,	 0.15,   2]
+	ItemPrefixGroup.MAGICAL: [
+			{"name": "Mystic", "damage": 0.1, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 2},
+			{"name": "Adept", "damage": 0, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 1},
+			{"name": "Masterful", "damage": 0.15, "speed": 0, "crit_chance": 0, "mana_cost": -0.2, "knockback": 0.05, "tier": 2},
+			{"name": "Inept", "damage": 0, "speed": 0, "crit_chance": 0, "mana_cost": 0.1, "knockback": 0, "tier": -1},
+			{"name": "Ignorant", "damage": -0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0.2, "knockback": 0, "tier": -2},
+			{"name": "Deranged", "damage": -0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0, "knockback": -0.1, "tier": -1},
+			{"name": "Intense", "damage": 0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0.15, "knockback": 0, "tier": -1},
+			{"name": "Taboo", "damage": 0, "speed": 0.1, "crit_chance": 0, "mana_cost": 0.1, "knockback": 0.1, "tier": 1},
+			{"name": "Celestial", "damage": 0.1, "speed": -0.1, "crit_chance": 0, "mana_cost": -0.1, "knockback": 0.1, "tier": 1},
+			{"name": "Furious", "damage": 0.15,	"speed": 0, "crit_chance": 0, "mana_cost": 0.2, "knockback": 0.15, "tier": 1},
+			{"name": "Manic", "damage": -0.1, "speed": 0.1, "crit_chance": 0, "mana_cost": -0.1, "knockback": 0, "tier": 1},
+			{"name": "Mythical", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "mana_cost": -0.1, "knockback": 0.15, "tier": 2}
 		]
 }
 
-death_lines = {
+DEATH_LINES = {
 	"spike":
 		[
 			"<p> got impaled by a spike.",
@@ -370,7 +356,7 @@ death_lines = {
 
 # Messages displayed when a world is loading
 
-helpful_tips = [
+TIPS = [
 	"Advanced players may wish to remap their buttons; you can do this from the Controls Menu in Settings.",
 	"The Housing section of the Equipment Menu allows you to decide what rooms you want your NPCs to live in.",
 	"You can check if a room is valid housing from the Housing section of the Inventory Menu.",
@@ -492,7 +478,7 @@ helpful_tips = [
 
 # Messages displayed when the user presses the quit button in a world
 
-exit_messages = [
+EXIT_MESSAGES = [
 	"Are you sure you want to exit?",
 	"Leaving so soon?",
 	"You'll come back someday right?",
@@ -507,32 +493,29 @@ exit_messages = [
 
 def find_prefix_data_by_name(prefix_name):
 	for prefix_dat in prefix_data[ItemPrefixGroup.UNIVERSAL]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.UNIVERSAL, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.COMMON]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.COMMON, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.LONGSWORD]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.LONGSWORD, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.RANGED]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.RANGED, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.MAGICAL]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.MAGICAL, prefix_dat]
 	for prefix_dat in prefix_data[ItemPrefixGroup.SHORTSWORD]:
-		if prefix_dat[0] == prefix_name:
+		if prefix_dat["name"] == prefix_name:
 			return [ItemPrefixGroup.SHORTSWORD, prefix_dat]
 	return None
 
 
 def parse_item_data():
 	global json_item_data
-	json_read_file = open("assets/game_data/item_data.json", "r")
-	json_item_data = json.loads(json_read_file.read())["items"]
-	json_read_file.close()
-
+	json_item_data = commons.ITEM_DATA
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
 	for item_data in json_item_data:
@@ -609,10 +592,8 @@ def get_ammo_item_ids_for_ammo_type(ammo_type):
 
 def parse_tile_data():
 	global json_tile_data
-	json_read_file = open("assets/game_data/tile_data.json", "r")
-	json_tile_data = json.loads(json_read_file.read())["tiles"]
-	json_read_file.close()
 
+	json_tile_data = commons.TILE_DATA
 	json_tile_data = sorted(json_tile_data, key=lambda x: int(x["id"]))
 
 	for tile_data in json_tile_data:
@@ -658,7 +639,7 @@ def create_tile_light_emission_lookup():
 		tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
 
 
-def get_tile_by_id(tile_id: int) -> TileData:
+def get_tile_by_id(tile_id: int):
 	if tile_id < len(json_tile_data):
 		return json_tile_data[tile_id]
 	else:
@@ -682,10 +663,8 @@ def get_current_tile_id_str_lookup():
 
 def parse_wall_data():
 	global json_wall_data
-	json_read_file = open("assets/game_data/wall_data.json", "r")
-	json_wall_data = json.loads(json_read_file.read())["walls"]
-	json_read_file.close()
 
+	json_wall_data = commons.WALL_DATA
 	json_wall_data = sorted(json_wall_data, key=lambda x: int(x["id"]))
 
 	for wall_data in json_wall_data:
@@ -728,10 +707,8 @@ def get_current_wall_id_str_lookup():
 
 def parse_sound_data():
 	global json_sound_data
-	json_read_file = open("assets/game_data/sound_data.json", "r")
-	json_sound_data = json.loads(json_read_file.read())["sounds"]
-	json_read_file.close()
 
+	json_sound_data = commons.SOUND_DATA
 	json_sound_data = sorted(json_sound_data, key=lambda x: int(x["id"]))
 
 	for sound_data in json_sound_data:
@@ -834,10 +811,8 @@ class StructureConnectionOrientation(Enum):
 
 def parse_structure_data():
 	global json_structure_data
-	json_read_file = open("assets/game_data/structure_data.json", "r")
-	json_structure_data = json.loads(json_read_file.read())["structures"]
-	json_read_file.close()
 
+	json_structure_data = commons.STRUCTURE_DATA
 	json_structure_data = sorted(json_structure_data, key=lambda x: int(x["id"]))
 
 	for structure_data in json_structure_data:
@@ -939,10 +914,8 @@ def get_structure_connection_orientation_from_str(structure_connection_orientati
 
 def parse_loot_data():
 	global json_loot_data
-	json_read_file = open("assets/game_data/loot_data.json", "r")
-	json_loot_data = json.loads(json_read_file.read())["loot"]
-	json_read_file.close()
 
+	json_loot_data = commons.LOOT_DATA
 	json_loot_data = sorted(json_loot_data, key=lambda x: int(x["id"]))
 
 	for loot_data in json_loot_data:
@@ -982,10 +955,8 @@ def get_loot_by_id_str(loot_id_str):
 
 def parse_entity_data():
 	global json_entity_data
-	json_read_file = open("assets/game_data/entity_data.json")
-	json_entity_data = json.loads(json_read_file.read())["entities"]
-	json_read_file.close()
-	
+
+	json_entity_data = commons.ENTITY_DATA
 	json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
 
 def create_entity_id_str_hash_table():

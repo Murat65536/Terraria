@@ -44,7 +44,7 @@ class Enemy:
 		self.despawn_tick: int = 5
 		self.animation_frame: int = 0
 		self.game_id: int = randint(1000, 9999)
-		self.world_invincible_timer: float = 0.0
+		self.world_invincible_timer: float = 0
 		self.world_invincible: bool = False
 		self.alive: bool = True
 
@@ -56,7 +56,7 @@ class Enemy:
 	def update(self) -> None:
 		if self.alive:
 			if self.world_invincible:
-				if self.world_invincible_timer <= 0.0:
+				if self.world_invincible_timer <= 0:
 					self.world_invincible = False
 				else:
 					self.world_invincible_timer -= commons.DELTA_TIME
@@ -81,7 +81,7 @@ class Enemy:
 				self.velocity = (self.velocity[0], self.velocity[1] + commons.GRAVITY * commons.DELTA_TIME)
 			self.run_ai()
 
-			drag_factor = 1.0 - commons.DELTA_TIME * 4
+			drag_factor = 1 - commons.DELTA_TIME * 4
 
 			self.velocity = (self.velocity[0] * drag_factor, self.velocity[1] * drag_factor)
 			self.position = (self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE, self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE)
@@ -180,9 +180,9 @@ class Enemy:
 			self.moving_left = False
 
 			value -= self.defense
-			value *= 1.0 + random() * 0.1 - 0.05
-			if value < 1.0:
-				value = 1.0
+			value *= 1 + random() * 0.1 - 0.05
+			if value < 1:
+				value = 1
 
 			if crit:
 				value *= 2.0
@@ -225,11 +225,11 @@ class Enemy:
 		if self.alive:
 			self.alive = False
 
-			coin_range: list[int] = game_data.json_entity_data[self.enemy_id]["coin_drops"]
-			coin_drops: list[item.Item] = item.get_coins_from_int(randint(coin_range[0], coin_range[1]))
+			coin_range: list[int] = game_data.json_entity_data[self.enemy_id]["coin_drop_range"]
+			coin_drop_range: list[item.Item] = item.get_coins_from_int(randint(coin_range[0], coin_range[1]))
 			item_drops = game_data.json_entity_data[self.enemy_id]["item_drops"]
 
-			for coin_item in coin_drops:
+			for coin_item in coin_drop_range:
 				entity_manager.spawn_physics_item(coin_item, self.position, pickup_delay=10)
 
 			total_weight = 0

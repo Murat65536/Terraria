@@ -420,7 +420,7 @@ def load_menu_world_data():
 
 			commons.WORLD_SAVE_OPTIONS.append((world.world.name, world_data_surf))
 
-active_menu_buttons = {
+active_menu_buttons: dict[str, list[MenuObject]] = {
 	"MAIN": [
 		MenuObject("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.SINGLE_PLAYER),
 		MenuObject("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.CREDITS),

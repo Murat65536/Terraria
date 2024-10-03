@@ -74,32 +74,32 @@ class Item:
 	def get_prefix_name(self):
 		if (self.prefix_data != None):
 			if self.has_prefix:
-				return self.prefix_data[1][0]
+				return self.prefix_data[1]["name"]
 		return ""
 
 	def get_attack_damage(self):
 		if self.prefix_data != None:
-			return self.json_item["attack_damage"] * (1 + self.prefix_data[1][1])
+			return self.json_item["attack_damage"] * (1 + self.prefix_data[1]["damage"])
 		else:
 			return self.json_item["attack_damage"]
 
 	def get_crit_chance(self):
 		if self.prefix_data != None:
 			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][2]), 0.0)
+				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"]), 0.0)
 			else:
-				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1][3]), 0.0)
+				return max(min(1.0, self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"]), 0.0)
 		else:
 			return self.json_item["crit_chance"]
 
 	def get_knockback(self):
 		if self.prefix_data != None:
 			if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-				return self.json_item["knockback"] * (1 + self.prefix_data[1][3])
+				return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
 			elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-				return self.json_item["knockback"] * (1 + self.prefix_data[1][4])
+				return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
 			else:
-				return self.json_item["knockback"] * (1 + self.prefix_data[1][5])
+				return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
 		else:
 			return self.json_item["knockback"]
 
@@ -107,36 +107,36 @@ class Item:
 		if (self.json_item != None):
 			if self.prefix_data != None:
 				if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-					return min(max(self.json_item["tier"] + self.prefix_data[1][4], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
 				elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-					return min(max(self.json_item["tier"] + self.prefix_data[1][5], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
 				else:
-					return min(max(self.json_item["tier"] + self.prefix_data[1][6], 0), 10)
+					return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
 			else:
 				return self.json_item["tier"]
 
 	def get_attack_speed(self):
 		if self.prefix_data != None:
-			return round(self.json_item["attack_speed"]*(1-self.prefix_data[1][2])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
+			return round(self.json_item["attack_speed"]*(1-self.prefix_data[1]["speed"])) # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
 		else:
 			return round(self.json_item["attack_speed"])
 
 	def get_scale(self):
 		if self.prefix_data != None:
 			if self.prefix_data[0] == ItemPrefixGroup.LONGSWORD or self.prefix_data[0] == ItemPrefixGroup.SHORTSWORD:
-				return 1.0 + self.prefix_data[1][4]
+				return 1 + self.prefix_data[1]["size"]
 		return 1.0
 
 	def get_ranged_projectile_speed(self):
 		if self.json_item != None:
 			if self.prefix_data != None and self.prefix_data[0] == ItemPrefixGroup.RANGED:
-				return self.json_item["ranged_projectile_speed"] * (1 + self.prefix_data[1][4])
+				return self.json_item["ranged_projectile_speed"] * (1 + self.prefix_data[1]["velocity"])
 			return self.json_item["ranged_projectile_speed"]
 
 	def get_mana_cost(self):
 		if self.json_item != None:
 			if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
-				return self.json_item["mana_cost"] * (1 + self.prefix_data[1][4])
+				return self.json_item["mana_cost"] * (1 + self.prefix_data[1]["mana_cost"])
 			return self.json_item["mana_cost"]
 
 	def get_name(self):

@@ -167,80 +167,80 @@ def render_stats_text(pos: List[Any]) -> bool:
 				stats.append(shared_methods.outline_text("Material", (255, 255, 255), commons.DEFAULT_FONT))
 
 			if equipped.has_prefix and equipped.prefix_data != None:
-				if equipped.prefix_data[1][1] != 0:
-					if equipped.prefix_data[1][1] > 0:
+				if equipped.prefix_data[1]["damage"] != 0:
+					if equipped.prefix_data[1]["damage"] > 0:
 						color = tuple(good_color)
 					else:
 						color = tuple(bad_color)
-					stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][1] * 100)))} % damage", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+					stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["damage"] * 100)))} % damage", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
-					if equipped.prefix_data[1][2] != 0:
-						if equipped.prefix_data[1][2] > 0:
+					if equipped.prefix_data[1]["speed"] != 0:
+						if equipped.prefix_data[1]["speed"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][2] * 100)))} % speed", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % speed", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				else:
-					if equipped.prefix_data[1][2] != 0:
-						if equipped.prefix_data[1][2] > 0:
+					if equipped.prefix_data[1]["speed"] != 0:
+						if equipped.prefix_data[1]["speed"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][2] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
-					if equipped.prefix_data[1][3] != 0:
-						if equipped.prefix_data[1][3] > 0:
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+					if equipped.prefix_data[1]["crit_chance"] != 0:
+						if equipped.prefix_data[1]["crit_chance"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][3] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
-					if equipped.prefix_data[1][3] != 0:
-						if equipped.prefix_data[1][3] > 0:
+					if equipped.prefix_data[1]["crit_chance"] != 0:
+						if equipped.prefix_data[1]["crit_chance"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][3] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.COMMON:
-					if equipped.prefix_data[1][4] != 0:
-						if equipped.prefix_data[1][4] > 0:
+					if equipped.prefix_data[1]["knockback"] != 0:
+						if equipped.prefix_data[1]["knockback"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD:
-					if equipped.prefix_data[1][4] != 0:
-						if equipped.prefix_data[1][4] > 0:
+					if equipped.prefix_data[1]["size"] != 0:
+						if equipped.prefix_data[1]["size"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD:
-					if equipped.prefix_data[1][4] != 0:
-						if equipped.prefix_data[1][4] > 0:
+					if equipped.prefix_data[1]["size"] != 0:
+						if equipped.prefix_data[1]["size"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["size"] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				elif equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED:
-					if equipped.prefix_data[1][4] != 0:
-						if equipped.prefix_data[1][4] > 0:
+					if equipped.prefix_data[1]["velocity"] != 0:
+						if equipped.prefix_data[1]["velocity"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % projectile velocity", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["velocity"] * 100)))} % projectile velocity", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				elif equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
-					if equipped.prefix_data[1][4] != 0:
-						if equipped.prefix_data[1][4] < 0:
+					if equipped.prefix_data[1]["mana_cost"] != 0:
+						if equipped.prefix_data[1]["mana_cost"] < 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][4] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["mana_cost"] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
-					if equipped.prefix_data[1][5] != 0:
-						if equipped.prefix_data[1][5] > 0:
+					if equipped.prefix_data[1]["knockback"] != 0:
+						if equipped.prefix_data[1]["knockback"] > 0:
 							color = tuple(good_color)
 						else:
 							color = tuple(bad_color)
-						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1][5] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
+						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 			for stat_index in range(len(stats)):
 				stats_text.blit(stats[stat_index], (0, stat_index * 15))
 		return True
@@ -587,7 +587,7 @@ def draw_exit_button() -> None:
 		if pygame.mouse.get_pressed()[0]:
 			entity_manager.client_player.inventory_open = False
 			entity_manager.client_player.chest_open = False
-			entity_manager.client_prompt = prompt.Prompt("Exit", game_data.exit_messages[random.randint(0, len(game_data.exit_messages) - 1)], button_1_name="Yep", size=(6, 2))
+			entity_manager.client_prompt = prompt.Prompt("Exit", game_data.EXIT_MESSAGES[random.randint(0, len(game_data.EXIT_MESSAGES) - 1)], button_1_name="Yep", size=(6, 2))
 			commons.WAIT_TO_USE = True
 	else:
 		color = (255, 255, 255)
@@ -864,7 +864,6 @@ while True:
 				last_thread_start = pygame.time.get_ticks()
 
 			newest_light_surf.unlock()
-			# TODO Gives error when clicked off of window. Controls lighting.
 			commons.screen.blit(newest_light_surf, (newest_light_surf_pos[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5, newest_light_surf_pos[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5))
 
 		if commons.DRAW_UI:
@@ -992,7 +991,7 @@ while True:
 
 							text0 = shared_methods.outline_text(f"Greetings {entity_manager.client_player.name}, bear with us while", (255, 255, 255), commons.LARGE_FONT)
 							text1 = shared_methods.outline_text(f"we load up '{world.world.name}'", (255, 255, 255), commons.LARGE_FONT)
-							text2 = shared_methods.outline_text(game_data.helpful_tips[random.randint(0, len(game_data.helpful_tips) - 1)], (255, 255, 255), commons.DEFAULT_FONT)
+							text2 = shared_methods.outline_text(game_data.TIPS[random.randint(0, len(game_data.TIPS) - 1)], (255, 255, 255), commons.DEFAULT_FONT)
 
 							commons.screen.blit(text0, (commons.WINDOW_WIDTH * 0.5 - text0.get_width() * 0.5, commons.WINDOW_HEIGHT * 0.5 - 30))
 							commons.screen.blit(text1, (commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5, commons.WINDOW_HEIGHT * 0.5))
@@ -1103,7 +1102,7 @@ while True:
 			if commons.game_state == "PLAYING":
 				entity_manager.client_player.inventory_open = False
 				entity_manager.client_player.chest_open = False
-				entity_manager.client_prompt = prompt.Prompt("Exit", game_data.exit_messages[random.randint(0, len(game_data.exit_messages) - 1)], button_1_name="Yep", size=(6, 2))
+				entity_manager.client_prompt = prompt.Prompt("Exit", game_data.EXIT_MESSAGES[random.randint(0, len(game_data.EXIT_MESSAGES) - 1)], button_1_name="Yep", size=(6, 2))
 			else:
 				pygame.quit()
 				sys.exit()
@@ -1122,6 +1121,7 @@ while True:
 
 		if commons.game_state == "PLAYING":
 			# print(round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
+			# TODO Change event.type to a match case statement.
 			if event.type == pygame.KEYDOWN:
 				# Toggle Inventory
 				if event.key == pygame.K_ESCAPE:
@@ -1249,7 +1249,7 @@ while True:
 				# Test Prompt Cheat
 				if event.key == pygame.K_v:
 					if commons.SHIFT_ACTIVE:
-						entity_manager.client_prompt = prompt.Prompt("test", "My name's the guide, I can help you around this awfully crafted world. It's basically just a rip off of terraria so this should be child's play")
+						entity_manager.client_prompt = prompt.Prompt("test", "Test")
 						entity_manager.add_message("Random prompt deployed", (255, 223, 10), outline_color=(80, 70, 3))
 
 				# Get Tile and Wall IDS
