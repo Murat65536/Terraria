@@ -84,8 +84,8 @@ class Projectile:
 				if world.tile_in_map(block_position[1] + j, block_position[0] + i):
 					tile_id = world.world.tile_data[block_position[1] + j][block_position[0] + i][0]
 					tile_data = game_data.get_tile_by_id(tile_id)
-					if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
-						if game_data.TileTag.PLATFORM not in tile_data["tags"]:
+					if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
+						if commons.TileTag.PLATFORM not in tile_data["tags"]:
 							block_rect = Rect(commons.BLOCK_SIZE * (block_position[1] + j), commons.BLOCK_SIZE * (block_position[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 							if block_rect.colliderect(self.rect):
 								delta_x = self.position[0] - block_rect.centerx

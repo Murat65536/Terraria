@@ -322,17 +322,17 @@ class Player:
 						if self.block_position[1] +	j >= 0:
 							tile_id	= world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
 							tile_data =	game_data.get_tile_by_id(tile_id)
-							if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
+							if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
 								block_rect = Rect(commons.BLOCK_SIZE	* (self.block_position[1] +	j),	commons.BLOCK_SIZE *	(self.block_position[0]	+ i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 								is_platform	= False
-								if game_data.TileTag.PLATFORM	in tile_data["tags"]:
+								if commons.TileTag.PLATFORM	in tile_data["tags"]:
 									is_platform	= True
 									if block_rect.colliderect(int(self.rect.left - 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
 										self.stop_left = True  # is there a	solid block	left
 									if block_rect.colliderect(int(self.rect.right +	1),	int(self.rect.top +	2),	1, int(self.rect.height	- 4)):
 										self.stop_right	= True	# is there a solid block right
 								if block_rect.colliderect(self.rect):
-									if not self.invincible and game_data.TileTag.DAMAGING in tile_data["tags"]:
+									if not self.invincible and commons.TileTag.DAMAGING in tile_data["tags"]:
 										self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
 
 
@@ -500,10 +500,10 @@ class Player:
 		Renders	the	item that the player is currently holding to the current_item_image	surface
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	render_current_item_image(self):
-		if not commons.IS_HOLDING_ITEM:
+		if not commons.is_holding_item:
 			item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 		else:
-			item = commons.ITEM_HOLDING
+			item = commons.item_holding
 		if item	is not None:
 			self.current_item_image	= item.get_image()
 
@@ -619,8 +619,8 @@ class Player:
 	def	use_item(self, right_click=False):
 		item: Item | None = None
 
-		if commons.IS_HOLDING_ITEM:
-			item = commons.ITEM_HOLDING
+		if commons.is_holding_item:
+			item = commons.item_holding
 		elif not self.inventory_open:
 			item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 
@@ -675,15 +675,15 @@ class Player:
 				block_position = commons.TILE_POSITION_MOUSE_HOVERING
 				tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
 				json_tile_data =	game_data.get_tile_by_id(tile_dat[0])
-				if game_data.TileTag.CHEST in json_tile_data["tags"] or game_data.TileTag.CYCLABLE in json_tile_data["tags"]:
-					if game_data.TileTag.MULTITILE in json_tile_data["tags"]:
+				if commons.TileTag.CHEST in json_tile_data["tags"] or commons.TileTag.CYCLABLE in json_tile_data["tags"]:
+					if commons.TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
 					world.use_special_tile(origin[0], origin[1])
 				
-				if game_data.TileTag.WORKBENCH in json_tile_data["tags"]:
-					if game_data.TileTag.MULTITILE in json_tile_data["tags"]:
+				if commons.TileTag.WORKBENCH in json_tile_data["tags"]:
+					if commons.TileTag.MULTITILE in json_tile_data["tags"]:
 						origin = block_position[0] - tile_dat[2][0], block_position[1] - tile_dat[2][1]
 					else:
 						origin = block_position
@@ -708,7 +708,7 @@ class Player:
 					if is_tile:
 						tile_to_place =	game_data.get_tile_by_id_str(block_item.get_tile_id_str())
 
-						if game_data.TileTag.MULTITILE in tile_to_place["tags"]:
+						if commons.TileTag.MULTITILE in tile_to_place["tags"]:
 							can_place =	True
 
 							tile_dimensions	= tile_to_place["multitile_dimensions"]
@@ -723,13 +723,13 @@ class Player:
 							for	i in range(len(required_solids)):
 								tile_id	= world.world.tile_data[block_position[0] +	required_solids[i][0]][block_position[1] + required_solids[i][1]][0]
 								tile_data =	game_data.get_tile_by_id(tile_id)
-								if game_data.TileTag.NO_COLLIDE in tile_data["tags"]:
+								if commons.TileTag.NO_COLLIDE in tile_data["tags"]:
 									can_place =	False
 
 							if can_place:
 								world.place_multitile(block_position[0], block_position[1],	tile_dimensions, tile_to_place["id"], True)
 
-								if game_data.TileTag.CHEST in tile_to_place["tags"]:
+								if commons.TileTag.CHEST in tile_to_place["tags"]:
 									world.world.chest_data.append([block_position, [None for _ in range(20)]])
 
 								block_placed = True
@@ -770,7 +770,7 @@ class Player:
 						self.use_delta = 0.0
 						self.can_use = False
 						if not commons.CREATIVE:
-							if not commons.IS_HOLDING_ITEM:
+							if not commons.is_holding_item:
 								self.items[ItemLocation.HOTBAR][self.hotbar_index].amount	-= 1
 								dat	= [ItemLocation.HOTBAR,	self.hotbar_index]
 								if dat not in self.old_inventory_positions:
@@ -779,11 +779,11 @@ class Player:
 									self.items[ItemLocation.HOTBAR][self.hotbar_index] = None
 							else:
 								commons.WAIT_TO_USE	= True
-								assert commons.ITEM_HOLDING is not None
-								commons.ITEM_HOLDING.amount -= 1
-								if commons.ITEM_HOLDING.amount <= 0:
-									commons.ITEM_HOLDING = None
-									commons.IS_HOLDING_ITEM	= False
+								assert commons.item_holding is not None
+								commons.item_holding.amount -= 1
+								if commons.item_holding.amount <= 0:
+									commons.item_holding = None
+									commons.is_holding_item	= False
 
 	"""=================================================================================================================	
 		player.Player.use_pickaxe -> void
@@ -808,7 +808,7 @@ class Player:
 					if tool_item.has_tag(ItemTag.PICKAXE):
 						tile_id	= world.world.tile_data[block_position[0]][block_position[1]][0]
 						tile_dat = game_data.get_tile_by_id(tile_id)
-						if game_data.TileTag.MULTITILE in tile_dat["tags"]:
+						if commons.TileTag.MULTITILE in tile_dat["tags"]:
 							multitile_origin = world.get_multitile_origin(block_position[0], block_position[1])
 							world.remove_multitile(multitile_origin, True)
 							game_data.play_tile_hit_sfx(tile_id)
@@ -1146,7 +1146,7 @@ class Player:
 		Uses a list	of outdated	positions in the hotbar, inventory or an open chest	to update the respective area's	surfaces
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	update_inventory_old_slots(self):
-		for	data in self.old_inventory_positions:
+		for data in self.old_inventory_positions:
 			if data[0] == ItemLocation.HOTBAR:
 				item = self.items[ItemLocation.HOTBAR][data[1]]
 				self.hotbar_image.blit(surface_manager.misc_gui[0],	(data[1] * 48, 0))
@@ -1212,10 +1212,10 @@ class Player:
 			commons.screen.blit(self.sprites[self.animation_frame],	(screen_position_x - 20, screen_position_y - 33))
 
 			if self.arm_out:
-				if not commons.IS_HOLDING_ITEM:
+				if not commons.is_holding_item:
 					item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 				else:
-					item = commons.ITEM_HOLDING
+					item = commons.item_holding
 
 				assert item is not None
 				if item.get_world_override_image()	is not None:
@@ -1230,10 +1230,10 @@ class Player:
 				commons.screen.blit(rotated_item_surf, (screen_position_x -	rotated_item_surf.get_width() *	0.5	+ offset_x,	screen_position_y -	rotated_item_surf.get_height() * 0.5))
 			
 			elif self.item_swing:
-				if not commons.IS_HOLDING_ITEM:
+				if not commons.is_holding_item:
 					item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 				else:
-					item = commons.ITEM_HOLDING
+					item = commons.item_holding
 
 				if item	is not None	and	item.has_tag(ItemTag.WEAPON):
 					assert self.current_item_swing_image is not None
@@ -1307,10 +1307,10 @@ class Player:
 						
 			elif self.item_extend:
 				print("test")
-				if not commons.IS_HOLDING_ITEM:
+				if not commons.is_holding_item:
 					item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 				else:
-					item = commons.ITEM_HOLDING
+					item = commons.item_holding
 
 				if item	is not None	and	item.has_tag(ItemTag.WEAPON):
 					assert self.current_item_extend_image is not None
@@ -1453,6 +1453,7 @@ class Player:
 		commons.PLAYER_DATA["playtime"] = self.playtime
 		commons.PLAYER_DATA["creation_date"] = self.creation_date
 		commons.PLAYER_DATA["last_played_date"] = self.last_played_date
+		print(commons.PLAYER_DATA["hotbar"])
 		pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 

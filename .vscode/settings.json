@@ -2,5 +2,5 @@
 	"python.analysis.extraPaths": [
 		"./source"
 	],
-	"python.analysis.typeCheckingMode": "standard"
+	"python.analysis.typeCheckingMode": "basic"
 }

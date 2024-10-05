@@ -365,7 +365,7 @@ def add_damage_number(pos: tuple[float, float], val: float, crit: bool=False, co
 
 	midX = size * 0.5 - width * 0.5
 	midY = size * 0.5 - height * 0.5
-	
+
 	if commons.FANCY_TEXT:
 		surf.blit(t2, (midX - 2, midY))
 		surf.blit(t2, (midX + 2, midY))

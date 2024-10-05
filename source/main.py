@@ -169,77 +169,77 @@ def render_stats_text(pos: List[Any]) -> bool:
 			if equipped.has_prefix and equipped.prefix_data != None:
 				if equipped.prefix_data[1]["damage"] != 0:
 					if equipped.prefix_data[1]["damage"] > 0:
-						color = tuple(good_color)
+						color = good_color
 					else:
-						color = tuple(bad_color)
+						color = bad_color
 					stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["damage"] * 100)))} % damage", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
 					if equipped.prefix_data[1]["speed"] != 0:
 						if equipped.prefix_data[1]["speed"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % speed", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				else:
 					if equipped.prefix_data[1]["speed"] != 0:
 						if equipped.prefix_data[1]["speed"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 					if equipped.prefix_data[1]["crit_chance"] != 0:
 						if equipped.prefix_data[1]["crit_chance"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
 					if equipped.prefix_data[1]["crit_chance"] != 0:
 						if equipped.prefix_data[1]["crit_chance"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % critical strike chance", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.COMMON:
 					if equipped.prefix_data[1]["knockback"] != 0:
 						if equipped.prefix_data[1]["knockback"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD:
 					if equipped.prefix_data[1]["size"] != 0:
 						if equipped.prefix_data[1]["size"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD:
 					if equipped.prefix_data[1]["size"] != 0:
 						if equipped.prefix_data[1]["size"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["size"] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				elif equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED:
 					if equipped.prefix_data[1]["velocity"] != 0:
 						if equipped.prefix_data[1]["velocity"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["velocity"] * 100)))} % projectile velocity", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				elif equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
 					if equipped.prefix_data[1]["mana_cost"] != 0:
 						if equipped.prefix_data[1]["mana_cost"] < 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["mana_cost"] * 100)))} % size", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 				if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
 					if equipped.prefix_data[1]["knockback"] != 0:
 						if equipped.prefix_data[1]["knockback"] > 0:
-							color = tuple(good_color)
+							color = good_color
 						else:
-							color = tuple(bad_color)
+							color = bad_color
 						stats.append(shared_methods.outline_text(f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback", color, commons.DEFAULT_FONT, outline_color=shared_methods.darken_color(color)))
 			for stat_index in range(len(stats)):
 				stats_text.blit(stats[stat_index], (0, stat_index * 15))
@@ -461,19 +461,20 @@ def draw_inventory_hover_text() -> None:
 		array_index = (commons.MOUSE_POSITION[1] - 270 - int(entity_manager.client_player.crafting_menu_offset_y)) // 48
 		if 0 <= array_index < len(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU]):
 			if pygame.mouse.get_pressed()[0]:  
-				if not commons.IS_HOLDING_ITEM:
-					commons.ITEM_HOLDING = item.Item(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0], amount=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1], auto_assign_prefix=True)
-					commons.IS_HOLDING_ITEM = True
+				if not commons.is_holding_item:
+					commons.item_holding = item.Item(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0], amount=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1], auto_assign_prefix=True)
+					print(commons.item_holding)
+					commons.is_holding_item = True
 					can_pickup_item = False
 					can_drop_holding = False
-					game_data.play_sound(commons.ITEM_HOLDING.get_pickup_sound_id_str())
-				elif can_drop_holding and commons.ITEM_HOLDING != None:
-					if commons.ITEM_HOLDING.item_id == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]:
-						if commons.ITEM_HOLDING.amount < commons.ITEM_HOLDING.get_max_stack():
-							commons.ITEM_HOLDING.amount += entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1]
+					game_data.play_sound(commons.item_holding.get_pickup_sound_id_str())
+				elif can_drop_holding and commons.item_holding != None:
+					if commons.item_holding.item_id == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]:
+						if commons.item_holding.amount < commons.item_holding.get_max_stack():
+							commons.item_holding.amount += entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1]
 							game_data.play_sound("sound.grab")
 			
-			if render_stats_text([item.ItemLocation.CRAFTING_MENU, array_index]) and not commons.IS_HOLDING_ITEM:
+			if render_stats_text([item.ItemLocation.CRAFTING_MENU, array_index]) and not commons.is_holding_item:
 				commons.screen.blit(stats_text, (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10))
 
 	if pos is not None:
@@ -481,39 +482,39 @@ def draw_inventory_hover_text() -> None:
 
 		if mouse_buttons[0] or mouse_buttons[2]:
 			# Dropping holding item
-			if can_drop_holding and commons.ITEM_HOLDING is not None:
+			if can_drop_holding and commons.item_holding is not None:
 				if mouse_buttons[0]:
-					amount = commons.ITEM_HOLDING.amount
+					amount = commons.item_holding.amount
 				else:
 					amount = 1
 
 				item_add_data = None
 
 				if mouse_buttons[0] or item_drop_tick <= 0:
-					item_add_data = entity_manager.client_player.give_item(commons.ITEM_HOLDING, amount, position=pos)
+					item_add_data = entity_manager.client_player.give_item(commons.item_holding, amount, position=pos)
 
 				if item_add_data is not None:
 					can_drop_holding = False
 
 					# Items are being dropped
 					if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
-						game_data.play_sound(commons.ITEM_HOLDING.get_drop_sound_id_str())
+						game_data.play_sound(commons.item_holding.get_drop_sound_id_str())
 						if mouse_buttons[0]:
-							commons.ITEM_HOLDING = None
-							commons.IS_HOLDING_ITEM = False
+							commons.item_holding = None
+							commons.is_holding_item = False
 						else:
-							commons.ITEM_HOLDING.amount -= 1
+							commons.item_holding.amount -= 1
 
 					# Dropping some of the items in hand
 					elif item_add_data[0] == item.ItemSlotClickResult.GAVE_SOME:
-						game_data.play_sound(commons.ITEM_HOLDING.get_drop_sound_id_str())
-						commons.ITEM_HOLDING.amount = int(item_add_data[1])
+						game_data.play_sound(commons.item_holding.get_drop_sound_id_str())
+						commons.item_holding.amount = int(item_add_data[1])
 
 					# Items are being swapped
 					elif item_add_data[0] == item.ItemSlotClickResult.SWAPPED:
-						game_data.play_sound(commons.ITEM_HOLDING.get_drop_sound_id_str())
-						entity_manager.client_player.items[item_add_data[2]][pos[1]] = commons.ITEM_HOLDING
-						commons.ITEM_HOLDING = item_add_data[1]
+						game_data.play_sound(commons.item_holding.get_drop_sound_id_str())
+						entity_manager.client_player.items[item_add_data[2]][pos[1]] = commons.item_holding
+						commons.item_holding = item_add_data[1]
 
 					if pos not in entity_manager.client_player.old_inventory_positions:
 						entity_manager.client_player.old_inventory_positions.append(pos)
@@ -523,35 +524,35 @@ def draw_inventory_hover_text() -> None:
 					if item_drop_rate <= 0:
 						item_drop_rate = 0
 					item_drop_tick = int(item_drop_rate)
-					if commons.ITEM_HOLDING is not None and commons.ITEM_HOLDING.amount <= 0:
-						commons.ITEM_HOLDING = None
-						commons.IS_HOLDING_ITEM = False
+					if commons.item_holding is not None and commons.item_holding.amount <= 0:
+						commons.item_holding = None
+						commons.is_holding_item = False
 				else:
 					item_drop_tick -= commons.DELTA_TIME
 
 			# Picking up item
 			elif can_pickup_item and not mouse_buttons[2]:
 				can_pickup_item = False
-				commons.ITEM_HOLDING = entity_manager.client_player.remove_item(pos)
-				if commons.ITEM_HOLDING is not None:
-					game_data.play_sound(commons.ITEM_HOLDING.get_pickup_sound_id_str())
-					commons.IS_HOLDING_ITEM = True
+				commons.item_holding = entity_manager.client_player.remove_item(pos)
+				if commons.item_holding is not None:
+					game_data.play_sound(commons.item_holding.get_pickup_sound_id_str())
+					commons.is_holding_item = True
 				entity_manager.client_player.render_current_item_image()
 
-		if render_stats_text(pos) and not commons.IS_HOLDING_ITEM:
+		if render_stats_text(pos) and not commons.is_holding_item:
 			commons.screen.blit(stats_text, (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10))
 
-	elif pygame.mouse.get_pressed()[2] and commons.IS_HOLDING_ITEM:
+	elif pygame.mouse.get_pressed()[2] and commons.is_holding_item:
 		if entity_manager.client_player.direction == 1:
 			velocity = (16, -random.random())
 		else:
 			velocity = (-16, -random.random())
 
-		entity_manager.spawn_physics_item(commons.ITEM_HOLDING, entity_manager.client_player.position, pickup_delay=250, velocity=velocity)
+		entity_manager.spawn_physics_item(commons.item_holding, entity_manager.client_player.position, pickup_delay=250, velocity=velocity)
 		
-		commons.IS_HOLDING_ITEM = False
+		commons.is_holding_item = False
 		can_drop_holding = False
-		commons.ITEM_HOLDING = None
+		commons.item_holding = None
 
 
 """================================================================================================================= 
@@ -562,10 +563,10 @@ def draw_inventory_hover_text() -> None:
 
 
 def draw_item_holding() -> None:
-	if commons.IS_HOLDING_ITEM and commons.ITEM_HOLDING != None:
-		commons.screen.blit(commons.ITEM_HOLDING.get_image(), (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10))
-		if commons.ITEM_HOLDING.amount > 1:
-			commons.screen.blit(shared_methods.outline_text(str(commons.ITEM_HOLDING.amount), (255, 255, 255), commons.SMALL_FONT), (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40))
+	if commons.is_holding_item and commons.item_holding != None:
+		commons.screen.blit(commons.item_holding.get_image(), (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10))
+		if commons.item_holding.amount > 1:
+			commons.screen.blit(shared_methods.outline_text(str(commons.item_holding.amount), (255, 255, 255), commons.SMALL_FONT), (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40))
 
 
 """================================================================================================================= 
@@ -608,7 +609,7 @@ def draw_interactive_block_hover() -> None:
 		tile_id = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
 		tile_data = game_data.get_tile_by_id(tile_id)
 		if (tile_data != None):
-			if game_data.TileTag.CHEST in tile_data["tags"] or game_data.TileTag.CYCLABLE in tile_data["tags"]:
+			if commons.TileTag.CHEST in tile_data["tags"] or commons.TileTag.CYCLABLE in tile_data["tags"]:
 				item_data = game_data.get_item_by_id_str(tile_data["item_id_str"])
 				if (item_data != None):
 					commons.screen.blit(item_data["image"], commons.MOUSE_POSITION)
@@ -1088,9 +1089,9 @@ while True:
 	if not pygame.mouse.get_pressed()[0]:
 		if commons.WAIT_TO_USE and not pygame.mouse.get_pressed()[2]:
 			commons.WAIT_TO_USE = False
-		if commons.IS_HOLDING_ITEM:
+		if commons.is_holding_item:
 			can_drop_holding = True
-		elif not commons.IS_HOLDING_ITEM:
+		elif not commons.is_holding_item:
 			can_pickup_item = True
 
 	if not pygame.mouse.get_pressed()[2]:
@@ -1121,7 +1122,6 @@ while True:
 
 		if commons.game_state == "PLAYING":
 			# print(round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
-			# TODO Change event.type to a match case statement.
 			if event.type == pygame.KEYDOWN:
 				# Toggle Inventory
 				if event.key == pygame.K_ESCAPE:

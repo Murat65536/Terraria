@@ -6,57 +6,6 @@ import commons
 import random
 from typing import Any, TypedDict, NotRequired
 
-class ItemTag(Enum):
-	TILE = 0
-	WALL = 1
-	MATERIAL = 2
-	WEAPON = 3
-	TOOL = 4
-	LONGSWORD = 5
-	RANGED = 6
-	MAGICAL = 7
-	AMMO = 8
-	PICKAXE = 9
-	AXE = 10
-	HAMMER = 11
-	GRAPPLE = 12 # TODO The code for the grappling hook is incomplete.
-	COIN = 13
-	SHORTSWORD = 14
-
-
-class ItemPrefixGroup(Enum):
-	UNIVERSAL = 0
-	COMMON = 1
-	LONGSWORD = 2
-	RANGED = 3
-	MAGICAL = 4
-	SHORTSWORD = 5
-
-
-class TileTag(Enum):
-	TRANSPARENT = 0
-	NO_DRAW = 1
-	NO_COLLIDE = 2
-	MULTITILE = 3
-	CYCLABLE = 4
-	CHEST = 5
-	BREAKABLE = 6
-	WORKBENCH = 7
-	PLATFORM = 8
-	DAMAGING = 9
-
-
-class TileStrengthType(Enum):
-	PICKAXE = 0
-	HAMMER = 1
-	AXE = 2
-	DAMAGE = 3
-
-
-class TileMaskType(Enum):
-	NONE = 0
-	NOISY = 1
-
 class PrefixData(TypedDict):
 	name: str
 	damage: float
@@ -69,18 +18,18 @@ class PrefixData(TypedDict):
 	tier: int
 
 def make_item_tag_list(item_tags_str: list[str]):
-	enum_list: list[ItemTag] = []
+	enum_list: list[commons.ItemTag] = []
 	for string in item_tags_str:
-		for tag in ItemTag:
+		for tag in commons.ItemTag:
 			if tag.name == string:
 				enum_list.append(tag)
 				break
 	return enum_list
 
 def make_item_prefix_list(item_prefixes_str: list[str]):
-	enum_list: list[ItemPrefixGroup] = []
+	enum_list: list[commons.ItemPrefixGroup] = []
 	for string in item_prefixes_str:
-		for prefix in ItemPrefixGroup:
+		for prefix in commons.ItemPrefixGroup:
 			if prefix.name == string:
 				enum_list.append(prefix)
 				break
@@ -88,9 +37,9 @@ def make_item_prefix_list(item_prefixes_str: list[str]):
 
 
 def make_tile_tag_list(tile_tags_str: list[str]):
-	enum_list: list[TileTag] = []
+	enum_list: list[commons.TileTag] = []
 	for string in tile_tags_str:
-		for tag in TileTag:
+		for tag in commons.TileTag:
 			if tag.name == string:
 				enum_list.append(tag)
 				break
@@ -98,13 +47,13 @@ def make_tile_tag_list(tile_tags_str: list[str]):
 
 
 def get_tile_strength_type_from_str(strength_type_string: str):
-	for types in TileStrengthType:
+	for types in commons.TileStrengthType:
 		if types.name == strength_type_string:
 			return types
 
 
 def get_tile_mask_type_from_str(mask_type_string: str):
-	for masks in TileMaskType:
+	for masks in commons.TileMaskType:
 		if masks.name == mask_type_string:
 			return masks
 
@@ -126,7 +75,7 @@ biome_tile_vals: list[list[list[str]]] = [
 
 platform_blocks: list[int] = [257]
 
-json_item_data: list[commons.ItemData] = []
+json_item_data: list[commons.PlacableTileItemData | commons.ImplacableTileItemData | commons.MaterialItemData | commons.WallItemData | commons.PickaxeItemData | commons.HammerItemData | commons.AxeItemData | commons.SwordItemData | commons.RangedItemData | commons.AmmunitionItemData | commons.GrapplingHookItemData | commons.MagicalWeaponItemData] = []
 item_id_str_hash_table: dict[str, int] = {}
 
 ammo_type_item_lists: dict[str, list[int]] = {}
@@ -156,8 +105,8 @@ music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
 
 
 # Item Prefix Information
-prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
-	ItemPrefixGroup.UNIVERSAL: [
+prefix_data: dict[commons.ItemPrefixGroup, list[PrefixData]] = {
+	commons.ItemPrefixGroup.UNIVERSAL: [
 			{"name": "Keen", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
 			{"name": "Superior", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "knockback": 0.1, "tier": 2},
 			{"name": "Forceful", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 1},
@@ -173,7 +122,7 @@ prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
 			{"name": "Demonic", "damage": 0.15, "speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 2},
 			{"name": "Zealous","damage": 0,"speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 1}
 		],
-	ItemPrefixGroup.COMMON: [
+	commons.ItemPrefixGroup.COMMON: [
 			{"name": "Quick", "damage": 0, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 1},
 			{"name": "Deadly","damage": 0.1, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 2},
 			{"name": "Agile", "damage": 0, "speed": 0.1, "crit_chance": 0.03, "knockback": 0, "tier": 1},
@@ -185,7 +134,7 @@ prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
 			{"name": "Annoying", "damage": -0.2, "speed": -0.15, "crit_chance": 0, "knockback": 0, "tier": -2},
 			{"name": "Nasty", "damage": 0.05, "speed": 0.1, "crit_chance": 0.02, "knockback": -0.1, "tier": 1},
 		],
-	ItemPrefixGroup.LONGSWORD: [
+	commons.ItemPrefixGroup.LONGSWORD: [
 			{"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
 			{"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
 			{"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
@@ -203,7 +152,7 @@ prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
 			{"name": "Light", "damage": 0,  "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
 			{"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2}
 		],
-			ItemPrefixGroup.SHORTSWORD: [
+		commons.ItemPrefixGroup.SHORTSWORD: [
 			{"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
 			{"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
 			{"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
@@ -221,7 +170,7 @@ prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
 			{"name": "Light", "damage": 0, "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
 			{"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2},
 		],
-	ItemPrefixGroup.RANGED: [
+		commons.ItemPrefixGroup.RANGED: [
 			{"name": "Sighted", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "velocity": 0, "knockback": 0, "tier": 1},
 			{"name": "Rapid", "damage": 0, "speed": 0.15, "crit_chance": 0, "velocity": 0.1, "knockback": 0, "tier": 2},
 			{"name": "Hasty", "damage": 0, "speed": 0.1, "crit_chance": 0,	"velocity": 0.15, "knockback": 0, "tier": 2},
@@ -235,7 +184,7 @@ prefix_data: dict[ItemPrefixGroup, list[PrefixData]] = {
 			{"name": "Frenzying", "damage": -0.15, "speed": 0.15, "crit_chance": 0, "velocity": 0, "knockback": 0, "tier": 0},
 			{"name": "Unreal", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "velocity": 0.1, "knockback": 0.15, "tier": 2},
 		],
-	ItemPrefixGroup.MAGICAL: [
+		commons.ItemPrefixGroup.MAGICAL: [
 			{"name": "Mystic", "damage": 0.1, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 2},
 			{"name": "Adept", "damage": 0, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 1},
 			{"name": "Masterful", "damage": 0.15, "speed": 0, "crit_chance": 0, "mana_cost": -0.2, "knockback": 0.05, "tier": 2},
@@ -492,24 +441,24 @@ EXIT_MESSAGES = [
 
 
 def find_prefix_data_by_name(prefix_name):
-	for prefix_dat in prefix_data[ItemPrefixGroup.UNIVERSAL]:
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.UNIVERSAL]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.UNIVERSAL, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.COMMON]:
+			return [commons.ItemPrefixGroup.UNIVERSAL, prefix_dat]
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.COMMON]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.COMMON, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.LONGSWORD]:
+			return [commons.ItemPrefixGroup.COMMON, prefix_dat]
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.LONGSWORD]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.LONGSWORD, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.RANGED]:
+			return [commons.ItemPrefixGroup.LONGSWORD, prefix_dat]
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.RANGED]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.RANGED, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.MAGICAL]:
+			return [commons.ItemPrefixGroup.RANGED, prefix_dat]
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.MAGICAL]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.MAGICAL, prefix_dat]
-	for prefix_dat in prefix_data[ItemPrefixGroup.SHORTSWORD]:
+			return [commons.ItemPrefixGroup.MAGICAL, prefix_dat]
+	for prefix_dat in prefix_data[commons.ItemPrefixGroup.SHORTSWORD]:
 		if prefix_dat["name"] == prefix_name:
-			return [ItemPrefixGroup.SHORTSWORD, prefix_dat]
+			return [commons.ItemPrefixGroup.SHORTSWORD, prefix_dat]
 	return None
 
 
@@ -518,8 +467,8 @@ def parse_item_data():
 	json_item_data = commons.ITEM_DATA
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
+	# TODO So what's happening is that typeddict is only allowing specific keys and when I try to add keys not in typeddict, it is unable to do that. :/ I guess mess around with NotRequired or just delete and rework the extra keys.
 	for item_data in json_item_data:
-		item_data["tags"] = make_item_tag_list(item_data["tags"])
 		try:
 			loaded_surf = pygame.image.load(item_data["image_path"]).convert_alpha()
 			if max(loaded_surf.get_width(), loaded_surf.get_height()) > 32:
@@ -531,7 +480,7 @@ def parse_item_data():
 		except FileNotFoundError:
 			item_data["image"] = None
 
-		if ItemTag.WEAPON in item_data["tags"]:
+		if commons.ItemTag.WEAPON in item_data["tags"]:
 			try:
 				loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
 				item_data["world_override_image"] = pygame.Surface((max(loaded_surf.get_width(), loaded_surf.get_height()), max(loaded_surf.get_width(), loaded_surf.get_height())))
@@ -540,13 +489,13 @@ def parse_item_data():
 
 			item_data["prefixes"] = make_item_prefix_list(item_data["prefixes"])
 
-		if ItemTag.AMMO in item_data["tags"]:
+		if commons.ItemTag.AMMO in item_data["tags"]:
 			try:
 				ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])
 			except KeyError:
 				ammo_type_item_lists[item_data["ammo_type"]] = [item_data["id"]]
 
-		if ItemTag.GRAPPLE in item_data["tags"]:
+		if commons.ItemTag.GRAPPLE in item_data["tags"]:
 			try:
 				loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
 				item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
@@ -585,7 +534,7 @@ def create_item_id_str_hash_table():
 def get_ammo_item_ids_for_ammo_type(ammo_type):
 	ammo_item_ids = []
 	for item_data in json_item_data:
-		if ItemTag.AMMO in item_data["tags"]:
+		if commons.ItemTag.AMMO in item_data["tags"]:
 			if item_data["ammo_type"] == ammo_type:
 				ammo_item_ids.append(int(item_data["id"]))
 
@@ -611,11 +560,11 @@ def parse_tile_data():
 		except pygame.error:
 			tile_data["image"] = None
 
-		if TileTag.MULTITILE in tile_data["tags"]:
+		if commons.TileTag.MULTITILE in tile_data["tags"]:
 			tile_data["multitile_image"] = pygame.image.load(tile_data["multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["multitile_dimensions"][1])
 			tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
 
-		if TileTag.DAMAGING in tile_data["tags"]:
+		if commons.TileTag.DAMAGING in tile_data["tags"]:
 			tile_data["tile_damage"] = int(tile_data["tile_damage"])
 
 

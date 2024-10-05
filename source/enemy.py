@@ -30,9 +30,9 @@ class Enemy:
 		self.health: float = game_data.json_entity_data[self.enemy_id]["health"]
 		self.max_health: float = self.health
 		self.defense: int = game_data.json_entity_data[self.enemy_id]["defense"]
-		self.knockback_resistance: int = game_data.json_entity_data[self.enemy_id]["knockback_resistance"]
+		self.knockback_resistance: float = game_data.json_entity_data[self.enemy_id]["knockback_resistance"]
 		self.attack_damage: int = game_data.json_entity_data[self.enemy_id]["attack_damage"]
-		self.color: tuple[int, int, int] = tuple(game_data.json_entity_data[self.enemy_id]["color"])
+		self.color: tuple[int, int, int] = game_data.json_entity_data[self.enemy_id]["color"]
 		self.rect: pygame.Rect = Rect(self.position[0] - commons.BLOCK_SIZE, self.position[1] - commons.BLOCK_SIZE / 1.5, commons.BLOCK_SIZE * 2, commons.BLOCK_SIZE * 1.5)
 		self.grounded: bool = False
 		self.stop_left: bool = False
@@ -118,10 +118,10 @@ class Enemy:
 				for i in range(-2, 3):
 					if world.tile_in_map(self.block_pos[1] + j, self.block_pos[0] + i):
 						tile_id: int = world.world.tile_data[self.block_pos[1] + j][self.block_pos[0] + i][0]
-						tile_data: game_data.TileData = game_data.get_tile_by_id(tile_id)
-						if game_data.TileTag.NO_COLLIDE not in tile_data["tags"]:
+						tile_data: commons.TileData | commons.DamagingTileData | commons.MultitileData | commons.DoorTileData | commons.LootTileData | commons.LootMultitileData = game_data.get_tile_by_id(tile_id)
+						if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
 							block_rect = Rect(commons.BLOCK_SIZE * (self.block_pos[1] + j), commons.BLOCK_SIZE * (self.block_pos[0] + i), commons.BLOCK_SIZE, commons.BLOCK_SIZE)
-							if game_data.TileTag.PLATFORM in tile_data["tags"]:
+							if commons.TileTag.PLATFORM in tile_data["tags"]:
 								platform = True
 							else:
 								platform = False
@@ -130,7 +130,7 @@ class Enemy:
 							if block_rect.colliderect(int(self.rect.right + 1), int(self.rect.top + 2), 1, int(self.rect.height - 4)):
 								self.stop_right = True  # Is there a solid block right
 							if block_rect.colliderect(self.rect):
-								if not self.world_invincible and game_data.TileTag.DAMAGING in tile_data["tags"]:
+								if not self.world_invincible and commons.TileTag.DAMAGING in tile_data["tags"]:
 									# self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
 									pass
 								
@@ -225,7 +225,7 @@ class Enemy:
 		if self.alive:
 			self.alive = False
 
-			coin_range: list[int] = game_data.json_entity_data[self.enemy_id]["coin_drop_range"]
+			coin_range: tuple[int, int] = game_data.json_entity_data[self.enemy_id]["coin_drop_range"]
 			coin_drop_range: list[item.Item] = item.get_coins_from_int(randint(coin_range[0], coin_range[1]))
 			item_drops = game_data.json_entity_data[self.enemy_id]["item_drops"]
 

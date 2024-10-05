@@ -1,7 +1,58 @@
 import pygame
-from typing import TextIO, TypedDict, NotRequired
+from typing import TextIO, TypedDict
 from datetime import datetime
+from enum import Enum
 
+
+class ItemTag(Enum):
+	TILE = 0
+	WALL = 1
+	MATERIAL = 2
+	WEAPON = 3
+	TOOL = 4
+	LONGSWORD = 5
+	RANGED = 6
+	MAGICAL = 7
+	AMMO = 8
+	PICKAXE = 9
+	AXE = 10
+	HAMMER = 11
+	GRAPPLE = 12 # TODO The code for the grappling hook is incomplete.
+	COIN = 13
+	SHORTSWORD = 14
+
+
+class ItemPrefixGroup(Enum):
+	UNIVERSAL = 0
+	COMMON = 1
+	LONGSWORD = 2
+	RANGED = 3
+	MAGICAL = 4
+	SHORTSWORD = 5
+
+
+class TileTag(Enum):
+	TRANSPARENT = 0
+	NO_DRAW = 1
+	NO_COLLIDE = 2
+	MULTITILE = 3
+	CYCLABLE = 4
+	CHEST = 5
+	BREAKABLE = 6
+	WORKBENCH = 7
+	PLATFORM = 8
+	DAMAGING = 9
+
+
+class TileStrengthType(Enum):
+	PICKAXE = 0
+	HAMMER = 1
+	AXE = 2
+	DAMAGE = 3
+
+class TileMaskType(Enum):
+	NONE = 0
+	NOISY = 1
 
 class PlayerData(TypedDict):
     name: str
@@ -50,7 +101,7 @@ class PlacableTileItemData(TypedDict):
     id: int
     id_str: int
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -66,7 +117,7 @@ class ImplacableTileItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -82,7 +133,7 @@ class MaterialItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -97,7 +148,7 @@ class WallItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -113,7 +164,7 @@ class PickaxeItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -124,7 +175,7 @@ class PickaxeItemData(TypedDict):
     knockback: int
     crit_chance: float
     world_override_image_path: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     pickaxe_power: float
     pickup_sound: str
     drop_sound: str
@@ -136,7 +187,7 @@ class HammerItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -147,7 +198,7 @@ class HammerItemData(TypedDict):
     knockback: float
     crit_chance: float
     world_override_image_path: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     pickup_sound: str
     drop_sound: str
     use_sound: str
@@ -159,7 +210,7 @@ class AxeItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -170,7 +221,7 @@ class AxeItemData(TypedDict):
     knockback: float
     crit_chance: float
     world_override_image_path: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     axe_power: float
     pickup_sound: str
     drop_sound: str
@@ -182,7 +233,7 @@ class SwordItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -193,7 +244,7 @@ class SwordItemData(TypedDict):
     knockback: float
     crit_chance: float
     world_override_image_path: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     pickup_sound: str
     drop_sound: str
     use_sound: str
@@ -204,7 +255,7 @@ class RangedItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -215,7 +266,7 @@ class RangedItemData(TypedDict):
     knockback: float
     crit_chance: float
     world_override_image_path: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     ranged_projectile_id_str: str
     ranged_ammo_type: str
     ranged_projectile_speed: float
@@ -231,7 +282,7 @@ class AmmunitionItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -251,7 +302,7 @@ class GrapplingHookItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     image_path: str
     tier: int
     max_stack: int
@@ -271,7 +322,7 @@ class MagicalWeaponItemData(TypedDict):
     id: int
     id_str: str
     name: str
-    tags: list[str]
+    tags: list[ItemTag]
     tier: int
     max_stack: int
     buy_price: int
@@ -279,7 +330,7 @@ class MagicalWeaponItemData(TypedDict):
     image_path: str
     pickup_sound: str
     drop_sound: str
-    prefixes: list[str]
+    prefixes: list[ItemPrefixGroup]
     attack_speed: int
     attack_damage: int
     knockback: float
@@ -347,19 +398,115 @@ class TileData(TypedDict):
     item_count_range: tuple[int, int]
     place_sound: str
     hit_sound: str
-    tile_damage: NotRequired[int]
-    tile_damage_name: NotRequired[str]
-    multitile_image_path: NotRequired[str]
-    multitile_dimensions: NotRequired[list[int]]
-    multitile_required_solids: NotRequired[list[list[int]]]
-    cycle_facing_left_tile_id_str: NotRequired[str]
-    cycle_facing_left_tile_offset: NotRequired[list[int]]
-    cycle_facing_left_sound: NotRequired[str]
-    cycle_facing_right_tile_id_str: NotRequired[str]
-    cycle_facing_right_tile_offset: NotRequired[list[int]]
-    cycle_facing_right_sound: NotRequired[str]
-    loot_group_id_str: NotRequired[str]
 
+class DamagingTileData(TypedDict):
+    id: int
+    id_str: str
+    name: str
+    strength: float
+    strength_type: str
+    mask_type: str
+    mask_merge_ids: list[str]
+    light_reduction: int
+    light_emission: int
+    average_color: tuple[int, int, int]
+    tags: list[str]
+    image_path: str
+    item_id_str: str
+    item_count_range: tuple[int, int]
+    place_sound: str
+    hit_sound: str
+    tile_damage: int
+    tile_damage_name: str
+
+class MultitileData(TypedDict):
+    id: int
+    id_str: str
+    name: str
+    strength: float
+    strength_type: str
+    mask_type: str
+    mask_merge_ids: list[str]
+    light_reduction: int
+    light_emission: int
+    average_color: tuple[int, int, int]
+    tags: list[str]
+    image_path: str
+    item_id_str: str
+    item_count_range: tuple[int, int]
+    multitile_image_path: str
+    multitile_dimensions: tuple[int, int]
+    multitile_required_solids: list[tuple[int, int]]
+    place_sound: str
+    hit_sound: str
+
+class DoorTileData(TypedDict):
+    id: int
+    id_str: str
+    name: str
+    strength: float
+    strength_type: str
+    mask_type: str
+    mask_merge_ids: list[str]
+    light_reduction: int
+    light_emission: int
+    average_color: tuple[int, int, int]
+    tags: list[str]
+    image_path: str
+    item_id_str: str
+    item_count_range: tuple[int, int]
+    cycle_facing_left_tile_id_str: str
+    cycle_facing_left_tile_offset: list[int]
+    cycle_facing_left_sound: str
+    cycle_facing_right_tile_id_str: str
+    cycle_facing_right_tile_offset: list[int]
+    cycle_facing_right_sound: str
+    multitile_image_path: str
+    multitile_dimensions: tuple[int, int]
+    multitile_required_solids: list[tuple[int, int]]
+    place_sound: str
+    hit_sound: str
+
+class LootMultitileData(TypedDict):
+    id: int
+    id_str: str
+    name: str
+    strength: float
+    strength_type: str
+    mask_type: str
+    mask_merge_ids: list[str]
+    light_reduction: int
+    light_emission: int
+    average_color: tuple[int, int, int]
+    tags: list[str]
+    image_path: str
+    item_id_str: str
+    item_count_range: tuple[int, int]
+    loot_group_id_str: str
+    multitile_image_path: str
+    multitile_dimensions: tuple[int, int]
+    multitile_required_solids: list[tuple[int, int]]
+    place_sound: str
+    hit_sound: str
+
+class LootTileData(TypedDict):
+    id: int
+    id_str: str
+    name: str
+    strength: float
+    strength_type: str
+    mask_type: str
+    mask_merge_ids: list[str]
+    light_reduction: int
+    light_emission: int
+    average_color: tuple[int, int, int]
+    tags: list[str]
+    image_path: str
+    item_id_str: str
+    item_count_range: tuple[int, int]
+    loot_group_id_str: str
+    place_sound: str
+    hit_sound: str
 
 class WallData(TypedDict):
     id: int
@@ -371,7 +518,7 @@ class WallData(TypedDict):
     item_id_str: str
     place_sound: str
     hit_sound: str
-    average_color: NotRequired[list[int]]
+    average_color: tuple[int, int, int]
 
 
 class WorldGenData(TypedDict):
@@ -391,10 +538,10 @@ game_state: str = "MAIN_MENU"
 game_sub_state: str = "MAIN"
 
 # Config loading
-config: TextIO = open("config.txt", "r")
-configDataStr: list[str] = config.readlines()
+CONFIG: TextIO = open("CONFIG.txt", "r")
+CONFIG_DATA: list[str] = CONFIG.readlines()
 configData: list[str] = []
-for item in configDataStr:
+for item in CONFIG_DATA:
     item = item.split("=")
     configData.append(item[1][:-1])
 WINDOW_WIDTH: int = int(configData[0].split(",")[0])
@@ -425,12 +572,12 @@ if RUN_FULLSCREEN:
 else:
     screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
-font_file_path: str = r"assets/fonts/AndyBold.ttf"
-SMALL_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 10)
-DEFAULT_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 16)
-MEDIUM_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 22)
-LARGE_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 40)
-EXTRA_LARGE_FONT: pygame.font.Font = pygame.font.Font(font_file_path, 50)
+FONT_FILE_PATH: str = r"assets/fonts/AndyBold.ttf"
+SMALL_FONT: pygame.font.Font = pygame.font.Font(FONT_FILE_PATH, 10)
+DEFAULT_FONT: pygame.font.Font = pygame.font.Font(FONT_FILE_PATH, 16)
+MEDIUM_FONT: pygame.font.Font = pygame.font.Font(FONT_FILE_PATH, 22)
+LARGE_FONT: pygame.font.Font = pygame.font.Font(FONT_FILE_PATH, 40)
+EXTRA_LARGE_FONT: pygame.font.Font = pygame.font.Font(FONT_FILE_PATH, 50)
 
 WAIT_TO_USE: bool = False
 
@@ -466,8 +613,8 @@ PLAYER_REACH: int = 8
 PLAYER_MODEL_COLOR_INDEX: int = 0
 TEXT_INPUT: str = ""
 
-IS_HOLDING_ITEM: bool = False
-ITEM_HOLDING: object = None
+is_holding_item: bool = False
+item_holding: object = None
 
 
 OLD_TIME_MILLISECONDS: int = pygame.time.get_ticks()
@@ -527,7 +674,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (5, 30),
+        "coin_drop_range": (5, 30)
     },
     {
         "id": 2,
@@ -547,7 +694,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (15, 50),
+        "coin_drop_range": (15, 50)
     },
     {
         "id": 3,
@@ -567,7 +714,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (25, 75),
+        "coin_drop_range": (25, 75)
     },
     {
         "id": 4,
@@ -587,7 +734,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (35, 110),
+        "coin_drop_range": (35, 110)
     },
     {
         "id": 5,
@@ -607,7 +754,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (45, 130),
+        "coin_drop_range": (45, 130)
     },
 ]
 
@@ -644,7 +791,7 @@ ITEM_DATA: list[
         "id": 1,
         "id_str": "item.iron_pickaxe",
         "name": "Iron Pickaxe",
-        "tags": ["PICKAXE", "TOOL", "WEAPON"],
+        "tags": [ItemTag.PICKAXE, ItemTag.TOOL, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_1.png",
         "tier": 0,
         "max_stack": 1,
@@ -655,12 +802,12 @@ ITEM_DATA: list[
         "knockback": 2,
         "crit_chance": 0.04,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickaxe_power": 40.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 2,
@@ -675,13 +822,13 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "tile_id_str": "tile.dirt",
         "pickup_sound": "sound.grab",
-        "drop_sound": "sound.grab",
+        "drop_sound": "sound.grab"
     },
     {
         "id": 3,
         "id_str": "item.stone_block",
         "name": "Stone",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_3.png",
         "tier": 0,
         "max_stack": 999,
@@ -690,13 +837,13 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "tile_id_str": "tile.stone",
         "pickup_sound": "sound.grab",
-        "drop_sound": "sound.grab",
+        "drop_sound": "sound.grab"
     },
     {
         "id": 4,
         "id_str": "item.iron_broadsword",
         "name": "Iron Broadsword",
-        "tags": ["LONGSWORD", "WEAPON"],
+        "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_4.png",
         "tier": 0,
         "max_stack": 1,
@@ -707,17 +854,17 @@ ITEM_DATA: list[
         "knockback": 5.5,
         "crit_chance": 0.04,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "LONGSWORD", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 5,
         "id_str": "item.mushroom",
         "name": "Mushroom",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_5.png",
         "tier": 0,
         "max_stack": 999,
@@ -726,13 +873,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.mushroom",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 6,
         "id_str": "item.iron_ore",
         "name": "Iron Ore",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_11.png",
         "tier": 0,
         "max_stack": 999,
@@ -741,13 +888,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.pot_thick_brown",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 7,
         "id_str": "item.dirt_wall",
         "name": "Dirt Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_30.png",
         "tier": 0,
         "max_stack": 999,
@@ -756,13 +903,13 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "wall_id_str": "wall.dirt",
+        "wall_id_str": "wall.dirt"
     },
     {
         "id": 8,
         "id_str": "item.stone_wall",
         "name": "Stone Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_26.png",
         "tier": 0,
         "max_stack": 999,
@@ -771,13 +918,13 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "wall_id_str": "wall.stone",
+        "wall_id_str": "wall.stone"
     },
     {
         "id": 9,
         "id_str": "item.snow",
         "name": "Snow",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_593.png",
         "tier": 0,
         "max_stack": 999,
@@ -786,13 +933,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.snow",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 10,
         "id_str": "item.snow_wall",
         "name": "Snow Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_4489.png",
         "tier": 0,
         "max_stack": 999,
@@ -801,13 +948,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.snow",
+        "wall_id_str": "wall.snow"
     },
     {
         "id": 11,
         "id_str": "item.ice",
         "name": "Ice",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/Items/item_664.png",
         "tier": 0,
         "max_stack": 999,
@@ -816,13 +963,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.none",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 12,
         "id_str": "item.ice_wall",
         "name": "Ice Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_4506.png",
         "tier": 0,
         "max_stack": 999,
@@ -831,13 +978,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.ice",
+        "wall_id_str": "wall.ice"
     },
     {
         "id": 13,
         "id_str": "item.wood",
         "name": "Wood",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_9.png",
         "tier": 0,
         "max_stack": 999,
@@ -846,13 +993,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 14,
         "id_str": "item.wood_wall",
         "name": "Wood Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/item_93.png",
         "tier": 0,
         "max_stack": 999,
@@ -861,13 +1008,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "wall_id_str": "wall.wood",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 15,
         "id_str": "item.copper_ore",
         "name": "Copper Ore",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_12.png",
         "tier": 0,
         "max_stack": 999,
@@ -876,13 +1023,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.copper",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 16,
         "id_str": "item.silver_ore",
         "name": "Silver Ore",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_14.png",
         "tier": 0,
         "max_stack": 999,
@@ -891,13 +1038,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.pot_thick_brown",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 17,
         "id_str": "item.sand",
         "name": "Sand",
-        "tags": ["MATERIAL", "TILE"],
+        "tags": [ItemTag.MATERIAL, ItemTag.TILE],
         "image_path": "assets/images/items/item_169.png",
         "tier": 0,
         "max_stack": 999,
@@ -906,13 +1053,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "tile_id_str": "tile.sand",
+        "tile_id_str": "tile.sand"
     },
     {
         "id": 18,
         "id_str": "item.hardened_sand_wall",
         "name": "Hardened Sand Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_3340.png",
         "tier": 0,
         "max_stack": 999,
@@ -921,13 +1068,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.hardened_sand",
+        "wall_id_str": "wall.hardened_sand"
     },
     {
         "id": 19,
         "id_str": "item.sandstone",
         "name": "Sandstone",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_3271.png",
         "tier": 0,
         "max_stack": 999,
@@ -936,13 +1083,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.sandstone",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 20,
         "id_str": "item.sandstone_wall",
         "name": "Sandstone Wall",
-        "tags": ["WALL"],
+        "tags": [ItemTag.WALL],
         "image_path": "assets/images/items/Item_3273.png",
         "tier": 0,
         "max_stack": 999,
@@ -951,13 +1098,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.sandstone",
+        "wall_id_str": "wall.sandstone"
     },
     {
         "id": 21,
         "id_str": "item.wood_platform",
         "name": "Wood Platform",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_94.png",
         "tier": 0,
         "max_stack": 999,
@@ -966,13 +1113,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.platform_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 22,
         "id_str": "item.copper_broadsword",
         "name": "Copper Broadsword",
-        "tags": ["LONGSWORD", "WEAPON"],
+        "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_3508.png",
         "tier": 0,
         "max_stack": 1,
@@ -983,17 +1130,17 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "LONGSWORD", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 23,
         "id_str": "item.excalibur",
         "name": "Excalibur",
-        "tags": ["LONGSWORD", "WEAPON"],
+        "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_368.png",
         "tier": 10,
         "max_stack": 1,
@@ -1004,17 +1151,17 @@ ITEM_DATA: list[
         "knockback": 0,
         "crit_chance": 0.0,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "LONGSWORD", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.9,
+        "hold_offset": 0.9
     },
     {
         "id": 24,
         "id_str": "item.wood_broadsword",
         "name": "Wooden Sword",
-        "tags": ["LONGSWORD", "WEAPON"],
+        "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_24.png",
         "tier": 0,
         "max_stack": 1,
@@ -1025,17 +1172,17 @@ ITEM_DATA: list[
         "knockback": 6,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "LONGSWORD", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 25,
         "id_str": "item.wood_bow",
         "name": "Wooden Bow",
-        "tags": ["RANGED", "WEAPON", "BOW"],
+        "tags": [ItemTag.RANGED, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_39.png",
         "tier": 0,
         "max_stack": 1,
@@ -1046,7 +1193,7 @@ ITEM_DATA: list[
         "knockback": 2,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "RANGED", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.RANGED, ItemPrefixGroup.UNIVERSAL],
         "ranged_projectile_id_str": "projectile.arrow",
         "ranged_ammo_type": "arrow",
         "ranged_projectile_speed": 75.0,
@@ -1055,13 +1202,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.bow",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 26,
         "id_str": "item.wooden_arrow",
         "name": "Wooden Arrow",
-        "tags": ["MATERIAL", "AMMO"],
+        "tags": [ItemTag.MATERIAL, ItemTag.AMMO],
         "image_path": "assets/images/items/Item_40.png",
         "tier": 0,
         "max_stack": 999,
@@ -1074,13 +1221,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 27,
         "id_str": "item.musket",
         "name": "Musket",
-        "tags": ["RANGED", "WEAPON", "GUN"],
+        "tags": [ItemTag.RANGED, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_96.png",
         "tier": 1,
         "max_stack": 1,
@@ -1091,7 +1238,7 @@ ITEM_DATA: list[
         "knockback": 4,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "RANGED", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.RANGED, ItemPrefixGroup.UNIVERSAL],
         "ranged_projectile_id_str": "projectile.bullet",
         "ranged_ammo_type": "bullet",
         "ranged_projectile_speed": 100.0,
@@ -1100,13 +1247,13 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.gun_shot",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 28,
         "id_str": "item.musket_ball",
         "name": "Musket Ball",
-        "tags": ["MATERIAL", "AMMO"],
+        "tags": [ItemTag.MATERIAL, ItemTag.AMMO],
         "image_path": "assets/images/items/Item_97.png",
         "tier": 0,
         "max_stack": 999,
@@ -1119,13 +1266,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 29,
         "id_str": "item.copper_coin",
         "name": "Copper Coin",
-        "tags": ["AMMO", "COIN"],
+        "tags": [ItemTag.AMMO, ItemTag.COIN],
         "image_path": "assets/images/items/Item_71.png",
         "tier": 0,
         "max_stack": 100,
@@ -1138,13 +1285,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 30,
         "id_str": "item.silver_coin",
         "name": "Silver Coin",
-        "tags": ["AMMO", "COIN"],
+        "tags": [ItemTag.AMMO, ItemTag.COIN],
         "image_path": "assets/images/items/Item_72.png",
         "tier": 0,
         "max_stack": 100,
@@ -1157,13 +1304,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 31,
         "id_str": "item.gold_coin",
         "name": "Gold Coin",
-        "tags": ["AMMO", "COIN"],
+        "tags": [ItemTag.AMMO, ItemTag.COIN],
         "image_path": "assets/images/items/Item_73.png",
         "tier": 0,
         "max_stack": 100,
@@ -1176,13 +1323,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 32,
         "id_str": "item.platinum_coin",
         "name": "Platinum Coin",
-        "tags": ["AMMO", "COIN"],
+        "tags": [ItemTag.AMMO, ItemTag.COIN],
         "image_path": "assets/images/items/Item_74.png",
         "tier": 0,
         "max_stack": 999,
@@ -1195,13 +1342,13 @@ ITEM_DATA: list[
         "ammo_knockback_mod": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 33,
         "id_str": "item.copper_pickaxe",
         "name": "Copper Pickaxe",
-        "tags": ["PICKAXE", "TOOL", "WEAPON"],
+        "tags": [ItemTag.PICKAXE, ItemTag.TOOL, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_3509.png",
         "tier": 0,
         "max_stack": 1,
@@ -1212,18 +1359,18 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickaxe_power": 35.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 34,
         "id_str": "item.copper_hammer",
         "name": "Copper Hammer",
-        "tags": ["HAMMER", "TOOL", "WEAPON"],
+        "tags": [ItemTag.HAMMER, ItemTag.TOOL, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_3505.png",
         "tier": 0,
         "max_stack": 1,
@@ -1234,18 +1381,18 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hammer_power": 0,
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 35,
         "id_str": "item.wood_hammer",
         "name": "Wood Hammer",
-        "tags": ["HAMMER", "TOOL", "WEAPON"],
+        "tags": [ItemTag.HAMMER, ItemTag.TOOL, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_196.png",
         "tier": 0,
         "max_stack": 1,
@@ -1256,18 +1403,18 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hammer_power": 0,
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 36,
         "id_str": "item.gel",
         "name": "Blue Gel",
-        "tags": ["MATERIAL"],
+        "tags": [ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_23.png",
         "tier": 0,
         "max_stack": 999,
@@ -1275,13 +1422,13 @@ ITEM_DATA: list[
         "sell_price": 1,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 37,
         "id_str": "item.wood_chest",
         "name": "Wooden Chest",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_48.png",
         "tier": 0,
         "max_stack": 99,
@@ -1290,13 +1437,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.chest_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 38,
         "id_str": "item.workbench",
         "name": "Workbench",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_36.png",
         "tier": 0,
         "max_stack": 99,
@@ -1305,13 +1452,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.crafting_table_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 39,
         "id_str": "item.wood_door",
         "name": "Wooden Door",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_25.png",
         "tier": 0,
         "max_stack": 99,
@@ -1320,13 +1467,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.door_wood_closed",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 40,
         "id_str": "item.torch",
         "name": "Torch",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_8.png",
         "tier": 0,
         "max_stack": 999,
@@ -1335,13 +1482,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.torch",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 41,
         "id_str": "item.spike",
         "name": "Spike",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "image_path": "assets/images/items/Item_147.png",
         "tier": 0,
         "max_stack": 999,
@@ -1350,13 +1497,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.spike",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 42,
         "id_str": "item.grappling_hook",
         "name": "Grappling Hook",
-        "tags": ["GRAPPLE", "TOOL"],
+        "tags": [ItemTag.GRAPPLE, ItemTag.TOOL],
         "image_path": "assets/images/items/grappling_hook.png",
         "tier": 0,
         "max_stack": 1,
@@ -1369,13 +1516,13 @@ ITEM_DATA: list[
         "grapple_claw_image_path": "assets/images/items/grappling_hook_claw.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0,
+        "hold_offset": 0.0
     },
     {
         "id": 43,
         "id_str": "item.water_bolt_spell",
         "name": "Water Bolt",
-        "tags": ["MAGICAL", "WEAPON"],
+        "tags": [ItemTag.MAGICAL, ItemTag.WEAPON],
         "tier": 3,
         "max_stack": 999,
         "buy_price": 10000,
@@ -1391,13 +1538,13 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "world_override_image_path": "",
         "use_sound": "sound.swing",
-        "mana_cost": 20,
+        "mana_cost": 20
     },
     {
         "id": 44,
         "id_str": "item.painting_a",
         "name": "Painting A",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "tier": 3,
         "max_stack": 999,
         "buy_price": 1000,
@@ -1406,13 +1553,13 @@ ITEM_DATA: list[
         "image_path": "assets/images/items/painting_a.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_a",
+        "tile_id_str": "tile.painting_a"
     },
     {
         "id": 45,
         "id_str": "item.painting_b",
         "name": "Painting B",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "tier": 3,
         "max_stack": 999,
         "buy_price": 1000,
@@ -1421,13 +1568,13 @@ ITEM_DATA: list[
         "image_path": "assets/images/items/painting_b.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_b",
+        "tile_id_str": "tile.painting_b"
     },
     {
         "id": 46,
         "id_str": "item.painting_c",
         "name": "Painting C",
-        "tags": ["TILE"],
+        "tags": [ItemTag.TILE],
         "tier": 3,
         "max_stack": 999,
         "buy_price": 1000,
@@ -1436,13 +1583,13 @@ ITEM_DATA: list[
         "image_path": "assets/images/items/painting_c.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_c",
+        "tile_id_str": "tile.painting_c"
     },
     {
         "id": 47,
         "id_str": "item.copper_axe",
         "name": "Copper Axe",
-        "tags": ["AXE", "TOOL", "WEAPON"],
+        "tags": [ItemTag.AXE, ItemTag.TOOL, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_3506.png",
         "tier": 0,
         "max_stack": 1,
@@ -1453,18 +1600,18 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "axe_power": 55.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
     {
         "id": 48,
         "id_str": "item.iron_shortsword",
         "name": "Iron Shortsword",
-        "tags": ["SHORTSWORD", "WEAPON"],
+        "tags": [ItemTag.SHORTSWORD, ItemTag.WEAPON],
         "image_path": "assets/images/items/Item_6.png",
         "tier": 0,
         "max_stack": 1,
@@ -1475,11 +1622,11 @@ ITEM_DATA: list[
         "knockback": 5.5,
         "crit_chance": 0.04,
         "world_override_image_path": "",
-        "prefixes": ["COMMON", "SHORTSWORD", "UNIVERSAL"],
+        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.SHORTSWORD, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8,
+        "hold_offset": 0.8
     },
 ]
 
@@ -1556,7 +1703,7 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             },
         ],
-        "coin_spawn_range": (75, 150),
+        "coin_spawn_range": (75, 150)
     },
     {
         "id": 2,
@@ -1605,7 +1752,7 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             },
         ],
-        "coin_spawn_range": (750, 2000),
+        "coin_spawn_range": (750, 2000)
     },
     {
         "id": 3,
@@ -1622,7 +1769,7 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             }
         ],
-        "coin_spawn_range": (5000, 15000),
+        "coin_spawn_range": (5000, 15000)
     },
 ]
 
@@ -1642,7 +1789,7 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/tink_1.wav",
             "assets/sounds/tink_2.wav",
         ],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 2,
@@ -1652,13 +1799,13 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/dig_1.wav",
             "assets/sounds/dig_2.wav",
         ],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 3,
         "id_str": "sound.jump",
         "variation_paths": ["assets/sounds/jump.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 4,
@@ -1668,67 +1815,67 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/player_hit_1.wav",
             "assets/sounds/player_hit_2.wav",
         ],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 5,
         "id_str": "sound.grass",
         "variation_paths": ["assets/sounds/grass.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 6,
         "id_str": "sound.player_death",
         "variation_paths": ["assets/sounds/player_killed.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 7,
         "id_str": "sound.mirror",
         "variation_paths": ["assets/sounds/mirror.wav"],
-        "volume": 0.1,
+        "volume": 0.1
     },
     {
         "id": 8,
         "id_str": "sound.slime_hurt",
         "variation_paths": ["assets/sounds/npc_hit_0.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 9,
         "id_str": "sound.slime_death",
         "variation_paths": ["assets/sounds/npc_killed_0.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 10,
         "id_str": "sound.swing",
         "variation_paths": ["assets/sounds/swing.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 11,
         "id_str": "sound.bow",
         "variation_paths": ["assets/sounds/bow.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 12,
         "id_str": "sound.gun_shot",
         "variation_paths": ["assets/sounds/gun_shot.wav"],
-        "volume": 0.2,
+        "volume": 0.2
     },
     {
         "id": 13,
         "id_str": "sound.bullet_hit",
         "variation_paths": ["assets/sounds/bullet_hit.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 14,
         "id_str": "sound.grab",
         "variation_paths": ["assets/sounds/grab.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 15,
@@ -1738,49 +1885,49 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/run_1.wav",
             "assets/sounds/run_2.wav",
         ],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 16,
         "id_str": "sound.coins",
         "variation_paths": ["assets/sounds/coins.wav"],
-        "volume": 0.3,
+        "volume": 0.3
     },
     {
         "id": 17,
         "id_str": "sound.menu_open",
         "variation_paths": ["assets/sounds/menu_open.wav"],
-        "volume": 0.3,
+        "volume": 0.3
     },
     {
         "id": 18,
         "id_str": "sound.menu_close",
         "variation_paths": ["assets/sounds/menu_close.wav"],
-        "volume": 0.3,
+        "volume": 0.3
     },
     {
         "id": 19,
         "id_str": "sound.menu_select",
         "variation_paths": ["assets/sounds/menu_select.wav"],
-        "volume": 0.3,
+        "volume": 0.3
     },
     {
         "id": 20,
         "id_str": "sound.chat",
         "variation_paths": ["assets/sounds/chat.wav"],
-        "volume": 0.3,
+        "volume": 0.3
     },
     {
         "id": 21,
         "id_str": "sound.door_opened",
         "variation_paths": ["assets/sounds/door_opened.wav"],
-        "volume": 1,
+        "volume": 1
     },
     {
         "id": 22,
         "id_str": "sound.door_closed",
         "variation_paths": ["assets/sounds/door_closed.wav"],
-        "volume": 1,
+        "volume": 1
     },
 ]
 
@@ -1809,7 +1956,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone]----",
-        ],
+        ]
     },
     {
         "id": 2,
@@ -1824,7 +1971,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[3:wall.wood][3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "-[0:tile.none;3:wall.wood][3:wall.wood]-[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone]-[3:wall.stone][0:tile.stone][3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 3,
@@ -1839,7 +1986,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 4,
@@ -1856,7 +2003,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 5,
@@ -1873,7 +2020,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]",
             "----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 6,
@@ -1895,7 +2042,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
-        ],
+        ]
     },
     {
         "id": 7,
@@ -1917,7 +2064,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 8,
@@ -1941,7 +2088,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 9,
@@ -1965,7 +2112,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
-        ],
+        ]
     },
     {
         "id": 10,
@@ -1992,7 +2139,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ],
+        ]
     },
     {
         "id": 11,
@@ -2019,7 +2166,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
-        ],
+        ]
     },
     {
         "id": 12,
@@ -2034,7 +2181,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][0:tile.none][3:wall.wood]--",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none]-[0:tile.none;3:wall.wood]-[0:tile.none;3:wall.wood]-",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone][0:tile.stone;3:wall.stone]-[3:wall.stone]-",
-        ],
+        ]
     },
     {
         "id": 13,
@@ -2049,7 +2196,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[1:-2,0][1:-2,-1][1:-2,-2][1:-2,-3][1:-2,-4;4:tree_trunk,Down]",
             "[1:-3,0][1:-3,-1][1:-3,-2][1:-3,-3][1:-3,-4]",
             "[1:-4,0][1:-4,-1][1:-4,-2][1:-4,-3][1:-4,-4]",
-        ],
+        ]
     },
     {
         "id": 14,
@@ -2058,7 +2205,7 @@ STRUCTURE_DATA: list[StructureData] = [
         "width": 1,
         "height": 2,
         "spawn_weight": 100,
-        "tile_data": ["[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"],
+        "tile_data": ["[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"]
     },
     {
         "id": 15,
@@ -2073,7 +2220,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
-        ],
+        ]
     },
     {
         "id": 16,
@@ -2088,7 +2235,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "-[0:tile.leaves]-",
             "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]",
-        ],
+        ]
     },
     {
         "id": 17,
@@ -2101,7 +2248,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.trunk]",
             "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_root,Down]",
             "-[0:tile.trunk]",
-        ],
+        ]
     },
     {
         "id": 18,
@@ -2117,7 +2264,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.trunk]--",
             "-[0:tile.trunk]-[0:tile.trunk]-",
             "---[0:tile.trunk][0:tile.trunk]",
-        ],
+        ]
     },
     {
         "id": 19,
@@ -2133,7 +2280,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.trunk][0:tile.trunk]--",
             "--[0:tile.trunk]-[0:tile.trunk]-",
             "-[0:tile.trunk]-[0:tile.trunk]--",
-        ],
+        ]
     },
     {
         "id": 20,
@@ -2150,7 +2297,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.trunk][0:tile.trunk][0:tile.trunk][1:-1,0][1:-1,-1][0:tile.trunk]--",
             "[0:tile.trunk]-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]-[0:tile.trunk]-",
             "---[0:tile.trunk]--[0:tile.trunk]-[0:tile.trunk]",
-        ],
+        ]
     },
     {
         "id": 21,
@@ -2180,7 +2327,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none]--",
-        ],
+        ]
     },
     {
         "id": 22,
@@ -2210,7 +2357,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ],
+        ]
     },
     {
         "id": 23,
@@ -2234,7 +2381,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]---------",
-        ],
+        ]
     },
     {
         "id": 24,
@@ -2260,7 +2407,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]--",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]--",
-        ],
+        ]
     },
     {
         "id": 25,
@@ -2287,7 +2434,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ],
+        ]
     },
     {
         "id": 26,
@@ -2310,7 +2457,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ],
+        ]
     },
     {
         "id": 27,
@@ -2333,11 +2480,11 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ],
+        ]
     },
 ]
 
-TILE_DATA: list[TileData] = [
+TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = [
     {
         "id": 0,
         "id_str": "tile.UNNAMED",
@@ -2372,7 +2519,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "place_sound": "",
-        "hit_sound": "",
+        "hit_sound": ""
     },
     {
         "id": 2,
@@ -2398,7 +2545,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.dirt_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 3,
@@ -2416,7 +2563,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.stone_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 4,
@@ -2434,7 +2581,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.dirt_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
-        "hit_sound": "sound.grass",
+        "hit_sound": "sound.grass"
     },
     {
         "id": 5,
@@ -2452,7 +2599,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.sand",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 6,
@@ -2470,7 +2617,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.sandstone",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 7,
@@ -2488,7 +2635,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.snow",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 8,
@@ -2506,7 +2653,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.ice",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 9,
@@ -2524,7 +2671,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.wood",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 10,
@@ -2548,7 +2695,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.wood",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 11,
@@ -2566,7 +2713,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.INVALID",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
-        "hit_sound": "sound.grass",
+        "hit_sound": "sound.grass"
     },
     {
         "id": 12,
@@ -2584,7 +2731,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.INVALID",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
-        "hit_sound": "sound.grass",
+        "hit_sound": "sound.grass"
     },
     {
         "id": 13,
@@ -2602,7 +2749,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.copper",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 14,
@@ -2620,7 +2767,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.silver",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 15,
@@ -2640,7 +2787,7 @@ TILE_DATA: list[TileData] = [
         "tile_damage": 50,
         "tile_damage_name": "spike",
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink",
+        "hit_sound": "sound.tink"
     },
     {
         "id": 16,
@@ -2658,7 +2805,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.torch",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 17,
@@ -2676,7 +2823,7 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.wood_platform",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 18,
@@ -2694,10 +2841,10 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.wood_chest",
         "item_count_range": (1, 1),
         "multitile_image_path": "assets/images/tiles/multitiles/chest_wood.png",
-        "multitile_dimensions": [2, 2],
-        "multitile_required_solids": [[0, 2], [1, 2]],
+        "multitile_dimensions": (2, 2),
+        "multitile_required_solids": [(0, 2), (1, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 19,
@@ -2715,10 +2862,10 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.workbench",
         "item_count_range": (1, 1),
         "multitile_image_path": "assets/images/tiles/multitiles/crafting_table.png",
-        "multitile_dimensions": [2, 1],
-        "multitile_required_solids": [[0, 1], [1, 1]],
+        "multitile_dimensions": (2, 1),
+        "multitile_required_solids": [(0, 1), (1, 1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 20,
@@ -2742,10 +2889,10 @@ TILE_DATA: list[TileData] = [
         "cycle_facing_right_tile_offset": [1, 0],
         "cycle_facing_right_sound": "sound.door_closed",
         "multitile_image_path": "assets/images/tiles/multitiles/door_wood_open_left.png",
-        "multitile_dimensions": [2, 3],
-        "multitile_required_solids": [[1, 3], [1, -1]],
+        "multitile_dimensions": (2, 3),
+        "multitile_required_solids": [(1, 3), (1, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 21,
@@ -2769,10 +2916,10 @@ TILE_DATA: list[TileData] = [
         "cycle_facing_right_tile_offset": [0, 0],
         "cycle_facing_right_sound": "sound.door_opened",
         "multitile_image_path": "assets/images/tiles/multitiles/door_wood_closed.png",
-        "multitile_dimensions": [1, 3],
-        "multitile_required_solids": [[0, 3], [0, -1]],
+        "multitile_dimensions": (1, 3),
+        "multitile_required_solids": [(0, 3), (0, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 22,
@@ -2796,10 +2943,10 @@ TILE_DATA: list[TileData] = [
         "cycle_facing_right_tile_offset": [0, 0],
         "cycle_facing_right_sound": "sound.door_closed",
         "multitile_image_path": "assets/images/tiles/multitiles/door_wood_open_right.png",
-        "multitile_dimensions": [2, 3],
-        "multitile_required_solids": [[0, 3], [0, -1]],
+        "multitile_dimensions": (2, 3),
+        "multitile_required_solids": [(0, 3), (0, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 23,
@@ -2818,10 +2965,10 @@ TILE_DATA: list[TileData] = [
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "multitile_image_path": "assets/images/tiles/multitiles/pot_tall_gray.png",
-        "multitile_dimensions": [1, 2],
-        "multitile_required_solids": [[0, 2]],
+        "multitile_dimensions": (1, 2),
+        "multitile_required_solids": [(0, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 24,
@@ -2840,10 +2987,10 @@ TILE_DATA: list[TileData] = [
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "multitile_image_path": "assets/images/tiles/multitiles/pot_tall_brown.png",
-        "multitile_dimensions": [1, 2],
-        "multitile_required_solids": [[0, 2]],
+        "multitile_dimensions": (1, 2),
+        "multitile_required_solids": [(0, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 25,
@@ -2861,11 +3008,11 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "multitile_image_path": "assets/images/tiles/multitiles/pot_thick_brown.png",
-        "multitile_dimensions": [2, 2],
-        "multitile_required_solids": [[0, 2], [1, 2]],
+        "multitile_dimensions": (2, 2),
+        "multitile_required_solids": [(0, 2), (1, 2)],
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 26,
@@ -2883,11 +3030,11 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "multitile_image_path": "assets/images/tiles/multitiles/pot_thick_brown.png",
-        "multitile_dimensions": [2, 2],
-        "multitile_required_solids": [[0, 2], [1, 2]],
+        "multitile_dimensions": (2, 2),
+        "multitile_required_solids": [(0, 2), (1, 2)],
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 27,
@@ -2906,7 +3053,7 @@ TILE_DATA: list[TileData] = [
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 28,
@@ -2925,7 +3072,7 @@ TILE_DATA: list[TileData] = [
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 29,
@@ -2943,10 +3090,10 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.wood",
         "item_count_range": (4, 20),
         "multitile_image_path": "assets/images/tiles/multitiles/tree_canopy_a.png",
-        "multitile_dimensions": [5, 5],
-        "multitile_required_solids": [[2, 5]],
+        "multitile_dimensions": (5, 5),
+        "multitile_required_solids": [(2, 5)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 30,
@@ -2966,8 +3113,8 @@ TILE_DATA: list[TileData] = [
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "multitile_image_path": "assets/images/tiles/multitiles/painting_a.png",
-        "multitile_dimensions": [3, 2],
-        "multitile_required_solids": [],
+        "multitile_dimensions": (3, 2),
+        "multitile_required_solids": []
     },
     {
         "id": 31,
@@ -2987,8 +3134,8 @@ TILE_DATA: list[TileData] = [
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "multitile_image_path": "assets/images/tiles/multitiles/painting_b.png",
-        "multitile_dimensions": [2, 2],
-        "multitile_required_solids": [],
+        "multitile_dimensions": (2, 2),
+        "multitile_required_solids": []
     },
     {
         "id": 32,
@@ -3008,8 +3155,8 @@ TILE_DATA: list[TileData] = [
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "multitile_image_path": "assets/images/tiles/multitiles/painting_c.png",
-        "multitile_dimensions": [3, 2],
-        "multitile_required_solids": [],
+        "multitile_dimensions": (3, 2),
+        "multitile_required_solids": []
     },
     {
         "id": 33,
@@ -3027,8 +3174,8 @@ TILE_DATA: list[TileData] = [
         "item_id_str": "item.mushroom",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
-    },
+        "hit_sound": "sound.dig"
+    }
 ]
 
 WALL_DATA: list[WallData] = [
@@ -3040,6 +3187,7 @@ WALL_DATA: list[WallData] = [
         "mask_merge_ids": [],
         "image_path": "assets/images/walls/",
         "item_id_str": "item.INVALID",
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
     },
@@ -3051,9 +3199,9 @@ WALL_DATA: list[WallData] = [
         "mask_merge_ids": [],
         "image_path": "assets/images/walls/",
         "item_id_str": "item.INVALID",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 2,
@@ -3071,9 +3219,9 @@ WALL_DATA: list[WallData] = [
         ],
         "image_path": "assets/images/walls/dirt.png",
         "item_id_str": "item.dirt_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 3,
@@ -3083,9 +3231,9 @@ WALL_DATA: list[WallData] = [
         "mask_merge_ids": ["wall.dirt", "wall.snow", "wall.wood"],
         "image_path": "assets/images/walls/stone.png",
         "item_id_str": "item.stone_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 4,
@@ -3095,9 +3243,9 @@ WALL_DATA: list[WallData] = [
         "mask_merge_ids": ["wall.snow"],
         "image_path": "assets/images/walls/ice.png",
         "item_id_str": "item.ice_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 5,
@@ -3114,9 +3262,9 @@ WALL_DATA: list[WallData] = [
         ],
         "image_path": "assets/images/walls/snow.png",
         "item_id_str": "item.snow_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 6,
@@ -3126,9 +3274,9 @@ WALL_DATA: list[WallData] = [
         "mask_merge_ids": ["wall.dirt", "wall.hardened_sand", "wall.snow"],
         "image_path": "assets/images/walls/sandstone.png",
         "item_id_str": "item.sandstone_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 7,
@@ -3144,9 +3292,9 @@ WALL_DATA: list[WallData] = [
         ],
         "image_path": "assets/images/walls/hardened_sand.png",
         "item_id_str": "item.hardened_sand_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
+        "hit_sound": "sound.dig"
     },
     {
         "id": 8,
@@ -3161,13 +3309,13 @@ WALL_DATA: list[WallData] = [
         ],
         "image_path": "assets/images/walls/wood.png",
         "item_id_str": "item.wood_wall",
-        "average_color": [255, 0, 255],
+        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig",
-    },
+        "hit_sound": "sound.dig"
+    }
 ]
 
 WORLD_GEN_DATA: list[WorldGenData] = [
     {"id": 0, "id_str": "world_gen.INVALID"},
-    {"id": 1, "id_str": "world_gen.default"},
+    {"id": 1, "id_str": "world_gen.default"}
 ]

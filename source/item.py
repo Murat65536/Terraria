@@ -4,7 +4,7 @@ import random
 import pygame
 
 import game_data
-from game_data import ItemPrefixGroup, ItemTag
+from commons import ItemPrefixGroup, ItemTag
 
 from enum import Enum
 
@@ -51,6 +51,8 @@ class Item:
 		# Auto assign prefix
 		if prefix_name is None or prefix_name == "":
 			if (self.json_item != None):
+				print(self.json_item["tags"])
+				print(ItemTag.WEAPON)
 				if auto_assign_prefix and ItemTag.WEAPON in self.json_item["tags"]:
 					# 15% chance to be given a prefix if it has a prefix category
 					if len(self.json_item["prefixes"]) > 0 and random.random() < 0.85:
