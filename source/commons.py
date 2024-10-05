@@ -813,7 +813,7 @@ ITEM_DATA: list[
         "id": 2,
         "id_str": "item.dirt_block",
         "name": "Dirt",
-        "tags": ["TILE", "MATERIAL"],
+        "tags": [ItemTag.TILE, ItemTag.MATERIAL],
         "image_path": "assets/images/items/Item_2.png",
         "tier": 0,
         "max_stack": 999,
