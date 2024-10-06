@@ -389,7 +389,6 @@ def load_menu_player_data():
 		player_data_surf.blit(sprites[0][0], (270, 0))
 		player_data_surf.blit(sprites[1][0], (270, 0))
 		commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
-		print(commons.PLAYER_SAVE_OPTIONS)
 
 
 """================================================================================================================= 

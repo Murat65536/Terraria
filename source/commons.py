@@ -627,12 +627,12 @@ WORLD_SAVE_OPTIONS: list[tuple[str, pygame.Surface]] = []
 AI_DATA: list[AIData] = [
     {"id": 0, "id_str": "loot.INVALID"},
     {"id": 1, "id_str": "loot.slime"},
-    {"id": 2, "id_str": "loot.bunny"},
+    {"id": 2, "id_str": "loot.bunny"}
 ]
 
 CRAFTING_RECIPES: list[CraftingRecipeData] = [
     {"id": 0, "id_str": "crafting_recipe.INVALID"},
-    {"id": 1, "id_str": "crafting_recipe.work_bench"},
+    {"id": 1, "id_str": "crafting_recipe.work_bench"}
 ]
 
 ENTITY_DATA: list[EntityData] = [
@@ -755,7 +755,7 @@ ENTITY_DATA: list[EntityData] = [
             }
         ],
         "coin_drop_range": (45, 130)
-    },
+    }
 ]
 
 ITEM_DATA: list[
@@ -1627,7 +1627,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8
-    },
+    }
 ]
 
 LOOT_DATA: list[LootData] = [
@@ -1770,13 +1770,13 @@ LOOT_DATA: list[LootData] = [
             }
         ],
         "coin_spawn_range": (5000, 15000)
-    },
+    }
 ]
 
 PROJECTILE_DATA: list[ProjectileData] = [
     {"id": 0, "id_str": "projectile.INVALID"},
     {"id": 1, "id_str": "projectile.arrow"},
-    {"id": 2, "id_str": "projectile.bullet"},
+    {"id": 2, "id_str": "projectile.bullet"}
 ]
 
 SOUND_DATA: list[SoundData] = [
@@ -1928,7 +1928,7 @@ SOUND_DATA: list[SoundData] = [
         "id_str": "sound.door_closed",
         "variation_paths": ["assets/sounds/door_closed.wav"],
         "volume": 1
-    },
+    }
 ]
 
 STRUCTURE_DATA: list[StructureData] = [
@@ -2481,7 +2481,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
         ]
-    },
+    }
 ]
 
 TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = [

@@ -26,13 +26,12 @@ def make_item_tag_list(item_tags_str: list[str]):
 				break
 	return enum_list
 
-def make_item_prefix_list(item_prefixes_str: list[str]):
+def make_item_prefix_list(item_prefixes: list[commons.ItemPrefixGroup]):
 	enum_list: list[commons.ItemPrefixGroup] = []
-	for string in item_prefixes_str:
-		for prefix in commons.ItemPrefixGroup:
-			if prefix.name == string:
-				enum_list.append(prefix)
-				break
+	for prefix in item_prefixes:
+		if prefix in commons.ItemPrefixGroup:
+			enum_list.append(prefix)
+			break
 	return enum_list
 
 

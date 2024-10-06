@@ -4,6 +4,7 @@ import pygame
 import math
 import random
 from pygame.locals import Rect
+from typing import TypedDict
 
 import commons
 import game_data
@@ -19,12 +20,15 @@ from physics_item import PhysicsItem
 from color_picker import ColorPicker
 from item import Item
 
+class Messages(TypedDict):
+	text: pygame.Surface
+	lifespan: float
 
 enemies: list[Enemy] = []
 particles: list[Particle] = []
 projectiles: list[Projectile] = []
 physics_items: list[PhysicsItem] = []
-messages: list[tuple[pygame.Surface, float]] = []
+messages: list[Messages] = []
 damage_numbers = []
 recent_pickups = []
 
@@ -165,7 +169,8 @@ def update_projectiles():
 def update_messages():
 	global messages
 	for message in messages:
-		if message[1] - commons.DELTA_TIME <= 0:
+		message["lifespan"] -= commons.DELTA_TIME
+		if message["lifespan"] <= 0:
 			messages.remove(message)
 
 
@@ -229,9 +234,9 @@ def draw_projectiles():
 
 def draw_messages():
 	for i in range(len(messages)):
-		if messages[i][1] < 1.0:
-			messages[i][0].set_alpha(int(messages[i][1] * 255))
-		commons.screen.blit(messages[i][0], (10, commons.WINDOW_HEIGHT - 25 - i * 20))
+		if messages[i]["lifespan"] < 1.0:
+			messages[i]["text"].set_alpha(int(messages[i]["lifespan"] * 255))
+		commons.screen.blit(messages[i]["text"], (10, commons.WINDOW_HEIGHT - 25 - i * 20))
 
 
 def draw_damage_numbers():
@@ -336,7 +341,7 @@ def add_message(text: str, color: tuple[int, int, int], life: float=5.0, outline
 		surf.blit(text2, (1, 3))
 
 	surf.blit(text1, (1, 1))
-	messages.insert(0, (surf, life))
+	messages.insert(0, {"text": surf, "lifespan": life})
 
 
 def add_damage_number(pos: tuple[float, float], val: float, crit: bool=False, color: tuple[int, int, int]=(0, 0, 0)):

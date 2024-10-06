@@ -463,7 +463,6 @@ def draw_inventory_hover_text() -> None:
 			if pygame.mouse.get_pressed()[0]:  
 				if not commons.is_holding_item:
 					commons.item_holding = item.Item(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0], amount=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1], auto_assign_prefix=True)
-					print(commons.item_holding)
 					commons.is_holding_item = True
 					can_pickup_item = False
 					can_drop_holding = False
@@ -839,7 +838,7 @@ while True:
 			if fade_back:
 				if fade_float < 1.0:
 					fade_surf = surface_manager.large_backgrounds[fade_background_id].copy()
-					fade_surf.set_alpha(fade_float * 255)
+					fade_surf.set_alpha(int(fade_float * 255))
 					fade_float += commons.DELTA_TIME
 				else:
 					fade_back = False
