@@ -51,21 +51,19 @@ def create_player():
 
 	# Load hotbar
 	hotbar: list[Item | None] = [None for _ in range(10)]
-	if commons.PLAYER_DATA["hotbar"] == []:
-		for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
-			loaded_item_data = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
-			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
-			item.assign_prefix(loaded_item_data[3])
-			hotbar[loaded_item_data[0]] = item
+	for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
+		loaded_item_data = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
+		item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
+		item.assign_prefix(loaded_item_data[3])
+		hotbar[loaded_item_data[0]] = item
 
 	# Load inventory
 	inventory: list[Item | None] = [None for _ in range(40)]
-	if commons.PLAYER_DATA["inventory"] == []:
-		for loaded_inventory_index in range(len(commons.PLAYER_DATA["inventory"])):
-			loaded_item_data = commons.PLAYER_DATA["inventory"][loaded_inventory_index]
-			item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
-			item.assign_prefix(loaded_item_data[3])
-			inventory[loaded_item_data[0]] = item
+	for loaded_inventory_index in range(len(commons.PLAYER_DATA["inventory"])):
+		loaded_item_data = commons.PLAYER_DATA["inventory"][loaded_inventory_index]
+		item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
+		item.assign_prefix(loaded_item_data[3])
+		inventory[loaded_item_data[0]] = item
 
 	hp = commons.PLAYER_DATA["hp"]
 	max_hp = commons.PLAYER_DATA["max_hp"]

@@ -141,13 +141,17 @@ class World:
 
 	def load(self, world_name, load_all=True):
 		save_map = pickle.load(open(f"assets/worlds/{world_name}.dat", "rb"))  # open selected save dat file
-
 		self.name = save_map["name"]
 		self.creation_date = save_map["creation_date"]
+		self.last_played_date = save_map["last_played_date"]
 		self.size = save_map["size"]
+		self.type = save_map["type"]
 		self.gen_type = save_map["gen_type"]
+		self.state_flags = save_map["state_flags"]
 		self.playtime = save_map["playtime"]
-		self.spawn_position = (save_map["spawn_position"][0], save_map["spawn_position"][1])
+		self.spawn_position = save_map["spawn_position"]
+		self.chest_data = save_map["chest_data"]
+		self.tile_id_str_lookup = save_map["tile_id_str_lookup"]
 		formatted_chest_data = save_map["chest_data"]
 
 		if load_all:
@@ -727,6 +731,7 @@ def use_special_tile(i, j):
 	tile_data = game_data.get_tile_by_id(tile_id)
 
 	if TileTag.CHEST in tile_data["tags"]:
+		print("test")
 		for chest_data_index in range(len(world.chest_data)):
 			if world.chest_data[chest_data_index][0] == (i, j):
 				entity_manager.client_player.open_chest(world.chest_data[chest_data_index][1])

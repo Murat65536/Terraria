@@ -591,8 +591,8 @@ MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 PLAYER_DATA: PlayerData = {
     "name": "",
     "model": None,
-    "hotbar": [(0, "", 0, "")],
-    "inventory": [(0, "", 0, "")],
+    "hotbar": [],
+    "inventory": [],
     "hp": 0,
     "max_hp": 0,
     "playtime": 0,

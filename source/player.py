@@ -1453,7 +1453,6 @@ class Player:
 		commons.PLAYER_DATA["playtime"] = self.playtime
 		commons.PLAYER_DATA["creation_date"] = self.creation_date
 		commons.PLAYER_DATA["last_played_date"] = self.last_played_date
-		print(commons.PLAYER_DATA["hotbar"])
 		pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player array
 		entity_manager.add_message("Saved Player: "	+ self.name	+ "!", (255, 255, 255))
 
@@ -1468,7 +1467,7 @@ class Player:
 			if commons.PARTICLES:
 				color = shared_methods.get_block_average_color(self.last_block_on)
 				for	i in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
-					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE *	1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
+					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE * 1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
 			self.velocity =	(self.velocity[0], -50)
 			self.grounded =	False
 
