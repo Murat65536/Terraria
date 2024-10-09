@@ -310,9 +310,10 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 	ammo_item_data = game_data.get_item_by_id(ammo_item_id)
 
 	total_damage = weapon_item.get_attack_damage() + ammo_item_data["ammo_damage"]
-	knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_mod"]
-	ammo_gravity_mod = ammo_item_data["ammo_gravity_mod"]
+	knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_modifier"]
+	ammo_gravity_modifier = ammo_item_data["ammo_gravity_modifier"]
 	ammo_drag = ammo_item_data["ammo_drag"]
+	ricochet_amount = ammo_item_data["ricochet_amount"]
 	
 	speed = weapon_item.get_ranged_projectile_speed()
 
@@ -326,7 +327,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 			is_crit = True
 
 		# Hack until we have projectile data loaded from the tool
-		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, 1, "arrow", gravity=ammo_gravity_mod, drag=ammo_drag))
+		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, ricochet_amount, "arrow", gravity=ammo_gravity_modifier, drag=ammo_drag))
 
 
 def add_message(text: str, color: tuple[int, int, int], life: float=5.0, outline_color: tuple[int, int, int]=(0, 0, 0)):

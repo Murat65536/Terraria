@@ -111,10 +111,15 @@ def outline_text(string, color, font, outline_color=(0, 0, 0)):
 		surf = pygame.Surface((text2.get_width() + 2, text2.get_height() + 2))
 		surf.fill((255, 0, 255))
 		surf.set_colorkey((255, 0, 255))
-		surf.blit(text2, (-2, 0))
-		surf.blit(text2, (2, 0))
-		surf.blit(text2, (0, -2))
-		surf.blit(text2, (0, 2))
+		surf.blit(text2, (-1, -1))
+		surf.blit(text2, (0, -1))
+		surf.blit(text2, (1, -1))
+		surf.blit(text2, (-1, 0))
+		surf.blit(text2, (1, 0))
+		surf.blit(text2, (-1, 1))
+		surf.blit(text2, (0, 1))
+		surf.blit(text2, (1, 1))
+
 		surf.blit(text1, (0, 0))
 		return surf
 	else:

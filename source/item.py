@@ -161,11 +161,11 @@ class Item:
 	def get_ammo_drag(self):
 		return self.json_item["ammo_drag"]
 
-	def get_ammo_gravity_mod(self):
-		return self.json_item["ammo_gravity_mod"]
+	def get_ammo_gravity_modifier(self):
+		return self.json_item["ammo_gravity_modifier"]
 
-	def get_ammo_knockback_mod(self):
-		return self.json_item["ammo_knockback_mod"]
+	def get_ammo_knockback_modifier(self):
+		return self.json_item["ammo_knockback_modifier"]
 
 	def assign_prefix(self, prefix_name):
 		self.prefix_data = game_data.find_prefix_data_by_name(prefix_name)

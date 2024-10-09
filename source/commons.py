@@ -291,11 +291,12 @@ class AmmunitionItemData(TypedDict):
     ammo_type: str
     ammo_damage: float
     ammo_drag: float
-    ammo_gravity_mod: float
-    ammo_knockback_mod: float
+    ammo_gravity_modifier: float
+    ammo_knockback_modifier: float
     pickup_sound: str
     drop_sound: str
     hold_offset: float
+    ricochet_amount: int
 
 
 class GrapplingHookItemData(TypedDict):
@@ -1217,11 +1218,12 @@ ITEM_DATA: list[
         "ammo_type": "arrow",
         "ammo_damage": 4.0,
         "ammo_drag": 0.05,
-        "ammo_gravity_mod": 1.2,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 1.2,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 27,
@@ -1262,11 +1264,12 @@ ITEM_DATA: list[
         "ammo_type": "bullet",
         "ammo_damage": 7.0,
         "ammo_drag": 0.05,
-        "ammo_gravity_mod": 0.5,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 0.5,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 29,
@@ -1281,11 +1284,12 @@ ITEM_DATA: list[
         "ammo_type": "bullet",
         "ammo_damage": 2.0,
         "ammo_drag": 5.0,
-        "ammo_gravity_mod": 1.0,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 1.0,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 30,
@@ -1300,11 +1304,12 @@ ITEM_DATA: list[
         "ammo_type": "bullet",
         "ammo_damage": 5.0,
         "ammo_drag": 2.5,
-        "ammo_gravity_mod": 0.75,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 0.75,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 31,
@@ -1319,11 +1324,12 @@ ITEM_DATA: list[
         "ammo_type": "bullet",
         "ammo_damage": 50.0,
         "ammo_drag": 1.25,
-        "ammo_gravity_mod": 0.5,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 0.5,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 32,
@@ -1338,11 +1344,12 @@ ITEM_DATA: list[
         "ammo_type": "bullet",
         "ammo_damage": 100.0,
         "ammo_drag": 0.625,
-        "ammo_gravity_mod": 0.25,
-        "ammo_knockback_mod": 0,
+        "ammo_gravity_modifier": 0.25,
+        "ammo_knockback_modifier": 0,
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "ricochet_amount": 1
     },
     {
         "id": 33,

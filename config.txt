@@ -1,4 +1,4 @@
-(pixels/tuple/int)(800,600/960,720/1280,720)RESOLUTION = 1280,600
+(pixels/tuple/int)(800,600/960,720/1280,720)RESOLUTION = 1280,720
 (float)GRAVITY = 1
 (bool)FULLSCREEN = 0
 (bool)PARTICLES = 1

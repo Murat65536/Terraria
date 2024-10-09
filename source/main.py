@@ -5,8 +5,7 @@ import random
 import _thread
 import datetime
 import pygame.locals
-import os
-from typing import List, Any, Tuple
+from typing import List, Any, TypedDict
 import commons
 import shared_methods
 import surface_manager
@@ -30,7 +29,7 @@ pygame.mixer.init()
 
 	Moves the background by a set amount, looping back when necessary
 -----------------------------------------------------------------------------------------------------------------"""
-def move_parallax(val: Tuple[float, float]) -> None:
+def move_parallax(val: tuple[float, float]) -> None:
 	global parallax_pos
 	parallax_pos = (parallax_pos[0] + val[0], parallax_pos[1] + val[1])
 	if parallax_pos[0] > 0:
@@ -89,11 +88,11 @@ def run_splash_screen() -> None:
 	commons.OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
 	
 	splash_screen_running = True
-	splash_screen_num = str(random.randint(1, 9))
+	splash_screen_num = random.randint(1, 9)
 	while splash_screen_running:
 		commons.DELTA_TIME = (pygame.time.get_ticks() - commons.OLD_TIME_MILLISECONDS) * 0.001
 		commons.OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
-		splashscreen = pygame.image.load(f"assets/images/backgrounds/SplashScreens/Splash_{splash_screen_num}.png")
+		splashscreen = pygame.image.load(f"assets/images/backgrounds/splash_screens/Splash_{splash_screen_num}.png")
 		splashscreen = pygame.transform.scale(splashscreen, (commons.WINDOW_WIDTH, commons.WINDOW_HEIGHT))
 		commons.screen.blit(splashscreen, (0, 0))
 		entity_manager.draw_particles()
@@ -156,8 +155,8 @@ def render_stats_text(pos: List[Any]) -> bool:
 			if equipped.has_tag(item.ItemTag.AMMO):
 				stats.append(shared_methods.outline_text("Ammunition", (255, 255, 255), commons.DEFAULT_FONT))
 				stats.append(shared_methods.outline_text(f"{str(equipped.get_ammo_damage())} damage", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_knockback_mod() * 100, 1))} % knockback", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_gravity_mod() * 100, 1))} % gravity", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_knockback_modifier() * 100, 1))} % knockback", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_gravity_modifier() * 100, 1))} % gravity", (255, 255, 255), commons.DEFAULT_FONT))
 				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_drag() * 100, 1))} % drag", (255, 255, 255), commons.DEFAULT_FONT))
 			
 			if equipped.has_tag(item.ItemTag.TILE):
@@ -615,18 +614,6 @@ def draw_interactive_block_hover() -> None:
 
 
 """================================================================================================================= 
-	draw_menu_background_sky -> void
-
-	Draws the menu background
------------------------------------------------------------------------------------------------------------------"""
-
-
-def draw_menu_background_sky() -> None:
-	for x in range(math.ceil(commons.WINDOW_WIDTH / menu_background_sky_width)):
-		commons.screen.blit(menu_background_sky, (x * menu_background_sky_width, 0))
-
-
-"""================================================================================================================= 
 	draw_menu_background -> void
 
 	Draws the menu background
@@ -635,34 +622,39 @@ def draw_menu_background_sky() -> None:
 
 def draw_menu_background() -> None:
 	menu_background_speed = 0
-	for i in range(len(menu_background_images)):
-		menu_background_width = menu_background_images[i].get_width()
-		menu_background_height = menu_background_images[i].get_height()
-		menu_background_speed += 3
-		if menu_background_width - menu_background_scroll[i] * menu_background_speed < 0:
-			menu_background_scroll[i] = 0
+	for background in menu_backgrounds[menu_background_number]:
+		image_number: int = round(background["frame"] / background["delay"])
+		menu_background_width = background["image"][image_number]["surface"].get_width()
+		menu_background_height = background["image"][image_number]["surface"].get_height()
+		menu_background_speed += 8 / len(menu_backgrounds[menu_background_number])
+		if menu_background_width - background["position"] * menu_background_speed < 0:
+			background["position"] = 0
 		for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
-			commons.screen.blit(menu_background_images[i], (x * menu_background_width - menu_background_scroll[i] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height))
+			commons.screen.blit(background["image"][image_number]["surface"], (x * menu_background_width - background["position"] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height + background["offset"]))
+		if (len(background["image"]) - 1) * background["delay"] <= background["frame"]:
+			background["frame"] = 0
+		else:
+			background["frame"] += 1
 
 
-good_color: Tuple[int, int, int] = (10, 230, 10)
-bad_color = (230, 10, 10)
+good_color: tuple[int, int, int] = (10, 230, 10)
+bad_color: tuple[int, int, int] = (230, 10, 10)
 
 # MAX SURF WIDTH IS 16383
 
-pygame.display.set_caption(r"Terraria")
+pygame.display.set_caption("Terraria")
 
 song_end_event = pygame.USEREVENT + 1
 pygame.mixer.music.set_endevent(song_end_event)
 
-ICON = pygame.image.load(r"assets/images/favicon/favicon.png")
+ICON = pygame.image.load("assets/images/favicon/favicon.png")
 pygame.display.set_icon(ICON)
 
 clock = pygame.time.Clock()
 
 if commons.SPLASHSCREEN:
 	run_splash_screen()
-	
+
 fps_text = shared_methods.outline_text(str(0), (255, 255, 255), commons.DEFAULT_FONT)
 hand_text = pygame.Surface((0, 0))
 stats_text = pygame.Surface((0, 0))
@@ -695,17 +687,70 @@ light_min_y = 0
 light_max_y = 0
 global_lighting = 255
 
-menu_background_images = []
-menu_background_scroll = {}
-menu_background_num = random.randint(0, len(next(os.walk("assets/images/backgrounds/MenuBackgrounds/"))[1]) - 1)
-menu_background_sky = pygame.image.load(f"assets/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_0.png").convert_alpha()
-menu_background_sky_width = menu_background_sky.get_width()
-menu_background_sky_height = menu_background_sky.get_height()
+class MenuImage(TypedDict):
+	path: str
+	surface: pygame.Surface
 
-for i in range(3):
-	menu_background_image = pygame.image.load(f"assets/images/backgrounds/MenuBackgrounds/Background_{menu_background_num}/Background_{i+1}.png").convert_alpha()
-	menu_background_images.append(menu_background_image)
-	menu_background_scroll.update({i:random.randint(0, menu_background_image.get_width())})
+class MenuImages(TypedDict):
+	image: list[MenuImage]
+	offset: int
+	frame: int
+	delay: int
+	position: float
+
+menu_backgrounds: list[list[MenuImages]] = [
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": -100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+	],
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+	],
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+	],
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 75, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 350, "frame": 0, "delay": 1, "position" : 0}
+	],
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}, {"path": "background_3.png", "surface": pygame.Surface((0, 0))}, {"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 225, "frame": 0, "delay": 20, "position" : 0}
+	],
+	[
+		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}, {"path": "background_3.png", "surface": pygame.Surface((0, 0))}, {"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 225, "frame": 0, "delay": 20, "position" : 0},
+		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 200, "frame": 0, "delay": 1, "position" : 0}
+	]
+]
+
+menu_background_number = random.randint(0, len(menu_backgrounds) - 1)
+menu_background_directory = f"assets/images/backgrounds/menu_backgrounds/background_{menu_background_number}"
+
+for background in menu_backgrounds[menu_background_number]:
+	for image in background["image"]:
+		menu_background_image = pygame.image.load(f"{menu_background_directory}/{image["path"]}").convert_alpha()
+		image["surface"] = menu_background_image
+		background["position"] = random.randint(0, menu_background_image.get_width())
 
 
 LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
@@ -913,10 +958,9 @@ while True:
 			auto_save_tick -= commons.DELTA_TIME
 
 	elif commons.game_state == "MAIN_MENU":
-		draw_menu_background_sky()
 		draw_menu_background()
-		for i in range(len(menu_background_scroll)):
-			menu_background_scroll[i] += 10 * commons.DELTA_TIME
+		for background in menu_backgrounds[menu_background_number]:
+			background["position"] += 10 * commons.DELTA_TIME
 		menu_manager.update_menu_buttons()
 		menu_manager.draw_menu_buttons()
 		if commons.game_sub_state == "MAIN":
