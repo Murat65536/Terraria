@@ -672,7 +672,7 @@ class Player:
 
 		else:
 			if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
-				block_position = commons.TILE_POSITION_MOUSE_HOVERING
+				block_position = commons.HOVERED_TILE
 				tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
 				json_tile_data =	game_data.get_tile_by_id(tile_dat[0])
 				if commons.TileTag.CHEST in json_tile_data["tags"] or commons.TileTag.CYCLABLE in json_tile_data["tags"]:
@@ -696,7 +696,7 @@ class Player:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def	place_block(self, screen_position_x, screen_position_y,	block_item,	is_tile):
 		if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
-			block_position = commons.TILE_POSITION_MOUSE_HOVERING
+			block_position = commons.HOVERED_TILE
 			if world.tile_in_map(block_position[0],	block_position[1]):
 
 				block_rect = Rect(commons.BLOCK_SIZE	* block_position[0], commons.BLOCK_SIZE * block_position[1] + 1, commons.BLOCK_SIZE, commons.BLOCK_SIZE)
@@ -803,7 +803,7 @@ class Player:
 			game_data.play_sound("sound.swing")
 
 			if math.sqrt((screen_position_x	- commons.MOUSE_POSITION[0])	** 2 + (screen_position_y -	commons.MOUSE_POSITION[1]) ** 2) < commons.BLOCK_SIZE	* commons.PLAYER_REACH or commons.CREATIVE:
-				block_position = commons.TILE_POSITION_MOUSE_HOVERING
+				block_position = commons.HOVERED_TILE
 				if world.tile_in_map(block_position[0],	block_position[1]):
 					if tool_item.has_tag(ItemTag.PICKAXE):
 						tile_id	= world.world.tile_data[block_position[0]][block_position[1]][0]

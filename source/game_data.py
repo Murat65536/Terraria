@@ -4,16 +4,57 @@ import pygame
 from enum import Enum
 import commons
 import random
-from typing import Any, TypedDict, NotRequired
+from typing import TypedDict
 
-class PrefixData(TypedDict):
+class UniversalPrefixData(TypedDict):
 	name: str
 	damage: float
 	speed: float
 	crit_chance: float
-	size: NotRequired[float]
-	velocity: NotRequired[float]
-	mana_cost: NotRequired[float]
+	knockback: float
+	tier: int
+
+class CommonPrefixData(TypedDict):
+	name: str
+	damage: float
+	speed: float
+	crit_chance: float
+	knockback: float
+	tier: int
+
+class LongswordPrefixData(TypedDict):
+	name: str
+	damage: float
+	speed: float
+	crit_chance: float
+	size: float
+	knockback: float
+	tier: int
+
+class ShortswordPrefixData(TypedDict):
+	name: str
+	damage: float
+	speed: float
+	crit_chance: float
+	size: float
+	knockback: float
+	tier: int
+
+class RangedPrefixData(TypedDict):
+	name: str
+	damage: float
+	speed: float
+	crit_chance: float
+	velocity: float
+	knockback: float
+	tier: int
+
+class MagicalPrefixData(TypedDict):
+	name: str
+	damage: float
+	speed: float
+	crit_chance: float
+	mana_cost: float
 	knockback: float
 	tier: int
 
@@ -104,7 +145,7 @@ music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
 
 
 # Item Prefix Information
-prefix_data: dict[commons.ItemPrefixGroup, list[PrefixData]] = {
+prefix_data: dict[commons.ItemPrefixGroup, list[UniversalPrefixData | CommonPrefixData | LongswordPrefixData | ShortswordPrefixData | RangedPrefixData | MagicalPrefixData]] = {
 	commons.ItemPrefixGroup.UNIVERSAL: [
 			{"name": "Keen", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
 			{"name": "Superior", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "knockback": 0.1, "tier": 2},
@@ -509,7 +550,7 @@ def parse_item_data():
 				item_data["grapple_claw_image"] = None
 
 
-def get_item_by_id(item_id) -> Any:
+def get_item_by_id(item_id):
 	if item_id < len(json_item_data):
 		return json_item_data[item_id]
 	else:
@@ -555,8 +596,6 @@ def parse_tile_data():
 			tile_data["image"] = pygame.image.load(tile_data["image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
 			tile_data["average_color"] = pygame.transform.average_color(tile_data["image"])
 		except FileNotFoundError:
-			tile_data["image"] = None
-		except pygame.error:
 			tile_data["image"] = None
 
 		if commons.TileTag.MULTITILE in tile_data["tags"]:

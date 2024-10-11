@@ -290,24 +290,43 @@ def check_wall_merge(wall_id_1, wall_id_2):
 	Returns the mask type given an array of the surrounding blocks
 -----------------------------------------------------------------------------------------------------------------"""
 def get_mask_type_from_adjacent_blocks(adjacent_blocks):
-	if adjacent_blocks == [0, 0, 0, 0]: return MaskType.SINGLE
-	elif adjacent_blocks == [0, 0, 0, 1]: return MaskType.SINGLE_VERTICAL_BOT
-	elif adjacent_blocks == [0, 0, 1, 0]: return MaskType.SINGLE_HORIZONTAL_RIGHT
-	elif adjacent_blocks == [0, 0, 1, 1]: return MaskType.CORNER_BOT_RIGHT
-	elif adjacent_blocks == [0, 1, 0, 0]: return MaskType.SINGLE_VERTICAL_TOP
-	elif adjacent_blocks == [0, 1, 0, 1]: return MaskType.SINGLE_VERTICAL_MID
-	elif adjacent_blocks == [0, 1, 1, 0]: return MaskType.CORNER_TOP_RIGHT
-	elif adjacent_blocks == [0, 1, 1, 1]: return MaskType.RIGHT_MID
-	elif adjacent_blocks == [1, 0, 0, 0]: return MaskType.SINGLE_HORIZONTAL_LEFT
-	elif adjacent_blocks == [1, 0, 0, 1]: return MaskType.CORNER_BOT_LEFT
-	elif adjacent_blocks == [1, 0, 1, 0]: return MaskType.SINGLE_HORIZONTAL_MID
-	elif adjacent_blocks == [1, 0, 1, 1]: return MaskType.BOT_MID
-	elif adjacent_blocks == [1, 1, 0, 0]: return MaskType.CORNER_TOP_LEFT
-	elif adjacent_blocks == [1, 1, 0, 1]: return MaskType.LEFT_MID
-	elif adjacent_blocks == [1, 0, 1, 0]: return MaskType.SINGLE_HORIZONTAL_MID
-	elif adjacent_blocks == [0, 1, 1, 1]: return MaskType.LEFT_MID
-	elif adjacent_blocks == [1, 1, 1, 1]: return MaskType.MIDDLE
-	elif adjacent_blocks == [1, 1, 1, 0]: return MaskType.TOP_MID
+	match adjacent_blocks:
+		case [0, 0, 0, 0]:
+			return MaskType.SINGLE
+		case [0, 0, 0, 1]:
+			return MaskType.SINGLE_VERTICAL_BOT
+		case [0, 0, 1, 0]:
+			return MaskType.SINGLE_HORIZONTAL_RIGHT
+		case [0, 0, 1, 1]:
+			return MaskType.CORNER_BOT_RIGHT
+		case [0, 1, 0, 0]:
+			return MaskType.SINGLE_VERTICAL_TOP
+		case [0, 1, 0, 1]:
+			return MaskType.SINGLE_VERTICAL_MID
+		case [0, 1, 1, 0]:
+			return MaskType.CORNER_TOP_RIGHT
+		case [0, 1, 1, 1]:
+			return MaskType.RIGHT_MID
+		case [1, 0, 0, 0]:
+			return MaskType.SINGLE_HORIZONTAL_LEFT
+		case [1, 0, 0, 1]:
+			return MaskType.CORNER_BOT_LEFT
+		case [1, 0, 1, 0]:
+			return MaskType.SINGLE_HORIZONTAL_MID
+		case [1, 0, 1, 1]:
+			return MaskType.BOT_MID
+		case [1, 1, 0, 0]:
+			return MaskType.CORNER_TOP_LEFT
+		case [1, 1, 0, 1]:
+			return MaskType.LEFT_MID
+		case [1, 0, 1, 0]:
+			return MaskType.SINGLE_HORIZONTAL_MID
+		case [0, 1, 1, 1]:
+			return MaskType.LEFT_MID
+		case [1, 1, 1, 1]:
+			return MaskType.MIDDLE
+		case [1, 1, 1, 0]:
+			return MaskType.TOP_MID
 
 
 """================================================================================================================= 
@@ -316,22 +335,39 @@ def get_mask_type_from_adjacent_blocks(adjacent_blocks):
 	Returns a random mask index for the given type
 -----------------------------------------------------------------------------------------------------------------"""
 def get_mask_index_from_type(mask_type):
-	if mask_type == MaskType.TOP_MID: return random.randint(1, 3)
-	elif mask_type == MaskType.LEFT_MID: return int(random.randint(0, 2) * 13)
-	elif mask_type == MaskType.BOT_MID: return random.randint(27, 29)
-	elif mask_type == MaskType.RIGHT_MID: return int(random.randint(0, 2) * 13) + 4
-	elif mask_type == MaskType.SINGLE_VERTICAL_MID: return int(random.randint(0, 2) * 13) + 5
-	elif mask_type == MaskType.SINGLE_HORIZONTAL_MID: return random.randint(58, 60)
-	elif mask_type == MaskType.SINGLE_VERTICAL_TOP: return random.randint(6, 8)
-	elif mask_type == MaskType.SINGLE_VERTICAL_BOT: return random.randint(45, 47)
-	elif mask_type == MaskType.SINGLE_HORIZONTAL_LEFT: return int(random.randint(0, 2) * 13) + 9
-	elif mask_type == MaskType.SINGLE_HORIZONTAL_RIGHT: return int(random.randint(0, 2) * 13) + 12
-	elif mask_type == MaskType.SINGLE: return random.randint(48, 50)
-	elif mask_type == MaskType.CORNER_TOP_LEFT: return 39 + int(random.randint(0, 2) * 2)
-	elif mask_type == MaskType.CORNER_TOP_RIGHT: return 40 + int(random.randint(0, 2) * 2)
-	elif mask_type == MaskType.CORNER_BOT_LEFT: return 52 + int(random.randint(0, 2) * 2)
-	elif mask_type == MaskType.CORNER_BOT_RIGHT: return 53 + int(random.randint(0, 2) * 2)
-	elif mask_type == MaskType.MIDDLE: return 14
+	match mask_type:
+		case MaskType.TOP_MID:
+			return random.randint(1, 3)
+		case MaskType.LEFT_MID:
+			return int(random.randint(0, 2) * 13)
+		case MaskType.BOT_MID:
+			return random.randint(27, 29)
+		case MaskType.RIGHT_MID:
+			return int(random.randint(0, 2) * 13) + 4
+		case MaskType.SINGLE_VERTICAL_MID:
+			return int(random.randint(0, 2) * 13) + 5
+		case MaskType.SINGLE_HORIZONTAL_MID:
+			return random.randint(58, 60)
+		case MaskType.SINGLE_VERTICAL_TOP:
+			return random.randint(6, 8)
+		case MaskType.SINGLE_VERTICAL_BOT:
+			return random.randint(45, 47)
+		case MaskType.SINGLE_HORIZONTAL_LEFT:
+			return int(random.randint(0, 2) * 13) + 9
+		case MaskType.SINGLE_HORIZONTAL_RIGHT:
+			return int(random.randint(0, 2) * 13) + 12
+		case MaskType.SINGLE:
+			return random.randint(48, 50)
+		case MaskType.CORNER_TOP_LEFT:
+			return 39 + int(random.randint(0, 2) * 2)
+		case MaskType.CORNER_TOP_RIGHT:
+			return 40 + int(random.randint(0, 2) * 2)
+		case MaskType.CORNER_BOT_LEFT:
+			return 52 + int(random.randint(0, 2) * 2)
+		case MaskType.CORNER_BOT_RIGHT:
+			return 53 + int(random.randint(0, 2) * 2)
+		case MaskType.MIDDLE:
+			return 14
 
 
 """================================================================================================================= 
@@ -340,21 +376,36 @@ def get_mask_index_from_type(mask_type):
 	Returns the type of a given mask index
 -----------------------------------------------------------------------------------------------------------------"""
 def get_mask_type_from_index(index):
-	if index == 1 or index == 2 or index == 3: return MaskType.TOP_MID
-	elif index == 0 or index == 13 or index == 26: return MaskType.LEFT_MID
-	elif index == 27 or index == 28 or index == 29: return MaskType.BOT_MID
-	elif index == 4 or index == 17 or index == 30: return MaskType.RIGHT_MID
-	elif index == 5 or index == 18 or index == 31: return MaskType.SINGLE_VERTICAL_MID
-	elif index == 58 or index == 59 or index == 60: return MaskType.SINGLE_HORIZONTAL_MID
-	elif index == 6 or index == 7 or index == 8: return MaskType.SINGLE_VERTICAL_TOP
-	elif index == 45 or index == 46 or index == 47: return MaskType.SINGLE_VERTICAL_TOP
-	elif index == 9 or index == 22 or index == 35: return MaskType.SINGLE_HORIZONTAL_LEFT
-	elif index == 12 or index == 25 or index == 38: return MaskType.SINGLE_HORIZONTAL_RIGHT
-	elif index == 48 or index == 49 or index == 50: return MaskType.SINGLE
-	elif index == 39 or index == 41 or index == 43: return MaskType.CORNER_TOP_LEFT
-	elif index == 40 or index == 42 or index == 44: return MaskType.CORNER_TOP_RIGHT
-	elif index == 52 or index == 54 or index == 56: return MaskType.CORNER_BOT_LEFT
-	elif index == 53 or index == 55 or index == 57: return MaskType.CORNER_BOT_RIGHT
+	if index == 1 or index == 2 or index == 3:
+		return MaskType.TOP_MID
+	elif index == 0 or index == 13 or index == 26:
+		return MaskType.LEFT_MID
+	elif index == 27 or index == 28 or index == 29:
+		return MaskType.BOT_MID
+	elif index == 4 or index == 17 or index == 30:
+		return MaskType.RIGHT_MID
+	elif index == 5 or index == 18 or index == 31:
+		return MaskType.SINGLE_VERTICAL_MID
+	elif index == 58 or index == 59 or index == 60:
+		return MaskType.SINGLE_HORIZONTAL_MID
+	elif index == 6 or index == 7 or index == 8:
+		return MaskType.SINGLE_VERTICAL_TOP
+	elif index == 45 or index == 46 or index == 47:
+		return MaskType.SINGLE_VERTICAL_TOP
+	elif index == 9 or index == 22 or index == 35:
+		return MaskType.SINGLE_HORIZONTAL_LEFT
+	elif index == 12 or index == 25 or index == 38:
+		return MaskType.SINGLE_HORIZONTAL_RIGHT
+	elif index == 48 or index == 49 or index == 50:
+		return MaskType.SINGLE
+	elif index == 39 or index == 41 or index == 43:
+		return MaskType.CORNER_TOP_LEFT
+	elif index == 40 or index == 42 or index == 44:
+		return MaskType.CORNER_TOP_RIGHT
+	elif index == 52 or index == 54 or index == 56:
+		return MaskType.CORNER_BOT_LEFT
+	elif index == 53 or index == 55 or index == 57:
+		return MaskType.CORNER_BOT_RIGHT
 
 
 """================================================================================================================= 
@@ -897,7 +948,6 @@ def create_tree(i, j, height):
 	assert world is not None
 
 	trunk_tile_id = game_data.get_tile_id_by_id_str("tile.trunk")
-	snow_leaves_tile_id = game_data.get_tile_id_by_id_str("tile.leaves_snow")
 	leaves_tile_id = game_data.get_tile_id_by_id_str("tile.leaves")
 	grass_tile_id = game_data.get_tile_id_by_id_str("tile.grass")
 	snow_tile_id = game_data.get_tile_id_by_id_str("tile.snow")
@@ -913,7 +963,7 @@ def create_tree(i, j, height):
 			break
 
 		elif tile_id == snow_tile_id:
-			leaf_tile = snow_leaves_tile_id
+			leaf_tile = leaves_tile_id
 			grounded = True
 			break
 

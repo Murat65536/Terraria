@@ -603,8 +603,8 @@ def draw_exit_button() -> None:
 
 
 def draw_interactive_block_hover() -> None:
-	if world.tile_in_map(commons.TILE_POSITION_MOUSE_HOVERING[0], commons.TILE_POSITION_MOUSE_HOVERING[1]):
-		tile_id = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
+	if world.tile_in_map(commons.HOVERED_TILE[0], commons.HOVERED_TILE[1]):
+		tile_id = world.world.tile_data[commons.HOVERED_TILE[0]][commons.HOVERED_TILE[1]][0]
 		tile_data = game_data.get_tile_by_id(tile_id)
 		if (tile_data != None):
 			if commons.TileTag.CHEST in tile_data["tags"] or commons.TileTag.CYCLABLE in tile_data["tags"]:
@@ -622,19 +622,18 @@ def draw_interactive_block_hover() -> None:
 
 def draw_menu_background() -> None:
 	menu_background_speed = 0
-	for background in menu_backgrounds[menu_background_number]:
-		image_number: int = round(background["frame"] / background["delay"])
-		menu_background_width = background["image"][image_number]["surface"].get_width()
-		menu_background_height = background["image"][image_number]["surface"].get_height()
+	for background in range(len(menu_backgrounds[menu_background_number])):
+		menu_background_width = menu_surfaces[background].get_width()
+		menu_background_height = menu_surfaces[background].get_height()
 		menu_background_speed += 8 / len(menu_backgrounds[menu_background_number])
-		if menu_background_width - background["position"] * menu_background_speed < 0:
-			background["position"] = 0
+		if menu_background_width - menu_backgrounds[menu_background_number][background]["position"] * menu_background_speed < 0:
+			menu_backgrounds[menu_background_number][background]["position"] = 0
 		for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
-			commons.screen.blit(background["image"][image_number]["surface"], (x * menu_background_width - background["position"] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height + background["offset"]))
-		if (len(background["image"]) - 1) * background["delay"] <= background["frame"]:
-			background["frame"] = 0
+			commons.screen.blit(menu_surfaces[background], (x * menu_background_width - menu_backgrounds[menu_background_number][background]["position"] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height + menu_backgrounds[menu_background_number][background]["offset"]))
+		if (len(menu_backgrounds[menu_background_number][background]["image"]) - 1) * menu_backgrounds[menu_background_number][background]["delay"] <= menu_backgrounds[menu_background_number][background]["frame"]:
+			menu_backgrounds[menu_background_number][background]["frame"] = 0
 		else:
-			background["frame"] += 1
+			menu_backgrounds[menu_background_number][background]["frame"] += 1
 
 
 good_color: tuple[int, int, int] = (10, 230, 10)
@@ -687,12 +686,8 @@ light_min_y = 0
 light_max_y = 0
 global_lighting = 255
 
-class MenuImage(TypedDict):
-	path: str
-	surface: pygame.Surface
-
 class MenuImages(TypedDict):
-	image: list[MenuImage]
+	image: list[str]
 	offset: int
 	frame: int
 	delay: int
@@ -700,56 +695,56 @@ class MenuImages(TypedDict):
 
 menu_backgrounds: list[list[MenuImages]] = [
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": -100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png"], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png"], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_3.png"], "offset": -100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_4.png"], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_5.png"], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
 	],
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png"], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png"], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_3.png"], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_4.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_5.png"], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
 	],
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
+		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png"], "offset": -50, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png"], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_3.png"], "offset": 25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_4.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_5.png"], "offset": 175, "frame": 0, "delay": 1, "position" : 0}
 	],
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_3.png", "surface": pygame.Surface((0, 0))}], "offset": 75, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 350, "frame": 0, "delay": 1, "position" : 0}
+		{"image": ["background_0.png",], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png",], "offset": -25, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png",], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_3.png",], "offset": 75, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_4.png",], "offset": 350, "frame": 0, "delay": 1, "position" : 0}
 	],
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}, {"path": "background_3.png", "surface": pygame.Surface((0, 0))}, {"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 225, "frame": 0, "delay": 20, "position" : 0}
+		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png", "background_3.png", "background_4.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0}
 	],
 	[
-		{"image": [{"path": "background_0.png", "surface": pygame.Surface((0, 0))}], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_1.png", "surface": pygame.Surface((0, 0))}], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": [{"path": "background_2.png", "surface": pygame.Surface((0, 0))}, {"path": "background_3.png", "surface": pygame.Surface((0, 0))}, {"path": "background_4.png", "surface": pygame.Surface((0, 0))}], "offset": 225, "frame": 0, "delay": 20, "position" : 0},
-		{"image": [{"path": "background_5.png", "surface": pygame.Surface((0, 0))}], "offset": 200, "frame": 0, "delay": 1, "position" : 0}
+		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_1.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
+		{"image": ["background_2.png", "background_3.png", "background_4.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0},
+		{"image": ["background_5.png"], "offset": 200, "frame": 0, "delay": 1, "position" : 0}
 	]
 ]
 
 menu_background_number = random.randint(0, len(menu_backgrounds) - 1)
 menu_background_directory = f"assets/images/backgrounds/menu_backgrounds/background_{menu_background_number}"
-
+menu_surfaces: list[pygame.Surface] = []
 for background in menu_backgrounds[menu_background_number]:
-	for image in background["image"]:
-		menu_background_image = pygame.image.load(f"{menu_background_directory}/{image["path"]}").convert_alpha()
-		image["surface"] = menu_background_image
+	for path in background["image"]:
+		menu_background_image = pygame.image.load(f"{menu_background_directory}/{path}").convert_alpha()
+		menu_surfaces.append(menu_background_image)
 		background["position"] = random.randint(0, menu_background_image.get_width())
 
 
@@ -773,7 +768,7 @@ old_time_milliseconds = pygame.time.get_ticks()
 
 while True:
 	commons.MOUSE_POSITION = pygame.mouse.get_pos()
-	commons.TILE_POSITION_MOUSE_HOVERING = (int((entity_manager.camera_position[0] + commons.MOUSE_POSITION[0] - commons.WINDOW_WIDTH * 0.5) // commons.BLOCK_SIZE), int((entity_manager.camera_position[1] + commons.MOUSE_POSITION[1] - commons.WINDOW_HEIGHT * 0.5) // commons.BLOCK_SIZE))
+	commons.HOVERED_TILE = (int((entity_manager.camera_position[0] + commons.MOUSE_POSITION[0] - commons.WINDOW_WIDTH * 0.5) // commons.BLOCK_SIZE), int((entity_manager.camera_position[1] + commons.MOUSE_POSITION[1] - commons.WINDOW_HEIGHT * 0.5) // commons.BLOCK_SIZE))
 	
 	commons.DELTA_TIME = (pygame.time.get_ticks() - old_time_milliseconds) * 0.001
 	old_time_milliseconds = pygame.time.get_ticks()
@@ -1298,13 +1293,13 @@ while True:
 				# Get Tile and Wall IDS
 				if event.key == pygame.K_p:
 					if commons.SHIFT_ACTIVE: 
-						if world.tile_in_map(commons.TILE_POSITION_MOUSE_HOVERING[0], commons.TILE_POSITION_MOUSE_HOVERING[1]):
-							wallID = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][1]
-							entity_manager.add_message("Wall at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(wallID), (255, 223, 10), outline_color=(80, 70, 3))
+						if world.tile_in_map(commons.HOVERED_TILE[0], commons.HOVERED_TILE[1]):
+							wallID = world.world.tile_data[commons.HOVERED_TILE[0]][commons.HOVERED_TILE[1]][1]
+							entity_manager.add_message("Wall at (" + str(commons.HOVERED_TILE[0]) + ", " + str(commons.HOVERED_TILE[1]) + ") has ID: " + str(wallID), (255, 223, 10), outline_color=(80, 70, 3))
 					else:
-						if world.tile_in_map(commons.TILE_POSITION_MOUSE_HOVERING[0], commons.TILE_POSITION_MOUSE_HOVERING[1]):
-							tileID = world.world.tile_data[commons.TILE_POSITION_MOUSE_HOVERING[0]][commons.TILE_POSITION_MOUSE_HOVERING[1]][0]
-							entity_manager.add_message("Tile at (" + str(commons.TILE_POSITION_MOUSE_HOVERING[0]) + ", " + str(commons.TILE_POSITION_MOUSE_HOVERING[1]) + ") has ID: " + str(tileID), (255, 223, 10), outline_color=(80, 70, 3))
+						if world.tile_in_map(commons.HOVERED_TILE[0], commons.HOVERED_TILE[1]):
+							tileID = world.world.tile_data[commons.HOVERED_TILE[0]][commons.HOVERED_TILE[1]][0]
+							entity_manager.add_message("Tile at (" + str(commons.HOVERED_TILE[0]) + ", " + str(commons.HOVERED_TILE[1]) + ") has ID: " + str(tileID), (255, 223, 10), outline_color=(80, 70, 3))
 
 				# Toggle UI
 				if event.key == pygame.K_u:
@@ -1417,7 +1412,6 @@ while True:
 						game_data.play_sound("sound.menu_select")
 
 		elif commons.game_state == "MAIN_MENU":
-
 			if commons.game_sub_state == "PLAYER_SELECTION" or commons.game_sub_state == "WORLD_SELECTION":
 				if event.type == pygame.MOUSEBUTTONDOWN:
 					if event.button == 4:
