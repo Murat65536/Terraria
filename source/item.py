@@ -150,10 +150,6 @@ class Item:
 		if self.json_item != None:
 			return self.json_item["id_str"]
 
-	def get_ammo_type(self):
-		if self.json_item != None:
-			return self.json_item["ammo_type"]
-
 	def get_ammo_damage(self):
 		if self.json_item != None:
 			return self.json_item["ammo_damage"]
@@ -187,12 +183,12 @@ class Item:
 	def get_offset_x(self):
 		if type(self.json_item["image"]) is pygame.Surface:
 			return int(24 - self.json_item["image"].get_width() * 0.5)
-		return 0
+		return 8
 
 	def get_offset_y(self):
 		if type(self.json_item["image"]) is pygame.Surface:
 			return int(24 - self.json_item["image"].get_height() * 0.5)
-		return 0
+		return 8
 
 	def get_world_override_image(self):
 		if self.json_item != None:

@@ -104,8 +104,6 @@ platform_blocks: list[int] = [257]
 json_item_data: list[commons.PlacableTileItemData | commons.ImplacableTileItemData | commons.MaterialItemData | commons.WallItemData | commons.PickaxeItemData | commons.HammerItemData | commons.AxeItemData | commons.SwordItemData | commons.RangedItemData | commons.AmmunitionItemData | commons.GrapplingHookItemData | commons.MagicalWeaponItemData] = []
 item_id_str_hash_table: dict[str, int] = {}
 
-ammo_type_item_lists: dict[str, list[int]] = {}
-
 json_tile_data: list[commons.TileData] = []
 tile_id_str_hash_table: dict[str, int] = {}
 tile_id_light_reduction_lookup: list[int] = []
@@ -498,12 +496,6 @@ def parse_item_data():
 			if max(item_data["image"].get_width(), item_data["image"].get_height()) > 32:
 				item_data["image"] = pygame.transform.scale(item_data["image"], (item_data["image"].get_width() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height())), item_data["image"].get_height() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height()))))
 
-			if commons.ItemTag.AMMO in item_data["tags"]:
-				try:
-					ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])
-				except KeyError:
-					ammo_type_item_lists[item_data["ammo_type"]] = [item_data["id"]]
-
 			if commons.ItemTag.GRAPPLE in item_data["tags"]:
 				try:
 					loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
@@ -537,14 +529,6 @@ def create_item_id_str_hash_table():
 	global item_id_str_hash_table
 	for item_index in range(len(json_item_data)):
 		item_id_str_hash_table[json_item_data[item_index]["id_str"]] = item_index
-
-
-def get_ammo_item_ids_for_ammo_type(ammo_type):
-	ammo_item_ids = []
-	for item_data in json_item_data:
-		if commons.ItemTag.AMMO in item_data["tags"]:
-			if item_data["ammo_type"] == ammo_type:
-				ammo_item_ids.append(int(item_data["id"]))
 
 
 def parse_tile_data():

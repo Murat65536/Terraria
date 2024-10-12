@@ -268,7 +268,7 @@ class RangedItemData(TypedDict):
     crit_chance: float
     prefixes: list[ItemPrefixGroup]
     ranged_projectile_id_str: str
-    ranged_ammo_type: str
+    ranged_ammo_type: list[str]
     ranged_projectile_speed: float
     ranged_accuracy: float
     ranged_num_projectiles: int
@@ -289,7 +289,6 @@ class AmmunitionItemData(TypedDict):
     max_stack: int
     buy_price: int
     sell_price: int
-    ammo_type: str
     ammo_damage: float
     ammo_drag: float
     ammo_gravity_modifier: float
@@ -1236,7 +1235,7 @@ ITEM_DATA: list[
             ItemPrefixGroup.UNIVERSAL,
         ],
         "ranged_projectile_id_str": "projectile.arrow",
-        "ranged_ammo_type": "arrow",
+        "ranged_ammo_type": ["item.wooden_arrow"],
         "ranged_projectile_speed": 75.0,
         "ranged_accuracy": 0.9,
         "ranged_num_projectiles": 1,
@@ -1256,7 +1255,6 @@ ITEM_DATA: list[
         "max_stack": 999,
         "buy_price": 5,
         "sell_price": 1,
-        "ammo_type": "arrow",
         "ammo_damage": 4.0,
         "ammo_drag": 0.05,
         "ammo_gravity_modifier": 1.2,
@@ -1288,7 +1286,7 @@ ITEM_DATA: list[
             ItemPrefixGroup.UNIVERSAL,
         ],
         "ranged_projectile_id_str": "projectile.bullet",
-        "ranged_ammo_type": "bullet",
+        "ranged_ammo_type": ["item.musket_ball"],
         "ranged_projectile_speed": 100.0,
         "ranged_accuracy": 0.95,
         "ranged_num_projectiles": 1,
@@ -1308,7 +1306,6 @@ ITEM_DATA: list[
         "max_stack": 999,
         "buy_price": 7,
         "sell_price": 1,
-        "ammo_type": "bullet",
         "ammo_damage": 7.0,
         "ammo_drag": 0.05,
         "ammo_gravity_modifier": 0.5,
@@ -1330,7 +1327,6 @@ ITEM_DATA: list[
         "max_stack": 100,
         "buy_price": 0,
         "sell_price": 0,
-        "ammo_type": "bullet",
         "ammo_damage": 2.0,
         "ammo_drag": 5.0,
         "ammo_gravity_modifier": 1.0,
@@ -1352,7 +1348,6 @@ ITEM_DATA: list[
         "max_stack": 100,
         "buy_price": 0,
         "sell_price": 0,
-        "ammo_type": "bullet",
         "ammo_damage": 5.0,
         "ammo_drag": 2.5,
         "ammo_gravity_modifier": 0.75,
@@ -1374,7 +1369,6 @@ ITEM_DATA: list[
         "max_stack": 100,
         "buy_price": 0,
         "sell_price": 0,
-        "ammo_type": "bullet",
         "ammo_damage": 50.0,
         "ammo_drag": 1.25,
         "ammo_gravity_modifier": 0.5,
@@ -1394,7 +1388,6 @@ ITEM_DATA: list[
         "max_stack": 999,
         "buy_price": 0,
         "sell_price": 0,
-        "ammo_type": "bullet",
         "ammo_damage": 100.0,
         "ammo_drag": 0.625,
         "ammo_gravity_modifier": 0.25,
