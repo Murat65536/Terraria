@@ -67,14 +67,6 @@ def make_item_tag_list(item_tags_str: list[str]):
 				break
 	return enum_list
 
-def make_item_prefix_list(item_prefixes: list[commons.ItemPrefixGroup]):
-	enum_list: list[commons.ItemPrefixGroup] = []
-	for prefix in item_prefixes:
-		if prefix in commons.ItemPrefixGroup:
-			enum_list.append(prefix)
-			break
-	return enum_list
-
 
 def make_tile_tag_list(tile_tags_str: list[str]):
 	enum_list: list[commons.TileTag] = []
@@ -90,12 +82,6 @@ def get_tile_strength_type_from_str(strength_type_string: str):
 	for types in commons.TileStrengthType:
 		if types.name == strength_type_string:
 			return types
-
-
-def get_tile_mask_type_from_str(mask_type_string: str):
-	for masks in commons.TileMaskType:
-		if masks.name == mask_type_string:
-			return masks
 
 
 def find_next_char_in_string(string: str, char: str, start_index: int):
@@ -507,47 +493,36 @@ def parse_item_data():
 	json_item_data = commons.ITEM_DATA
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
-	# TODO So what's happening is that typeddict is only allowing specific keys and when I try to add keys not in typeddict, it is unable to do that. :/ I guess mess around with NotRequired or just delete and rework the extra keys.
 	for item_data in json_item_data:
-		try:
-			loaded_surf = pygame.image.load(item_data["image_path"]).convert_alpha()
-			if max(loaded_surf.get_width(), loaded_surf.get_height()) > 32:
-				loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height())), loaded_surf.get_height() * (32 / max(loaded_surf.get_width(), loaded_surf.get_height()))))
-			# loaded_surf = pygame.transform.scale(loaded_surf, (loaded_surf.get_width(), loaded_surf.get_height()))
-			item_data["image"] = loaded_surf
-			item_data["item_slot_offset_x"] = int(24 - item_data["image"].get_width() * 0.5)
-			item_data["item_slot_offset_y"] = int(24 - item_data["image"].get_height() * 0.5)
-		except FileNotFoundError:
-			item_data["image"] = None
+		if type(item_data["image"]) is pygame.Surface:
+			if max(item_data["image"].get_width(), item_data["image"].get_height()) > 32:
+				item_data["image"] = pygame.transform.scale(item_data["image"], (item_data["image"].get_width() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height())), item_data["image"].get_height() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height()))))
 
-		if commons.ItemTag.WEAPON in item_data["tags"]:
-			try:
-				loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
-				item_data["world_override_image"] = pygame.Surface((max(loaded_surf.get_width(), loaded_surf.get_height()), max(loaded_surf.get_width(), loaded_surf.get_height())))
-			except FileNotFoundError:
-				item_data["world_override_image"] = None
+			if commons.ItemTag.WEAPON in item_data["tags"]:
+				try:
+					loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
+					item_data["world_override_image"] = pygame.Surface((max(loaded_surf.get_width(), loaded_surf.get_height()), max(loaded_surf.get_width(), loaded_surf.get_height())))
+				except FileNotFoundError:
+					item_data["world_override_image"] = None
 
-			item_data["prefixes"] = make_item_prefix_list(item_data["prefixes"])
+			if commons.ItemTag.AMMO in item_data["tags"]:
+				try:
+					ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])
+				except KeyError:
+					ammo_type_item_lists[item_data["ammo_type"]] = [item_data["id"]]
 
-		if commons.ItemTag.AMMO in item_data["tags"]:
-			try:
-				ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])
-			except KeyError:
-				ammo_type_item_lists[item_data["ammo_type"]] = [item_data["id"]]
+			if commons.ItemTag.GRAPPLE in item_data["tags"]:
+				try:
+					loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
+					item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+				except FileNotFoundError:
+					item_data["grapple_chain_image"] = None
 
-		if commons.ItemTag.GRAPPLE in item_data["tags"]:
-			try:
-				loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
-				item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
-			except FileNotFoundError:
-				item_data["grapple_chain_image"] = None
-
-			try:
-				loaded_surf = pygame.image.load(item_data["grapple_claw_image_path"]).convert_alpha()
-				item_data["grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
-				item_data["grapple_claw_image"].set_colorkey((255, 0, 255))
-			except FileNotFoundError:
-				item_data["grapple_claw_image"] = None
+				try:
+					loaded_surf = pygame.image.load(item_data["grapple_claw_image_path"]).convert_alpha()
+					item_data["grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
+				except FileNotFoundError:
+					item_data["grapple_claw_image"] = None
 
 
 def get_item_by_id(item_id):
@@ -587,20 +562,10 @@ def parse_tile_data():
 
 	for tile_data in json_tile_data:
 		tile_data["strength_type"] = get_tile_strength_type_from_str(tile_data["strength_type"])
-		tile_data["mask_type"] = get_tile_mask_type_from_str(tile_data["mask_type"])
 		tile_data["light_reduction"] = int(tile_data["light_reduction"])
 		tile_data["light_emission"] = int(tile_data["light_emission"])
 
 		tile_data["tags"] = make_tile_tag_list(tile_data["tags"])
-		try:
-			tile_data["image"] = pygame.image.load(tile_data["image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
-			tile_data["average_color"] = pygame.transform.average_color(tile_data["image"])
-		except FileNotFoundError:
-			tile_data["image"] = None
-
-		if commons.TileTag.MULTITILE in tile_data["tags"]:
-			tile_data["multitile_image"] = pygame.image.load(tile_data["multitile_image_path"]).convert_alpha()  # , (commons.BLOCK_SIZE * tile_data["multitile_dimensions"][0], commons.BLOCK_SIZE * tile_data["multitile_dimensions"][1])
-			tile_data["average_color"] = pygame.transform.average_color(tile_data["multitile_image"])
 
 		if commons.TileTag.DAMAGING in tile_data["tags"]:
 			tile_data["tile_damage"] = int(tile_data["tile_damage"])
@@ -653,15 +618,6 @@ def parse_wall_data():
 
 	json_wall_data = commons.WALL_DATA
 	json_wall_data = sorted(json_wall_data, key=lambda x: int(x["id"]))
-
-	for wall_data in json_wall_data:
-		wall_data["mask_type"] = get_tile_mask_type_from_str(wall_data["mask_type"])
-		try:
-			wall_data["image"] = pygame.transform.scale(pygame.image.load(wall_data["image_path"]).convert_alpha(), (commons.BLOCK_SIZE, commons.BLOCK_SIZE))
-			wall_data["image"].set_colorkey((255, 0, 255))
-			wall_data["average_color"] = pygame.transform.average_color(wall_data["image"])
-		except FileNotFoundError:
-			wall_data["image"] = None
 
 
 def create_wall_id_str_hash_table():

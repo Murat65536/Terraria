@@ -421,7 +421,7 @@ class Player:
 				value =	1
 			self.hp	-= value
 
-			entity_manager.add_damage_number(self.position,	value, color=(240,	20,	20))
+			entity_manager.add_damage_number(self.position,	value, color=(240, 20, 20))
 
 			if self.hp < 0:
 				self.hp	= 0
@@ -823,12 +823,10 @@ class Player:
 
 									entity_manager.spawn_physics_item(Item(item_id), ((block_position[0] + 0.5)	* commons.BLOCK_SIZE, (block_position[1]	+ 0.5) * commons.BLOCK_SIZE), pickup_delay=10)
 								world.update_terrain_surface(block_position[0],	block_position[1])
-								color = tile_dat["average_color"]
-
 								game_data.play_tile_hit_sfx(tile_id)
 								if commons.PARTICLES:
 									for	i in range(int(random.randint(2, 3) * commons.PARTICLE_DENSITY)):
-										entity_manager.spawn_particle((block_position[0] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,	block_position[1] *	commons.BLOCK_SIZE +	commons.BLOCK_SIZE *	0.5), color, size=13, life=1, angle=-math.pi *	0.5, spread=math.pi, gravity=0.05)
+										entity_manager.spawn_particle((block_position[0] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5, block_position[1] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5), pygame.transform.average_color(tile_dat["image"]), size=13, life=1, angle=-math.pi * 0.5, spread=math.pi, gravity=0.05)
 
 					elif tool_item.has_tag(ItemTag.HAMMER):
 						wall_id	= world.world.tile_data[block_position[0]][block_position[1]][1]
@@ -1100,7 +1098,8 @@ class Player:
 			self.hotbar_image.blit(surface_manager.misc_gui[0],	(48	* hotbar_index,	0))
 			item = self.items[ItemLocation.HOTBAR][hotbar_index]
 			if item is not None:
-				self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * hotbar_index, item.get_item_slot_offset_y()))
+				self.hotbar_image.blit(item.get_image(), (item.get_offset_x() + 48 * hotbar_index, item.get_offset_y()))
+				print(item.get_offset_x() + 48)
 				if item.amount > 1:
 					self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * hotbar_index, 30))
 
@@ -1118,7 +1117,7 @@ class Player:
 			self.inventory_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.INVENTORY][inventory_index]
 			if item is not None:
-				self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
+				self.inventory_image.blit(item.get_image(),	(item.get_offset_x() + 48 * slot_x, item.get_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.INVENTORY][inventory_index].amount > 1:
 					self.inventory_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.INVENTORY][inventory_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
@@ -1136,7 +1135,7 @@ class Player:
 			self.chest_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.CHEST][chest_index]
 			if item is not None:
-				self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + 48 * slot_x, item.get_item_slot_offset_y()	+ 48 * slot_y))
+				self.chest_image.blit(item.get_image(),	(item.get_offset_x() + 48 * slot_x, item.get_offset_y()	+ 48 * slot_y))
 				if self.items[ItemLocation.CHEST][chest_index].amount > 1:
 					self.chest_image.blit(shared_methods.outline_text(str(self.items[ItemLocation.CHEST][chest_index].amount), (255, 255,	255), commons.SMALL_FONT), (24 +	48 * slot_x, 30 + 48 * slot_y))
 
@@ -1151,7 +1150,7 @@ class Player:
 				item = self.items[ItemLocation.HOTBAR][data[1]]
 				self.hotbar_image.blit(surface_manager.misc_gui[0],	(data[1] * 48, 0))
 				if item is not None:
-					self.hotbar_image.blit(item.get_image(), (item.get_item_slot_offset_x()	+ 48 * data[1],	item.get_item_slot_offset_y()))
+					self.hotbar_image.blit(item.get_image(), (item.get_offset_x()	+ 48 * data[1],	item.get_offset_y()))
 					if item.amount > 1:
 						self.hotbar_image.blit(shared_methods.outline_text(str(item.amount), (255, 255, 255),	commons.SMALL_FONT),	(24	+ 48 * data[1],	30))
 			elif data[0] == ItemLocation.INVENTORY:
@@ -1160,7 +1159,7 @@ class Player:
 				slot_y = data[1] // 10
 				self.inventory_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
 				if item is not None:
-					self.inventory_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
+					self.inventory_image.blit(item.get_image(),	(item.get_offset_x() + slot_x	* 48, item.get_offset_y()	+ slot_y * 48))
 					if item.amount > 1:
 						self.inventory_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 
@@ -1170,7 +1169,7 @@ class Player:
 				slot_y = data[1] // 5
 				self.chest_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
 				if item is not None:
-					self.chest_image.blit(item.get_image(),	(item.get_item_slot_offset_x() + slot_x	* 48, item.get_item_slot_offset_y()	+ slot_y * 48))
+					self.chest_image.blit(item.get_image(),	(item.get_offset_x() + slot_x	* 48, item.get_offset_y()	+ slot_y * 48))
 					if item.amount > 1:
 						self.chest_image.blit(shared_methods.outline_text(str(item.amount), (255,	255, 255), commons.SMALL_FONT), (24 + 48 * slot_x, 30 + 48 *	slot_y))
 		self.old_inventory_positions = []
@@ -1196,7 +1195,7 @@ class Player:
 			item_data =	game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
 			image =	item_data["image"]
 			if image is not	None:
-				self.craftable_items_surf.blit(image, (item_data["item_slot_offset_x"], item_data["item_slot_offset_y"] +	i *	48))
+				self.craftable_items_surf.blit(image, (int(24 - item_data["image"].get_width() * 0.5), int(24 - item_data["image"].get_height() * 0.5) + i * 48))
 
 	"""=================================================================================================================	
 		player.Player.draw -> void
@@ -1465,8 +1464,8 @@ class Player:
 		if self.alive and self.grounded:
 			game_data.play_sound("sound.jump")
 			if commons.PARTICLES:
-				color = shared_methods.get_block_average_color(self.last_block_on)
-				for	i in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
+				color = pygame.transform.average_color(game_data.get_tile_by_id(self.last_block_on)["image"])
+				for	_ in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
 					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE * 1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
 			self.velocity =	(self.velocity[0], -50)
 			self.grounded =	False

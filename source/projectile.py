@@ -117,7 +117,7 @@ class Projectile:
 			if self.bounce_num <= 0:
 				entity_manager.projectiles.remove(self)
 				if commons.PARTICLES:
-					color = shared_methods.get_block_average_color(block_hit_tile_id)
+					color = pygame.transform.average_color(game_data.get_tile_by_id(block_hit_tile_id)["image"])
 					velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
 					velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
 					for i in range(int(4 * commons.PARTICLE_DENSITY)):

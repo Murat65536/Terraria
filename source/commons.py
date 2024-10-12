@@ -5,54 +5,56 @@ from enum import Enum
 
 
 class ItemTag(Enum):
-	TILE = 0
-	WALL = 1
-	MATERIAL = 2
-	WEAPON = 3
-	TOOL = 4
-	LONGSWORD = 5
-	RANGED = 6
-	MAGICAL = 7
-	AMMO = 8
-	PICKAXE = 9
-	AXE = 10
-	HAMMER = 11
-	GRAPPLE = 12 # TODO The code for the grappling hook is incomplete.
-	COIN = 13
-	SHORTSWORD = 14
+    TILE = 0
+    WALL = 1
+    MATERIAL = 2
+    WEAPON = 3
+    TOOL = 4
+    LONGSWORD = 5
+    RANGED = 6
+    MAGICAL = 7
+    AMMO = 8
+    PICKAXE = 9
+    AXE = 10
+    HAMMER = 11
+    GRAPPLE = 12  # TODO The code for the grappling hook is incomplete.
+    COIN = 13
+    SHORTSWORD = 14
 
 
 class ItemPrefixGroup(Enum):
-	UNIVERSAL = 0
-	COMMON = 1
-	LONGSWORD = 2
-	RANGED = 3
-	MAGICAL = 4
-	SHORTSWORD = 5
+    UNIVERSAL = 0
+    COMMON = 1
+    LONGSWORD = 2
+    RANGED = 3
+    MAGICAL = 4
+    SHORTSWORD = 5
 
 
 class TileTag(Enum):
-	TRANSPARENT = 0
-	NO_DRAW = 1
-	NO_COLLIDE = 2
-	MULTITILE = 3
-	CYCLABLE = 4
-	CHEST = 5
-	BREAKABLE = 6
-	WORKBENCH = 7
-	PLATFORM = 8
-	DAMAGING = 9
+    TRANSPARENT = 0
+    NO_DRAW = 1
+    NO_COLLIDE = 2
+    MULTITILE = 3
+    CYCLABLE = 4
+    CHEST = 5
+    BREAKABLE = 6
+    WORKBENCH = 7
+    PLATFORM = 8
+    DAMAGING = 9
 
 
 class TileStrengthType(Enum):
-	PICKAXE = 0
-	HAMMER = 1
-	AXE = 2
-	DAMAGE = 3
+    PICKAXE = 0
+    HAMMER = 1
+    AXE = 2
+    DAMAGE = 3
+
 
 class TileMaskType(Enum):
-	NONE = 0
-	NOISY = 1
+    NONE = 0
+    NOISY = 1
+
 
 class PlayerData(TypedDict):
     name: str
@@ -102,7 +104,6 @@ class PlacableTileItemData(TypedDict):
     id_str: int
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -111,6 +112,7 @@ class PlacableTileItemData(TypedDict):
     tile_id_str: str
     pickup_sound: str
     drop_sound: str
+    image: pygame.Surface | None
 
 
 class ImplacableTileItemData(TypedDict):
@@ -118,7 +120,6 @@ class ImplacableTileItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -127,6 +128,7 @@ class ImplacableTileItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class MaterialItemData(TypedDict):
@@ -134,7 +136,6 @@ class MaterialItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -142,6 +143,7 @@ class MaterialItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class WallItemData(TypedDict):
@@ -149,7 +151,6 @@ class WallItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -158,6 +159,7 @@ class WallItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     wall_id_str: str
+    image: pygame.Surface | None
 
 
 class PickaxeItemData(TypedDict):
@@ -165,7 +167,6 @@ class PickaxeItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -181,6 +182,7 @@ class PickaxeItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class HammerItemData(TypedDict):
@@ -188,7 +190,6 @@ class HammerItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -204,6 +205,7 @@ class HammerItemData(TypedDict):
     use_sound: str
     hammer_power: float
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class AxeItemData(TypedDict):
@@ -211,7 +213,6 @@ class AxeItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -227,6 +228,7 @@ class AxeItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class SwordItemData(TypedDict):
@@ -234,7 +236,6 @@ class SwordItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -249,6 +250,7 @@ class SwordItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class RangedItemData(TypedDict):
@@ -256,7 +258,6 @@ class RangedItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -276,6 +277,7 @@ class RangedItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class AmmunitionItemData(TypedDict):
@@ -283,7 +285,6 @@ class AmmunitionItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -297,6 +298,7 @@ class AmmunitionItemData(TypedDict):
     drop_sound: str
     hold_offset: float
     ricochet_amount: int
+    image: pygame.Surface | None
 
 
 class GrapplingHookItemData(TypedDict):
@@ -304,7 +306,6 @@ class GrapplingHookItemData(TypedDict):
     id_str: str
     name: str
     tags: list[ItemTag]
-    image_path: str
     tier: int
     max_stack: int
     buy_price: int
@@ -317,6 +318,7 @@ class GrapplingHookItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     hold_offset: float
+    image: pygame.Surface | None
 
 
 class MagicalWeaponItemData(TypedDict):
@@ -328,7 +330,6 @@ class MagicalWeaponItemData(TypedDict):
     max_stack: int
     buy_price: int
     sell_price: int
-    image_path: str
     pickup_sound: str
     drop_sound: str
     prefixes: list[ItemPrefixGroup]
@@ -340,6 +341,7 @@ class MagicalWeaponItemData(TypedDict):
     world_override_image_path: str
     use_sound: str
     mana_cost: int
+    image: pygame.Surface | None
 
 
 class ItemLootData(TypedDict):
@@ -388,17 +390,17 @@ class TileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
     place_sound: str
     hit_sound: str
+    image: pygame.Surface | None
+
 
 class DamagingTileData(TypedDict):
     id: int
@@ -406,19 +408,19 @@ class DamagingTileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
     place_sound: str
     hit_sound: str
     tile_damage: int
     tile_damage_name: str
+    image: pygame.Surface | None
+
 
 class MultitileData(TypedDict):
     id: int
@@ -426,20 +428,19 @@ class MultitileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
-    multitile_image_path: str
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
+    image: pygame.Surface | None
+
 
 class DoorTileData(TypedDict):
     id: int
@@ -447,13 +448,11 @@ class DoorTileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
     cycle_facing_left_tile_id_str: str
@@ -462,11 +461,12 @@ class DoorTileData(TypedDict):
     cycle_facing_right_tile_id_str: str
     cycle_facing_right_tile_offset: list[int]
     cycle_facing_right_sound: str
-    multitile_image_path: str
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
+    image: pygame.Surface | None
+
 
 class LootMultitileData(TypedDict):
     id: int
@@ -474,21 +474,20 @@ class LootMultitileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
     loot_group_id_str: str
-    multitile_image_path: str
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
+    image: pygame.Surface | None
+
 
 class LootTileData(TypedDict):
     id: int
@@ -496,30 +495,29 @@ class LootTileData(TypedDict):
     name: str
     strength: float
     strength_type: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    average_color: tuple[int, int, int]
     tags: list[str]
-    image_path: str
     item_id_str: str
     item_count_range: tuple[int, int]
     loot_group_id_str: str
     place_sound: str
     hit_sound: str
+    image: pygame.Surface | None
+
 
 class WallData(TypedDict):
     id: int
     id_str: str
     name: str
-    mask_type: str
+    mask_type: TileMaskType
     mask_merge_ids: list[str]
-    image_path: str
     item_id_str: str
     place_sound: str
     hit_sound: str
-    average_color: tuple[int, int, int]
+    image: pygame.Surface | None
 
 
 class WorldGenData(TypedDict):
@@ -628,12 +626,12 @@ WORLD_SAVE_OPTIONS: list[tuple[str, pygame.Surface]] = []
 AI_DATA: list[AIData] = [
     {"id": 0, "id_str": "loot.INVALID"},
     {"id": 1, "id_str": "loot.slime"},
-    {"id": 2, "id_str": "loot.bunny"}
+    {"id": 2, "id_str": "loot.bunny"},
 ]
 
 CRAFTING_RECIPES: list[CraftingRecipeData] = [
     {"id": 0, "id_str": "crafting_recipe.INVALID"},
-    {"id": 1, "id_str": "crafting_recipe.work_bench"}
+    {"id": 1, "id_str": "crafting_recipe.work_bench"},
 ]
 
 ENTITY_DATA: list[EntityData] = [
@@ -675,7 +673,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (5, 30)
+        "coin_drop_range": (5, 30),
     },
     {
         "id": 2,
@@ -695,7 +693,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (15, 50)
+        "coin_drop_range": (15, 50),
     },
     {
         "id": 3,
@@ -715,7 +713,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (25, 75)
+        "coin_drop_range": (25, 75),
     },
     {
         "id": 4,
@@ -735,7 +733,7 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (35, 110)
+        "coin_drop_range": (35, 110),
     },
     {
         "id": 5,
@@ -755,8 +753,8 @@ ENTITY_DATA: list[EntityData] = [
                 "item_weight": 100,
             }
         ],
-        "coin_drop_range": (45, 130)
-    }
+        "coin_drop_range": (45, 130),
+    },
 ]
 
 ITEM_DATA: list[
@@ -778,7 +776,6 @@ ITEM_DATA: list[
         "id_str": "item.INVALID",
         "name": "INVALID",
         "tags": [],
-        "image_path": "",
         "tier": 0,
         "max_stack": 9999,
         "buy_price": 0,
@@ -787,13 +784,13 @@ ITEM_DATA: list[
         "tile_id_str": "tile.UNNAMED",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
+        "image": None,
     },
     {
         "id": 1,
         "id_str": "item.iron_pickaxe",
         "name": "Iron Pickaxe",
         "tags": [ItemTag.PICKAXE, ItemTag.TOOL, ItemTag.WEAPON],
-        "image_path": "assets/images/items/iron_pickaxe.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 0,
@@ -808,14 +805,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/iron_pickaxe.png"
+        ).convert_alpha(),
     },
     {
         "id": 2,
         "id_str": "item.dirt_block",
         "name": "Dirt",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/dirt_block.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 1,
@@ -823,14 +822,16 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "tile_id_str": "tile.dirt",
         "pickup_sound": "sound.grab",
-        "drop_sound": "sound.grab"
+        "drop_sound": "sound.grab",
+        "image": pygame.image.load(
+            "assets/images/items/dirt_block.png"
+        ).convert_alpha(),
     },
     {
         "id": 3,
         "id_str": "item.stone_block",
         "name": "Stone",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/stone_block.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -838,14 +839,16 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "tile_id_str": "tile.stone",
         "pickup_sound": "sound.grab",
-        "drop_sound": "sound.grab"
+        "drop_sound": "sound.grab",
+        "image": pygame.image.load(
+            "assets/images/items/stone_block.png"
+        ).convert_alpha(),
     },
     {
         "id": 4,
         "id_str": "item.iron_broadsword",
         "name": "Iron Broadsword",
         "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
-        "image_path": "assets/images/items/iron_broadsword.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 200,
@@ -855,18 +858,24 @@ ITEM_DATA: list[
         "knockback": 5.5,
         "crit_chance": 0.04,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.LONGSWORD,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/iron_broadsword.png"
+        ).convert_alpha(),
     },
     {
         "id": 5,
         "id_str": "item.mushroom",
         "name": "Mushroom",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/mushroom.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -874,14 +883,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.mushroom",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/mushroom.png").convert_alpha(),
     },
     {
         "id": 6,
         "id_str": "item.iron_ore",
         "name": "Iron Ore",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/iron_ore.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 20,
@@ -889,14 +898,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.pot_thick_brown",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/iron_ore.png").convert_alpha(),
     },
     {
         "id": 7,
         "id_str": "item.dirt_wall",
         "name": "Dirt Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/dirt_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -904,14 +913,14 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "wall_id_str": "wall.dirt"
+        "wall_id_str": "wall.dirt",
+        "image": pygame.image.load("assets/images/items/dirt_wall.png").convert_alpha(),
     },
     {
         "id": 8,
         "id_str": "item.stone_wall",
         "name": "Stone Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/stone_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -919,14 +928,16 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "wall_id_str": "wall.stone"
+        "wall_id_str": "wall.stone",
+        "image": pygame.image.load(
+            "assets/images/items/stone_wall.png"
+        ).convert_alpha(),
     },
     {
         "id": 9,
         "id_str": "item.snow",
         "name": "Snow",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/snow.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -934,14 +945,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.snow",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/snow.png").convert_alpha(),
     },
     {
         "id": 10,
         "id_str": "item.snow_wall",
         "name": "Snow Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/snow_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -949,14 +960,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.snow"
+        "wall_id_str": "wall.snow",
+        "image": pygame.image.load("assets/images/items/snow_wall.png").convert_alpha(),
     },
     {
         "id": 11,
         "id_str": "item.ice",
         "name": "Ice",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/ice.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -964,14 +975,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.none",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/ice.png").convert_alpha(),
     },
     {
         "id": 12,
         "id_str": "item.ice_wall",
         "name": "Ice Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/ice_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -979,14 +990,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.ice"
+        "wall_id_str": "wall.ice",
+        "image": pygame.image.load("assets/images/items/ice_wall.png").convert_alpha(),
     },
     {
         "id": 13,
         "id_str": "item.wood",
         "name": "Wood",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/wood.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -994,14 +1005,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/wood.png").convert_alpha(),
     },
     {
         "id": 14,
         "id_str": "item.wood_wall",
         "name": "Wood Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/wood_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 2,
@@ -1009,14 +1020,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "wall_id_str": "wall.wood",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/wood_wall.png").convert_alpha(),
     },
     {
         "id": 15,
         "id_str": "item.copper_ore",
         "name": "Copper Ore",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/copper_ore.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 10,
@@ -1024,14 +1035,16 @@ ITEM_DATA: list[
         "tile_id_str": "tile.copper",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load(
+            "assets/images/items/copper_ore.png"
+        ).convert_alpha(),
     },
     {
         "id": 16,
         "id_str": "item.silver_ore",
         "name": "Silver Ore",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/silver_ore.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 20,
@@ -1039,14 +1052,16 @@ ITEM_DATA: list[
         "tile_id_str": "tile.pot_thick_brown",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load(
+            "assets/images/items/silver_ore.png"
+        ).convert_alpha(),
     },
     {
         "id": 17,
         "id_str": "item.sand",
         "name": "Sand",
         "tags": [ItemTag.MATERIAL, ItemTag.TILE],
-        "image_path": "assets/images/items/sand.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 10,
@@ -1054,14 +1069,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "tile_id_str": "tile.sand"
+        "tile_id_str": "tile.sand",
+        "image": pygame.image.load("assets/images/items/sand.png").convert_alpha(),
     },
     {
         "id": 18,
         "id_str": "item.hardened_sand_wall",
         "name": "Hardened Sand Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/hardened_sand_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 10,
@@ -1069,14 +1084,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.hardened_sand"
+        "wall_id_str": "wall.hardened_sand",
+        "image": pygame.image.load(
+            "assets/images/items/hardened_sand_wall.png"
+        ).convert_alpha(),
     },
     {
         "id": 19,
         "id_str": "item.sandstone",
         "name": "Sandstone",
         "tags": [ItemTag.TILE, ItemTag.MATERIAL],
-        "image_path": "assets/images/items/sandstone.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -1084,14 +1101,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.sandstone",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/sandstone.png").convert_alpha(),
     },
     {
         "id": 20,
         "id_str": "item.sandstone_wall",
         "name": "Sandstone Wall",
         "tags": [ItemTag.WALL],
-        "image_path": "assets/images/items/sandstone_wall.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -1099,14 +1116,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "wall_id_str": "wall.sandstone"
+        "wall_id_str": "wall.sandstone",
+        "image": pygame.image.load(
+            "assets/images/items/sandstone_wall.png"
+        ).convert_alpha(),
     },
     {
         "id": 21,
         "id_str": "item.wood_platform",
         "name": "Wood Platform",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/wood_platform.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 20,
@@ -1114,14 +1133,16 @@ ITEM_DATA: list[
         "tile_id_str": "tile.platform_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load(
+            "assets/images/items/wood_platform.png"
+        ).convert_alpha(),
     },
     {
         "id": 22,
         "id_str": "item.copper_broadsword",
         "name": "Copper Broadsword",
         "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
-        "image_path": "assets/images/items/copper_broadsword.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 200,
@@ -1131,18 +1152,24 @@ ITEM_DATA: list[
         "knockback": 10,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.LONGSWORD,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/copper_broadsword.png"
+        ).convert_alpha(),
     },
     {
         "id": 23,
         "id_str": "item.excalibur",
         "name": "Excalibur",
         "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
-        "image_path": "assets/images/items/excalibur.png",
         "tier": 10,
         "max_stack": 1,
         "buy_price": 100000000,
@@ -1152,18 +1179,22 @@ ITEM_DATA: list[
         "knockback": 0,
         "crit_chance": 0.0,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.LONGSWORD,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.9
+        "hold_offset": 0.9,
+        "image": pygame.image.load("assets/images/items/excalibur.png").convert_alpha(),
     },
     {
         "id": 24,
         "id_str": "item.wood_broadsword",
         "name": "Wooden Sword",
         "tags": [ItemTag.LONGSWORD, ItemTag.WEAPON],
-        "image_path": "assets/images/items/wood_broadsword.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 100,
@@ -1173,18 +1204,24 @@ ITEM_DATA: list[
         "knockback": 6,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.LONGSWORD, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.LONGSWORD,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/wood_broadsword.png"
+        ).convert_alpha(),
     },
     {
         "id": 25,
         "id_str": "item.wood_bow",
         "name": "Wooden Bow",
         "tags": [ItemTag.RANGED, ItemTag.WEAPON],
-        "image_path": "assets/images/items/wood_bow.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 150,
@@ -1194,7 +1231,11 @@ ITEM_DATA: list[
         "knockback": 2,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.RANGED, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.RANGED,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "ranged_projectile_id_str": "projectile.arrow",
         "ranged_ammo_type": "arrow",
         "ranged_projectile_speed": 75.0,
@@ -1203,14 +1244,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.bow",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load("assets/images/items/wood_bow.png").convert_alpha(),
     },
     {
         "id": 26,
         "id_str": "item.wooden_arrow",
         "name": "Wooden Arrow",
         "tags": [ItemTag.MATERIAL, ItemTag.AMMO],
-        "image_path": "assets/images/items/wooden_arrow.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
@@ -1223,14 +1264,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load(
+            "assets/images/items/wooden_arrow.png"
+        ).convert_alpha(),
     },
     {
         "id": 27,
         "id_str": "item.musket",
         "name": "Musket",
         "tags": [ItemTag.RANGED, ItemTag.WEAPON],
-        "image_path": "assets/images/items/musket.png",
         "tier": 1,
         "max_stack": 1,
         "buy_price": 5000,
@@ -1240,7 +1283,11 @@ ITEM_DATA: list[
         "knockback": 4,
         "crit_chance": 0.03,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.RANGED, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.RANGED,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "ranged_projectile_id_str": "projectile.bullet",
         "ranged_ammo_type": "bullet",
         "ranged_projectile_speed": 100.0,
@@ -1249,14 +1296,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.gun_shot",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/musket.png").convert_alpha(),
     },
     {
         "id": 28,
         "id_str": "item.musket_ball",
         "name": "Musket Ball",
         "tags": [ItemTag.MATERIAL, ItemTag.AMMO],
-        "image_path": "assets/images/items/musket_ball.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 7,
@@ -1269,14 +1316,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load(
+            "assets/images/items/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 29,
         "id_str": "item.copper_coin",
         "name": "Copper Coin",
         "tags": [ItemTag.AMMO, ItemTag.COIN],
-        "image_path": "assets/images/items/copper_coin.png",
         "tier": 0,
         "max_stack": 100,
         "buy_price": 0,
@@ -1289,14 +1338,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load(
+            "assets/images/items/copper_coin.png"
+        ).convert_alpha(),
     },
     {
         "id": 30,
         "id_str": "item.silver_coin",
         "name": "Silver Coin",
         "tags": [ItemTag.AMMO, ItemTag.COIN],
-        "image_path": "assets/images/items/silver_coin.png",
         "tier": 0,
         "max_stack": 100,
         "buy_price": 0,
@@ -1309,14 +1360,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load(
+            "assets/images/items/silver_coin.png"
+        ).convert_alpha(),
     },
     {
         "id": 31,
         "id_str": "item.gold_coin",
         "name": "Gold Coin",
         "tags": [ItemTag.AMMO, ItemTag.COIN],
-        "image_path": "assets/images/items/gold_coin.png",
         "tier": 0,
         "max_stack": 100,
         "buy_price": 0,
@@ -1329,14 +1382,14 @@ ITEM_DATA: list[
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load("assets/images/items/gold_coin.png").convert_alpha(),
     },
     {
         "id": 32,
         "id_str": "item.platinum_coin",
         "name": "Platinum Coin",
         "tags": [ItemTag.AMMO, ItemTag.COIN],
-        "image_path": "assets/images/items/platinum_coin.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 0,
@@ -1349,14 +1402,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.coins",
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
-        "ricochet_amount": 1
+        "ricochet_amount": 1,
+        "image": pygame.image.load(
+            "assets/images/items/platinum_coin.png"
+        ).convert_alpha(),
     },
     {
         "id": 33,
         "id_str": "item.copper_pickaxe",
         "name": "Copper Pickaxe",
         "tags": [ItemTag.PICKAXE, ItemTag.TOOL, ItemTag.WEAPON],
-        "image_path": "assets/images/items/copper_pickaxe.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 150,
@@ -1371,14 +1426,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/copper_pickaxe.png"
+        ).convert_alpha(),
     },
     {
         "id": 34,
         "id_str": "item.copper_hammer",
         "name": "Copper Hammer",
         "tags": [ItemTag.HAMMER, ItemTag.TOOL, ItemTag.WEAPON],
-        "image_path": "assets/images/items/copper_hammer.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 150,
@@ -1393,14 +1450,16 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hammer_power": 0,
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/copper_hammer.png"
+        ).convert_alpha(),
     },
     {
         "id": 35,
         "id_str": "item.wood_hammer",
         "name": "Wood Hammer",
         "tags": [ItemTag.HAMMER, ItemTag.TOOL, ItemTag.WEAPON],
-        "image_path": "assets/images/items/wood_hammer.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 150,
@@ -1415,28 +1474,30 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hammer_power": 0,
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/wood_hammer.png"
+        ).convert_alpha(),
     },
     {
         "id": 36,
         "id_str": "item.gel",
         "name": "Blue Gel",
         "tags": [ItemTag.MATERIAL],
-        "image_path": "assets/images/items/gel.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 5,
         "sell_price": 1,
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/gel.png").convert_alpha(),
     },
     {
         "id": 37,
         "id_str": "item.wood_chest",
         "name": "Wooden Chest",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/wood_chest.png",
         "tier": 0,
         "max_stack": 99,
         "buy_price": 50,
@@ -1444,14 +1505,16 @@ ITEM_DATA: list[
         "tile_id_str": "tile.chest_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load(
+            "assets/images/items/wood_chest.png"
+        ).convert_alpha(),
     },
     {
         "id": 38,
         "id_str": "item.workbench",
         "name": "Workbench",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/workbench.png",
         "tier": 0,
         "max_stack": 99,
         "buy_price": 50,
@@ -1459,14 +1522,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.crafting_table_wood",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/workbench.png").convert_alpha(),
     },
     {
         "id": 39,
         "id_str": "item.wood_door",
         "name": "Wooden Door",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/wood_door.png",
         "tier": 0,
         "max_stack": 99,
         "buy_price": 50,
@@ -1474,14 +1537,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.door_wood_closed",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/wood_door.png").convert_alpha(),
     },
     {
         "id": 40,
         "id_str": "item.torch",
         "name": "Torch",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/torch.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 20,
@@ -1489,14 +1552,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.torch",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/torch.png").convert_alpha(),
     },
     {
         "id": 41,
         "id_str": "item.spike",
         "name": "Spike",
         "tags": [ItemTag.TILE],
-        "image_path": "assets/images/items/Item_147.png",
         "tier": 0,
         "max_stack": 999,
         "buy_price": 15,
@@ -1504,14 +1567,14 @@ ITEM_DATA: list[
         "tile_id_str": "tile.spike",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load("assets/images/items/spike.png").convert_alpha(),
     },
     {
         "id": 42,
         "id_str": "item.grappling_hook",
         "name": "Grappling Hook",
         "tags": [ItemTag.GRAPPLE, ItemTag.TOOL],
-        "image_path": "assets/images/items/grappling_hook.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 10000,
@@ -1523,7 +1586,10 @@ ITEM_DATA: list[
         "grapple_claw_image_path": "assets/images/grappling_hook_claw.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "hold_offset": 0.0
+        "hold_offset": 0.0,
+        "image": pygame.image.load(
+            "assets/images/items/grappling_hook.png"
+        ).convert_alpha(),
     },
     {
         "id": 43,
@@ -1534,7 +1600,6 @@ ITEM_DATA: list[
         "max_stack": 999,
         "buy_price": 10000,
         "sell_price": 750,
-        "image_path": "assets/images/items/water_bolt.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "prefixes": [],
@@ -1545,7 +1610,10 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "world_override_image_path": "",
         "use_sound": "sound.swing",
-        "mana_cost": 20
+        "mana_cost": 20,
+        "image": pygame.image.load(
+            "assets/images/items/water_bolt.png"
+        ).convert_alpha(),
     },
     {
         "id": 44,
@@ -1557,10 +1625,12 @@ ITEM_DATA: list[
         "buy_price": 1000,
         "sell_price": 100,
         "hold_offset": 0,
-        "image_path": "assets/images/items/painting_a.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_a"
+        "tile_id_str": "tile.painting_a",
+        "image": pygame.image.load(
+            "assets/images/items/painting_a.png"
+        ).convert_alpha(),
     },
     {
         "id": 45,
@@ -1572,10 +1642,12 @@ ITEM_DATA: list[
         "buy_price": 1000,
         "sell_price": 100,
         "hold_offset": 0,
-        "image_path": "assets/images/items/painting_b.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_b"
+        "tile_id_str": "tile.painting_b",
+        "image": pygame.image.load(
+            "assets/images/items/painting_b.png"
+        ).convert_alpha(),
     },
     {
         "id": 46,
@@ -1587,17 +1659,18 @@ ITEM_DATA: list[
         "buy_price": 1000,
         "sell_price": 100,
         "hold_offset": 0,
-        "image_path": "assets/images/items/painting_c.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "tile_id_str": "tile.painting_c"
+        "tile_id_str": "tile.painting_c",
+        "image": pygame.image.load(
+            "assets/images/items/painting_c.png"
+        ).convert_alpha(),
     },
     {
         "id": 47,
         "id_str": "item.copper_axe",
         "name": "Copper Axe",
         "tags": [ItemTag.AXE, ItemTag.TOOL, ItemTag.WEAPON],
-        "image_path": "assets/images/items/copper_axe.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 150,
@@ -1612,14 +1685,16 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/copper_axe.png"
+        ).convert_alpha(),
     },
     {
         "id": 48,
         "id_str": "item.iron_shortsword",
         "name": "Iron Shortsword",
         "tags": [ItemTag.SHORTSWORD, ItemTag.WEAPON],
-        "image_path": "assets/images/items/iron_shortsword.png",
         "tier": 0,
         "max_stack": 1,
         "buy_price": 200,
@@ -1629,12 +1704,19 @@ ITEM_DATA: list[
         "knockback": 5.5,
         "crit_chance": 0.04,
         "world_override_image_path": "",
-        "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.SHORTSWORD, ItemPrefixGroup.UNIVERSAL],
+        "prefixes": [
+            ItemPrefixGroup.COMMON,
+            ItemPrefixGroup.SHORTSWORD,
+            ItemPrefixGroup.UNIVERSAL,
+        ],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
-        "hold_offset": 0.8
-    }
+        "hold_offset": 0.8,
+        "image": pygame.image.load(
+            "assets/images/items/iron_shortsword.png"
+        ).convert_alpha(),
+    },
 ]
 
 LOOT_DATA: list[LootData] = [
@@ -1710,7 +1792,7 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             },
         ],
-        "coin_spawn_range": (75, 150)
+        "coin_spawn_range": (75, 150),
     },
     {
         "id": 2,
@@ -1759,7 +1841,7 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             },
         ],
-        "coin_spawn_range": (750, 2000)
+        "coin_spawn_range": (750, 2000),
     },
     {
         "id": 3,
@@ -1776,14 +1858,14 @@ LOOT_DATA: list[LootData] = [
                 "once_per_instance": False,
             }
         ],
-        "coin_spawn_range": (5000, 15000)
-    }
+        "coin_spawn_range": (5000, 15000),
+    },
 ]
 
 PROJECTILE_DATA: list[ProjectileData] = [
     {"id": 0, "id_str": "projectile.INVALID"},
     {"id": 1, "id_str": "projectile.arrow"},
-    {"id": 2, "id_str": "projectile.bullet"}
+    {"id": 2, "id_str": "projectile.bullet"},
 ]
 
 SOUND_DATA: list[SoundData] = [
@@ -1796,7 +1878,7 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/tink_1.wav",
             "assets/sounds/tink_2.wav",
         ],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 2,
@@ -1806,13 +1888,13 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/dig_1.wav",
             "assets/sounds/dig_2.wav",
         ],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 3,
         "id_str": "sound.jump",
         "variation_paths": ["assets/sounds/jump.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 4,
@@ -1822,67 +1904,67 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/player_hit_1.wav",
             "assets/sounds/player_hit_2.wav",
         ],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 5,
         "id_str": "sound.grass",
         "variation_paths": ["assets/sounds/grass.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 6,
         "id_str": "sound.player_death",
         "variation_paths": ["assets/sounds/player_killed.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 7,
         "id_str": "sound.mirror",
         "variation_paths": ["assets/sounds/mirror.wav"],
-        "volume": 0.1
+        "volume": 0.1,
     },
     {
         "id": 8,
         "id_str": "sound.slime_hurt",
         "variation_paths": ["assets/sounds/npc_hit_0.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 9,
         "id_str": "sound.slime_death",
         "variation_paths": ["assets/sounds/npc_killed_0.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 10,
         "id_str": "sound.swing",
         "variation_paths": ["assets/sounds/swing.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 11,
         "id_str": "sound.bow",
         "variation_paths": ["assets/sounds/bow.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 12,
         "id_str": "sound.gun_shot",
         "variation_paths": ["assets/sounds/gun_shot.wav"],
-        "volume": 0.2
+        "volume": 0.2,
     },
     {
         "id": 13,
         "id_str": "sound.bullet_hit",
         "variation_paths": ["assets/sounds/bullet_hit.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 14,
         "id_str": "sound.grab",
         "variation_paths": ["assets/sounds/grab.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 15,
@@ -1892,50 +1974,50 @@ SOUND_DATA: list[SoundData] = [
             "assets/sounds/run_1.wav",
             "assets/sounds/run_2.wav",
         ],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 16,
         "id_str": "sound.coins",
         "variation_paths": ["assets/sounds/coins.wav"],
-        "volume": 0.3
+        "volume": 0.3,
     },
     {
         "id": 17,
         "id_str": "sound.menu_open",
         "variation_paths": ["assets/sounds/menu_open.wav"],
-        "volume": 0.3
+        "volume": 0.3,
     },
     {
         "id": 18,
         "id_str": "sound.menu_close",
         "variation_paths": ["assets/sounds/menu_close.wav"],
-        "volume": 0.3
+        "volume": 0.3,
     },
     {
         "id": 19,
         "id_str": "sound.menu_select",
         "variation_paths": ["assets/sounds/menu_select.wav"],
-        "volume": 0.3
+        "volume": 0.3,
     },
     {
         "id": 20,
         "id_str": "sound.chat",
         "variation_paths": ["assets/sounds/chat.wav"],
-        "volume": 0.3
+        "volume": 0.3,
     },
     {
         "id": 21,
         "id_str": "sound.door_opened",
         "variation_paths": ["assets/sounds/door_opened.wav"],
-        "volume": 1
+        "volume": 1,
     },
     {
         "id": 22,
         "id_str": "sound.door_closed",
         "variation_paths": ["assets/sounds/door_closed.wav"],
-        "volume": 1
-    }
+        "volume": 1,
+    },
 ]
 
 STRUCTURE_DATA: list[StructureData] = [
@@ -1963,7 +2045,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "-[0:tile.stone][0:tile.stone;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone]----",
-        ]
+        ],
     },
     {
         "id": 2,
@@ -1978,7 +2060,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[3:wall.wood][3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "-[0:tile.none;3:wall.wood][3:wall.wood]-[0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone]-[3:wall.stone][0:tile.stone][3:wall.stone][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.wood][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 3,
@@ -1993,7 +2075,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 4,
@@ -2010,7 +2092,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood;4:mineshaft,Down]",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 5,
@@ -2027,7 +2109,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone]",
             "----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "----[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 6,
@@ -2049,7 +2131,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.door_wood_closed;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][1:0,-2;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]-",
-        ]
+        ],
     },
     {
         "id": 7,
@@ -2071,7 +2153,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.spike;3:wall.stone][0:tile.stone;3:wall.stone]",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 8,
@@ -2095,7 +2177,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_short_brown;3:wall.stone][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_brown;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]",
             "--[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 9,
@@ -2119,7 +2201,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone]-",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
             "[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--",
-        ]
+        ],
     },
     {
         "id": 10,
@@ -2146,7 +2228,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]",
-        ]
+        ],
     },
     {
         "id": 11,
@@ -2173,7 +2255,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.pot_tall_gray;1:0,0;3:wall.stone][1:0,-1;3:wall.stone][0:tile.stone;3:wall.stone]--------",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
             "-[0:tile.stone;3:wall.stone][0:tile.none;3:wall.stone][0:tile.none;3:wall.stone;4:mineshaft,Right][0:tile.none;3:wall.stone][0:tile.stone;3:wall.stone]--------",
-        ]
+        ],
     },
     {
         "id": 12,
@@ -2188,7 +2270,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood;4:mineshaft,Up][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none][0:tile.none][3:wall.wood]--",
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none]-[0:tile.none;3:wall.wood]-[0:tile.none;3:wall.wood]-",
             "[0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone;3:wall.stone][0:tile.stone][0:tile.stone;3:wall.stone]-[3:wall.stone]-",
-        ]
+        ],
     },
     {
         "id": 13,
@@ -2203,7 +2285,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[1:-2,0][1:-2,-1][1:-2,-2][1:-2,-3][1:-2,-4;4:tree_trunk,Down]",
             "[1:-3,0][1:-3,-1][1:-3,-2][1:-3,-3][1:-3,-4]",
             "[1:-4,0][1:-4,-1][1:-4,-2][1:-4,-3][1:-4,-4]",
-        ]
+        ],
     },
     {
         "id": 14,
@@ -2212,7 +2294,7 @@ STRUCTURE_DATA: list[StructureData] = [
         "width": 1,
         "height": 2,
         "spawn_weight": 100,
-        "tile_data": ["[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"]
+        "tile_data": ["[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_trunk,Down]"],
     },
     {
         "id": 15,
@@ -2227,7 +2309,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
-        ]
+        ],
     },
     {
         "id": 16,
@@ -2242,7 +2324,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.leaves][0:tile.leaves][0:tile.leaves]",
             "-[0:tile.leaves]-",
             "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk][0:tile.trunk;4:tree_trunk,Down]",
-        ]
+        ],
     },
     {
         "id": 17,
@@ -2255,7 +2337,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.trunk]",
             "[0:tile.trunk;4:tree_trunk,Up][0:tile.trunk;4:tree_root,Down]",
             "-[0:tile.trunk]",
-        ]
+        ],
     },
     {
         "id": 18,
@@ -2271,7 +2353,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.trunk]--",
             "-[0:tile.trunk]-[0:tile.trunk]-",
             "---[0:tile.trunk][0:tile.trunk]",
-        ]
+        ],
     },
     {
         "id": 19,
@@ -2287,7 +2369,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.trunk][0:tile.trunk]--",
             "--[0:tile.trunk]-[0:tile.trunk]-",
             "-[0:tile.trunk]-[0:tile.trunk]--",
-        ]
+        ],
     },
     {
         "id": 20,
@@ -2304,7 +2386,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.trunk][0:tile.trunk][0:tile.trunk][1:-1,0][1:-1,-1][0:tile.trunk]--",
             "[0:tile.trunk]-[0:tile.trunk]-[0:tile.trunk][0:tile.trunk]-[0:tile.trunk]-",
             "---[0:tile.trunk]--[0:tile.trunk]-[0:tile.trunk]",
-        ]
+        ],
     },
     {
         "id": 21,
@@ -2334,7 +2416,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]-",
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none]--",
-        ]
+        ],
     },
     {
         "id": 22,
@@ -2364,7 +2446,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-1,0;3:wall.wood][1:-1,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ]
+        ],
     },
     {
         "id": 23,
@@ -2388,7 +2470,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
             "-[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]--------",
             "--[0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none][0:tile.none]---------",
-        ]
+        ],
     },
     {
         "id": 24,
@@ -2414,7 +2496,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_short_brown;3:wall.wood][0:tile.wood;3:wall.wood]--",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]--",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]--",
-        ]
+        ],
     },
     {
         "id": 25,
@@ -2441,7 +2523,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.pot_tall_gray;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ]
+        ],
     },
     {
         "id": 26,
@@ -2464,7 +2546,7 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ]
+        ],
     },
     {
         "id": 27,
@@ -2487,28 +2569,34 @@ STRUCTURE_DATA: list[StructureData] = [
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][1:-2,0;3:wall.wood][1:-2,-1;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.platform_wood;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.none;3:wall.wood][0:tile.wood;3:wall.wood]",
             "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
-        ]
-    }
+        ],
+    },
 ]
 
-TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = [
+TILE_DATA: list[
+    TileData
+    | DamagingTileData
+    | MultitileData
+    | DoorTileData
+    | LootTileData
+    | LootMultitileData
+] = [
     {
         "id": 0,
         "id_str": "tile.UNNAMED",
         "name": "UNNAMED",
         "strength": 0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "",
         "item_id_str": "item.INVALID",
         "item_count_range": (1, 1),
         "place_sound": "",
         "hit_sound": "",
+        "image": None,
     },
     {
         "id": 1,
@@ -2516,17 +2604,16 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "None",
         "strength": 0,
         "strength_type": "PICKAXE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["NO_COLLIDE", "NO_DRAW"],
-        "image_path": "",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "place_sound": "",
-        "hit_sound": ""
+        "hit_sound": "",
+        "image": None,
     },
     {
         "id": 2,
@@ -2534,7 +2621,7 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Dirt",
         "strength": 1,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "tile.grass",
             "tile.sand",
@@ -2546,13 +2633,15 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         ],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/dirt.png",
         "item_id_str": "item.dirt_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/dirt.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 3,
@@ -2560,17 +2649,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Stone",
         "strength": 3,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.wood"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/stone.png",
         "item_id_str": "item.stone_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/stone.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 4,
@@ -2578,17 +2669,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Grass",
         "strength": 0.5,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/grass.png",
         "item_id_str": "item.dirt_block",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
-        "hit_sound": "sound.grass"
+        "hit_sound": "sound.grass",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/grass.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 5,
@@ -2596,17 +2689,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Sand",
         "strength": 0.5,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/sand.png",
         "item_id_str": "item.sand",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/sand.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 6,
@@ -2614,17 +2709,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Sandstone",
         "strength": 1.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/sandstone.png",
         "item_id_str": "item.sandstone",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/sandstone.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 7,
@@ -2632,17 +2729,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Snow",
         "strength": 0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk", "tile.copper"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/snow.png",
         "item_id_str": "item.snow",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/snow.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 8,
@@ -2650,17 +2749,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Ice",
         "strength": 1.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/ice.png",
         "item_id_str": "item.ice",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/ice.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 9,
@@ -2668,17 +2769,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Wood",
         "strength": 1.0,
         "strength_type": "AXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.stone"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/wood.png",
         "item_id_str": "item.wood",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/wood.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 10,
@@ -2686,7 +2789,7 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Trunk",
         "strength": 5.0,
         "strength_type": "AXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "tile.dirt",
             "tile.grass",
@@ -2695,13 +2798,15 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         ],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["NO_COLLIDE"],
-        "image_path": "assets/images/tiles/trunk.png",
         "item_id_str": "item.wood",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/trunk.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 11,
@@ -2709,17 +2814,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Leaves",
         "strength": 0.5,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk"],
         "light_reduction": 5,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["NO_COLLIDE"],
-        "image_path": "assets/images/tiles/leaves.png",
         "item_id_str": "item.INVALID",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
-        "hit_sound": "sound.grass"
+        "hit_sound": "sound.grass",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/leaves.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 12,
@@ -2727,17 +2834,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Copper Ore",
         "strength": 3.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.stone", "tile.snow"],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/copper_ore.png",
         "item_id_str": "item.copper",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/copper_ore.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 13,
@@ -2745,17 +2854,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Silver",
         "strength": 0,
         "strength_type": "PICKAXE",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": [],
-        "image_path": "assets/images/tiles/silver.png",
         "item_id_str": "item.silver",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/silver.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 14,
@@ -2763,19 +2874,21 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Spike",
         "strength": 1.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (50, 50, 50),
         "tags": ["DAMAGING", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/spike.png",
         "item_id_str": "item.spike",
         "item_count_range": (1, 1),
         "tile_damage": 50,
         "tile_damage_name": "spike",
         "place_sound": "sound.tink",
-        "hit_sound": "sound.tink"
+        "hit_sound": "sound.tink",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/spike.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 15,
@@ -2783,17 +2896,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Torch",
         "strength": 1.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 200,
-        "average_color": (178, 178, 10),
         "tags": ["NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/lamp.png",
         "item_id_str": "item.torch",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/lamp.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 16,
@@ -2801,17 +2916,19 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Wood Platform",
         "strength": 1.0,
         "strength_type": "PICKAXE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["PLATFORM", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/platform_wood.png",
         "item_id_str": "item.wood_platform",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/platform_wood.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 17,
@@ -2819,20 +2936,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Chest",
         "strength": 2.0,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["CHEST", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.wood_chest",
         "item_count_range": (1, 1),
-        "multitile_image_path": "assets/images/tiles/multitiles/chest_wood.png",
         "multitile_dimensions": (2, 2),
         "multitile_required_solids": [(0, 2), (1, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/chest_wood.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 18,
@@ -2840,20 +2960,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Wood Crafting Table",
         "strength": 1.0,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["WORKBENCH", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.workbench",
         "item_count_range": (1, 1),
-        "multitile_image_path": "assets/images/tiles/multitiles/crafting_table.png",
         "multitile_dimensions": (2, 1),
         "multitile_required_solids": [(0, 1), (1, 1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/crafting_table.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 19,
@@ -2861,13 +2984,11 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Wood Door Open Left",
         "strength": 1.0,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["CYCLABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_closed",
@@ -2876,11 +2997,16 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "cycle_facing_right_tile_id_str": "tile.door_wood_closed",
         "cycle_facing_right_tile_offset": [1, 0],
         "cycle_facing_right_sound": "sound.door_closed",
-        "multitile_image_path": "assets/images/tiles/multitiles/door_wood_open_left.png",
         "multitile_dimensions": (2, 3),
         "multitile_required_solids": [(1, 3), (1, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/door_wood_open_left.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 20,
@@ -2888,13 +3014,11 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Closed Wood Door",
         "strength": 1.0,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 35,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["CYCLABLE", "MULTITILE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_open_left",
@@ -2903,11 +3027,16 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "cycle_facing_right_tile_id_str": "tile.door_wood_open_right",
         "cycle_facing_right_tile_offset": [0, 0],
         "cycle_facing_right_sound": "sound.door_opened",
-        "multitile_image_path": "assets/images/tiles/multitiles/door_wood_closed.png",
         "multitile_dimensions": (1, 3),
         "multitile_required_solids": [(0, 3), (0, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/door_wood_closed.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 21,
@@ -2915,13 +3044,11 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Wood Door Open Right",
         "strength": 1.0,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["CYCLABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_closed",
@@ -2930,11 +3057,16 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "cycle_facing_right_tile_id_str": "tile.door_wood_closed",
         "cycle_facing_right_tile_offset": [0, 0],
         "cycle_facing_right_sound": "sound.door_closed",
-        "multitile_image_path": "assets/images/tiles/multitiles/door_wood_open_right.png",
         "multitile_dimensions": (2, 3),
         "multitile_required_solids": [(0, 3), (0, -1)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/door_wood_open_right.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 22,
@@ -2942,21 +3074,24 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Tall Gray Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (80, 80, 80),
         "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
-        "multitile_image_path": "assets/images/tiles/multitiles/pot_tall_gray.png",
         "multitile_dimensions": (1, 2),
         "multitile_required_solids": [(0, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/pot_tall_gray.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 23,
@@ -2964,21 +3099,24 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Tall Brown Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
-        "multitile_image_path": "assets/images/tiles/multitiles/pot_tall_brown.png",
         "multitile_dimensions": (1, 2),
         "multitile_required_solids": [(0, 2)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/pot_tall_brown.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 24,
@@ -2986,21 +3124,24 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "thick Brown Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
-        "multitile_image_path": "assets/images/tiles/multitiles/pot_thick_brown.png",
         "multitile_dimensions": (2, 2),
         "multitile_required_solids": [(0, 2), (1, 2)],
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/pot_thick_brown.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 25,
@@ -3008,21 +3149,24 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "thick Gray Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "average_color": (80, 80, 80),
         "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
-        "multitile_image_path": "assets/images/tiles/multitiles/pot_thick_brown.png",
         "multitile_dimensions": (2, 2),
         "multitile_required_solids": [(0, 2), (1, 2)],
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/pot_thick_brown.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 26,
@@ -3030,18 +3174,20 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Short Gray Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (80, 80, 80),
         "tags": ["BREAKABLE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/pot_short_gray.png",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/pot_short_gray.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 27,
@@ -3049,18 +3195,22 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Short Brown Pot",
         "strength": 0.5,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (85, 60, 42),
         "tags": ["BREAKABLE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/pot_short_brown.png",
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/pot_short_brown.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 28,
@@ -3068,20 +3218,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Tree Canopy A",
         "strength": 0,
         "strength_type": "DAMAGE",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.wood",
         "item_count_range": (4, 20),
-        "multitile_image_path": "assets/images/tiles/multitiles/tree_canopy_a.png",
         "multitile_dimensions": (5, 5),
         "multitile_required_solids": [(2, 5)],
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/tree_canopy_a.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 29,
@@ -3089,20 +3242,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Painting A",
         "strength": 0.5,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["MULTITILE", "NO_COLLIDE"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.painting_a",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
-        "multitile_image_path": "assets/images/tiles/multitiles/painting_a.png",
         "multitile_dimensions": (3, 2),
-        "multitile_required_solids": []
+        "multitile_required_solids": [],
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/painting_a.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 30,
@@ -3110,20 +3266,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Painting B",
         "strength": 0.5,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["MULTITILE", "NO_COLLIDE"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.painting_b",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
-        "multitile_image_path": "assets/images/tiles/multitiles/painting_b.png",
         "multitile_dimensions": (2, 2),
-        "multitile_required_solids": []
+        "multitile_required_solids": [],
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/painting_b.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 31,
@@ -3131,20 +3290,23 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Painting C",
         "strength": 0.5,
         "strength_type": "HAMMER",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["MULTITILE", "NO_COLLIDE"],
-        "image_path": "assets/images/tiles/",
         "item_id_str": "item.painting_c",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
-        "multitile_image_path": "assets/images/tiles/multitiles/painting_c.png",
         "multitile_dimensions": (3, 2),
-        "multitile_required_solids": []
+        "multitile_required_solids": [],
+        "image": pygame.transform.scale(
+            pygame.image.load(
+                "assets/images/tiles/multitiles/painting_c.png"
+            ).convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 32,
@@ -3152,18 +3314,20 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         "name": "Mushroom",
         "strength": 0,
         "strength_type": "Pickaxe, Axe, Sword",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "average_color": (255, 0, 255),
         "tags": ["NO_COLLIDE", "TRANSPARENT"],
-        "image_path": "assets/images/tiles/mushroom.png",
         "item_id_str": "item.mushroom",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
-    }
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/tiles/mushroom.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
+    },
 ]
 
 WALL_DATA: list[WallData] = [
@@ -3171,31 +3335,29 @@ WALL_DATA: list[WallData] = [
         "id": 0,
         "id_str": "wall.INVALID",
         "name": "INVALID",
-        "mask_type": "NONE",
+        "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
-        "image_path": "assets/images/walls/",
         "item_id_str": "item.INVALID",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
+        "image": None,
     },
     {
         "id": 1,
         "id_str": "wall.none",
         "name": "None",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [],
-        "image_path": "assets/images/walls/",
         "item_id_str": "item.INVALID",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": None,
     },
     {
         "id": 2,
         "id_str": "wall.dirt",
         "name": "Dirt Wall",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "wall.dirt",
             "wall.ice",
@@ -3205,41 +3367,47 @@ WALL_DATA: list[WallData] = [
             "wall.stone",
             "wall.wood",
         ],
-        "image_path": "assets/images/walls/dirt.png",
         "item_id_str": "item.dirt_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/dirt.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 3,
         "id_str": "wall.stone",
         "name": "Stone",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["wall.dirt", "wall.snow", "wall.wood"],
-        "image_path": "assets/images/walls/stone.png",
         "item_id_str": "item.stone_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/stone.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 4,
         "id_str": "wall.ice",
         "name": "Ice",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["wall.snow"],
-        "image_path": "assets/images/walls/ice.png",
         "item_id_str": "item.ice_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/ice.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 5,
         "id_str": "wall.snow",
         "name": "Snow",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "wall.dirt",
             "wall.ice",
@@ -3248,29 +3416,33 @@ WALL_DATA: list[WallData] = [
             "wall.stone",
             "wall.wood",
         ],
-        "image_path": "assets/images/walls/snow.png",
         "item_id_str": "item.snow_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/snow.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 6,
         "id_str": "wall.sandstone",
         "name": "Sandstone",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["wall.dirt", "wall.hardened_sand", "wall.snow"],
-        "image_path": "assets/images/walls/sandstone.png",
         "item_id_str": "item.sandstone_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/sandstone.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 7,
         "id_str": "wall.hardened_sand",
         "name": "Sand",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "wall.dirt",
             "wall.sandstone",
@@ -3278,32 +3450,36 @@ WALL_DATA: list[WallData] = [
             "wall.stone",
             "wall.wood",
         ],
-        "image_path": "assets/images/walls/hardened_sand.png",
         "item_id_str": "item.hardened_sand_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/hardened_sand.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
     },
     {
         "id": 8,
         "id_str": "wall.wood",
         "name": "Wood",
-        "mask_type": "NOISY",
+        "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "wall.dirt",
             "wall.hardened_sand",
             "wall.snow",
             "wall.stone",
         ],
-        "image_path": "assets/images/walls/wood.png",
         "item_id_str": "item.wood_wall",
-        "average_color": (255, 0, 255),
         "place_sound": "sound.dig",
-        "hit_sound": "sound.dig"
-    }
+        "hit_sound": "sound.dig",
+        "image": pygame.transform.scale(
+            pygame.image.load("assets/images/walls/wood.png").convert_alpha(),
+            (BLOCK_SIZE, BLOCK_SIZE),
+        ),
+    },
 ]
 
 WORLD_GEN_DATA: list[WorldGenData] = [
     {"id": 0, "id_str": "world_gen.INVALID"},
-    {"id": 1, "id_str": "world_gen.default"}
+    {"id": 1, "id_str": "world_gen.default"},
 ]

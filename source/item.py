@@ -184,19 +184,15 @@ class Item:
 		else:
 			raise ValueError("Item image is not set.")
 
-	def get_item_slot_offset_x(self):
-		if self.json_item != None:
-			try:
-				return self.json_item["item_slot_offset_x"]
-			except KeyError:
-				return 8
+	def get_offset_x(self):
+		if type(self.json_item["image"]) is pygame.Surface:
+			return int(24 - self.json_item["image"].get_width() * 0.5)
+		return 0
 
-	def get_item_slot_offset_y(self):
-		if self.json_item != None:
-			try:
-				return self.json_item["item_slot_offset_y"]
-			except KeyError:
-				return 8
+	def get_offset_y(self):
+		if type(self.json_item["image"]) is pygame.Surface:
+			return int(24 - self.json_item["image"].get_height() * 0.5)
+		return 0
 
 	def get_world_override_image(self):
 		if self.json_item != None:

@@ -892,7 +892,7 @@ def update_terrain_surface(i, j, affect_others=True):
 
 			if TileTag.MULTITILE in json_tile_dat["tags"]:
 				tile_img = pygame.Surface((commons.BLOCK_SIZE, commons.BLOCK_SIZE)).convert()
-				tile_img.blit(json_tile_dat["multitile_image"], (-tile_dat[2][0] * commons.BLOCK_SIZE, -tile_dat[2][1] * commons.BLOCK_SIZE))
+				tile_img.blit(json_tile_dat["image"], (-tile_dat[2][0] * commons.BLOCK_SIZE, -tile_dat[2][1] * commons.BLOCK_SIZE))
 			else:
 				tile_img = json_tile_dat["image"].copy()
 

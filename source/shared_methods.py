@@ -38,18 +38,6 @@ def get_on_off(bool_var):
 def darken_color(color: tuple[int, int, int], factor: float=0.6):
 	return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
 
-
-"""================================================================================================================= 
-	shared_methods.get_block_average_color -> tuple
-
-	Given a tile_id, the average color of that tile's image is computed using the 'pygame.transform.average_color'
-	function, or potentially overridden in the tile tool
------------------------------------------------------------------------------------------------------------------"""
-def get_block_average_color(tile_id):
-	tile_data = game_data.get_tile_by_id(tile_id)
-	if (tile_data != None):
-		return tile_data["average_color"]
-
 """================================================================================================================= 
 	shared_methods.get_tier_color -> tuple
 

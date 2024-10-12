@@ -28,7 +28,7 @@ class Particle:
 				angle += random.random() * spread - spread * 0.5  # Set angle + random spread in set range
 			self.velocity = (math.cos(angle) * magnitude, math.sin(angle) * magnitude)  # Velocity from angle and magnitude
 		else:
-			self.velocity = velocity
+			self.velocity = (velocity, velocity)
 		self.gravity = gravity
 
 	"""================================================================================================================= 

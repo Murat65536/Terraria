@@ -1146,17 +1146,7 @@ while True:
 				pygame.quit()
 				sys.exit()
 			commons.WAIT_TO_USE = True
-		
-		# if event.type == song_end_event:
-		# 	pygame.mixer.music.load("assets/sounds/day.mp3")
-		# 	pygame.mixer.music.set_volume(game_data.music_volume)
-		# 	pygame.mixer.music.play()
 
-			# if event.key == K_CAPSLOCK:
-			#	if commons.SHIFT_ACTIVE:
-			#		commons.SHIFT_ACTIVE = False
-			#	else:
-			#		commons.SHIFT_ACTIVE = True
 
 		if commons.game_state == "PLAYING":
 			# print(round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
@@ -1250,17 +1240,21 @@ while True:
 
 								if tile_id != game_data.air_tile_id:
 									tile_data = game_data.get_tile_by_id(tile_id)
-									if tile_data != None:
-										if tile_data["average_color"] != (255, 0, 255):
-											pygame.draw.rect(world_surf, tile_data["average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
-											continue
+									if type(tile_data["image"]) is pygame.Surface:
+										try:
+											pygame.draw.rect(world_surf, pygame.transform.average_color(tile_data["image"]), pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+										except FileNotFoundError:
+											pass
+										continue
 
 								if wall_id != game_data.air_wall_id:
 									wall_data = game_data.get_wall_by_id(wall_id)
-									if wall_data != None:
-										if wall_data["average_color"] != (255, 0, 255):
-											pygame.draw.rect(world_surf, wall_data["average_color"], pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
-											continue
+									if type(wall_data["image"]) is pygame.Surface:
+										try:
+											pygame.draw.rect(world_surf, pygame.transform.average_color(wall_data["image"]), pygame.Rect(tile_x * tile_scale, tile_y * tile_scale, tile_scale, tile_scale), 0)
+										except FileNotFoundError:
+											pass
+										continue
 
 								sky_darken_factor = 1.0 - 0.7 * min(1.0, max(0.0, (tile_y - 55) / 110))
 								color = shared_methods.darken_color((135, 206, 234), int(sky_darken_factor))
