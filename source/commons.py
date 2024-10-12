@@ -175,7 +175,6 @@ class PickaxeItemData(TypedDict):
     attack_damage: int
     knockback: int
     crit_chance: float
-    world_override_image_path: str
     prefixes: list[ItemPrefixGroup]
     pickaxe_power: float
     pickup_sound: str
@@ -183,6 +182,7 @@ class PickaxeItemData(TypedDict):
     use_sound: str
     hold_offset: float
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class HammerItemData(TypedDict):
@@ -198,7 +198,6 @@ class HammerItemData(TypedDict):
     attack_damage: int
     knockback: float
     crit_chance: float
-    world_override_image_path: str
     prefixes: list[ItemPrefixGroup]
     pickup_sound: str
     drop_sound: str
@@ -206,6 +205,7 @@ class HammerItemData(TypedDict):
     hammer_power: float
     hold_offset: float
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class AxeItemData(TypedDict):
@@ -221,7 +221,6 @@ class AxeItemData(TypedDict):
     attack_damage: int
     knockback: float
     crit_chance: float
-    world_override_image_path: str
     prefixes: list[ItemPrefixGroup]
     axe_power: float
     pickup_sound: str
@@ -229,6 +228,7 @@ class AxeItemData(TypedDict):
     use_sound: str
     hold_offset: float
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class SwordItemData(TypedDict):
@@ -244,13 +244,13 @@ class SwordItemData(TypedDict):
     attack_damage: int
     knockback: float
     crit_chance: float
-    world_override_image_path: str
     prefixes: list[ItemPrefixGroup]
     pickup_sound: str
     drop_sound: str
     use_sound: str
     hold_offset: float
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class RangedItemData(TypedDict):
@@ -266,7 +266,6 @@ class RangedItemData(TypedDict):
     attack_damage: int
     knockback: float
     crit_chance: float
-    world_override_image_path: str
     prefixes: list[ItemPrefixGroup]
     ranged_projectile_id_str: str
     ranged_ammo_type: str
@@ -278,6 +277,7 @@ class RangedItemData(TypedDict):
     use_sound: str
     hold_offset: float
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class AmmunitionItemData(TypedDict):
@@ -338,10 +338,10 @@ class MagicalWeaponItemData(TypedDict):
     knockback: float
     crit_chance: float
     hold_offset: float
-    world_override_image_path: str
     use_sound: str
     mana_cost: int
     image: pygame.Surface | None
+    world_override_image: pygame.Surface | None
 
 
 class ItemLootData(TypedDict):
@@ -799,7 +799,6 @@ ITEM_DATA: list[
         "attack_damage": 7,
         "knockback": 2,
         "crit_chance": 0.04,
-        "world_override_image_path": "",
         "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickaxe_power": 40.0,
         "pickup_sound": "sound.grab",
@@ -809,6 +808,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/iron_pickaxe.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 2,
@@ -857,7 +857,6 @@ ITEM_DATA: list[
         "attack_damage": 12,
         "knockback": 5.5,
         "crit_chance": 0.04,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.LONGSWORD,
@@ -870,6 +869,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/iron_broadsword.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 5,
@@ -1151,7 +1151,6 @@ ITEM_DATA: list[
         "attack_damage": 5,
         "knockback": 10,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.LONGSWORD,
@@ -1164,6 +1163,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_broadsword.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 23,
@@ -1178,7 +1178,6 @@ ITEM_DATA: list[
         "attack_damage": 1337,
         "knockback": 0,
         "crit_chance": 0.0,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.LONGSWORD,
@@ -1189,6 +1188,7 @@ ITEM_DATA: list[
         "use_sound": "sound.swing",
         "hold_offset": 0.9,
         "image": pygame.image.load("assets/images/items/excalibur.png").convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 24,
@@ -1203,7 +1203,6 @@ ITEM_DATA: list[
         "attack_damage": 3,
         "knockback": 6,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.LONGSWORD,
@@ -1216,6 +1215,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/wood_broadsword.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 25,
@@ -1230,7 +1230,6 @@ ITEM_DATA: list[
         "attack_damage": 4,
         "knockback": 2,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.RANGED,
@@ -1246,6 +1245,7 @@ ITEM_DATA: list[
         "use_sound": "sound.bow",
         "hold_offset": 0.8,
         "image": pygame.image.load("assets/images/items/wood_bow.png").convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 26,
@@ -1282,7 +1282,6 @@ ITEM_DATA: list[
         "attack_damage": 12,
         "knockback": 4,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.RANGED,
@@ -1298,6 +1297,7 @@ ITEM_DATA: list[
         "use_sound": "sound.gun_shot",
         "hold_offset": 0.0,
         "image": pygame.image.load("assets/images/items/musket.png").convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 28,
@@ -1420,7 +1420,6 @@ ITEM_DATA: list[
         "attack_damage": 2,
         "knockback": 10,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickaxe_power": 35.0,
         "pickup_sound": "sound.grab",
@@ -1430,6 +1429,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_pickaxe.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 34,
@@ -1444,7 +1444,6 @@ ITEM_DATA: list[
         "attack_damage": 2,
         "knockback": 10,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
@@ -1454,6 +1453,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_hammer.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 35,
@@ -1468,7 +1468,6 @@ ITEM_DATA: list[
         "attack_damage": 2,
         "knockback": 10,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
@@ -1478,6 +1477,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/wood_hammer.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 36,
@@ -1608,12 +1608,12 @@ ITEM_DATA: list[
         "knockback": 0,
         "crit_chance": 0.03,
         "hold_offset": 0.0,
-        "world_override_image_path": "",
         "use_sound": "sound.swing",
         "mana_cost": 20,
         "image": pygame.image.load(
             "assets/images/items/water_bolt.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 44,
@@ -1679,7 +1679,6 @@ ITEM_DATA: list[
         "attack_damage": 2,
         "knockback": 10,
         "crit_chance": 0.03,
-        "world_override_image_path": "",
         "prefixes": [ItemPrefixGroup.COMMON, ItemPrefixGroup.UNIVERSAL],
         "axe_power": 55.0,
         "pickup_sound": "sound.grab",
@@ -1689,6 +1688,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_axe.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
     {
         "id": 48,
@@ -1703,7 +1703,6 @@ ITEM_DATA: list[
         "attack_damage": 12,
         "knockback": 5.5,
         "crit_chance": 0.04,
-        "world_override_image_path": "",
         "prefixes": [
             ItemPrefixGroup.COMMON,
             ItemPrefixGroup.SHORTSWORD,
@@ -1716,6 +1715,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/iron_shortsword.png"
         ).convert_alpha(),
+        "world_override_image": None,
     },
 ]
 

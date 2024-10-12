@@ -498,13 +498,6 @@ def parse_item_data():
 			if max(item_data["image"].get_width(), item_data["image"].get_height()) > 32:
 				item_data["image"] = pygame.transform.scale(item_data["image"], (item_data["image"].get_width() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height())), item_data["image"].get_height() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height()))))
 
-			if commons.ItemTag.WEAPON in item_data["tags"]:
-				try:
-					loaded_surf = pygame.image.load(item_data["world_override_image_path"]).convert_alpha()
-					item_data["world_override_image"] = pygame.Surface((max(loaded_surf.get_width(), loaded_surf.get_height()), max(loaded_surf.get_width(), loaded_surf.get_height())))
-				except FileNotFoundError:
-					item_data["world_override_image"] = None
-
 			if commons.ItemTag.AMMO in item_data["tags"]:
 				try:
 					ammo_type_item_lists[item_data["ammo_type"]].append(item_data["id"])

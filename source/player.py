@@ -883,7 +883,7 @@ class Player:
 		if self.can_use:
 			ammo_to_use_id = -1
 			ammo_to_use_dat	= None
-			for	item_id	in game_data.ammo_type_item_lists[ranged_weapon_item.json_item["ranged_ammo_type"]]:
+			for item_id in game_data.ammo_type_item_lists[ranged_weapon_item.json_item["ranged_ammo_type"]]:
 				item_ammo_slots	= self.find_existing_item_stacks(item_id)
 				if len(item_ammo_slots) > 0:
 					ammo_to_use_dat	= item_ammo_slots[0]
