@@ -206,7 +206,7 @@ class Enemy:
 
 					for _ in range(int(5 * commons.PARTICLE_DENSITY)):  # Blood particles
 						particle_pos = (self.position[0] + random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random() * self.rect.height - self.rect.height * 0.5)
-						entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random() * velocity_magnitude * 0.5, outline=False)
+						entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random() * velocity_magnitude * 0.5, outline=True)
 			else:
 				self.kill(source_velocity)
 
@@ -255,7 +255,7 @@ class Enemy:
 
 				for _ in range(int(25 * commons.PARTICLE_DENSITY)):  # Blood particles
 					particle_pos = (self.position[0] + random() * self.rect.width - self.rect.width * 0.5, self.position[1] + random() * self.rect.height - self.rect.height * 0.5)
-					entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random() * velocity_magnitude * 0.4, outline=False)
+					entity_manager.spawn_particle(particle_pos, self.color, life=0.5, size=10, angle=velocity_angle, spread=math.pi * 0.2, magnitude=random() * velocity_magnitude * 0.4, outline=True)
 
 			game_data.play_sound("sound.slime_death")  # Death sound
 

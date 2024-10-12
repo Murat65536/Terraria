@@ -154,10 +154,10 @@ def render_stats_text(pos: List[Any]) -> bool:
 			
 			if equipped.has_tag(item.ItemTag.AMMO):
 				stats.append(shared_methods.outline_text("Ammunition", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(equipped.get_ammo_damage())} damage", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_knockback_modifier() * 100, 1))} % knockback", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_gravity_modifier() * 100, 1))} % gravity", (255, 255, 255), commons.DEFAULT_FONT))
-				stats.append(shared_methods.outline_text(f"{str(round(equipped.get_ammo_drag() * 100, 1))} % drag", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{equipped.get_ammo_damage()} damage", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{round(equipped.get_ammo_knockback_modifier() * 100, 1)} % knockback", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{round(equipped.get_ammo_gravity_modifier() * 100, 1)} % gravity", (255, 255, 255), commons.DEFAULT_FONT))
+				stats.append(shared_methods.outline_text(f"{round(equipped.get_ammo_drag() * 100, 1)} % drag", (255, 255, 255), commons.DEFAULT_FONT))
 			
 			if equipped.has_tag(item.ItemTag.TILE):
 				stats.append(shared_methods.outline_text("Can be placed", (255, 255, 255), commons.DEFAULT_FONT))

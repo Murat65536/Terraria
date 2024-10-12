@@ -298,7 +298,7 @@ def spawn_enemy(position=None, enemy_id=None):
 		enemies.append(Enemy(position, enemy_id))
 
 
-def spawn_particle(position: tuple[float, float], color: tuple[int, int, int], life: float=2.0, magnitude: float=1.0, size: int=5, angle: float=0, spread: float=math.pi / 4, gravity: float=0.25, velocity: float=0, outline: bool=False):
+def spawn_particle(position: tuple[float, float], color: tuple[int, int, int], life: float=2.0, magnitude: float=1.0, size: int=5, angle: float=0, spread: float=math.pi / 4, gravity: float=0.25, velocity: float=0, outline: bool=True):
 	particles.append(Particle(position, color, life, magnitude, size, angle, spread, gravity, velocity, outline))
 
 
@@ -314,6 +314,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 	ammo_gravity_modifier = ammo_item_data["ammo_gravity_modifier"]
 	ammo_drag = ammo_item_data["ammo_drag"]
 	ricochet_amount = ammo_item_data["ricochet_amount"]
+	image = ammo_item_data["ammo_image"]
 	
 	speed = weapon_item.get_ranged_projectile_speed()
 
@@ -327,7 +328,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 			is_crit = True
 
 		# Hack until we have projectile data loaded from the tool
-		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, ricochet_amount, "arrow", gravity=ammo_gravity_modifier, drag=ammo_drag))
+		projectiles.append(Projectile(position, velocity, "Arrow", 0, source, total_damage, knockback, is_crit, ricochet_amount, "arrow", image, gravity=ammo_gravity_modifier, drag=ammo_drag))
 
 
 def add_message(text: str, color: tuple[int, int, int], life: float=5.0, outline_color: tuple[int, int, int]=(0, 0, 0)):

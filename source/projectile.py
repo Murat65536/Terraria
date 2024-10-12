@@ -20,7 +20,7 @@ import surface_manager
 	Stores information required to update and draw a single Projectile instance
 -----------------------------------------------------------------------------------------------------------------"""
 class Projectile:
-	def __init__(self, position, velocity, projectile_type, projectile_id, source, damage, knockback, crit, bounce_num, trail, max_life=5, gravity=commons.GRAVITY, drag=0.99):
+	def __init__(self, position, velocity, projectile_type, projectile_id, source, damage, knockback, crit, bounce_num, trail, image, max_life=5, gravity=commons.GRAVITY, drag=0.99):
 		self.position = position
 		self.velocity = velocity
 		self.angle = math.atan2(velocity[1], velocity[0])
@@ -31,6 +31,7 @@ class Projectile:
 		self.knockback = knockback
 		self.crit = crit
 		self.trail = trail
+		self.image = image
 		self.trail_tick = 0.1
 		self.bounce_num = bounce_num
 		self.size = 16
@@ -123,7 +124,7 @@ class Projectile:
 					for i in range(int(4 * commons.PARTICLE_DENSITY)):
 						entity_manager.spawn_particle(self.position, color, life=0.5, angle=velocity_angle, spread=0.8, magnitude=velocity_magnitude * random.random() * 0.7, gravity=0, size=8)
 				if self.projectile_type == "Bullet":
-					game_data.play_sound("sound.bullet")
+					game_data.play_sound("sound.bullet_hit")
 				else:
 					game_data.play_sound("sound.dig")
 				return
@@ -145,9 +146,9 @@ class Projectile:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def draw(self):
 		if self.projectile_type == "Arrow":
-			angle = math.atan2(self.velocity[1], -self.velocity[0]) * 180 / math.pi - 90
+			angle = math.atan2(self.velocity[1], -self.velocity[0]) * 180 / math.pi + 90
 			surf = surface_manager.projectiles[self.projectile_id].copy()
-			surf = shared_methods.rotate_surface(surf, angle)
+			surf = shared_methods.rotate_surface(self.image, angle)
 			commons.screen.blit(surf, (self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5, self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5))
 		elif self.projectile_type == "Bullet":
 			pygame.draw.circle(commons.screen, (60, 60, 60), (int(self.rect.centerx - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5), int(self.rect.centery - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5)), 3, 0)

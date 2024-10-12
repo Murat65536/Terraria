@@ -112,7 +112,7 @@ class PlacableTileItemData(TypedDict):
     tile_id_str: str
     pickup_sound: str
     drop_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class ImplacableTileItemData(TypedDict):
@@ -128,7 +128,7 @@ class ImplacableTileItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class MaterialItemData(TypedDict):
@@ -143,7 +143,7 @@ class MaterialItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class WallItemData(TypedDict):
@@ -159,7 +159,7 @@ class WallItemData(TypedDict):
     pickup_sound: str
     drop_sound: str
     wall_id_str: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class PickaxeItemData(TypedDict):
@@ -181,7 +181,7 @@ class PickaxeItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -204,7 +204,7 @@ class HammerItemData(TypedDict):
     use_sound: str
     hammer_power: float
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -227,7 +227,7 @@ class AxeItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -249,7 +249,7 @@ class SwordItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -276,7 +276,7 @@ class RangedItemData(TypedDict):
     drop_sound: str
     use_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -297,7 +297,8 @@ class AmmunitionItemData(TypedDict):
     drop_sound: str
     hold_offset: float
     ricochet_amount: int
-    image: pygame.Surface | None
+    image: pygame.Surface
+    ammo_image: pygame.Surface
 
 
 class GrapplingHookItemData(TypedDict):
@@ -312,12 +313,12 @@ class GrapplingHookItemData(TypedDict):
     grapple_speed: float
     grapple_chain_length: float
     grapple_max_chains: int
-    grapple_chain_image_path: str
-    grapple_claw_image_path: str
     pickup_sound: str
     drop_sound: str
     hold_offset: float
-    image: pygame.Surface | None
+    image: pygame.Surface
+    grapple_chain_image: pygame.Surface
+    grapple_claw_image: pygame.Surface
 
 
 class MagicalWeaponItemData(TypedDict):
@@ -339,7 +340,7 @@ class MagicalWeaponItemData(TypedDict):
     hold_offset: float
     use_sound: str
     mana_cost: int
-    image: pygame.Surface | None
+    image: pygame.Surface
     world_override_image: pygame.Surface | None
 
 
@@ -398,7 +399,7 @@ class TileData(TypedDict):
     item_count_range: tuple[int, int]
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class DamagingTileData(TypedDict):
@@ -418,7 +419,7 @@ class DamagingTileData(TypedDict):
     hit_sound: str
     tile_damage: int
     tile_damage_name: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class MultitileData(TypedDict):
@@ -438,7 +439,7 @@ class MultitileData(TypedDict):
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class DoorTileData(TypedDict):
@@ -464,7 +465,7 @@ class DoorTileData(TypedDict):
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class LootMultitileData(TypedDict):
@@ -485,7 +486,7 @@ class LootMultitileData(TypedDict):
     multitile_required_solids: list[tuple[int, int]]
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class LootTileData(TypedDict):
@@ -504,7 +505,7 @@ class LootTileData(TypedDict):
     loot_group_id_str: str
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class WallData(TypedDict):
@@ -516,7 +517,7 @@ class WallData(TypedDict):
     item_id_str: str
     place_sound: str
     hit_sound: str
-    image: pygame.Surface | None
+    image: pygame.Surface
 
 
 class WorldGenData(TypedDict):
@@ -783,7 +784,7 @@ ITEM_DATA: list[
         "tile_id_str": "tile.UNNAMED",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "image": None,
+        "image": pygame.Surface((0, 0)),
     },
     {
         "id": 1,
@@ -1266,6 +1267,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/wooden_arrow.png"
         ).convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/wooden_arrow.png").convert_alpha()
     },
     {
         "id": 27,
@@ -1317,6 +1319,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/musket_ball.png"
         ).convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
     },
     {
         "id": 29,
@@ -1338,6 +1341,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_coin.png"
         ).convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
     },
     {
         "id": 30,
@@ -1359,6 +1363,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/silver_coin.png"
         ).convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
     },
     {
         "id": 31,
@@ -1378,6 +1383,7 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "ricochet_amount": 1,
         "image": pygame.image.load("assets/images/items/gold_coin.png").convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
     },
     {
         "id": 32,
@@ -1399,6 +1405,7 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/platinum_coin.png"
         ).convert_alpha(),
+        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
     },
     {
         "id": 33,
@@ -1575,13 +1582,17 @@ ITEM_DATA: list[
         "grapple_speed": 10.0,
         "grapple_chain_length": 100.0,
         "grapple_max_chains": 1,
-        "grapple_chain_image_path": "assets/images/grappling_hook_chain.png",
-        "grapple_claw_image_path": "assets/images/grappling_hook_claw.png",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
         "image": pygame.image.load(
             "assets/images/items/grappling_hook.png"
+        ).convert_alpha(),
+        "grapple_chain_image": pygame.image.load(
+            "assets/images/grappling_hook_chain.png"
+        ).convert_alpha(),
+        "grapple_claw_image": pygame.image.load(
+            "assets/images/grappling_hook_claw.png"
         ).convert_alpha(),
     },
     {
@@ -2589,7 +2600,7 @@ TILE_DATA: list[
         "item_count_range": (1, 1),
         "place_sound": "",
         "hit_sound": "",
-        "image": None,
+        "image": pygame.Surface((0, 0)),
     },
     {
         "id": 1,
@@ -2606,7 +2617,7 @@ TILE_DATA: list[
         "item_count_range": (0, 0),
         "place_sound": "",
         "hit_sound": "",
-        "image": None,
+        "image": pygame.Surface((0, 0)),
     },
     {
         "id": 2,
@@ -3333,7 +3344,7 @@ WALL_DATA: list[WallData] = [
         "item_id_str": "item.INVALID",
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
-        "image": None,
+        "image": pygame.Surface((0, 0)),
     },
     {
         "id": 1,
@@ -3344,7 +3355,7 @@ WALL_DATA: list[WallData] = [
         "item_id_str": "item.INVALID",
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
-        "image": None,
+        "image": pygame.Surface((0, 0)),
     },
     {
         "id": 2,

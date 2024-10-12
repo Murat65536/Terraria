@@ -439,7 +439,7 @@ class Player:
 
 					for	i in range(int(10 *	commons.PARTICLE_DENSITY)):	# blood
 						particle_pos = (self.position[0] + random.random() * commons.PLAYER_WIDTH -	commons.PLAYER_WIDTH * 0.5,	self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5)
-						entity_manager.spawn_particle(particle_pos,	(230, 0, 0), life=1, size=10, angle=velocity_angle,	spread=math.pi * 0.2, magnitude=random.random()	* velocity_magnitude, gravity=0.15,	outline=False)
+						entity_manager.spawn_particle(particle_pos,	(230, 0, 0), life=1, size=10, angle=velocity_angle,	spread=math.pi * 0.2, magnitude=random.random()	* velocity_magnitude, gravity=0.15,	outline=True)
 			else:
 				self.kill(source_name, source_velocity)
 
@@ -476,7 +476,7 @@ class Player:
 					entity_manager.spawn_particle((self.position[0]	+ random.random() *	commons.PLAYER_WIDTH - commons.PLAYER_WIDTH	* 0.5,
 												  self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5),
 												  (230,	0, 0), life=1, angle=velocity_angle, size=10, spread=0.9,
-												  magnitude=random.random()	* velocity_magnitude * 0.8,	gravity=0.15, outline=False)
+												  magnitude=random.random()	* velocity_magnitude * 0.8,	gravity=0.15, outline=True)
 			game_data.play_sound("sound.player_death")  # death sound
 
 	"""=================================================================================================================	
@@ -1465,7 +1465,7 @@ class Player:
 			if commons.PARTICLES:
 				color = pygame.transform.average_color(game_data.get_tile_by_id(self.last_block_on)["image"])
 				for	_ in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
-					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE * 1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0, magnitude=1.5 + random.random() * 10)
+					entity_manager.spawn_particle((self.position[0], self.position[1] +	commons.BLOCK_SIZE * 1.5), color, size=10, life=1, angle=-math.pi *	0.5, spread=math.pi	* 0.33,	gravity=0.2, magnitude=1.5 + random.random() * 10)
 			self.velocity =	(self.velocity[0], -50)
 			self.grounded =	False
 

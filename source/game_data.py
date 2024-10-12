@@ -496,19 +496,6 @@ def parse_item_data():
 			if max(item_data["image"].get_width(), item_data["image"].get_height()) > 32:
 				item_data["image"] = pygame.transform.scale(item_data["image"], (item_data["image"].get_width() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height())), item_data["image"].get_height() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height()))))
 
-			if commons.ItemTag.GRAPPLE in item_data["tags"]:
-				try:
-					loaded_surf = pygame.image.load(item_data["grapple_chain_image_path"]).convert_alpha()
-					item_data["grapple_chain_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
-				except FileNotFoundError:
-					item_data["grapple_chain_image"] = None
-
-				try:
-					loaded_surf = pygame.image.load(item_data["grapple_claw_image_path"]).convert_alpha()
-					item_data["grapple_claw_image"] = pygame.Surface((loaded_surf.get_width(), loaded_surf.get_height()))
-				except FileNotFoundError:
-					item_data["grapple_claw_image"] = None
-
 
 def get_item_by_id(item_id):
 	if item_id < len(json_item_data):
