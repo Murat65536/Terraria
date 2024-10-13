@@ -491,12 +491,6 @@ def parse_item_data():
 	json_item_data = commons.ITEM_DATA
 	json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
 
-	for item_data in json_item_data:
-		if type(item_data["image"]) is pygame.Surface:
-			if max(item_data["image"].get_width(), item_data["image"].get_height()) > 32:
-				item_data["image"] = pygame.transform.scale(item_data["image"], (item_data["image"].get_width() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height())), item_data["image"].get_height() * (32 / max(item_data["image"].get_width(), item_data["image"].get_height()))))
-
-
 def get_item_by_id(item_id):
 	if item_id < len(json_item_data):
 		return json_item_data[item_id]

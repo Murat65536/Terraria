@@ -2843,7 +2843,7 @@ TILE_DATA: list[
         "light_reduction": 25,
         "light_emission": 0,
         "tags": [],
-        "item_id_str": "item.copper",
+        "item_id_str": "item.copper_ore",
         "item_count_range": (1, 1),
         "place_sound": "sound.tink",
         "hit_sound": "sound.tink",

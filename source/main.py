@@ -542,11 +542,11 @@ def draw_inventory_hover_text() -> None:
 
 	elif pygame.mouse.get_pressed()[2] and commons.is_holding_item:
 		if entity_manager.client_player.direction == 1:
-			velocity = (16, -random.random())
+			velocity = (32, random.random() * 2)
 		else:
-			velocity = (-16, -random.random())
+			velocity = (-32, random.random() * 2)
 
-		entity_manager.spawn_physics_item(commons.item_holding, entity_manager.client_player.position, pickup_delay=250, velocity=velocity)
+		entity_manager.spawn_physics_item(commons.item_holding, entity_manager.client_player.position, velocity=velocity)
 		
 		commons.is_holding_item = False
 		can_drop_holding = False

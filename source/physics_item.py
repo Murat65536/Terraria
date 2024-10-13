@@ -58,7 +58,8 @@ class PhysicsItem:
 		Gives the image an invisible border so that it can be rotated without clipping
 	-----------------------------------------------------------------------------------------------------------------"""
 	def render_image(self):
-		self.image = pygame.transform.scale(self.item.get_image(), (int(commons.BLOCK_SIZE * 1.414 * self.item_scale), int(commons.BLOCK_SIZE * 1.414 * self.item_scale)))
+		# self.image = pygame.transform.scale(self.item.get_image(), (int(commons.BLOCK_SIZE * 1.414 * self.item_scale), int(commons.BLOCK_SIZE * 1.414 * self.item_scale)))
+		self.image = self.item.get_image()
 		self.half_image_size = self.image.get_width() * 0.5
 
 	"""================================================================================================================= 
@@ -187,5 +188,4 @@ class PhysicsItem:
 		
 		if commons.HITBOXES:
 			pygame.draw.rect(commons.screen, (255, 0, 0), Rect(self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
-															   self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
-															   self.rect.width, self.rect.height), 1)
+															   self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5, self.rect.width, self.rect.height), 1)
