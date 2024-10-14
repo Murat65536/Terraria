@@ -623,13 +623,13 @@ def draw_interactive_block_hover() -> None:
 def draw_menu_background() -> None:
 	menu_background_speed = 0
 	for background in range(len(menu_backgrounds[menu_background_number])):
-		menu_background_width = menu_surfaces[background].get_width()
-		menu_background_height = menu_surfaces[background].get_height()
+		menu_background_width = menu_surfaces[background][int(menu_backgrounds[menu_background_number][background]["frame"] / menu_backgrounds[menu_background_number][background]["delay"])].get_width()
+		menu_background_height = menu_surfaces[background][int(menu_backgrounds[menu_background_number][background]["frame"] / menu_backgrounds[menu_background_number][background]["delay"])].get_height()
 		menu_background_speed += 8 / len(menu_backgrounds[menu_background_number])
 		if menu_background_width - menu_backgrounds[menu_background_number][background]["position"] * menu_background_speed < 0:
 			menu_backgrounds[menu_background_number][background]["position"] = 0
 		for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
-			commons.screen.blit(menu_surfaces[background], (x * menu_background_width - menu_backgrounds[menu_background_number][background]["position"] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height + menu_backgrounds[menu_background_number][background]["offset"]))
+			commons.screen.blit(menu_surfaces[background][int(menu_backgrounds[menu_background_number][background]["frame"] / menu_backgrounds[menu_background_number][background]["delay"])], (x * menu_background_width - menu_backgrounds[menu_background_number][background]["position"] * menu_background_speed, commons.WINDOW_HEIGHT - menu_background_height + menu_backgrounds[menu_background_number][background]["offset"]))
 		if (len(menu_backgrounds[menu_background_number][background]["image"]) - 1) * menu_backgrounds[menu_background_number][background]["delay"] <= menu_backgrounds[menu_background_number][background]["frame"]:
 			menu_backgrounds[menu_background_number][background]["frame"] = 0
 		else:
@@ -727,25 +727,27 @@ menu_backgrounds: list[list[MenuImages]] = [
 	],
 	[
 		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": ["background_1.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": ["background_2.png", "background_3.png", "background_4.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0}
+		{"image": ["background_1.png", "background_2.png", "background_3.png"], "offset": 100, "frame": 0, "delay": 20, "position" : 0},
+		{"image": ["background_4.png", "background_5.png", "background_6.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0}
 	],
 	[
 		{"image": ["background_0.png"], "offset": 0, "frame": 0, "delay": 1, "position" : 0},
-		{"image": ["background_1.png"], "offset": 100, "frame": 0, "delay": 1, "position" : 0},
-		{"image": ["background_2.png", "background_3.png", "background_4.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0},
+		{"image": ["background_1.png", "background_2.png", "background_3.png"], "offset": 100, "frame": 0, "delay": 20, "position" : 0},
+		{"image": ["background_4.png", "background_5.png", "background_6.png"], "offset": 225, "frame": 0, "delay": 20, "position" : 0},
 		{"image": ["background_5.png"], "offset": 200, "frame": 0, "delay": 1, "position" : 0}
 	]
 ]
 
 menu_background_number = random.randint(0, len(menu_backgrounds) - 1)
 menu_background_directory = f"assets/images/backgrounds/menu_backgrounds/background_{menu_background_number}"
-menu_surfaces: list[pygame.Surface] = []
+menu_surfaces: list[list[pygame.Surface]] = []
 for background in menu_backgrounds[menu_background_number]:
+	animation: list[pygame.Surface] = []
 	for path in background["image"]:
 		menu_background_image = pygame.image.load(f"{menu_background_directory}/{path}").convert_alpha()
-		menu_surfaces.append(menu_background_image)
+		animation.append(menu_background_image)
 		background["position"] = random.randint(0, menu_background_image.get_width())
+	menu_surfaces.append(animation)
 
 
 LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9

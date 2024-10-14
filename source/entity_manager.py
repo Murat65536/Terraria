@@ -328,7 +328,7 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 			is_crit = True
 
 		# Hack until we have projectile data loaded from the tool
-		projectiles.append(Projectile(position, velocity, 0, source, total_damage, knockback, is_crit, ricochet_amount, "arrow", image, gravity=ammo_gravity_modifier, drag=ammo_drag))
+		projectiles.append(Projectile(position, velocity, source, total_damage, knockback, is_crit, ricochet_amount, "arrow", image, gravity=ammo_gravity_modifier, drag=ammo_drag))
 
 
 def add_message(text: str, color: tuple[int, int, int], life: float=5.0, outline_color: tuple[int, int, int]=(0, 0, 0)):

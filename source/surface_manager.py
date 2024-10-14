@@ -5,7 +5,6 @@ tile_masks: list[pygame.Surface] = []
 misc_gui: list[pygame.Surface] = []
 backgrounds: list[pygame.Surface] = []
 walls: list[pygame.Surface] = []
-projectiles: list[pygame.Surface] = []
 hair: list[pygame.Surface] = []
 special_tiles: list[pygame.Surface] = []
 torsos: list[pygame.Surface] = []
@@ -49,17 +48,6 @@ def load_background_surfaces():
 		surf.blit(background_image, (-i, 0))
 		surf = pygame.transform.scale(surf, (4096, 1676))
 		backgrounds.append(surf)
-
-def load_projectile_surfaces():
-	global projectiles
-	projectile_tileset_image = pygame.image.load("assets/images/projectileTileset.png").convert()
-	projectiles = []
-	for j in range(10):
-		for i in range(10):
-			surf = pygame.Surface((16, 16))
-			surf.blit(projectile_tileset_image, (-i * 16, -j * 16))
-			surf.set_colorkey((255, 0, 255))
-			projectiles.append(surf)
 
 
 def load_hair_surfaces():
@@ -141,7 +129,6 @@ def compile_background_images():  # creates a larger surf compiled with backgrou
 load_tile_mask_surfaces()
 load_misc_gui_surfaces()
 load_background_surfaces()
-load_projectile_surfaces()
 load_hair_surfaces()
 load_head_surfaces()
 load_new_hair_surfaces()

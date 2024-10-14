@@ -20,11 +20,10 @@ import surface_manager
 	Stores information required to update and draw a single Projectile instance
 -----------------------------------------------------------------------------------------------------------------"""
 class Projectile:
-	def __init__(self, position, velocity, projectile_id, source, damage, knockback, crit, bounce_num, trail, image, max_life=5, gravity=commons.GRAVITY, drag=0.99):
+	def __init__(self, position, velocity, source, damage, knockback, crit, bounce_num, trail, image, max_life=5, gravity=commons.GRAVITY, drag=0.99):
 		self.position = position
 		self.velocity = velocity
 		self.angle = math.atan2(velocity[1], velocity[0])
-		self.projectile_id = projectile_id
 		self.source = source
 		self.damage = damage
 		self.knockback = knockback
@@ -142,7 +141,6 @@ class Projectile:
 	-----------------------------------------------------------------------------------------------------------------"""
 	def draw(self):
 		angle = math.atan2(self.velocity[1], -self.velocity[0]) * 180 / math.pi + 90
-		surf = surface_manager.projectiles[self.projectile_id].copy()
 		surf = shared_methods.rotate_surface(self.image, angle)
 		commons.screen.blit(surf, (self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5, self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5))
 		if commons.HITBOXES:
