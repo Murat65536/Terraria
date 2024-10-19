@@ -37,7 +37,7 @@ def	get_death_message(name,	source):
 	Transfers the data stored in PLAYER_MODEL_DATA to PLAYER_MODEL
 -----------------------------------------------------------------------------------------------------------------"""
 def	update_player_model_using_model_data():
-	assert commons.PLAYER_MODEL is Model
+	assert type(commons.PLAYER_MODEL) is Model
 
 	commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0][0]
 	commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1][0]

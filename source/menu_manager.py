@@ -243,16 +243,16 @@ def update_menu_buttons():
 							commons.TEXT_INPUT = ""
 						case PlayerCreationButtons.RANDOMIZE:
 							commons.PLAYER_MODEL_DATA = [
-								0,
-								random.randint(0, 8),
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0],
-								[(random.randint(0, 128), random.randint(0, 128), random.randint(0, 128)), 0, 0]
+								[0],
+								[random.randint(0, 8),],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
+								[random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0]
 							]
 							player.update_player_model_using_model_data()
 							commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
