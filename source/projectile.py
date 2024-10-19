@@ -11,7 +11,7 @@ import world
 
 import entity_manager
 import shared_methods
-import surface_manager
+import tilesets
 
 
 """================================================================================================================= 

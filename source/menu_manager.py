@@ -15,7 +15,7 @@ import prompt
 import world
 
 import entity_manager
-import surface_manager
+import tilesets
 import shared_methods
 
 
@@ -416,7 +416,7 @@ def load_menu_world_data():
 			world_data_surf.blit(shared_methods.outline_text(world.world.get_creation_date_string(), (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
 			world_data_surf.blit(shared_methods.outline_text(str(int((world.world.playtime / 60) // 60)) + ":" + str(int(world.world.playtime // 60 % 60)).zfill(2) + ":" + str(int(world.world.playtime % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
 
-			world_data_surf.blit(surface_manager.misc_gui[10], (260, 7))
+			world_data_surf.blit(tilesets.misc_gui[0][10], (260, 7))
 
 			commons.WORLD_SAVE_OPTIONS.append((world.world.name, world_data_surf))
 

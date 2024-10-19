@@ -14,7 +14,7 @@ import commons
 import world
 
 import shared_methods
-import surface_manager
+import tilesets
 import entity_manager
 
 
@@ -1095,7 +1095,7 @@ class Player:
 	def	render_hotbar(self):
 		self.hotbar_image.fill((255, 0, 255))
 		for	hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
-			self.hotbar_image.blit(surface_manager.misc_gui[0],	(48	* hotbar_index,	0))
+			self.hotbar_image.blit(tilesets.misc_gui[0][0],	(48	* hotbar_index,	0))
 			item = self.items[ItemLocation.HOTBAR][hotbar_index]
 			if item is not None:
 				self.hotbar_image.blit(item.get_resized_image(), (item.get_resized_offset_x() + 48 * hotbar_index, item.get_resized_offset_y()))
@@ -1113,7 +1113,7 @@ class Player:
 		for	inventory_index	in range(len(self.items[ItemLocation.INVENTORY])):
 			slot_x = inventory_index % 10
 			slot_y = inventory_index // 10
-			self.inventory_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
+			self.inventory_image.blit(tilesets.misc_gui[0][0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.INVENTORY][inventory_index]
 			if item is not None:
 				self.inventory_image.blit(item.get_resized_image(),	(item.get_resized_offset_x() + 48 * slot_x, item.get_resized_offset_y() + 48 * slot_y))
@@ -1131,7 +1131,7 @@ class Player:
 		for	chest_index	in range(len(self.items[ItemLocation.CHEST])):
 			slot_x = chest_index % 5
 			slot_y = chest_index // 5
-			self.chest_image.blit(surface_manager.misc_gui[0], (48 * slot_x, 48 * slot_y))
+			self.chest_image.blit(tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y))
 			item = self.items[ItemLocation.CHEST][chest_index]
 			if item is not None:
 				self.chest_image.blit(item.get_resized_image(),	(item.get_resized_offset_x() + 48 * slot_x, item.get_resized_offset_y()	+ 48 * slot_y))
@@ -1147,7 +1147,7 @@ class Player:
 		for data in self.old_inventory_positions:
 			if data[0] == ItemLocation.HOTBAR:
 				item = self.items[ItemLocation.HOTBAR][data[1]]
-				self.hotbar_image.blit(surface_manager.misc_gui[0],	(data[1] * 48, 0))
+				self.hotbar_image.blit(tilesets.misc_gui[0][0],	(data[1] * 48, 0))
 				if item is not None:
 					self.hotbar_image.blit(item.get_resized_image(), (item.get_resized_offset_x() + 48 * data[1],	item.get_resized_offset_y()))
 					if item.amount > 1:
@@ -1156,7 +1156,7 @@ class Player:
 				item = self.items[ItemLocation.INVENTORY][data[1]]
 				slot_x = data[1] % 10
 				slot_y = data[1] // 10
-				self.inventory_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
+				self.inventory_image.blit(tilesets.misc_gui[0][0], (slot_x * 48, slot_y	* 48))
 				if item is not None:
 					self.inventory_image.blit(item.get_resized_image(),	(item.get_resized_offset_x() + slot_x	* 48, item.get_resized_offset_y() + slot_y * 48))
 					if item.amount > 1:
@@ -1166,7 +1166,7 @@ class Player:
 				item = self.items[ItemLocation.CHEST][data[1]]
 				slot_x = data[1] % 5
 				slot_y = data[1] // 5
-				self.chest_image.blit(surface_manager.misc_gui[0], (slot_x * 48, slot_y	* 48))
+				self.chest_image.blit(tilesets.misc_gui[0][0], (slot_x * 48, slot_y	* 48))
 				if item is not None:
 					self.chest_image.blit(item.get_resized_image(),	(item.get_resized_offset_x() + slot_x * 48, item.get_resized_offset_y() + slot_y * 48))
 					if item.amount > 1:
@@ -1190,7 +1190,7 @@ class Player:
 		self.craftable_items_surf =	pygame.Surface((48,	len(self.items[ItemLocation.CRAFTING_MENU])	* 48))
 		self.craftable_items_surf.fill((255, 0, 255))
 		for	i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
-			self.craftable_items_surf.blit(surface_manager.misc_gui[0],	(0,	i *	48))
+			self.craftable_items_surf.blit(tilesets.misc_gui[0][0],	(0,	i *	48))
 			item_data =	game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
 			image =	item_data["image"]
 			if max(image.get_width(), image.get_height()) > 32:
@@ -1486,17 +1486,16 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 	sprites	= []
 	arm_sprites	= []
 	for	j in range(directions):	 # for both	directions
-		hair = shared_methods.transparent_color_surface(surface_manager.new_hair[model.hair_id][0], model.hair_col)
+		hair = shared_methods.transparent_color_surface(tilesets.hair[model.hair_id][0], model.hair_col)
 
 		if j == 1:	# flip if necessary
 			hair = pygame.transform.flip(hair, True, False)
 
-		torso =	shared_methods.color_surface(surface_manager.torsos[0], model.shirt_col)
+		torso =	shared_methods.color_surface(tilesets.torsos[0][0], model.shirt_col)
 		if j == 0:	# flip if necessary
 			torso =	pygame.transform.flip(torso, True, False)
 
-		head = shared_methods.transparent_color_surface(surface_manager.head[0], model.skin_col)
-		# head = shared_methods.color_surface(surface_manager.hair[9], model.skin_col)
+		head = shared_methods.transparent_color_surface(tilesets.head[0][0], model.skin_col)
 		pygame.draw.rect(head, (255, 254, 255),	Rect(26, 26, 2, 4),	0)
 		pygame.draw.rect(head, model.eye_col, Rect(28, 26, 2, 4), 0)
 
@@ -1508,8 +1507,8 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 			arm_surf.fill((255,	0, 255))
 			arm_surf.set_colorkey((255,	0, 255))
 
-			arms = shared_methods.color_surface(surface_manager.torsos[i +	31], model.under_shirt_col)
-			hands =	shared_methods.color_surface(surface_manager.torsos[i + 51], model.skin_col)
+			arms = shared_methods.color_surface(tilesets.torsos[0][i + 31], model.under_shirt_col)
+			hands =	shared_methods.color_surface(tilesets.torsos[0][i + 51], model.skin_col)
 			if j == 0:	# flip if necessary
 				arms = pygame.transform.flip(arms, True, False)
 				hands =	pygame.transform.flip(hands, True, False)
@@ -1524,8 +1523,8 @@ def	render_sprites(model, directions=2,	arm_frame_count=20,	torso_frame_count=15
 			body_surf.fill((255, 0, 255))
 			body_surf.set_colorkey(
 				(255, 0, 255))	# create the surf for the whole	player with	a colorkey	of (255, 0, 255)
-			trousers = shared_methods.color_surface(surface_manager.torsos[i + 1],	model.trouser_col)
-			shoes =	shared_methods.color_surface(surface_manager.torsos[i + 16], model.shoe_col)
+			trousers = shared_methods.color_surface(tilesets.torsos[0][i + 1], model.trouser_col)
+			shoes =	shared_methods.color_surface(tilesets.torsos[0][i + 16], model.shoe_col)
 			if j == 0:	# flip if necessary
 				trousers = pygame.transform.flip(trousers, True, False)
 				shoes =	pygame.transform.flip(shoes, True, False)

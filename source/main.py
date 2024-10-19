@@ -8,7 +8,6 @@ import pygame.locals
 from typing import List, Any, TypedDict
 import commons
 import shared_methods
-import surface_manager
 import entity_manager
 import world
 import menu_manager
@@ -879,13 +878,13 @@ while True:
 		if commons.BACKGROUND:
 			if fade_back:
 				if fade_float < 1.0:
-					fade_surf = surface_manager.large_backgrounds[fade_background_id].copy()
+					fade_surf = commons.GAME_BACKGROUND.copy()
 					fade_surf.set_alpha(int(fade_float * 255))
 					fade_float += commons.DELTA_TIME
 				else:
 					fade_back = False
 					background_id = int(fade_background_id)
-			commons.screen.blit(surface_manager.large_backgrounds[background_id], parallax_pos)
+			commons.screen.blit(commons.GAME_BACKGROUND, parallax_pos)
 			if fade_back:
 				commons.screen.blit(fade_surf, parallax_pos)
 		else:

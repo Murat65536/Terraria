@@ -7,7 +7,7 @@ import game_data
 import commons
 import world
 import entity_manager
-import surface_manager
+import tilesets
 import shared_methods
 import item
 
@@ -305,7 +305,7 @@ class Enemy:
 	def draw(self):
 		left = self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
 		top = self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
-		commons.screen.blit(surface_manager.slimes[(self.enemy_id - 1) * 3 + self.animation_frame], (left, top))
+		commons.screen.blit(tilesets.slimes[0][(self.enemy_id - 1) * 3 + self.animation_frame], (left, top))
 		if self.health < self.max_health:
 			health_float = self.health / self.max_health
 			col: tuple[int, int, int] = (int(255 * (1 - health_float)), int(255 * health_float), 0)

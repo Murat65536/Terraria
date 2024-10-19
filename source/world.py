@@ -3,7 +3,7 @@ from pygame.locals import Rect
 
 import commons
 import game_data
-import surface_manager
+import tilesets
 import entity_manager
 import shared_methods
 import item
@@ -460,7 +460,7 @@ def get_mask_index_from_pos(i, j, tile_id):
 	Draws the given text to the screen and then immediately flips the display
 -----------------------------------------------------------------------------------------------------------------"""
 def blit_generation_stage(string):
-	commons.screen.blit(surface_manager.large_backgrounds[1], (0, 0))
+	commons.screen.blit(commons.GAME_BACKGROUND, (0, 0))
 	text1 = shared_methods.outline_text("Generating " + WORLD_NAME, (255, 255, 255), commons.EXTRA_LARGE_FONT)
 	text2 = shared_methods.outline_text(string, (255, 255, 255), commons.LARGE_FONT)
 	commons.screen.blit(text1, (commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5, 120))
@@ -899,14 +899,14 @@ def update_terrain_surface(i, j, affect_others=True):
 			tile_img.set_colorkey((255, 0, 255))
 
 			if json_tile_dat["mask_type"] != TileMaskType.NONE:
-				tile_img.blit(surface_manager.tile_masks[tile_mask_data[tile[0]][tile[1]]],  (0,  0),  None,  pygame.BLEND_RGBA_MULT)  # Blit the block mask to the block texture using a multiply blend flag
+				tile_img.blit(tilesets.tile_masks[0][tile_mask_data[tile[0]][tile[1]]],  (0,  0),  None,  pygame.BLEND_RGBA_MULT)  # Blit the block mask to the block texture using a multiply blend flag
 
 			if (tile_mask_data[tile[0]][tile[1]] != 14 or TileTag.TRANSPARENT not in json_tile_dat["tags"]) and tile_dat[1] != game_data.air_wall_id:  # If the block is not a centre block (and so there is some transparency in it) and there is a wall tile behind it,  blit the wall tile
 				back_img = json_wall_dat["image"].copy()  # Get the wall texture
 				wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(tile[0], tile[1], tile_dat[1])  # Get the wall mask
 				if get_mask_type_from_index(wall_tile_mask_data[tile[0]][tile[1]]) == get_mask_type_from_index(tile_mask_data[tile[0]][tile[1]]):  # If the mask of the wall and the mask of the tile are from the same type
 					wall_tile_mask_data[tile[0]][tile[1]] = tile_mask_data[tile[0]][tile[1]]  # Set the wall mask to the tile mask
-				back_img.blit(surface_manager.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]],  (0,  0),  None,  pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
+				back_img.blit(tilesets.tile_masks[0][wall_tile_mask_data[tile[0]][tile[1]]],  (0,  0),  None,  pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
 				back_img.blit(tile_img, (0, 0))  # Blit the masked block texture to the main surface
 				terrain_surface.blit(back_img, (tile[0] * commons.BLOCK_SIZE,  tile[1] * commons.BLOCK_SIZE))  # Blit the masked wall surf to the main surf
 			else:
@@ -915,7 +915,7 @@ def update_terrain_surface(i, j, affect_others=True):
 		elif tile_dat[1] != game_data.air_wall_id:  # If there is no block but there is a wall
 			back_img = json_wall_dat["image"].copy()  # Get the wall texture
 			wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(tile[0], tile[1], tile_dat[1])  # Get the wall mask
-			back_img.blit(surface_manager.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]], (0, 0), None, pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
+			back_img.blit(tilesets.tile_masks[0][wall_tile_mask_data[tile[0]][tile[1]]], (0, 0), None, pygame.BLEND_RGBA_MULT)  # Blit the mask onto the wall texture using a multiply blend flag
 			terrain_surface.blit(back_img, (tile[0] * commons.BLOCK_SIZE, tile[1] * commons.BLOCK_SIZE))  # Blit the masked wall surf to the main surf
 
 

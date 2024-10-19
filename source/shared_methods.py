@@ -6,7 +6,7 @@ from pygame.locals import BLEND_RGB_ADD
 import math
 
 import commons
-import surface_manager
+import tilesets
 import game_data
 
 """================================================================================================================= 
@@ -147,7 +147,7 @@ def create_menu_surface(width, height, body):
 			else:
 				index = 9
 				
-			surf.blit(surface_manager.misc_gui[index], (i * 48, j * 48))
+			surf.blit(tilesets.misc_gui[0][index], (i * 48, j * 48))
 	usable_width = width * 48 - 60
 	lines = [""]
 	words = body.split(" ")
