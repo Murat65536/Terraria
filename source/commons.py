@@ -94,7 +94,7 @@ class EntityData(TypedDict):
     defense: int
     knockback_resistance: float
     attack_damage: int
-    color: tuple[int, int, int]
+    color: pygame.Color
     item_drops: list[EntityItemData]
     coin_drop_range: tuple[int, int]
 
@@ -647,7 +647,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 0,
         "knockback_resistance": 0,
         "attack_damage": 0,
-        "color": (0, 0, 0),
+        "color": pygame.Color(0, 0, 0),
         "item_drops": [
             {
                 "item_name": "item.INVALID",
@@ -667,7 +667,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 0,
         "knockback_resistance": -2,
         "attack_damage": 6,
-        "color": (10, 200, 10),
+        "color": pygame.Color(10, 200, 10),
         "item_drops": [
             {
                 "item_name": "item.gel",
@@ -687,7 +687,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 2,
         "knockback_resistance": 0,
         "attack_damage": 7,
-        "color": (10, 10, 200),
+        "color": pygame.Color(10, 10, 200),
         "item_drops": [
             {
                 "item_name": "item.gel",
@@ -707,7 +707,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 4,
         "knockback_resistance": 0,
         "attack_damage": 12,
-        "color": (200, 10, 10),
+        "color": pygame.Color(200, 10, 10),
         "item_drops": [
             {
                 "item_name": "item.gel",
@@ -727,7 +727,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 6,
         "knockback_resistance": 0.1,
         "attack_damage": 12,
-        "color": (200, 10, 200),
+        "color": pygame.Color(200, 10, 200),
         "item_drops": [
             {
                 "item_name": "item.gel",
@@ -747,7 +747,7 @@ ENTITY_DATA: list[EntityData] = [
         "defense": 7,
         "knockback_resistance": 0,
         "attack_damage": 15,
-        "color": (200, 150, 100),
+        "color": pygame.Color(200, 150, 100),
         "item_drops": [
             {
                 "item_name": "item.gel",

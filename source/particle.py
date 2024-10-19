@@ -5,9 +5,9 @@ import entity_manager
 
 
 """================================================================================================================= 
-	particle.Particle
+    particle.Particle
 
-	Holds all the information required to update and draw a single particle
+    Holds all the information required to update and draw a single particle
 -----------------------------------------------------------------------------------------------------------------"""
 
 
@@ -52,10 +52,10 @@ class Particle:
         self.gravity = gravity
 
     """================================================================================================================= 
-		particle.Particle.update -> void
+        particle.Particle.update -> void
 
-		Moves the particle, updates it's time remaining and uses this time remaining to calculate it's size
-	-----------------------------------------------------------------------------------------------------------------"""
+        Moves the particle, updates it's time remaining and uses this time remaining to calculate it's size
+    -----------------------------------------------------------------------------------------------------------------"""
 
     def update(self):
         drag_factor = 1.0 - commons.DELTA_TIME * 2
@@ -82,10 +82,10 @@ class Particle:
             entity_manager.particles.remove(self)
 
     """================================================================================================================= 
-		particle.Particle.draw -> void
+        particle.Particle.draw -> void
 
-		Draws the particle instance, optionally with an outline
-	-----------------------------------------------------------------------------------------------------------------"""
+        Draws the particle instance, optionally with an outline
+    -----------------------------------------------------------------------------------------------------------------"""
 
     def draw(self):
         if self.outline:

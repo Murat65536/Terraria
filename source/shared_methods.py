@@ -10,220 +10,220 @@ import tilesets
 import game_data
 
 """================================================================================================================= 
-	shared_methods.normalize_vec_2 -> tuple
+    shared_methods.normalize_vec_2 -> tuple
 
-	Performs vector normalization on the given vector (scalar tuple)
+    Performs vector normalization on the given vector (scalar tuple)
 -----------------------------------------------------------------------------------------------------------------"""
 def normalize_vec_2(vector):
-	magnitude = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
-	return vector[0] / magnitude, vector[1] / magnitude
+    magnitude = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
+    return vector[0] / magnitude, vector[1] / magnitude
 
 
 """================================================================================================================= 
-	shared_methods.get_on_off -> string
+    shared_methods.get_on_off -> string
 
-	Given a bool, returns either "on" or "off"
+    Given a bool, returns either "on" or "off"
 -----------------------------------------------------------------------------------------------------------------"""
 def get_on_off(bool_var):
-	if bool_var:
-		return "on"
-	return "off"
+    if bool_var:
+        return "on"
+    return "off"
 
 
 """================================================================================================================= 
-	shared_methods.darken_color -> tuple
+    shared_methods.darken_color -> tuple
 
-	Multiplies all three components of a color tuple by a given float
+    Multiplies all three components of a color tuple by a given float
 -----------------------------------------------------------------------------------------------------------------"""
 def darken_color(color: tuple[int, int, int], factor: float=0.6):
-	return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
+    return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
 
 """================================================================================================================= 
-	shared_methods.get_tier_color -> tuple
+    shared_methods.get_tier_color -> tuple
 
-	Given an item tier, a color representing that tier is returned
+    Given an item tier, a color representing that tier is returned
 -----------------------------------------------------------------------------------------------------------------"""
 def get_tier_color(tier):
-	if tier < 0:
-		return 150, 150, 150  # Gray
-	elif tier == 1:
-		return 146, 146, 249  # Blue
-	elif tier == 2:
-		return 146, 249, 146  # Green
-	elif tier == 3:
-		return 233, 182, 137  # Orange
-	elif tier == 4:
-		return 253, 148, 148  # Light Red
-	elif tier == 5:
-		return 249, 146, 249  # Pink
-	elif tier == 6:
-		return 191, 146, 233  # Light Purple
-	elif tier == 7:
-		return 139, 237, 9  # Lime
-	elif tier == 8:
-		return 233, 233, 9  # Yellow
-	elif tier == 9:
-		return 3, 138, 177  # Cyan
-	elif tier == 10:
-		return 229, 35, 89  # Red
-	elif tier > 10:
-		return 170, 37, 241  # Purple
-	else:
-		return 255, 255, 255, 255  # White
+    if tier < 0:
+        return 150, 150, 150  # Gray
+    elif tier == 1:
+        return 146, 146, 249  # Blue
+    elif tier == 2:
+        return 146, 249, 146  # Green
+    elif tier == 3:
+        return 233, 182, 137  # Orange
+    elif tier == 4:
+        return 253, 148, 148  # Light Red
+    elif tier == 5:
+        return 249, 146, 249  # Pink
+    elif tier == 6:
+        return 191, 146, 233  # Light Purple
+    elif tier == 7:
+        return 139, 237, 9  # Lime
+    elif tier == 8:
+        return 233, 233, 9  # Yellow
+    elif tier == 9:
+        return 3, 138, 177  # Cyan
+    elif tier == 10:
+        return 229, 35, 89  # Red
+    elif tier > 10:
+        return 170, 37, 241  # Purple
+    else:
+        return 255, 255, 255, 255  # White
 
 
 """================================================================================================================= 
-	shared_methods.rotate_surface -> pygame.Surface
+    shared_methods.rotate_surface -> pygame.Surface
 
-	Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
+    Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
 -----------------------------------------------------------------------------------------------------------------"""
 def rotate_surface(image, angle):
-	original_rect = image.get_rect()
-	rotated_image = pygame.transform.rotate(image, angle)
-	rotated_rect = original_rect.copy()
-	rotated_rect.center = rotated_image.get_rect().center
-	# rotated_image = rotated_image.subsurface(rotated_rect).copy()
-	return rotated_image
+    original_rect = image.get_rect()
+    rotated_image = pygame.transform.rotate(image, angle)
+    rotated_rect = original_rect.copy()
+    rotated_rect.center = rotated_image.get_rect().center
+    # rotated_image = rotated_image.subsurface(rotated_rect).copy()
+    return rotated_image
 
 
 """================================================================================================================= 
-	shared_methods.outline_text -> pygame.Surface
+    shared_methods.outline_text -> pygame.Surface
 
-	Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
-	an outline effect
+    Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
+    an outline effect
 -----------------------------------------------------------------------------------------------------------------"""
 def outline_text(string, color, font, outline_color=(0, 0, 0)):
-	text1 = font.render(string, False, color)
-	if commons.FANCY_TEXT:
-		text2 = font.render(string, False, outline_color)
-		surf = pygame.Surface((text2.get_width() + 2, text2.get_height() + 2))
-		surf.fill((255, 0, 255))
-		surf.set_colorkey((255, 0, 255))
-		surf.blit(text2, (-1, -1))
-		surf.blit(text2, (0, -1))
-		surf.blit(text2, (1, -1))
-		surf.blit(text2, (-1, 0))
-		surf.blit(text2, (1, 0))
-		surf.blit(text2, (-1, 1))
-		surf.blit(text2, (0, 1))
-		surf.blit(text2, (1, 1))
+    text1 = font.render(string, False, color)
+    if commons.FANCY_TEXT:
+        text2 = font.render(string, False, outline_color)
+        surf = pygame.Surface((text2.get_width() + 2, text2.get_height() + 2))
+        surf.fill((255, 0, 255))
+        surf.set_colorkey((255, 0, 255))
+        surf.blit(text2, (-1, -1))
+        surf.blit(text2, (0, -1))
+        surf.blit(text2, (1, -1))
+        surf.blit(text2, (-1, 0))
+        surf.blit(text2, (1, 0))
+        surf.blit(text2, (-1, 1))
+        surf.blit(text2, (0, 1))
+        surf.blit(text2, (1, 1))
 
-		surf.blit(text1, (0, 0))
-		return surf
-	else:
-		return text1
+        surf.blit(text1, (0, 0))
+        return surf
+    else:
+        return text1
 
 
 """================================================================================================================= 
-	shared_methods.create_menu_surface -> pygame.Surface
+    shared_methods.create_menu_surface -> pygame.Surface
 
-	Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some
-	optional text (measurements in multiples of 48px)
+    Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some
+    optional text (measurements in multiples of 48px)
 -----------------------------------------------------------------------------------------------------------------"""
 def create_menu_surface(width, height, body):
-	surf = pygame.Surface((width * 48, height * 48))
-	surf.fill((255, 0, 255))
-	surf.set_colorkey((255, 0, 255))
-	for i in range(width):
-		for j in range(height):
-			if i == 0:
-				if j == 0:
-					index = 5
-				elif j == height - 1:
-					index = 6
-				else:
-					index = 2
-			elif i == width-1:
-				if j == 0:
-					index = 8
-				elif j == height - 1:
-					index = 7
-				else:
-					index = 4
-			elif j == 0:
-				index = 1
-			elif j == height - 1:
-				index = 3
-			else:
-				index = 9
-				
-			surf.blit(tilesets.misc_gui[0][index], (i * 48, j * 48))
-	usable_width = width * 48 - 60
-	lines = [""]
-	words = body.split(" ")
-	line_width = 0
-	for word in words:
-		line_width += commons.DEFAULT_FONT.size(" " + word)[0]
-		if line_width > usable_width:
-			line_width = 0
-			lines.append(word)
-		else:
-			lines[-1] += " " + word
-	for i in range(len(lines)):
-		surf.blit(outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT), (15, 15 + i * 20))
-	return surf
+    surf = pygame.Surface((width * 48, height * 48))
+    surf.fill((255, 0, 255))
+    surf.set_colorkey((255, 0, 255))
+    for i in range(width):
+        for j in range(height):
+            if i == 0:
+                if j == 0:
+                    index = 5
+                elif j == height - 1:
+                    index = 6
+                else:
+                    index = 2
+            elif i == width-1:
+                if j == 0:
+                    index = 8
+                elif j == height - 1:
+                    index = 7
+                else:
+                    index = 4
+            elif j == 0:
+                index = 1
+            elif j == height - 1:
+                index = 3
+            else:
+                index = 9
+                
+            surf.blit(tilesets.misc_gui[0][index], (i * 48, j * 48))
+    usable_width = width * 48 - 60
+    lines = [""]
+    words = body.split(" ")
+    line_width = 0
+    for word in words:
+        line_width += commons.DEFAULT_FONT.size(" " + word)[0]
+        if line_width > usable_width:
+            line_width = 0
+            lines.append(word)
+        else:
+            lines[-1] += " " + word
+    for i in range(len(lines)):
+        surf.blit(outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT), (15, 15 + i * 20))
+    return surf
 
 
 """================================================================================================================= 
-	shared_methods.color_surface -> pygame.Surface
+    shared_methods.color_surface -> pygame.Surface
 
-	Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
+    Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
 def color_surface(gray_surf, col) -> pygame.Surface:
-	if col == ():
-		col = (0, 0, 0)
-	x = gray_surf.get_width()
-	y = gray_surf.get_height()
-	surf = pygame.Surface((x, y))
-	surf.fill((255, 255, 255))
-	surf.set_colorkey((255, 255, 255))  # set the colorkey to white
-	surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
-	color = pygame.Surface((x, y))
-	color.fill(col)  # create a blank surf with the color of the hair
-	surf.blit(color, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
-	return surf
+    if col == ():
+        col = (0, 0, 0)
+    x = gray_surf.get_width()
+    y = gray_surf.get_height()
+    surf = pygame.Surface((x, y))
+    surf.fill((255, 255, 255))
+    surf.set_colorkey((255, 255, 255))  # set the colorkey to white
+    surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
+    color = pygame.Surface((x, y))
+    color.fill(col)  # create a blank surf with the color of the hair
+    surf.blit(color, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
+    return surf
 
 """================================================================================================================= 
-	shared_methods.transparent_color_surface -> pygame.Surface
+    shared_methods.transparent_color_surface -> pygame.Surface
 
-	Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
+    Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
 def transparent_color_surface(surf, col):
-	grayscale = (128, 128, 128)
-	colored_surface = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
-	colored_surface.blit(surf, (0, 0), None, pygame.BLEND_RGBA_ADD)
-	grayscale_surface = pygame.Surface(surf.get_size())
-	grayscale_surface.fill(grayscale)
-	colored_surface.blit(grayscale_surface, (0, 0), None, pygame.BLEND_RGB_MULT)
-	color = pygame.Surface(surf.get_size())
-	color.fill(col)
-	colored_surface.blit(color, (0, 0), None, BLEND_RGB_ADD)
-	return colored_surface
+    grayscale = (128, 128, 128)
+    colored_surface = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
+    colored_surface.blit(surf, (0, 0), None, pygame.BLEND_RGBA_ADD)
+    grayscale_surface = pygame.Surface(surf.get_size())
+    grayscale_surface.fill(grayscale)
+    colored_surface.blit(grayscale_surface, (0, 0), None, pygame.BLEND_RGB_MULT)
+    color = pygame.Surface(surf.get_size())
+    color.fill(col)
+    colored_surface.blit(color, (0, 0), None, BLEND_RGB_ADD)
+    return colored_surface
 
 
 """================================================================================================================= 
-	shared_methods.lerp_float -> float
+    shared_methods.lerp_float -> float
 
-	Simple linear interpolation
+    Simple linear interpolation
 -----------------------------------------------------------------------------------------------------------------"""
 def lerp_float(a, b, t):
-	return a + (b - a) * t
+    return a + (b - a) * t
 
 
 def smooth_zero_to_one(zero_to_one_float, iterations):
-	for _ in range(iterations):
-		zero_to_one_float = math.sin(zero_to_one_float * math.pi - math.pi * 0.5)
-		zero_to_one_float = zero_to_one_float * 0.5 + 0.5
-	return zero_to_one_float
+    for _ in range(iterations):
+        zero_to_one_float = math.sin(zero_to_one_float * math.pi - math.pi * 0.5)
+        zero_to_one_float = zero_to_one_float * 0.5 + 0.5
+    return zero_to_one_float
 
 
 def ease_out_zero_to_one(zero_to_one_float, iterations):
-	for _ in range(iterations):
-		zero_to_one_float = math.sin(zero_to_one_float * math.pi * 0.5)
-	return zero_to_one_float
+    for _ in range(iterations):
+        zero_to_one_float = math.sin(zero_to_one_float * math.pi * 0.5)
+    return zero_to_one_float
 
 
 def ease_in_zero_to_one(zero_to_one_float, iterations):
-	for _ in range(iterations):
-		zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
-	return zero_to_one_float
+    for _ in range(iterations):
+        zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
+    return zero_to_one_float
