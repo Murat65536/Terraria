@@ -20,5 +20,6 @@
 	<li>You can turn off and on settings in the 'config.txt' file</li>
 	<li>Sounds are from Terraria</li>
 	<li>Heavy inspiration taken from Fergus Griggs</li>
+	<li>Assets obtained from The Spriters Resource</li>
 	<li>This project is VERY incomplete</li>
 </ul>
