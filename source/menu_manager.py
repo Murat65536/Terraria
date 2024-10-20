@@ -20,70 +20,81 @@ import shared_methods
 
 
 class Type(Enum):
-    TEXT = 1,
+    TEXT = (1,)
     BUTTON = 2
 
+
 class TitleScreenButtons(Enum):
-    SINGLE_PLAYER = 1,
-    CREDITS = 2,
-    CHANGES = 3,
-    SETTINGS = 4,
+    SINGLE_PLAYER = (1,)
+    CREDITS = (2,)
+    CHANGES = (3,)
+    SETTINGS = (4,)
     EXIT = 5
 
+
 class PlayerSelectionButtons(Enum):
-    NEW_PLAYER = 1,
+    NEW_PLAYER = (1,)
     BACK = 2
 
+
 class PlayerCreationButtons(Enum):
-    HAIR_TYPE = 1,
-    HAIR_COLOR = 2,
-    EYE_COLOR = 3,
-    SKIN_COLOR = 4,
-    CLOTHES = 5,
-    CREATE = 6,
-    RANDOMIZE = 7,
+    HAIR_TYPE = (1,)
+    HAIR_COLOR = (2,)
+    EYE_COLOR = (3,)
+    SKIN_COLOR = (4,)
+    CLOTHES = (5,)
+    CREATE = (6,)
+    RANDOMIZE = (7,)
     BACK = 8
+
 
 class ColorPickerButtons(Enum):
     BACK = 1
 
+
 class ClothesButtons(Enum):
-    SHIRT_COLOR = 1,
-    UNDERSHIRT_COLOR = 2,
-    TROUSER_COLOR = 3,
-    SHOE_COLOR = 4,
+    SHIRT_COLOR = (1,)
+    UNDERSHIRT_COLOR = (2,)
+    TROUSER_COLOR = (3,)
+    SHOE_COLOR = (4,)
     BACK = 5
+
 
 class PlayerNamingButtons(Enum):
-    SET_NAME = 1,
+    SET_NAME = (1,)
     BACK = 2
+
 
 class WorldSelectionButtons(Enum):
-    NEW_WORLD = 1,
+    NEW_WORLD = (1,)
     BACK = 2
+
 
 class WorldCreationButtons(Enum):
-    TINY = 1,
-    SMALL = 2,
-    MEDIUM = 3,
-    LARGE = 4,
+    TINY = (1,)
+    SMALL = (2,)
+    MEDIUM = (3,)
+    LARGE = (4,)
     BACK = 5
 
+
 class WorldNamingButtons(Enum):
-    SET_NAME = 1,
+    SET_NAME = (1,)
     BACK = 2
+
 
 class CreditsButton(Enum):
     BACK = 1
 
+
 class ChangesButtons(Enum):
-    GITHUB = 1,
-    TRELLO = 2,
+    GITHUB = (1,)
+    TRELLO = (2,)
     BACK = 3
+
 
 class SettingsButtons(Enum):
     BACK = 1
-
 
 
 """================================================================================================================= 
@@ -92,17 +103,38 @@ class SettingsButtons(Enum):
     Stores information about a single button, the visibility of a given button is set by the active_menu_buttons
     table
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 class MenuObject:
-    def __init__(self, text: str, position: tuple[float, float], font, click_sound_id, type: Type, color=(153, 153, 153), outline_color=(0, 0, 0), function=None):
+    def __init__(
+        self,
+        text: str,
+        position: tuple[float, float],
+        font,
+        click_sound_id,
+        type: Type,
+        color=(153, 153, 153),
+        outline_color=(0, 0, 0),
+        function=None,
+    ):
         self.text = text
         self.position = position
         self.type = type
         self.color = color
         self.function = function
-        self.text_surface = shared_methods.outline_text(text, self.color, font, outline_color)
+        self.text_surface = shared_methods.outline_text(
+            text, self.color, font, outline_color
+        )
         if self.type == Type.BUTTON:
-            self.alt_text_surface = shared_methods.outline_text(text, (255, 255, 0), font)
-        self.rect = Rect(self.position[0] - self.text_surface.get_width() * 0.5, self.position[1] - self.text_surface.get_height() * 0.5, self.text_surface.get_width(), self.text_surface.get_height())
+            self.alt_text_surface = shared_methods.outline_text(
+                text, (255, 255, 0), font
+            )
+        self.rect = Rect(
+            self.position[0] - self.text_surface.get_width() * 0.5,
+            self.position[1] - self.text_surface.get_height() * 0.5,
+            self.text_surface.get_width(),
+            self.text_surface.get_height(),
+        )
         self.hovered = False
         self.clicked = False
         self.click_sound_id = click_sound_id
@@ -113,6 +145,7 @@ class MenuObject:
 
         Checks to see if the mouse is interacting with the button instance, performing all the related logic
     -----------------------------------------------------------------------------------------------------------------"""
+
     def update(self):
         if self.type == Type.BUTTON:
             if self.rect.collidepoint(commons.MOUSE_POSITION):
@@ -135,15 +168,16 @@ class MenuObject:
 
         Draws the button's text surface or alt_text_surface depending on the hover state of the button
     -----------------------------------------------------------------------------------------------------------------"""
+
     def draw(self):
         if not self.hovered:
             if self.text == "Terraria":
-                commons.screen.blit(self.text_surface, (self.rect.left, self.rect.top + 3))
+                commons.screen.blit(
+                    self.text_surface, (self.rect.left, self.rect.top + 3)
+                )
             commons.screen.blit(self.text_surface, (self.rect.left, self.rect.top))
         else:
             commons.screen.blit(self.alt_text_surface, (self.rect.left, self.rect.top))
-
-
 
 
 """================================================================================================================= 
@@ -152,11 +186,13 @@ class MenuObject:
     Sets the active state of all buttons to false and then re-adds buttons based on the current game sub state 
     and data in the 'active_menu_buttons' table
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def update_active_menu_buttons():
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
             text.active = False
-    
+
     for menu in active_menu_buttons:
         if commons.game_sub_state == menu:
             for text in active_menu_buttons[menu]:
@@ -164,12 +200,13 @@ def update_active_menu_buttons():
             break
 
 
-
 """================================================================================================================= 
     menu_manager.update_menu_buttons -> void
 
     Calls update on all active button instances, handles unique button press logic
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def update_menu_buttons():
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
@@ -203,20 +240,53 @@ def update_menu_buttons():
                                 [95, 125, 127, 0, 0],
                                 [48, 76, 127, 0, 0],
                                 [129, 113, 45, 0, 0],
-                                [80, 100, 45, 0, 0]
+                                [80, 100, 45, 0, 0],
                             ]
                             commons.PLAYER_MODEL = player.Model(
                                 commons.PLAYER_MODEL_DATA[0][0],
                                 commons.PLAYER_MODEL_DATA[1][0],
-                                (commons.PLAYER_MODEL_DATA[2][0], commons.PLAYER_MODEL_DATA[2][1], commons.PLAYER_MODEL_DATA[2][2]),
-                                (commons.PLAYER_MODEL_DATA[3][0], commons.PLAYER_MODEL_DATA[3][1], commons.PLAYER_MODEL_DATA[3][2]),
-                                (commons.PLAYER_MODEL_DATA[4][0], commons.PLAYER_MODEL_DATA[4][1], commons.PLAYER_MODEL_DATA[4][2]),
-                                (commons.PLAYER_MODEL_DATA[5][0], commons.PLAYER_MODEL_DATA[5][1], commons.PLAYER_MODEL_DATA[5][2]),
-                                (commons.PLAYER_MODEL_DATA[6][0], commons.PLAYER_MODEL_DATA[6][1], commons.PLAYER_MODEL_DATA[6][2]),
-                                (commons.PLAYER_MODEL_DATA[7][0], commons.PLAYER_MODEL_DATA[7][1], commons.PLAYER_MODEL_DATA[7][2]),
-                                (commons.PLAYER_MODEL_DATA[8][0], commons.PLAYER_MODEL_DATA[8][1], commons.PLAYER_MODEL_DATA[8][2])
+                                (
+                                    commons.PLAYER_MODEL_DATA[2][0],
+                                    commons.PLAYER_MODEL_DATA[2][1],
+                                    commons.PLAYER_MODEL_DATA[2][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[3][0],
+                                    commons.PLAYER_MODEL_DATA[3][1],
+                                    commons.PLAYER_MODEL_DATA[3][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[4][0],
+                                    commons.PLAYER_MODEL_DATA[4][1],
+                                    commons.PLAYER_MODEL_DATA[4][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[5][0],
+                                    commons.PLAYER_MODEL_DATA[5][1],
+                                    commons.PLAYER_MODEL_DATA[5][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[6][0],
+                                    commons.PLAYER_MODEL_DATA[6][1],
+                                    commons.PLAYER_MODEL_DATA[6][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[7][0],
+                                    commons.PLAYER_MODEL_DATA[7][1],
+                                    commons.PLAYER_MODEL_DATA[7][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[8][0],
+                                    commons.PLAYER_MODEL_DATA[8][1],
+                                    commons.PLAYER_MODEL_DATA[8][2],
+                                ),
                             )
-                            commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+                            commons.PLAYER_FRAMES = player.render_sprites(
+                                commons.PLAYER_MODEL,
+                                directions=1,
+                                arm_frame_count=1,
+                                torso_frame_count=1,
+                            )
                         case PlayerSelectionButtons.BACK:
                             commons.game_sub_state = "MAIN"
                         case PlayerCreationButtons.HAIR_TYPE:
@@ -225,8 +295,15 @@ def update_menu_buttons():
                                 commons.PLAYER_MODEL.hair_id += 1
                             else:
                                 commons.PLAYER_MODEL.hair_id = 0
-                            commons.PLAYER_MODEL_DATA[1][0] = commons.PLAYER_MODEL.hair_id
-                            commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+                            commons.PLAYER_MODEL_DATA[1][
+                                0
+                            ] = commons.PLAYER_MODEL.hair_id
+                            commons.PLAYER_FRAMES = player.render_sprites(
+                                commons.PLAYER_MODEL,
+                                directions=1,
+                                arm_frame_count=1,
+                                torso_frame_count=1,
+                            )
                         case PlayerCreationButtons.HAIR_COLOR:
                             commons.game_sub_state = "COLOR_PICKER"
                             commons.PLAYER_MODEL_COLOR_INDEX = 3
@@ -244,18 +321,73 @@ def update_menu_buttons():
                         case PlayerCreationButtons.RANDOMIZE:
                             commons.PLAYER_MODEL_DATA = [
                                 [0],
-                                [random.randint(0, 8),],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0],
-                                [random.randint(0, 128), random.randint(0, 128), random.randint(0, 128), 0, 0]
+                                [
+                                    random.randint(0, 8),
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
+                                [
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    random.randint(0, 128),
+                                    0,
+                                    0,
+                                ],
                             ]
                             player.update_player_model_using_model_data()
-                            commons.PLAYER_FRAMES = player.render_sprites(commons.PLAYER_MODEL, directions=1, arm_frame_count=1, torso_frame_count=1)
+                            commons.PLAYER_FRAMES = player.render_sprites(
+                                commons.PLAYER_MODEL,
+                                directions=1,
+                                arm_frame_count=1,
+                                torso_frame_count=1,
+                            )
                         case PlayerCreationButtons.BACK:
                             commons.game_sub_state = "PLAYER_SELECTION"
                         case ColorPickerButtons.BACK:
@@ -285,7 +417,12 @@ def update_menu_buttons():
                             commons.PLAYER_DATA["playtime"] = 0
                             commons.PLAYER_DATA["creation_date"] = date
                             commons.PLAYER_DATA["last_played_date"] = date
-                            pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{commons.TEXT_INPUT}.player", "wb"))  # Save player array
+                            pickle.dump(
+                                commons.PLAYER_DATA,
+                                open(
+                                    f"assets/players/{commons.TEXT_INPUT}.player", "wb"
+                                ),
+                            )  # Save player array
                             commons.game_sub_state = "PLAYER_SELECTION"
                             load_menu_player_data()
                         case PlayerNamingButtons.BACK:
@@ -327,23 +464,66 @@ def update_menu_buttons():
                         case CreditsButton.BACK:
                             commons.game_sub_state = "MAIN"
                         case ChangesButtons.GITHUB:
-                            entity_manager.client_prompt = prompt.Prompt("browser opened", "GitHub page opened in a new tab.", size=(5, 2))
+                            entity_manager.client_prompt = prompt.Prompt(
+                                "browser opened",
+                                "GitHub page opened in a new tab.",
+                                size=(5, 2),
+                            )
                             webbrowser.open("https://github.com/Murat65536/Terraria")
                         case ChangesButtons.TRELLO:
-                            entity_manager.client_prompt = prompt.Prompt("browser opened", "Trello board opened in a new tab.", size=(5, 2))
-                            webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
+                            entity_manager.client_prompt = prompt.Prompt(
+                                "browser opened",
+                                "Trello board opened in a new tab.",
+                                size=(5, 2),
+                            )
+                            webbrowser.open(
+                                "https://trello.com/b/tI74vC1t/terraria-trello-board"
+                            )
                         case ChangesButtons.BACK:
                             commons.game_sub_state = "MAIN"
                         case SettingsButtons.BACK:
                             commons.game_sub_state = "MAIN"
 
                     if commons.game_sub_state == "COLOR_PICKER":
-                        if commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] is not None or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] is not None:
-                            entity_manager.client_color_picker.selected_red = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0]
-                            entity_manager.client_color_picker.selected_green = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1]
-                            entity_manager.client_color_picker.selected_blue = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2]
-                            entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][3]
-                            entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][4]
+                        if (
+                            commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][
+                                0
+                            ]
+                            is not None
+                            or commons.PLAYER_MODEL_DATA[
+                                commons.PLAYER_MODEL_COLOR_INDEX
+                            ][1]
+                            is not None
+                            or commons.PLAYER_MODEL_DATA[
+                                commons.PLAYER_MODEL_COLOR_INDEX
+                            ][2]
+                            is not None
+                        ):
+                            entity_manager.client_color_picker.selected_red = (
+                                commons.PLAYER_MODEL_DATA[
+                                    commons.PLAYER_MODEL_COLOR_INDEX
+                                ][0]
+                            )
+                            entity_manager.client_color_picker.selected_green = (
+                                commons.PLAYER_MODEL_DATA[
+                                    commons.PLAYER_MODEL_COLOR_INDEX
+                                ][1]
+                            )
+                            entity_manager.client_color_picker.selected_blue = (
+                                commons.PLAYER_MODEL_DATA[
+                                    commons.PLAYER_MODEL_COLOR_INDEX
+                                ][2]
+                            )
+                            entity_manager.client_color_picker.selected_x = (
+                                commons.PLAYER_MODEL_DATA[
+                                    commons.PLAYER_MODEL_COLOR_INDEX
+                                ][3]
+                            )
+                            entity_manager.client_color_picker.selected_y = (
+                                commons.PLAYER_MODEL_DATA[
+                                    commons.PLAYER_MODEL_COLOR_INDEX
+                                ][4]
+                            )
 
                     update_active_menu_buttons()
 
@@ -353,6 +533,8 @@ def update_menu_buttons():
 
     Calls draw on all active button instances
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def draw_menu_buttons():
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
@@ -365,6 +547,8 @@ def draw_menu_buttons():
 
     Loads all player save metadata and creates a surface for each one
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def load_menu_player_data():
     path = "assets/players"
     if not os.path.exists(path):
@@ -378,14 +562,63 @@ def load_menu_player_data():
         player_data_surf = pygame.Surface((315, 60))
         player_data_surf.fill((50, 50, 50))
         pygame.draw.rect(player_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
-        player_data_surf.blit(shared_methods.outline_text(dat["name"], (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # Name
-        player_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
-        player_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
-        player_data_surf.blit(shared_methods.outline_text(str(dat["creation_date"])[:19], (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
-        player_data_surf.blit(shared_methods.outline_text(str(dat["hp"]) + "HP", (230, 10, 10), commons.DEFAULT_FONT, outline_color=(128, 5, 5)), (155, 3))  # hp
-        player_data_surf.blit(shared_methods.outline_text("100MNA", (80, 102, 244), commons.DEFAULT_FONT, outline_color=(30, 41, 122)), (205, 3))  # mana
-        player_data_surf.blit(shared_methods.outline_text(str(int((dat["playtime"] / 60) // 60)) + ":" + str(int(dat["playtime"] // 60 % 60)).zfill(2) + ":" + str(int(dat["playtime"] % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
-        sprites = player.render_sprites(dat["model"], directions=1, arm_frame_count=1, torso_frame_count=1)
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                dat["name"], (255, 255, 255), commons.DEFAULT_FONT
+            ),
+            (5, 3),
+        )  # Name
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                "Created: ", (255, 255, 255), commons.DEFAULT_FONT
+            ),
+            (5, 20),
+        )  # Creation date
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                "Playtime: ", (255, 255, 255), commons.DEFAULT_FONT
+            ),
+            (5, 40),
+        )  # Playtime
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                str(dat["creation_date"])[:19], (230, 230, 0), commons.DEFAULT_FONT
+            ),
+            (80, 20),
+        )  # Creation date
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                str(dat["hp"]) + "HP",
+                (230, 10, 10),
+                commons.DEFAULT_FONT,
+                outline_color=(128, 5, 5),
+            ),
+            (155, 3),
+        )  # hp
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                "100MNA",
+                (80, 102, 244),
+                commons.DEFAULT_FONT,
+                outline_color=(30, 41, 122),
+            ),
+            (205, 3),
+        )  # mana
+        player_data_surf.blit(
+            shared_methods.outline_text(
+                str(int((dat["playtime"] / 60) // 60))
+                + ":"
+                + str(int(dat["playtime"] // 60 % 60)).zfill(2)
+                + ":"
+                + str(int(dat["playtime"] % 60)).zfill(2),
+                (230, 230, 0),
+                commons.DEFAULT_FONT,
+            ),
+            (90, 40),
+        )  # playtime
+        sprites = player.render_sprites(
+            dat["model"], directions=1, arm_frame_count=1, torso_frame_count=1
+        )
         player_data_surf.blit(sprites[0][0], (270, 0))
         player_data_surf.blit(sprites[1][0], (270, 0))
         commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
@@ -396,6 +629,8 @@ def load_menu_player_data():
 
     Loads all world save metadata and creates a surface for each one
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def load_menu_world_data():
     path = "assets/worlds"
     if not os.path.exists(path):
@@ -410,87 +645,436 @@ def load_menu_world_data():
             world_data_surf.fill((50, 50, 50))
             pygame.draw.rect(world_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
 
-            world_data_surf.blit(shared_methods.outline_text(world.world.name, (255, 255, 255), commons.DEFAULT_FONT), (5, 3))  # name
-            world_data_surf.blit(shared_methods.outline_text("Created: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 20))  # Creation date
-            world_data_surf.blit(shared_methods.outline_text("Playtime: ", (255, 255, 255), commons.DEFAULT_FONT), (5, 40))  # Playtime
-            world_data_surf.blit(shared_methods.outline_text(world.world.get_creation_date_string(), (230, 230, 0), commons.DEFAULT_FONT), (80, 20))  # Creation date
-            world_data_surf.blit(shared_methods.outline_text(str(int((world.world.playtime / 60) // 60)) + ":" + str(int(world.world.playtime // 60 % 60)).zfill(2) + ":" + str(int(world.world.playtime % 60)).zfill(2), (230, 230, 0), commons.DEFAULT_FONT), (90, 40))  # playtime
+            world_data_surf.blit(
+                shared_methods.outline_text(
+                    world.world.name, (255, 255, 255), commons.DEFAULT_FONT
+                ),
+                (5, 3),
+            )  # name
+            world_data_surf.blit(
+                shared_methods.outline_text(
+                    "Created: ", (255, 255, 255), commons.DEFAULT_FONT
+                ),
+                (5, 20),
+            )  # Creation date
+            world_data_surf.blit(
+                shared_methods.outline_text(
+                    "Playtime: ", (255, 255, 255), commons.DEFAULT_FONT
+                ),
+                (5, 40),
+            )  # Playtime
+            world_data_surf.blit(
+                shared_methods.outline_text(
+                    world.world.get_creation_date_string(),
+                    (230, 230, 0),
+                    commons.DEFAULT_FONT,
+                ),
+                (80, 20),
+            )  # Creation date
+            world_data_surf.blit(
+                shared_methods.outline_text(
+                    str(int((world.world.playtime / 60) // 60))
+                    + ":"
+                    + str(int(world.world.playtime // 60 % 60)).zfill(2)
+                    + ":"
+                    + str(int(world.world.playtime % 60)).zfill(2),
+                    (230, 230, 0),
+                    commons.DEFAULT_FONT,
+                ),
+                (90, 40),
+            )  # playtime
 
             world_data_surf.blit(tilesets.misc_gui[0][10], (260, 7))
 
             commons.WORLD_SAVE_OPTIONS.append((world.world.name, world_data_surf))
 
+
 active_menu_buttons: dict[str, list[MenuObject]] = {
     "MAIN": [
-        MenuObject("Single Player", (commons.WINDOW_WIDTH * 0.5, 250), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.SINGLE_PLAYER),
-        MenuObject("Credits", (commons.WINDOW_WIDTH * 0.5, 305), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.CREDITS),
-        MenuObject("Changes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.CHANGES),
-        MenuObject("Settings", (commons.WINDOW_WIDTH * 0.5, 415), commons.LARGE_FONT, 24, Type.BUTTON, function=TitleScreenButtons.SETTINGS),
-        MenuObject("Exit", (commons.WINDOW_WIDTH * 0.5, 470), commons.LARGE_FONT, 25, Type.BUTTON, function=TitleScreenButtons.EXIT)
+        MenuObject(
+            "Single Player",
+            (commons.WINDOW_WIDTH * 0.5, 250),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=TitleScreenButtons.SINGLE_PLAYER,
+        ),
+        MenuObject(
+            "Credits",
+            (commons.WINDOW_WIDTH * 0.5, 305),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=TitleScreenButtons.CREDITS,
+        ),
+        MenuObject(
+            "Changes",
+            (commons.WINDOW_WIDTH * 0.5, 360),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=TitleScreenButtons.CHANGES,
+        ),
+        MenuObject(
+            "Settings",
+            (commons.WINDOW_WIDTH * 0.5, 415),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=TitleScreenButtons.SETTINGS,
+        ),
+        MenuObject(
+            "Exit",
+            (commons.WINDOW_WIDTH * 0.5, 470),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=TitleScreenButtons.EXIT,
+        ),
     ],
     "PLAYER_SELECTION": [
-        MenuObject("Select Player", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
-        MenuObject("New Player", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerSelectionButtons.NEW_PLAYER),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerSelectionButtons.BACK)
+        MenuObject(
+            "Select Player",
+            (commons.WINDOW_WIDTH * 0.5, 90),
+            commons.LARGE_FONT,
+            24,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "New Player",
+            (commons.WINDOW_WIDTH * 0.5, 530),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerSelectionButtons.NEW_PLAYER,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=PlayerSelectionButtons.BACK,
+        ),
     ],
     "PLAYER_CREATION": [
-        MenuObject("Hair Type", (commons.WINDOW_WIDTH * 0.5, 200), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.HAIR_TYPE),
-        MenuObject("Hair Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.HAIR_COLOR),
-        MenuObject("Eye Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.EYE_COLOR),
-        MenuObject("Skin Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.SKIN_COLOR),
-        MenuObject("Clothes", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CLOTHES),
-        MenuObject("Create", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerCreationButtons.CREATE),
-        MenuObject("Randomize", (commons.WINDOW_WIDTH * 0.5, 490), commons.LARGE_FONT, 26, Type.BUTTON, function=PlayerCreationButtons.RANDOMIZE),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerCreationButtons.BACK)
+        MenuObject(
+            "Hair Type",
+            (commons.WINDOW_WIDTH * 0.5, 200),
+            commons.LARGE_FONT,
+            26,
+            Type.BUTTON,
+            function=PlayerCreationButtons.HAIR_TYPE,
+        ),
+        MenuObject(
+            "Hair Color",
+            (commons.WINDOW_WIDTH * 0.5, 240),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerCreationButtons.HAIR_COLOR,
+        ),
+        MenuObject(
+            "Eye Color",
+            (commons.WINDOW_WIDTH * 0.5, 280),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerCreationButtons.EYE_COLOR,
+        ),
+        MenuObject(
+            "Skin Color",
+            (commons.WINDOW_WIDTH * 0.5, 320),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerCreationButtons.SKIN_COLOR,
+        ),
+        MenuObject(
+            "Clothes",
+            (commons.WINDOW_WIDTH * 0.5, 360),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerCreationButtons.CLOTHES,
+        ),
+        MenuObject(
+            "Create",
+            (commons.WINDOW_WIDTH * 0.5, 450),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerCreationButtons.CREATE,
+        ),
+        MenuObject(
+            "Randomize",
+            (commons.WINDOW_WIDTH * 0.5, 490),
+            commons.LARGE_FONT,
+            26,
+            Type.BUTTON,
+            function=PlayerCreationButtons.RANDOMIZE,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=PlayerCreationButtons.BACK,
+        ),
     ],
     "COLOR_PICKER": [
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ColorPickerButtons.BACK)
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=ColorPickerButtons.BACK,
+        )
     ],
     "CLOTHES": [
-        MenuObject("Shirt Color", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHIRT_COLOR),
-        MenuObject("Undershirt Color", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.UNDERSHIRT_COLOR),
-        MenuObject("Trouser Color", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.TROUSER_COLOR),
-        MenuObject("Shoe Color", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, function=ClothesButtons.SHOE_COLOR),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ClothesButtons.BACK)
+        MenuObject(
+            "Shirt Color",
+            (commons.WINDOW_WIDTH * 0.5, 240),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ClothesButtons.SHIRT_COLOR,
+        ),
+        MenuObject(
+            "Undershirt Color",
+            (commons.WINDOW_WIDTH * 0.5, 280),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ClothesButtons.UNDERSHIRT_COLOR,
+        ),
+        MenuObject(
+            "Trouser Color",
+            (commons.WINDOW_WIDTH * 0.5, 320),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ClothesButtons.TROUSER_COLOR,
+        ),
+        MenuObject(
+            "Shoe Color",
+            (commons.WINDOW_WIDTH * 0.5, 360),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ClothesButtons.SHOE_COLOR,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=ClothesButtons.BACK,
+        ),
     ],
     "PLAYER_NAMING": [
-        MenuObject("Set Player Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=PlayerNamingButtons.SET_NAME),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=PlayerNamingButtons.BACK)
+        MenuObject(
+            "Set Player Name",
+            (commons.WINDOW_WIDTH * 0.5, 450),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=PlayerNamingButtons.SET_NAME,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=PlayerNamingButtons.BACK,
+        ),
     ],
     "WORLD_SELECTION": [
-        MenuObject("Select World", (commons.WINDOW_WIDTH * 0.5, 90), commons.LARGE_FONT, 24, Type.TEXT),
-        MenuObject("New World", (commons.WINDOW_WIDTH * 0.5, 530), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldSelectionButtons.NEW_WORLD),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldSelectionButtons.BACK)
+        MenuObject(
+            "Select World",
+            (commons.WINDOW_WIDTH * 0.5, 90),
+            commons.LARGE_FONT,
+            24,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "New World",
+            (commons.WINDOW_WIDTH * 0.5, 530),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=WorldSelectionButtons.NEW_WORLD,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=WorldSelectionButtons.BACK,
+        ),
     ],
     "WORLD_CREATION": [
-        MenuObject("World Size", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 24, Type.TEXT),
-        MenuObject("Tiny (100x350)", (commons.WINDOW_WIDTH * 0.5, 240), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.TINY),
-        MenuObject("Small (200x400)", (commons.WINDOW_WIDTH * 0.5, 280), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.SMALL),
-        MenuObject("Medium (400x450)", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldCreationButtons.MEDIUM),
-        MenuObject("Large (700x550)", (commons.WINDOW_WIDTH * 0.5, 360), commons.LARGE_FONT, 24, Type.BUTTON, (200, 0, 0), (100, 0, 0), function=WorldCreationButtons.LARGE),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldCreationButtons.BACK)
+        MenuObject(
+            "World Size",
+            (commons.WINDOW_WIDTH * 0.5, 120),
+            commons.EXTRA_LARGE_FONT,
+            24,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Tiny (100x350)",
+            (commons.WINDOW_WIDTH * 0.5, 240),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=WorldCreationButtons.TINY,
+        ),
+        MenuObject(
+            "Small (200x400)",
+            (commons.WINDOW_WIDTH * 0.5, 280),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=WorldCreationButtons.SMALL,
+        ),
+        MenuObject(
+            "Medium (400x450)",
+            (commons.WINDOW_WIDTH * 0.5, 320),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=WorldCreationButtons.MEDIUM,
+        ),
+        MenuObject(
+            "Large (700x550)",
+            (commons.WINDOW_WIDTH * 0.5, 360),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            (200, 0, 0),
+            (100, 0, 0),
+            function=WorldCreationButtons.LARGE,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=WorldCreationButtons.BACK,
+        ),
     ],
     "WORLD_NAMING": [
-        MenuObject("Set World Name", (commons.WINDOW_WIDTH * 0.5, 450), commons.LARGE_FONT, 24, Type.BUTTON, function=WorldNamingButtons.SET_NAME),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=WorldNamingButtons.BACK)
+        MenuObject(
+            "Set World Name",
+            (commons.WINDOW_WIDTH * 0.5, 450),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=WorldNamingButtons.SET_NAME,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=WorldNamingButtons.BACK,
+        ),
     ],
     "CREDITS": [
-        MenuObject("Credits", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-        MenuObject("Images: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 270), commons.LARGE_FONT, 25, Type.TEXT),
-        MenuObject("Sounds: Re-Logic", (commons.WINDOW_WIDTH * 0.5, 310), commons.LARGE_FONT, 25, Type.TEXT),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=CreditsButton.BACK)
+        MenuObject(
+            "Credits",
+            (commons.WINDOW_WIDTH * 0.5, 120),
+            commons.EXTRA_LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Images: Re-Logic",
+            (commons.WINDOW_WIDTH * 0.5, 270),
+            commons.LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Sounds: Re-Logic",
+            (commons.WINDOW_WIDTH * 0.5, 310),
+            commons.LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=CreditsButton.BACK,
+        ),
     ],
     "CHANGES": [
-        MenuObject("Changes", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-        MenuObject("GitHub Repo", (commons.WINDOW_WIDTH * 0.5, 320), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.GITHUB),
-        MenuObject("Trello Board", (commons.WINDOW_WIDTH * 0.5, 400), commons.LARGE_FONT, 24, Type.BUTTON, function=ChangesButtons.TRELLO),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=ChangesButtons.BACK)
+        MenuObject(
+            "Changes",
+            (commons.WINDOW_WIDTH * 0.5, 120),
+            commons.EXTRA_LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "GitHub Repo",
+            (commons.WINDOW_WIDTH * 0.5, 320),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ChangesButtons.GITHUB,
+        ),
+        MenuObject(
+            "Trello Board",
+            (commons.WINDOW_WIDTH * 0.5, 400),
+            commons.LARGE_FONT,
+            24,
+            Type.BUTTON,
+            function=ChangesButtons.TRELLO,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=ChangesButtons.BACK,
+        ),
     ],
     "SETTINGS": [
-        MenuObject("Settings", (commons.WINDOW_WIDTH * 0.5, 120), commons.EXTRA_LARGE_FONT, 25, Type.TEXT),
-        MenuObject("Coming soon", (commons.WINDOW_WIDTH * 0.5, 300), commons.LARGE_FONT, 25, Type.TEXT),
-        MenuObject("Back", (commons.WINDOW_WIDTH * 0.5, 570), commons.LARGE_FONT, 25, Type.BUTTON, function=SettingsButtons.BACK)
-    ]
+        MenuObject(
+            "Settings",
+            (commons.WINDOW_WIDTH * 0.5, 120),
+            commons.EXTRA_LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Coming soon",
+            (commons.WINDOW_WIDTH * 0.5, 300),
+            commons.LARGE_FONT,
+            25,
+            Type.TEXT,
+        ),
+        MenuObject(
+            "Back",
+            (commons.WINDOW_WIDTH * 0.5, 570),
+            commons.LARGE_FONT,
+            25,
+            Type.BUTTON,
+            function=SettingsButtons.BACK,
+        ),
+    ],
 }
 
 update_active_menu_buttons()

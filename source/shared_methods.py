@@ -14,6 +14,8 @@ import game_data
 
     Performs vector normalization on the given vector (scalar tuple)
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def normalize_vec_2(vector):
     magnitude = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
     return vector[0] / magnitude, vector[1] / magnitude
@@ -24,6 +26,8 @@ def normalize_vec_2(vector):
 
     Given a bool, returns either "on" or "off"
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def get_on_off(bool_var):
     if bool_var:
         return "on"
@@ -35,14 +39,19 @@ def get_on_off(bool_var):
 
     Multiplies all three components of a color tuple by a given float
 -----------------------------------------------------------------------------------------------------------------"""
-def darken_color(color: tuple[int, int, int], factor: float=0.6):
+
+
+def darken_color(color: tuple[int, int, int], factor: float = 0.6):
     return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
+
 
 """================================================================================================================= 
     shared_methods.get_tier_color -> tuple
 
     Given an item tier, a color representing that tier is returned
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def get_tier_color(tier):
     if tier < 0:
         return 150, 150, 150  # Gray
@@ -77,6 +86,8 @@ def get_tier_color(tier):
 
     Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def rotate_surface(image, angle):
     original_rect = image.get_rect()
     rotated_image = pygame.transform.rotate(image, angle)
@@ -92,6 +103,8 @@ def rotate_surface(image, angle):
     Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
     an outline effect
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def outline_text(string, color, font, outline_color=(0, 0, 0)):
     text1 = font.render(string, False, color)
     if commons.FANCY_TEXT:
@@ -120,6 +133,8 @@ def outline_text(string, color, font, outline_color=(0, 0, 0)):
     Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some
     optional text (measurements in multiples of 48px)
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def create_menu_surface(width, height, body):
     surf = pygame.Surface((width * 48, height * 48))
     surf.fill((255, 0, 255))
@@ -133,7 +148,7 @@ def create_menu_surface(width, height, body):
                     index = 6
                 else:
                     index = 2
-            elif i == width-1:
+            elif i == width - 1:
                 if j == 0:
                     index = 8
                 elif j == height - 1:
@@ -146,7 +161,7 @@ def create_menu_surface(width, height, body):
                 index = 3
             else:
                 index = 9
-                
+
             surf.blit(tilesets.misc_gui[0][index], (i * 48, j * 48))
     usable_width = width * 48 - 60
     lines = [""]
@@ -160,7 +175,10 @@ def create_menu_surface(width, height, body):
         else:
             lines[-1] += " " + word
     for i in range(len(lines)):
-        surf.blit(outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT), (15, 15 + i * 20))
+        surf.blit(
+            outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT),
+            (15, 15 + i * 20),
+        )
     return surf
 
 
@@ -169,6 +187,8 @@ def create_menu_surface(width, height, body):
 
     Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def color_surface(gray_surf, col) -> pygame.Surface:
     if col == ():
         col = (0, 0, 0)
@@ -177,17 +197,24 @@ def color_surface(gray_surf, col) -> pygame.Surface:
     surf = pygame.Surface((x, y))
     surf.fill((255, 255, 255))
     surf.set_colorkey((255, 255, 255))  # set the colorkey to white
-    surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
+    surf.blit(
+        gray_surf, (0, 0)
+    )  # create a surf with the given hair and white background
     color = pygame.Surface((x, y))
     color.fill(col)  # create a blank surf with the color of the hair
-    surf.blit(color, (0, 0), None, BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
+    surf.blit(
+        color, (0, 0), None, BLEND_RGB_ADD
+    )  # blit the new surf to the hair with an add blend flag
     return surf
+
 
 """================================================================================================================= 
     shared_methods.transparent_color_surface -> pygame.Surface
 
     Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def transparent_color_surface(surf, col):
     grayscale = (128, 128, 128)
     colored_surface = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
@@ -206,6 +233,8 @@ def transparent_color_surface(surf, col):
 
     Simple linear interpolation
 -----------------------------------------------------------------------------------------------------------------"""
+
+
 def lerp_float(a, b, t):
     return a + (b - a) * t
 
@@ -225,5 +254,7 @@ def ease_out_zero_to_one(zero_to_one_float, iterations):
 
 def ease_in_zero_to_one(zero_to_one_float, iterations):
     for _ in range(iterations):
-        zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
+        zero_to_one_float = 1.0 + math.sin(
+            zero_to_one_float * math.pi * 0.5 - math.pi * 0.5
+        )
     return zero_to_one_float

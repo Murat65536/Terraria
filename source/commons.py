@@ -389,12 +389,12 @@ class TileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     place_sound: str
@@ -407,12 +407,12 @@ class DamagingTileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     place_sound: str
@@ -427,12 +427,12 @@ class MultitileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     multitile_dimensions: tuple[int, int]
@@ -447,12 +447,12 @@ class DoorTileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     cycle_facing_left_tile_id_str: str
@@ -473,12 +473,12 @@ class LootMultitileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     loot_group_id_str: str
@@ -494,12 +494,12 @@ class LootTileData(TypedDict):
     id_str: str
     name: str
     strength: float
-    strength_type: str
+    strength_type: TileStrengthType
     mask_type: TileMaskType
     mask_merge_ids: list[str]
     light_reduction: int
     light_emission: int
-    tags: list[str]
+    tags: list[TileTag]
     item_id_str: str
     item_count_range: tuple[int, int]
     loot_group_id_str: str
@@ -621,8 +621,15 @@ DELTA_TIME: int = 0
 
 CURRENT_SKY_LIGHTING: int = 255
 
-GAME_BACKGROUND: pygame.Surface = pygame.Surface((WINDOW_WIDTH + 2048, WINDOW_HEIGHT + 838))
-GAME_BACKGROUND.blit(pygame.image.load("assets/images/backgrounds/game_backgrounds/forest_background.png"), (0, 0))
+GAME_BACKGROUND: pygame.Surface = pygame.Surface(
+    (WINDOW_WIDTH + 2048, WINDOW_HEIGHT + 838)
+)
+GAME_BACKGROUND.blit(
+    pygame.image.load(
+        "assets/images/backgrounds/game_backgrounds/forest_background.png"
+    ),
+    (0, 0),
+)
 
 WORLD_SAVE_OPTIONS: list[tuple[str, pygame.Surface]] = []
 
@@ -1270,7 +1277,9 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/wooden_arrow.png"
         ).convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/wooden_arrow.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/wooden_arrow.png"
+        ).convert_alpha(),
     },
     {
         "id": 27,
@@ -1322,7 +1331,9 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/musket_ball.png"
         ).convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 29,
@@ -1344,7 +1355,9 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/copper_coin.png"
         ).convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 30,
@@ -1366,7 +1379,9 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/silver_coin.png"
         ).convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 31,
@@ -1386,7 +1401,9 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "ricochet_amount": 1,
         "image": pygame.image.load("assets/images/items/gold_coin.png").convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 32,
@@ -1408,7 +1425,9 @@ ITEM_DATA: list[
         "image": pygame.image.load(
             "assets/images/items/platinum_coin.png"
         ).convert_alpha(),
-        "ammo_image": pygame.image.load("assets/images/projectiles/musket_ball.png").convert_alpha()
+        "ammo_image": pygame.image.load(
+            "assets/images/projectiles/musket_ball.png"
+        ).convert_alpha(),
     },
     {
         "id": 33,
@@ -2593,7 +2612,7 @@ TILE_DATA: list[
         "id_str": "tile.UNNAMED",
         "name": "UNNAMED",
         "strength": 0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [],
         "light_reduction": 0,
@@ -2610,12 +2629,12 @@ TILE_DATA: list[
         "id_str": "tile.none",
         "name": "None",
         "strength": 0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "tags": ["NO_COLLIDE", "NO_DRAW"],
+        "tags": [TileTag.NO_COLLIDE, TileTag.NO_DRAW],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "place_sound": "",
@@ -2627,7 +2646,7 @@ TILE_DATA: list[
         "id_str": "tile.dirt",
         "name": "Dirt",
         "strength": 1,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "tile.grass",
@@ -2655,7 +2674,7 @@ TILE_DATA: list[
         "id_str": "tile.stone",
         "name": "Stone",
         "strength": 3,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.wood"],
         "light_reduction": 25,
@@ -2675,7 +2694,7 @@ TILE_DATA: list[
         "id_str": "tile.grass",
         "name": "Grass",
         "strength": 0.5,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk"],
         "light_reduction": 25,
@@ -2695,7 +2714,7 @@ TILE_DATA: list[
         "id_str": "tile.sand",
         "name": "Sand",
         "strength": 0.5,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
@@ -2715,7 +2734,7 @@ TILE_DATA: list[
         "id_str": "tile.sandstone",
         "name": "Sandstone",
         "strength": 1.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
@@ -2735,7 +2754,7 @@ TILE_DATA: list[
         "id_str": "tile.snow",
         "name": "Snow",
         "strength": 0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk", "tile.copper"],
         "light_reduction": 25,
@@ -2755,7 +2774,7 @@ TILE_DATA: list[
         "id_str": "tile.ice",
         "name": "Ice",
         "strength": 1.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt"],
         "light_reduction": 25,
@@ -2775,7 +2794,7 @@ TILE_DATA: list[
         "id_str": "tile.wood",
         "name": "Wood",
         "strength": 1.0,
-        "strength_type": "AXE",
+        "strength_type": TileStrengthType.AXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.stone"],
         "light_reduction": 25,
@@ -2795,7 +2814,7 @@ TILE_DATA: list[
         "id_str": "tile.trunk",
         "name": "Trunk",
         "strength": 5.0,
-        "strength_type": "AXE",
+        "strength_type": TileStrengthType.AXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [
             "tile.dirt",
@@ -2805,7 +2824,7 @@ TILE_DATA: list[
         ],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["NO_COLLIDE"],
+        "tags": [TileTag.NO_COLLIDE],
         "item_id_str": "item.wood",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
@@ -2820,12 +2839,12 @@ TILE_DATA: list[
         "id_str": "tile.leaves",
         "name": "Leaves",
         "strength": 0.5,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.trunk"],
         "light_reduction": 5,
         "light_emission": 0,
-        "tags": ["NO_COLLIDE"],
+        "tags": [TileTag.NO_COLLIDE],
         "item_id_str": "item.INVALID",
         "item_count_range": (1, 1),
         "place_sound": "sound.grass",
@@ -2840,7 +2859,7 @@ TILE_DATA: list[
         "id_str": "tile.copper",
         "name": "Copper Ore",
         "strength": 3.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": ["tile.dirt", "tile.stone", "tile.snow"],
         "light_reduction": 25,
@@ -2860,7 +2879,7 @@ TILE_DATA: list[
         "id_str": "tile.silver",
         "name": "Silver",
         "strength": 0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NOISY,
         "mask_merge_ids": [],
         "light_reduction": 25,
@@ -2880,12 +2899,12 @@ TILE_DATA: list[
         "id_str": "tile.spike",
         "name": "Spike",
         "strength": 1.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["DAMAGING", "TRANSPARENT"],
+        "tags": [TileTag.DAMAGING, TileTag.TRANSPARENT],
         "item_id_str": "item.spike",
         "item_count_range": (1, 1),
         "tile_damage": 50,
@@ -2902,12 +2921,12 @@ TILE_DATA: list[
         "id_str": "tile.torch",
         "name": "Torch",
         "strength": 1.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 200,
-        "tags": ["NO_COLLIDE", "TRANSPARENT"],
+        "tags": [TileTag.NO_COLLIDE, TileTag.TRANSPARENT],
         "item_id_str": "item.torch",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
@@ -2922,12 +2941,12 @@ TILE_DATA: list[
         "id_str": "tile.platform_wood",
         "name": "Wood Platform",
         "strength": 1.0,
-        "strength_type": "PICKAXE",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["PLATFORM", "TRANSPARENT"],
+        "tags": [TileTag.PLATFORM, TileTag.TRANSPARENT],
         "item_id_str": "item.wood_platform",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",
@@ -2942,12 +2961,17 @@ TILE_DATA: list[
         "id_str": "tile.chest_wood",
         "name": "Chest",
         "strength": 2.0,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["CHEST", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.CHEST,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.wood_chest",
         "item_count_range": (1, 1),
         "multitile_dimensions": (2, 2),
@@ -2966,12 +2990,17 @@ TILE_DATA: list[
         "id_str": "tile.crafting_table_wood",
         "name": "Wood Crafting Table",
         "strength": 1.0,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["WORKBENCH", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.WORKBENCH,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.workbench",
         "item_count_range": (1, 1),
         "multitile_dimensions": (2, 1),
@@ -2990,12 +3019,17 @@ TILE_DATA: list[
         "id_str": "tile.door_wood_open_left",
         "name": "Wood Door Open Left",
         "strength": 1.0,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "tags": ["CYCLABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.CYCLABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_closed",
@@ -3020,12 +3054,12 @@ TILE_DATA: list[
         "id_str": "tile.door_wood_closed",
         "name": "Closed Wood Door",
         "strength": 1.0,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 35,
         "light_emission": 0,
-        "tags": ["CYCLABLE", "MULTITILE", "TRANSPARENT"],
+        "tags": [TileTag.CYCLABLE, TileTag.MULTITILE, TileTag.TRANSPARENT],
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_open_left",
@@ -3050,12 +3084,17 @@ TILE_DATA: list[
         "id_str": "tile.door_wood_open_right",
         "name": "Wood Door Open Right",
         "strength": 1.0,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 10,
         "light_emission": 0,
-        "tags": ["CYCLABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.CYCLABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.wood_door",
         "item_count_range": (1, 1),
         "cycle_facing_left_tile_id_str": "tile.door_wood_closed",
@@ -3080,12 +3119,17 @@ TILE_DATA: list[
         "id_str": "tile.pot_tall_gray",
         "name": "Tall Gray Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.BREAKABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
@@ -3105,12 +3149,17 @@ TILE_DATA: list[
         "id_str": "tile.pot_tall_brown",
         "name": "Tall Brown Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.BREAKABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
@@ -3130,12 +3179,17 @@ TILE_DATA: list[
         "id_str": "tile.pot_thick_brown",
         "name": "thick Brown Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.BREAKABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "multitile_dimensions": (2, 2),
@@ -3155,12 +3209,17 @@ TILE_DATA: list[
         "id_str": "tile.pot_thick_gray",
         "name": "thick Gray Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [
+            TileTag.BREAKABLE,
+            TileTag.MULTITILE,
+            TileTag.NO_COLLIDE,
+            TileTag.TRANSPARENT,
+        ],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "multitile_dimensions": (2, 2),
@@ -3180,12 +3239,12 @@ TILE_DATA: list[
         "id_str": "tile.pot_short_gray",
         "name": "Short Gray Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [TileTag.BREAKABLE, TileTag.NO_COLLIDE, TileTag.TRANSPARENT],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
@@ -3201,12 +3260,12 @@ TILE_DATA: list[
         "id_str": "tile.pot_short_brown",
         "name": "Short Brown Pot",
         "strength": 0.5,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["BREAKABLE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [TileTag.BREAKABLE, TileTag.NO_COLLIDE, TileTag.TRANSPARENT],
         "item_id_str": "item.INVALID",
         "item_count_range": (0, 0),
         "loot_group_id_str": "loot.pot",
@@ -3224,12 +3283,12 @@ TILE_DATA: list[
         "id_str": "tile.tree_canopy_a",
         "name": "Tree Canopy A",
         "strength": 0,
-        "strength_type": "DAMAGE",
+        "strength_type": TileStrengthType.DAMAGE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "tags": ["MULTITILE", "NO_COLLIDE", "TRANSPARENT"],
+        "tags": [TileTag.MULTITILE, TileTag.NO_COLLIDE, TileTag.TRANSPARENT],
         "item_id_str": "item.wood",
         "item_count_range": (4, 20),
         "multitile_dimensions": (5, 5),
@@ -3248,12 +3307,12 @@ TILE_DATA: list[
         "id_str": "tile.painting_a",
         "name": "Painting A",
         "strength": 0.5,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["MULTITILE", "NO_COLLIDE"],
+        "tags": [TileTag.MULTITILE, TileTag.NO_COLLIDE],
         "item_id_str": "item.painting_a",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
@@ -3272,12 +3331,12 @@ TILE_DATA: list[
         "id_str": "tile.painting_b",
         "name": "Painting B",
         "strength": 0.5,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["MULTITILE", "NO_COLLIDE"],
+        "tags": [TileTag.MULTITILE, TileTag.NO_COLLIDE],
         "item_id_str": "item.painting_b",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
@@ -3296,12 +3355,12 @@ TILE_DATA: list[
         "id_str": "tile.painting_c",
         "name": "Painting C",
         "strength": 0.5,
-        "strength_type": "HAMMER",
+        "strength_type": TileStrengthType.HAMMER,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 25,
         "light_emission": 0,
-        "tags": ["MULTITILE", "NO_COLLIDE"],
+        "tags": [TileTag.MULTITILE, TileTag.NO_COLLIDE],
         "item_id_str": "item.painting_c",
         "item_count_range": (0, 0),
         "place_sound": "sound.dig",
@@ -3320,12 +3379,12 @@ TILE_DATA: list[
         "id_str": "tile.mushroom",
         "name": "Mushroom",
         "strength": 0,
-        "strength_type": "Pickaxe, Axe, Sword",
+        "strength_type": TileStrengthType.PICKAXE,
         "mask_type": TileMaskType.NONE,
         "mask_merge_ids": [],
         "light_reduction": 0,
         "light_emission": 0,
-        "tags": ["NO_COLLIDE", "TRANSPARENT"],
+        "tags": [TileTag.NO_COLLIDE, TileTag.TRANSPARENT],
         "item_id_str": "item.mushroom",
         "item_count_range": (1, 1),
         "place_sound": "sound.dig",

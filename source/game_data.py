@@ -6,6 +6,7 @@ import commons
 import random
 from typing import TypedDict
 
+
 class UniversalPrefixData(TypedDict):
     name: str
     damage: float
@@ -14,6 +15,7 @@ class UniversalPrefixData(TypedDict):
     knockback: float
     tier: int
 
+
 class CommonPrefixData(TypedDict):
     name: str
     damage: float
@@ -21,6 +23,7 @@ class CommonPrefixData(TypedDict):
     crit_chance: float
     knockback: float
     tier: int
+
 
 class LongswordPrefixData(TypedDict):
     name: str
@@ -31,6 +34,7 @@ class LongswordPrefixData(TypedDict):
     knockback: float
     tier: int
 
+
 class ShortswordPrefixData(TypedDict):
     name: str
     damage: float
@@ -39,6 +43,7 @@ class ShortswordPrefixData(TypedDict):
     size: float
     knockback: float
     tier: int
+
 
 class RangedPrefixData(TypedDict):
     name: str
@@ -49,6 +54,7 @@ class RangedPrefixData(TypedDict):
     knockback: float
     tier: int
 
+
 class MagicalPrefixData(TypedDict):
     name: str
     damage: float
@@ -58,6 +64,7 @@ class MagicalPrefixData(TypedDict):
     knockback: float
     tier: int
 
+
 def make_item_tag_list(item_tags_str: list[str]):
     enum_list: list[commons.ItemTag] = []
     for string in item_tags_str:
@@ -66,22 +73,6 @@ def make_item_tag_list(item_tags_str: list[str]):
                 enum_list.append(tag)
                 break
     return enum_list
-
-
-def make_tile_tag_list(tile_tags_str: list[str]):
-    enum_list: list[commons.TileTag] = []
-    for string in tile_tags_str:
-        for tag in commons.TileTag:
-            if tag.name == string:
-                enum_list.append(tag)
-                break
-    return enum_list
-
-
-def get_tile_strength_type_from_str(strength_type_string: str):
-    for types in commons.TileStrengthType:
-        if types.name == strength_type_string:
-            return types
 
 
 def find_next_char_in_string(string: str, char: str, start_index: int):
@@ -96,15 +87,38 @@ def find_next_char_in_string(string: str, char: str, start_index: int):
 biome_tile_vals: list[list[list[str]]] = [
     [["tile.grass", "tile.dirt", "tile.stone"], ["wall.dirt", "wall.stone"]],
     [["tile.snow", "tile.snow", "tile.ice"], ["wall.snow", "wall.ice"]],
-    [["tile.sand", "tile.sand", "tile.sandstone"], ["wall.hardened_sand", "wall.sandstone"]]
+    [
+        ["tile.sand", "tile.sand", "tile.sandstone"],
+        ["wall.hardened_sand", "wall.sandstone"],
+    ],
 ]
 
 platform_blocks: list[int] = [257]
 
-json_item_data: list[commons.PlacableTileItemData | commons.ImplacableTileItemData | commons.MaterialItemData | commons.WallItemData | commons.PickaxeItemData | commons.HammerItemData | commons.AxeItemData | commons.SwordItemData | commons.RangedItemData | commons.AmmunitionItemData | commons.GrapplingHookItemData | commons.MagicalWeaponItemData] = []
+json_item_data: list[
+    commons.PlacableTileItemData
+    | commons.ImplacableTileItemData
+    | commons.MaterialItemData
+    | commons.WallItemData
+    | commons.PickaxeItemData
+    | commons.HammerItemData
+    | commons.AxeItemData
+    | commons.SwordItemData
+    | commons.RangedItemData
+    | commons.AmmunitionItemData
+    | commons.GrapplingHookItemData
+    | commons.MagicalWeaponItemData
+] = []
 item_id_str_hash_table: dict[str, int] = {}
 
-json_tile_data: list[commons.TileData] = []
+json_tile_data: list[
+    commons.TileData
+    | commons.DamagingTileData
+    | commons.MultitileData
+    | commons.DoorTileData
+    | commons.LootTileData
+    | commons.LootMultitileData
+] = []
 tile_id_str_hash_table: dict[str, int] = {}
 tile_id_light_reduction_lookup: list[int] = []
 tile_id_light_emission_lookup: list[int] = []
@@ -129,201 +143,824 @@ music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
 
 
 # Item Prefix Information
-prefix_data: dict[commons.ItemPrefixGroup, list[UniversalPrefixData | CommonPrefixData | LongswordPrefixData | ShortswordPrefixData | RangedPrefixData | MagicalPrefixData]] = {
+prefix_data: dict[
+    commons.ItemPrefixGroup,
+    list[
+        UniversalPrefixData
+        | CommonPrefixData
+        | LongswordPrefixData
+        | ShortswordPrefixData
+        | RangedPrefixData
+        | MagicalPrefixData
+    ],
+] = {
     commons.ItemPrefixGroup.UNIVERSAL: [
-            {"name": "Keen", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
-            {"name": "Superior", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "knockback": 0.1, "tier": 2},
-            {"name": "Forceful", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 1},
-            {"name": "Broken", "damage": -0.3, "speed": 0, "crit_chance": 0, "knockback": -0.2, "tier": -2},
-            {"name": "Damaged", "damage": -0.15, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": -1},
-            {"name": "Shoddy", "damage": -0.1, "speed": 0, "crit_chance": 0, "knockback": -0.15, "tier": -2},
-            {"name": "Hurtful", "damage": 0.1, "speed": 0, "crit_chance": 0, "knockback": 0, "tier": 1},
-            {"name": "Strong", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 1},
-            {"name": "Unpleasant", "damage": 0.05, "speed": 0, "crit_chance": 0, "knockback": 0.15, "tier": 2},
-            {"name": "Weak", "damage": 0, "speed": 0, "crit_chance": 0, "knockback": -0.2, "tier": -1},
-            {"name": "Ruthless", "damage": 0.18, "speed": 0, "crit_chance": 0, "knockback": -0.1, "tier": 1},
-            {"name": "Godly", "damage": 0.15, "speed": 0, "crit_chance": 0.05, "knockback": 0.15, "tier": 2},
-            {"name": "Demonic", "damage": 0.15, "speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 2},
-            {"name": "Zealous","damage": 0,"speed": 0, "crit_chance": 0.05, "knockback": 0, "tier": 1}
-        ],
+        {
+            "name": "Keen",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Superior",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0.03,
+            "knockback": 0.1,
+            "tier": 2,
+        },
+        {
+            "name": "Forceful",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0.15,
+            "tier": 1,
+        },
+        {
+            "name": "Broken",
+            "damage": -0.3,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": -0.2,
+            "tier": -2,
+        },
+        {
+            "name": "Damaged",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Shoddy",
+            "damage": -0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": -0.15,
+            "tier": -2,
+        },
+        {
+            "name": "Hurtful",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Strong",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0.15,
+            "tier": 1,
+        },
+        {
+            "name": "Unpleasant",
+            "damage": 0.05,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+        {
+            "name": "Weak",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": -0.2,
+            "tier": -1,
+        },
+        {
+            "name": "Ruthless",
+            "damage": 0.18,
+            "speed": 0,
+            "crit_chance": 0,
+            "knockback": -0.1,
+            "tier": 1,
+        },
+        {
+            "name": "Godly",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0.05,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+        {
+            "name": "Demonic",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0.05,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Zealous",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0.05,
+            "knockback": 0,
+            "tier": 1,
+        },
+    ],
     commons.ItemPrefixGroup.COMMON: [
-            {"name": "Quick", "damage": 0, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 1},
-            {"name": "Deadly","damage": 0.1, "speed": 0.1, "crit_chance": 0, "knockback": 0, "tier": 2},
-            {"name": "Agile", "damage": 0, "speed": 0.1, "crit_chance": 0.03, "knockback": 0, "tier": 1},
-            {"name": "Nimble", "damage": 0, "speed": 0.05, "crit_chance": 0, "knockback": 0, "tier": 1},
-            {"name": "Murderous", "damage": -0.07, "speed": 0.06, "crit_chance": 0.03, "knockback": 0, "tier": 2},
-            {"name": "Slow", "damage": 0, "speed": -0.15, "crit_chance": 0, "knockback": 0, "tier": -1},
-            {"name": "Sluggish", "damage": 0,  "speed": -0.2, "crit_chance": 0, "knockback": 0, "tier": -2},
-            {"name": "Lazy", "damage": 0, "speed": -0.08, "crit_chance": 0, "knockback": 0, "tier": -1},
-            {"name": "Annoying", "damage": -0.2, "speed": -0.15, "crit_chance": 0, "knockback": 0, "tier": -2},
-            {"name": "Nasty", "damage": 0.05, "speed": 0.1, "crit_chance": 0.02, "knockback": -0.1, "tier": 1},
-        ],
+        {
+            "name": "Quick",
+            "damage": 0,
+            "speed": 0.1,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Deadly",
+            "damage": 0.1,
+            "speed": 0.1,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Agile",
+            "damage": 0,
+            "speed": 0.1,
+            "crit_chance": 0.03,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Nimble",
+            "damage": 0,
+            "speed": 0.05,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Murderous",
+            "damage": -0.07,
+            "speed": 0.06,
+            "crit_chance": 0.03,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Slow",
+            "damage": 0,
+            "speed": -0.15,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Sluggish",
+            "damage": 0,
+            "speed": -0.2,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": -2,
+        },
+        {
+            "name": "Lazy",
+            "damage": 0,
+            "speed": -0.08,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Annoying",
+            "damage": -0.2,
+            "speed": -0.15,
+            "crit_chance": 0,
+            "knockback": 0,
+            "tier": -2,
+        },
+        {
+            "name": "Nasty",
+            "damage": 0.05,
+            "speed": 0.1,
+            "crit_chance": 0.02,
+            "knockback": -0.1,
+            "tier": 1,
+        },
+    ],
     commons.ItemPrefixGroup.LONGSWORD: [
-            {"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
-            {"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
-            {"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
-            {"name": "Savage", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 2},
-            {"name": "Sharp", "damage": 0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
-            {"name": "Pointy", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
-            {"name": "Tiny", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.18, "knockback": 0, "tier": -1},
-            {"name": "Terrible", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": -0.13, "knockback": -0.15, "tier": -2},
-            {"name": "Small", "damage": 0,     "speed": 0, "crit_chance": 0, "size": -0.1, "knockback": 0, "tier": -1},
-            {"name": "Dull", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": -1},
-            {"name": "Unhappy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": -0.1, "knockback": -0.1, "tier": -2},
-            {"name": "Bulky", "damage": 0.05, "speed": -0.15, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 1},
-            {"name": "Shameful", "damage": -0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": -0.2, "tier": -2},
-            {"name": "Heavy", "damage": 0,  "speed": -0.1, "crit_chance": 0, "size": 0, "knockback": 0.15, "tier": 0},
-            {"name": "Light", "damage": 0,  "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
-            {"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2}
-        ],
-        commons.ItemPrefixGroup.SHORTSWORD: [
-            {"name": "Large", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.12, "knockback": 0, "tier": 1},
-            {"name": "Massive", "damage": 0, "speed": 0, "crit_chance": 0, "size": 0.18, "knockback": 0, "tier": 1},
-            {"name": "Dangerous", "damage": 0.05, "speed": 0, "crit_chance": 0.02, "size": 0.05, "knockback": 0, "tier": 1},
-            {"name": "Savage", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 2},
-            {"name": "Sharp", "damage": 0.15, "speed": 0, "crit_chance": 0,    "size": 0, "knockback": 0, "tier": 1},
-            {"name": "Pointy", "damage": 0.1, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": 1},
-            {"name": "Tiny", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.18, "knockback": 0, "tier": -1},
-            {"name": "Terrible", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": -0.13, "knockback": -0.15, "tier": -2},
-            {"name": "Small", "damage": 0, "speed": 0, "crit_chance": 0, "size": -0.1, "knockback": 0, "tier": -1},
-            {"name": "Dull", "damage": -0.15, "speed": 0, "crit_chance": 0, "size": 0, "knockback": 0, "tier": -1},
-            {"name": "Unhappy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": -0.1, "knockback": -0.1, "tier": -2},
-            {"name": "Bulky", "damage": 0.05, "speed": -0.15, "crit_chance": 0, "size": 0.1, "knockback": 0.1, "tier": 1},
-            {"name": "Shameful", "damage": -0.1, "speed": 0, "crit_chance": 0, "size": 0.1, "knockback": -0.2, "tier": -2},
-            {"name": "Heavy", "damage": 0, "speed": -0.1, "crit_chance": 0, "size": 0, "knockback": 0.15, "tier": 0},
-            {"name": "Light", "damage": 0, "speed": 0.15, "crit_chance": 0, "size": 0, "knockback": -0.1, "tier": 0},
-            {"name": "Legendary", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "size": 0.1, "knockback": 0.15, "tier": 2},
-        ],
-        commons.ItemPrefixGroup.RANGED: [
-            {"name": "Sighted", "damage": 0.1, "speed": 0, "crit_chance": 0.03, "velocity": 0, "knockback": 0, "tier": 1},
-            {"name": "Rapid", "damage": 0, "speed": 0.15, "crit_chance": 0, "velocity": 0.1, "knockback": 0, "tier": 2},
-            {"name": "Hasty", "damage": 0, "speed": 0.1, "crit_chance": 0,    "velocity": 0.15, "knockback": 0, "tier": 2},
-            {"name": "Intimidating", "damage": 0, "speed": 0, "crit_chance": 0,    "velocity": 0.05, "knockback": 0.15, "tier": 2},
-            {"name": "Deadly", "damage": 0.1, "speed": 0.05, "crit_chance": 0.02, "velocity": 0.05, "knockback": 0.05, "tier": 2},
-            {"name": "Staunch", "damage": 0.1, "speed": 0, "crit_chance": 0, "velocity": 0,     "knockback": 0.15, "tier": 2},
-            {"name": "Awful", "damage": -0.15, "speed": 0, "crit_chance": 0, "velocity": -0.1, "knockback": -0.1, "tier": -2},
-            {"name": "Lethargic", "damage": 0, "speed": 0.15, "crit_chance": 0, "velocity": -0.1, "knockback": 0, "tier": -2},
-            {"name": "Awkward", "damage": 0, "speed": -0.1,    "crit_chance": 0, "velocity": 0, "knockback": -0.2, "tier": -2},
-            {"name": "Powerful", "damage": 0.15, "speed": -0.1, "crit_chance": 0.01, "velocity": 0, "knockback": 0, "tier": 1},
-            {"name": "Frenzying", "damage": -0.15, "speed": 0.15, "crit_chance": 0, "velocity": 0, "knockback": 0, "tier": 0},
-            {"name": "Unreal", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "velocity": 0.1, "knockback": 0.15, "tier": 2},
-        ],
-        commons.ItemPrefixGroup.MAGICAL: [
-            {"name": "Mystic", "damage": 0.1, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 2},
-            {"name": "Adept", "damage": 0, "speed": 0, "crit_chance": 0, "mana_cost": -0.15, "knockback": 0, "tier": 1},
-            {"name": "Masterful", "damage": 0.15, "speed": 0, "crit_chance": 0, "mana_cost": -0.2, "knockback": 0.05, "tier": 2},
-            {"name": "Inept", "damage": 0, "speed": 0, "crit_chance": 0, "mana_cost": 0.1, "knockback": 0, "tier": -1},
-            {"name": "Ignorant", "damage": -0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0.2, "knockback": 0, "tier": -2},
-            {"name": "Deranged", "damage": -0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0, "knockback": -0.1, "tier": -1},
-            {"name": "Intense", "damage": 0.1, "speed": 0, "crit_chance": 0, "mana_cost": 0.15, "knockback": 0, "tier": -1},
-            {"name": "Taboo", "damage": 0, "speed": 0.1, "crit_chance": 0, "mana_cost": 0.1, "knockback": 0.1, "tier": 1},
-            {"name": "Celestial", "damage": 0.1, "speed": -0.1, "crit_chance": 0, "mana_cost": -0.1, "knockback": 0.1, "tier": 1},
-            {"name": "Furious", "damage": 0.15,    "speed": 0, "crit_chance": 0, "mana_cost": 0.2, "knockback": 0.15, "tier": 1},
-            {"name": "Manic", "damage": -0.1, "speed": 0.1, "crit_chance": 0, "mana_cost": -0.1, "knockback": 0, "tier": 1},
-            {"name": "Mythical", "damage": 0.15, "speed": 0.1, "crit_chance": 0.05, "mana_cost": -0.1, "knockback": 0.15, "tier": 2}
-        ]
+        {
+            "name": "Large",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.12,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Massive",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.18,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Dangerous",
+            "damage": 0.05,
+            "speed": 0,
+            "crit_chance": 0.02,
+            "size": 0.05,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Savage",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": 0.1,
+            "tier": 2,
+        },
+        {
+            "name": "Sharp",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Pointy",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Tiny",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.18,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Terrible",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.13,
+            "knockback": -0.15,
+            "tier": -2,
+        },
+        {
+            "name": "Small",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.1,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Dull",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Unhappy",
+            "damage": 0,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "size": -0.1,
+            "knockback": -0.1,
+            "tier": -2,
+        },
+        {
+            "name": "Bulky",
+            "damage": 0.05,
+            "speed": -0.15,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": 0.1,
+            "tier": 1,
+        },
+        {
+            "name": "Shameful",
+            "damage": -0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": -0.2,
+            "tier": -2,
+        },
+        {
+            "name": "Heavy",
+            "damage": 0,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0.15,
+            "tier": 0,
+        },
+        {
+            "name": "Light",
+            "damage": 0,
+            "speed": 0.15,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": -0.1,
+            "tier": 0,
+        },
+        {
+            "name": "Legendary",
+            "damage": 0.15,
+            "speed": 0.1,
+            "crit_chance": 0.05,
+            "size": 0.1,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+    ],
+    commons.ItemPrefixGroup.SHORTSWORD: [
+        {
+            "name": "Large",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.12,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Massive",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.18,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Dangerous",
+            "damage": 0.05,
+            "speed": 0,
+            "crit_chance": 0.02,
+            "size": 0.05,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Savage",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": 0.1,
+            "tier": 2,
+        },
+        {
+            "name": "Sharp",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Pointy",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Tiny",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.18,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Terrible",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.13,
+            "knockback": -0.15,
+            "tier": -2,
+        },
+        {
+            "name": "Small",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": -0.1,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Dull",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Unhappy",
+            "damage": 0,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "size": -0.1,
+            "knockback": -0.1,
+            "tier": -2,
+        },
+        {
+            "name": "Bulky",
+            "damage": 0.05,
+            "speed": -0.15,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": 0.1,
+            "tier": 1,
+        },
+        {
+            "name": "Shameful",
+            "damage": -0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "size": 0.1,
+            "knockback": -0.2,
+            "tier": -2,
+        },
+        {
+            "name": "Heavy",
+            "damage": 0,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": 0.15,
+            "tier": 0,
+        },
+        {
+            "name": "Light",
+            "damage": 0,
+            "speed": 0.15,
+            "crit_chance": 0,
+            "size": 0,
+            "knockback": -0.1,
+            "tier": 0,
+        },
+        {
+            "name": "Legendary",
+            "damage": 0.15,
+            "speed": 0.1,
+            "crit_chance": 0.05,
+            "size": 0.1,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+    ],
+    commons.ItemPrefixGroup.RANGED: [
+        {
+            "name": "Sighted",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0.03,
+            "velocity": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Rapid",
+            "damage": 0,
+            "speed": 0.15,
+            "crit_chance": 0,
+            "velocity": 0.1,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Hasty",
+            "damage": 0,
+            "speed": 0.1,
+            "crit_chance": 0,
+            "velocity": 0.15,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Intimidating",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "velocity": 0.05,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+        {
+            "name": "Deadly",
+            "damage": 0.1,
+            "speed": 0.05,
+            "crit_chance": 0.02,
+            "velocity": 0.05,
+            "knockback": 0.05,
+            "tier": 2,
+        },
+        {
+            "name": "Staunch",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "velocity": 0,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+        {
+            "name": "Awful",
+            "damage": -0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "velocity": -0.1,
+            "knockback": -0.1,
+            "tier": -2,
+        },
+        {
+            "name": "Lethargic",
+            "damage": 0,
+            "speed": 0.15,
+            "crit_chance": 0,
+            "velocity": -0.1,
+            "knockback": 0,
+            "tier": -2,
+        },
+        {
+            "name": "Awkward",
+            "damage": 0,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "velocity": 0,
+            "knockback": -0.2,
+            "tier": -2,
+        },
+        {
+            "name": "Powerful",
+            "damage": 0.15,
+            "speed": -0.1,
+            "crit_chance": 0.01,
+            "velocity": 0,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Frenzying",
+            "damage": -0.15,
+            "speed": 0.15,
+            "crit_chance": 0,
+            "velocity": 0,
+            "knockback": 0,
+            "tier": 0,
+        },
+        {
+            "name": "Unreal",
+            "damage": 0.15,
+            "speed": 0.1,
+            "crit_chance": 0.05,
+            "velocity": 0.1,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+    ],
+    commons.ItemPrefixGroup.MAGICAL: [
+        {
+            "name": "Mystic",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": -0.15,
+            "knockback": 0,
+            "tier": 2,
+        },
+        {
+            "name": "Adept",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": -0.15,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Masterful",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": -0.2,
+            "knockback": 0.05,
+            "tier": 2,
+        },
+        {
+            "name": "Inept",
+            "damage": 0,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": 0.1,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Ignorant",
+            "damage": -0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": 0.2,
+            "knockback": 0,
+            "tier": -2,
+        },
+        {
+            "name": "Deranged",
+            "damage": -0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": 0,
+            "knockback": -0.1,
+            "tier": -1,
+        },
+        {
+            "name": "Intense",
+            "damage": 0.1,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": 0.15,
+            "knockback": 0,
+            "tier": -1,
+        },
+        {
+            "name": "Taboo",
+            "damage": 0,
+            "speed": 0.1,
+            "crit_chance": 0,
+            "mana_cost": 0.1,
+            "knockback": 0.1,
+            "tier": 1,
+        },
+        {
+            "name": "Celestial",
+            "damage": 0.1,
+            "speed": -0.1,
+            "crit_chance": 0,
+            "mana_cost": -0.1,
+            "knockback": 0.1,
+            "tier": 1,
+        },
+        {
+            "name": "Furious",
+            "damage": 0.15,
+            "speed": 0,
+            "crit_chance": 0,
+            "mana_cost": 0.2,
+            "knockback": 0.15,
+            "tier": 1,
+        },
+        {
+            "name": "Manic",
+            "damage": -0.1,
+            "speed": 0.1,
+            "crit_chance": 0,
+            "mana_cost": -0.1,
+            "knockback": 0,
+            "tier": 1,
+        },
+        {
+            "name": "Mythical",
+            "damage": 0.15,
+            "speed": 0.1,
+            "crit_chance": 0.05,
+            "mana_cost": -0.1,
+            "knockback": 0.15,
+            "tier": 2,
+        },
+    ],
 }
 
 DEATH_LINES = {
-    "spike":
-        [
-            "<p> got impaled by a spike.",
-            "A spike impaled the face of <p>.",
-            "The spikes of <w> eradicated <p>.",
-            "<p> didn't look where they were going.",
-            "<p> found out that spikes are sharp.",
-        ],
-    "falling":
-        [
-            "<p> fell to their death.",
-            "<p> didn't bounce.",
-            "<p> invented gravity.",
-            "<p> discovered the meaning of defenestration.",
-            "<p> was freeeee, free-fallin'.",
-            "<p> tried to ice skate uphill.",
-            "<p> thought they could fly.",
-            "<p> left a crater.",
-            "<p> forgot their happy thought.",
-        ],
-    "enemy":
-        [
-            "<p> was slain by <e>.",
-            "<p> was eviscerated by <e>.",
-            "<p> was murdered by <e>.",
-            "<p>'s face was torn off by <e>.",
-            "<p>'s entrails were ripped out by <e>.",
-            "<p> was destroyed by <e>.",
-            "<p>'s skull was crushed by <e>.",
-            "<p> got massacred by <e>.",
-            "<p> got impaled by <e>.",
-            "<p> was torn in half by <e>.",
-            "<p> was decapitated by <e>.",
-            "<p> let their arms get torn off by <e>.",
-            "<p> watched their innards become outards by <e>.",
-            "<p> was brutally dissected by <e>.",
-            "<p>'s extremities were detached by <e>.",
-            "<p>'s body was mangled by <e>.",
-            "<p>'s vital organs were ruptured by <e>.",
-            "<p> was turned into a pile of flesh by <e>.",
-            "<p> was removed from <w> by <e>.",
-            "<p> got snapped in half by <e>.",
-            "<p> was cut down the middle by <e>.",
-            "<p> was chopped up by <e>.",
-            "<p>'s plead for death was answered by <e>.",
-            "<p>'s meat was ripped off the bone by <e>.",
-            "<p>'s flailing about was finally stopped by <e>.",
-            "<p> had their head removed by <e>.",
-            "<p>'s bowels were unplugged by <e>.",
-            "<p>'s journey was ended by <e>.",
-            "<p> was sent to Ocram's House by <e>.",
-            "<p> was macerated by <e>.",
-            "<p> was exsanguinated by <e>.",
-            "<p> was sent to the bone zone by <e>.",
-            "<p> was spontaneously lobotomized by <e>.",
-            "<p> was pressed into a succulent pulp by <e>.",
-            "<p> was ground into sad meat by <e>.",
-            "<p>'s bones were shattered by <e>.",
-            "<p> was turned into monster food by <e>.",
-            "<p> had their home remodeled by <e>.",
-            "<p> was voluntold to donate blood by <e>.",
-            "<p> had their cap peeled back by <e>.",
-            "<p>'s top knot was carved off by <e>.",
-            "<p>'s parts were misplaced by <e>.",
-            "<p> was blended into a zesty sauce by <e>.",
-            "<p>'s spine was ripped out by <e>.",
-            "<p>'s living streak was ended by <e>.",
-            "<p> received a forced amputation by <e>.",
-            "<p>'s neck was snapped by <e>.",
-            "<p> was shredded to bits by <e>.",
-            "<p> succumbed to a fatal injury by <e>.",
-            "<p> was informed of their expiration date by <e>.",
-            "<p>'s incompetence was put on display by <e>.",
-            "<p>'s soul was extractinated by <e>.",
-            "<p> underwent a merciful euthanasia by <e>.",
-            "<p> was eaten from the bottom up by <e>.",
-            "<p> was deboned by <e>.",
-            "<p> had both kidneys stolen by <e>.",
-            "<p>'s depravity was ended by <e>.",
-            "<p>'s disc was herniated by <e>.",
-            "<p>'s body was donated to science by <e>.",
-            "<p> had their brain turned to jam by <e>.",
-            "<p> was turned into long pig by <e>.",
-            "<p> was sent to the farm by <e>.",
-            "<p>'s clogs were popped by <e>.",
-            "<p>'s ticker was stopped by <e>.",
-            "<p> was whacked in the head by <e>.",
-            "<p> got rubbed out by <e>.",
-            "<p> was degloved by <e>.",
-            "<p> was flayed by <e>.",
-            "<p> was ganked by <e>.",
-            "<p> got spanked by <e>.",
-            "<p> got got by <e>.",
-            "<p> got murked by <e>.",
-            "<p> was put in a glass coffin by <e>.",
-            "<p> was put on the wrong side of the grass by <e>.",
-            "<p> will quickly be forgotten by <e>.",
-            "<p> was smote by <e>.",
-        ]
+    "spike": [
+        "<p> got impaled by a spike.",
+        "A spike impaled the face of <p>.",
+        "The spikes of <w> eradicated <p>.",
+        "<p> didn't look where they were going.",
+        "<p> found out that spikes are sharp.",
+    ],
+    "falling": [
+        "<p> fell to their death.",
+        "<p> didn't bounce.",
+        "<p> invented gravity.",
+        "<p> discovered the meaning of defenestration.",
+        "<p> was freeeee, free-fallin'.",
+        "<p> tried to ice skate uphill.",
+        "<p> thought they could fly.",
+        "<p> left a crater.",
+        "<p> forgot their happy thought.",
+    ],
+    "enemy": [
+        "<p> was slain by <e>.",
+        "<p> was eviscerated by <e>.",
+        "<p> was murdered by <e>.",
+        "<p>'s face was torn off by <e>.",
+        "<p>'s entrails were ripped out by <e>.",
+        "<p> was destroyed by <e>.",
+        "<p>'s skull was crushed by <e>.",
+        "<p> got massacred by <e>.",
+        "<p> got impaled by <e>.",
+        "<p> was torn in half by <e>.",
+        "<p> was decapitated by <e>.",
+        "<p> let their arms get torn off by <e>.",
+        "<p> watched their innards become outards by <e>.",
+        "<p> was brutally dissected by <e>.",
+        "<p>'s extremities were detached by <e>.",
+        "<p>'s body was mangled by <e>.",
+        "<p>'s vital organs were ruptured by <e>.",
+        "<p> was turned into a pile of flesh by <e>.",
+        "<p> was removed from <w> by <e>.",
+        "<p> got snapped in half by <e>.",
+        "<p> was cut down the middle by <e>.",
+        "<p> was chopped up by <e>.",
+        "<p>'s plead for death was answered by <e>.",
+        "<p>'s meat was ripped off the bone by <e>.",
+        "<p>'s flailing about was finally stopped by <e>.",
+        "<p> had their head removed by <e>.",
+        "<p>'s bowels were unplugged by <e>.",
+        "<p>'s journey was ended by <e>.",
+        "<p> was sent to Ocram's House by <e>.",
+        "<p> was macerated by <e>.",
+        "<p> was exsanguinated by <e>.",
+        "<p> was sent to the bone zone by <e>.",
+        "<p> was spontaneously lobotomized by <e>.",
+        "<p> was pressed into a succulent pulp by <e>.",
+        "<p> was ground into sad meat by <e>.",
+        "<p>'s bones were shattered by <e>.",
+        "<p> was turned into monster food by <e>.",
+        "<p> had their home remodeled by <e>.",
+        "<p> was voluntold to donate blood by <e>.",
+        "<p> had their cap peeled back by <e>.",
+        "<p>'s top knot was carved off by <e>.",
+        "<p>'s parts were misplaced by <e>.",
+        "<p> was blended into a zesty sauce by <e>.",
+        "<p>'s spine was ripped out by <e>.",
+        "<p>'s living streak was ended by <e>.",
+        "<p> received a forced amputation by <e>.",
+        "<p>'s neck was snapped by <e>.",
+        "<p> was shredded to bits by <e>.",
+        "<p> succumbed to a fatal injury by <e>.",
+        "<p> was informed of their expiration date by <e>.",
+        "<p>'s incompetence was put on display by <e>.",
+        "<p>'s soul was extractinated by <e>.",
+        "<p> underwent a merciful euthanasia by <e>.",
+        "<p> was eaten from the bottom up by <e>.",
+        "<p> was deboned by <e>.",
+        "<p> had both kidneys stolen by <e>.",
+        "<p>'s depravity was ended by <e>.",
+        "<p>'s disc was herniated by <e>.",
+        "<p>'s body was donated to science by <e>.",
+        "<p> had their brain turned to jam by <e>.",
+        "<p> was turned into long pig by <e>.",
+        "<p> was sent to the farm by <e>.",
+        "<p>'s clogs were popped by <e>.",
+        "<p>'s ticker was stopped by <e>.",
+        "<p> was whacked in the head by <e>.",
+        "<p> got rubbed out by <e>.",
+        "<p> was degloved by <e>.",
+        "<p> was flayed by <e>.",
+        "<p> was ganked by <e>.",
+        "<p> got spanked by <e>.",
+        "<p> got got by <e>.",
+        "<p> got murked by <e>.",
+        "<p> was put in a glass coffin by <e>.",
+        "<p> was put on the wrong side of the grass by <e>.",
+        "<p> will quickly be forgotten by <e>.",
+        "<p> was smote by <e>.",
+    ],
 }
 
 
@@ -380,7 +1017,7 @@ TIPS = [
     "If you're sick of getting knocked around, try equipping a Cobalt Shield. You can find one in the Dungeon.",
     "Grappling Hooks are invaluable tools for exploration. Try crafting them with Hooks or gems.",
     "The best wizards around use Mana Flowers.",
-    "Use " + '"' + "suspicious looking items" + '"'  + "at your own risk!",
+    "Use " + '"' + "suspicious looking items" + '"' + "at your own risk!",
     "Seeds can be used to grow a variety of useful ingredients for crafting potions.",
     "If you need to remove background walls, craft a hammer!",
     "Got some extra walls or platforms? You can turn them back into their original materials!",
@@ -446,7 +1083,7 @@ TIPS = [
     "During a Solar Eclipse, be on the lookout for tons of strange and creepy monsters.",
     "Sometimes, enemies may even invade from other dimensions . . .",
     "A Pumpkin Medallion can be used to summon the Pumpkin Moon. Spooky!",
-    "Feeling up for the chill of winter? Use a Naughty Present to summon the Frost Moon!"
+    "Feeling up for the chill of winter? Use a Naughty Present to summon the Frost Moon!",
 ]
 
 # Messages displayed when the user presses the quit button in a world
@@ -489,7 +1126,8 @@ def find_prefix_data_by_name(prefix_name):
 def parse_item_data():
     global json_item_data
     json_item_data = commons.ITEM_DATA
-    json_item_data = sorted(json_item_data, key=lambda x: int(x["id"]))
+    json_item_data = sorted(json_item_data, key=lambda x: x["id"])
+
 
 def get_item_by_id(item_id):
     if item_id < len(json_item_data):
@@ -516,17 +1154,7 @@ def parse_tile_data():
     global json_tile_data
 
     json_tile_data = commons.TILE_DATA
-    json_tile_data = sorted(json_tile_data, key=lambda x: int(x["id"]))
-
-    for tile_data in json_tile_data:
-        tile_data["strength_type"] = get_tile_strength_type_from_str(tile_data["strength_type"])
-        tile_data["light_reduction"] = int(tile_data["light_reduction"])
-        tile_data["light_emission"] = int(tile_data["light_emission"])
-
-        tile_data["tags"] = make_tile_tag_list(tile_data["tags"])
-
-        if commons.TileTag.DAMAGING in tile_data["tags"]:
-            tile_data["tile_damage"] = int(tile_data["tile_damage"])
+    json_tile_data = sorted(json_tile_data, key=lambda x: x["id"])
 
 
 def create_tile_id_str_hash_table():
@@ -539,17 +1167,30 @@ def create_tile_light_reduction_lookup():
     global tile_id_light_reduction_lookup
     tile_id_light_reduction_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_reduction_lookup.append(json_tile_data[tile_index]["light_reduction"])
+        tile_id_light_reduction_lookup.append(
+            json_tile_data[tile_index]["light_reduction"]
+        )
 
 
 def create_tile_light_emission_lookup():
     global tile_id_light_emission_lookup
     tile_id_light_emission_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
+        tile_id_light_emission_lookup.append(
+            json_tile_data[tile_index]["light_emission"]
+        )
 
 
-def get_tile_by_id(tile_id: int):
+def get_tile_by_id(
+    tile_id: int,
+) -> (
+    commons.TileData
+    | commons.DamagingTileData
+    | commons.MultitileData
+    | commons.DoorTileData
+    | commons.LootTileData
+    | commons.LootMultitileData
+):
     if tile_id < len(json_tile_data):
         return json_tile_data[tile_id]
     else:
@@ -575,7 +1216,7 @@ def parse_wall_data():
     global json_wall_data
 
     json_wall_data = commons.WALL_DATA
-    json_wall_data = sorted(json_wall_data, key=lambda x: int(x["id"]))
+    json_wall_data = sorted(json_wall_data, key=lambda x: x["id"])
 
 
 def create_wall_id_str_hash_table():
@@ -610,11 +1251,9 @@ def parse_sound_data():
     global json_sound_data
 
     json_sound_data = commons.SOUND_DATA
-    json_sound_data = sorted(json_sound_data, key=lambda x: int(x["id"]))
+    json_sound_data = sorted(json_sound_data, key=lambda x: x["id"])
 
     for sound_data in json_sound_data:
-        sound_data["id"] = int(sound_data["id"])
-        sound_data["volume"] = float(sound_data["volume"])
         sound_data["variations"] = []
         for sound_variation in sound_data["variation_paths"]:
             try:
@@ -658,7 +1297,7 @@ def change_music_volume(amount):
 
 def change_sound_volume(amount):
     global sound_volume_multiplier
-    
+
     if sound_volume_multiplier + amount >= 0 and sound_volume_multiplier + amount <= 2:
         sound_volume_multiplier += amount
 
@@ -668,7 +1307,7 @@ def play_sound(sound_id_str: str) -> None:
 
     if commons.SOUND:
         sound_data = get_sound_by_id_str(sound_id_str)
-        if (sound_data != None):
+        if sound_data != None:
             sound_index = random.randint(0, len(sound_data["variations"]) - 1)
             sound = sound_data["variations"][sound_index]
             sound.set_volume(sound_data["volume"] * sound_volume_multiplier)
@@ -678,28 +1317,28 @@ def play_sound(sound_id_str: str) -> None:
 def play_tile_hit_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
-        if (tile_data != None):
+        if tile_data != None:
             play_sound(tile_data["hit_sound"])
 
 
 def play_tile_place_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
-        if (tile_data != None):
+        if tile_data != None:
             play_sound(tile_data["place_sound"])
 
 
 def play_wall_hit_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
-        if(wall_data != None):
+        if wall_data != None:
             play_sound(wall_data["hit_sound"])
 
 
 def play_wall_place_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
-        if (wall_data != None):
+        if wall_data != None:
             play_sound(wall_data["place_sound"])
 
 
@@ -714,13 +1353,9 @@ def parse_structure_data():
     global json_structure_data
 
     json_structure_data = commons.STRUCTURE_DATA
-    json_structure_data = sorted(json_structure_data, key=lambda x: int(x["id"]))
+    json_structure_data = sorted(json_structure_data, key=lambda x: x["id"])
 
     for structure_data in json_structure_data:
-        structure_data["id"] = int(structure_data["id"])
-        structure_data["spawn_weight"] = int(structure_data["spawn_weight"])
-        structure_data["width"] = int(structure_data["width"])
-        structure_data["height"] = int(structure_data["height"])
 
         structure_data["connections"] = []
         structure_data["chest_loot"] = []
@@ -736,7 +1371,7 @@ def parse_structure_data():
                     y_pos = len(tile_data[-1]) - 1
                     end_index = find_next_char_in_string(column, "]", char_index)
                     if end_index != -1:
-                        tile_data_string = column[char_index + 1:end_index]
+                        tile_data_string = column[char_index + 1 : end_index]
                         char_index = end_index
                         data_strs = tile_data_string.split(";")
                         for data_str in data_strs:
@@ -745,15 +1380,27 @@ def parse_structure_data():
                             if data_str_id == 0:
                                 tile_data[-1][-1][0] = data_str_split[1]
                             elif data_str_id == 2:
-                                structure_data["chest_loot"].append([(x_pos, y_pos), data_str_split[1]])
+                                structure_data["chest_loot"].append(
+                                    [(x_pos, y_pos), data_str_split[1]]
+                                )
                             elif data_str_id == 3:
                                 tile_data[-1][-1][1] = data_str_split[1]
                             elif data_str_id == 1:
                                 split_str = data_str_split[1].split(",")
-                                tile_data[-1][-1][2] = int(split_str[0]), int(split_str[1])
+                                tile_data[-1][-1][2] = int(split_str[0]), int(
+                                    split_str[1]
+                                )
                             elif data_str_id == 4:
                                 connection_data = data_str_split[1].split(",")
-                                structure_data["connections"].append([(x_pos, y_pos), connection_data[0],  get_structure_connection_orientation_from_str(connection_data[1])])
+                                structure_data["connections"].append(
+                                    [
+                                        (x_pos, y_pos),
+                                        connection_data[0],
+                                        get_structure_connection_orientation_from_str(
+                                            connection_data[1]
+                                        ),
+                                    ]
+                                )
                 char_index += 1
 
         structure_data["tile_data"] = tile_data
@@ -762,14 +1409,18 @@ def parse_structure_data():
 def create_structure_id_str_hash_table():
     global structure_id_str_hash_table
     for structure_index in range(len(json_structure_data)):
-        structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = structure_index
+        structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = (
+            structure_index
+        )
 
 
 def get_structure_by_id(structure_id):
     if structure_id < len(json_structure_data):
         return json_structure_data[structure_id]
     else:
-        raise ValueError("Inserted structure ID greater than maximum structure ID length.")
+        raise ValueError(
+            "Inserted structure ID greater than maximum structure ID length."
+        )
 
 
 def get_structure_id_by_id_str(structure_id_str):
@@ -782,10 +1433,15 @@ def get_structure_by_id_str(structure_id_str):
 
 def find_structures_for_connection(connection_type, connection_orientation):
     out_connections = []
-    opposite_connection_orientation = get_opposite_structure_connection_orientation(connection_orientation)
+    opposite_connection_orientation = get_opposite_structure_connection_orientation(
+        connection_orientation
+    )
     for structure in json_structure_data:
         for connection in structure["connections"]:
-            if connection[1] == connection_type and connection[2] == opposite_connection_orientation:
+            if (
+                connection[1] == connection_type
+                and connection[2] == opposite_connection_orientation
+            ):
                 out_connections.append([structure["id_str"], connection[0]])
 
     return out_connections
@@ -817,21 +1473,24 @@ def parse_loot_data():
     global json_loot_data
 
     json_loot_data = commons.LOOT_DATA
-    json_loot_data = sorted(json_loot_data, key=lambda x: int(x["id"]))
+    json_loot_data = sorted(json_loot_data, key=lambda x: x["id"])
 
     for loot_data in json_loot_data:
         possible_item_strs = loot_data["item_list_data"]
         item_list_data = []
         for possible_item_properties_str in possible_item_strs:
-            item_list_data.append([
-                possible_item_properties_str["item_id_str"],
-                possible_item_properties_str["item_spawn_weight"],
-                possible_item_properties_str["item_spawn_depth_range"],
-                possible_item_properties_str["item_stack_count_range"],
-                possible_item_properties_str["item_slot_priority"],
-                possible_item_properties_str["once_per_instance"]
-            ])
+            item_list_data.append(
+                [
+                    possible_item_properties_str["item_id_str"],
+                    possible_item_properties_str["item_spawn_weight"],
+                    possible_item_properties_str["item_spawn_depth_range"],
+                    possible_item_properties_str["item_stack_count_range"],
+                    possible_item_properties_str["item_slot_priority"],
+                    possible_item_properties_str["once_per_instance"],
+                ]
+            )
         loot_data["item_list_data"] = item_list_data
+
 
 def create_loot_id_str_hash_table():
     global loot_id_str_hash_table
@@ -860,10 +1519,14 @@ def parse_entity_data():
     json_entity_data = commons.ENTITY_DATA
     json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
 
+
 def create_entity_id_str_hash_table():
     global entity_id_str_hash_table
     for entity_index in range(len(json_entity_data)):
-        entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = entity_index
+        entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = (
+            entity_index
+        )
+
 
 parse_item_data()
 create_item_id_str_hash_table()
