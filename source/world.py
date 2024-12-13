@@ -1134,7 +1134,7 @@ def update_terrain_surface(i, j, affect_others=True):
 
             if json_tile_dat["mask_type"] != TileMaskType.NONE:
                 tile_img.blit(
-                    tilesets.tile_masks[0][tile_mask_data[tile[0]][tile[1]]],
+                    tilesets.tile_masks[tile_mask_data[tile[0]][tile[1]]],
                     (0, 0),
                     None,
                     pygame.BLEND_RGBA_MULT,
@@ -1159,7 +1159,7 @@ def update_terrain_surface(i, j, affect_others=True):
                         tile[1]
                     ]  # Set the wall mask to the tile mask
                 back_img.blit(
-                    tilesets.tile_masks[0][wall_tile_mask_data[tile[0]][tile[1]]],
+                    tilesets.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]],
                     (0, 0),
                     None,
                     pygame.BLEND_RGBA_MULT,
@@ -1185,7 +1185,7 @@ def update_terrain_surface(i, j, affect_others=True):
                 tile[0], tile[1], tile_dat[1]
             )  # Get the wall mask
             back_img.blit(
-                tilesets.tile_masks[0][wall_tile_mask_data[tile[0]][tile[1]]],
+                tilesets.tile_masks[wall_tile_mask_data[tile[0]][tile[1]]],
                 (0, 0),
                 None,
                 pygame.BLEND_RGBA_MULT,

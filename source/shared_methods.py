@@ -2,7 +2,6 @@
 
 import pygame
 import math
-from pygame.locals import BLEND_RGB_ADD
 import math
 
 import commons
@@ -29,9 +28,7 @@ def normalize_vec_2(vector):
 
 
 def get_on_off(bool_var):
-    if bool_var:
-        return "on"
-    return "off"
+    return "on" if bool_var else "off"
 
 
 """================================================================================================================= 
@@ -162,7 +159,7 @@ def create_menu_surface(width, height, body):
             else:
                 index = 9
 
-            surf.blit(tilesets.misc_gui[0][index], (i * 48, j * 48))
+            surf.blit(tilesets.misc_gui[index], (i * 48, j * 48))
     usable_width = width * 48 - 60
     lines = [""]
     words = body.split(" ")
@@ -224,7 +221,7 @@ def transparent_color_surface(surf, col):
     colored_surface.blit(grayscale_surface, (0, 0), None, pygame.BLEND_RGB_MULT)
     color = pygame.Surface(surf.get_size())
     color.fill(col)
-    colored_surface.blit(color, (0, 0), None, BLEND_RGB_ADD)
+    colored_surface.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)
     return colored_surface
 
 

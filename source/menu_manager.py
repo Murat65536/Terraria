@@ -281,16 +281,10 @@ def update_menu_buttons():
                                     commons.PLAYER_MODEL_DATA[8][2],
                                 ),
                             )
-                            commons.PLAYER_FRAMES = player.render_sprites(
-                                commons.PLAYER_MODEL,
-                                directions=1,
-                                arm_frame_count=1,
-                                torso_frame_count=1,
-                            )
+                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
                         case PlayerSelectionButtons.BACK:
                             commons.game_sub_state = "MAIN"
                         case PlayerCreationButtons.HAIR_TYPE:
-                            assert commons.PLAYER_MODEL is not None
                             if commons.PLAYER_MODEL.hair_id < 163:
                                 commons.PLAYER_MODEL.hair_id += 1
                             else:
@@ -298,12 +292,7 @@ def update_menu_buttons():
                             commons.PLAYER_MODEL_DATA[1][
                                 0
                             ] = commons.PLAYER_MODEL.hair_id
-                            commons.PLAYER_FRAMES = player.render_sprites(
-                                commons.PLAYER_MODEL,
-                                directions=1,
-                                arm_frame_count=1,
-                                torso_frame_count=1,
-                            )
+                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
                         case PlayerCreationButtons.HAIR_COLOR:
                             commons.game_sub_state = "COLOR_PICKER"
                             commons.PLAYER_MODEL_COLOR_INDEX = 3
@@ -382,12 +371,7 @@ def update_menu_buttons():
                                 ],
                             ]
                             player.update_player_model_using_model_data()
-                            commons.PLAYER_FRAMES = player.render_sprites(
-                                commons.PLAYER_MODEL,
-                                directions=1,
-                                arm_frame_count=1,
-                                torso_frame_count=1,
-                            )
+                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
                         case PlayerCreationButtons.BACK:
                             commons.game_sub_state = "PLAYER_SELECTION"
                         case ColorPickerButtons.BACK:
@@ -409,7 +393,7 @@ def update_menu_buttons():
                         case PlayerNamingButtons.SET_NAME:
                             date = datetime.datetime.now()
                             commons.PLAYER_DATA["name"] = commons.TEXT_INPUT
-                            commons.PLAYER_DATA["model"] = commons.PLAYER_MODEL
+                            commons.PLAYER_DATA["model"] = commons.PLAYER_MODEL.get_colors()
                             commons.PLAYER_DATA["hotbar"] = []
                             commons.PLAYER_DATA["inventory"] = []
                             commons.PLAYER_DATA["hp"] = 100
@@ -616,11 +600,8 @@ def load_menu_player_data():
             ),
             (90, 40),
         )  # playtime
-        sprites = player.render_sprites(
-            dat["model"], directions=1, arm_frame_count=1, torso_frame_count=1
-        )
-        player_data_surf.blit(sprites[0][0], (270, 0))
-        player_data_surf.blit(sprites[1][0], (270, 0))
+        sprites = player.Model(*dat["model"]).create_sprite()
+        player_data_surf.blit(sprites, (270, 0))
         commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
 
 
@@ -684,7 +665,7 @@ def load_menu_world_data():
                 (90, 40),
             )  # playtime
 
-            world_data_surf.blit(tilesets.misc_gui[0][10], (260, 7))
+            world_data_surf.blit(tilesets.misc_gui[10], (260, 7))
 
             commons.WORLD_SAVE_OPTIONS.append((world.world.name, world_data_surf))
 

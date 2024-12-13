@@ -10,6 +10,7 @@ import entity_manager
 import tilesets
 import shared_methods
 import item
+from data.tile import TileData, DamagingTileData, MultitileData, DoorTileData, LootTileData, LootMultitileData
 
 
 """================================================================================================================= 
@@ -152,12 +153,12 @@ class Enemy:
                             self.block_pos[0] + i
                         ][0]
                         tile_data: (
-                            commons.TileData
-                            | commons.DamagingTileData
-                            | commons.MultitileData
-                            | commons.DoorTileData
-                            | commons.LootTileData
-                            | commons.LootMultitileData
+                            TileData
+                            | DamagingTileData
+                            | MultitileData
+                            | DoorTileData
+                            | LootTileData
+                            | LootMultitileData
                         ) = game_data.get_tile_by_id(tile_id)
                         if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
                             block_rect = Rect(
@@ -497,7 +498,7 @@ class Enemy:
             + commons.WINDOW_HEIGHT * 0.5
         )
         commons.screen.blit(
-            tilesets.slimes[0][(self.enemy_id - 1) * 3 + self.animation_frame],
+            tilesets.slimes[(self.enemy_id - 1) * 3 + self.animation_frame],
             (left, top),
         )
         if self.health < self.max_health:

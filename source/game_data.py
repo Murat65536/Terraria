@@ -5,7 +5,13 @@ from enum import Enum
 import commons
 import random
 from typing import TypedDict
-
+from data.item import PlacableTileItemData, ImplacableTileItemData, MaterialItemData, WallItemData, PickaxeItemData, HammerItemData, AxeItemData, SwordItemData, RangedItemData, AmmunitionItemData, GrapplingHookItemData, MagicalWeaponItemData, ITEM_DATA
+from data.tile import TileData, DamagingTileData, MultitileData, DoorTileData, LootTileData, LootMultitileData, TILE_DATA
+from data.wall import WallData, WALL_DATA
+from data.sound import SoundData, SOUND_DATA
+from data.structure import StructureData, STRUCTURE_DATA
+from data.loot import LootData, LOOT_DATA
+from data.entity import EntityData, ENTITY_DATA
 
 class UniversalPrefixData(TypedDict):
     name: str
@@ -96,46 +102,46 @@ biome_tile_vals: list[list[list[str]]] = [
 platform_blocks: list[int] = [257]
 
 json_item_data: list[
-    commons.PlacableTileItemData
-    | commons.ImplacableTileItemData
-    | commons.MaterialItemData
-    | commons.WallItemData
-    | commons.PickaxeItemData
-    | commons.HammerItemData
-    | commons.AxeItemData
-    | commons.SwordItemData
-    | commons.RangedItemData
-    | commons.AmmunitionItemData
-    | commons.GrapplingHookItemData
-    | commons.MagicalWeaponItemData
+    PlacableTileItemData
+    | ImplacableTileItemData
+    | MaterialItemData
+    | WallItemData
+    | PickaxeItemData
+    | HammerItemData
+    | AxeItemData
+    | SwordItemData
+    | RangedItemData
+    | AmmunitionItemData
+    | GrapplingHookItemData
+    | MagicalWeaponItemData
 ] = []
 item_id_str_hash_table: dict[str, int] = {}
 
 json_tile_data: list[
-    commons.TileData
-    | commons.DamagingTileData
-    | commons.MultitileData
-    | commons.DoorTileData
-    | commons.LootTileData
-    | commons.LootMultitileData
+    TileData
+    | DamagingTileData
+    | MultitileData
+    | DoorTileData
+    | LootTileData
+    | LootMultitileData
 ] = []
 tile_id_str_hash_table: dict[str, int] = {}
 tile_id_light_reduction_lookup: list[int] = []
 tile_id_light_emission_lookup: list[int] = []
 
-json_wall_data: list[commons.WallData] = []
+json_wall_data: list[WallData] = []
 wall_id_str_hash_table: dict[str, int] = {}
 
-json_sound_data: list[commons.SoundData] = []
+json_sound_data: list[SoundData] = []
 sound_id_str_hash_table: dict[str, int] = {}
 
-json_structure_data: list[commons.StructureData] = []
+json_structure_data: list[StructureData] = []
 structure_id_str_hash_table: dict[str, int] = {}
 
-json_loot_data: list[commons.LootData] = []
+json_loot_data: list[LootData] = []
 loot_id_str_hash_table: dict[str, int] = {}
 
-json_entity_data: list[commons.EntityData] = []
+json_entity_data: list[EntityData] = []
 entity_id_str_hash_table: dict[str, int] = {}
 
 sound_volume_multiplier: float = commons.CONFIG_SOUND_VOLUME
@@ -1125,7 +1131,7 @@ def find_prefix_data_by_name(prefix_name):
 
 def parse_item_data():
     global json_item_data
-    json_item_data = commons.ITEM_DATA
+    json_item_data = ITEM_DATA
     json_item_data = sorted(json_item_data, key=lambda x: x["id"])
 
 
@@ -1153,7 +1159,7 @@ def create_item_id_str_hash_table():
 def parse_tile_data():
     global json_tile_data
 
-    json_tile_data = commons.TILE_DATA
+    json_tile_data = TILE_DATA
     json_tile_data = sorted(json_tile_data, key=lambda x: x["id"])
 
 
@@ -1184,12 +1190,12 @@ def create_tile_light_emission_lookup():
 def get_tile_by_id(
     tile_id: int,
 ) -> (
-    commons.TileData
-    | commons.DamagingTileData
-    | commons.MultitileData
-    | commons.DoorTileData
-    | commons.LootTileData
-    | commons.LootMultitileData
+    TileData
+    | DamagingTileData
+    | MultitileData
+    | DoorTileData
+    | LootTileData
+    | LootMultitileData
 ):
     if tile_id < len(json_tile_data):
         return json_tile_data[tile_id]
@@ -1215,7 +1221,7 @@ def get_current_tile_id_str_lookup():
 def parse_wall_data():
     global json_wall_data
 
-    json_wall_data = commons.WALL_DATA
+    json_wall_data = WALL_DATA
     json_wall_data = sorted(json_wall_data, key=lambda x: x["id"])
 
 
@@ -1250,7 +1256,7 @@ def get_current_wall_id_str_lookup():
 def parse_sound_data():
     global json_sound_data
 
-    json_sound_data = commons.SOUND_DATA
+    json_sound_data = SOUND_DATA
     json_sound_data = sorted(json_sound_data, key=lambda x: x["id"])
 
     for sound_data in json_sound_data:
@@ -1352,7 +1358,7 @@ class StructureConnectionOrientation(Enum):
 def parse_structure_data():
     global json_structure_data
 
-    json_structure_data = commons.STRUCTURE_DATA
+    json_structure_data = STRUCTURE_DATA
     json_structure_data = sorted(json_structure_data, key=lambda x: x["id"])
 
     for structure_data in json_structure_data:
@@ -1472,7 +1478,7 @@ def get_structure_connection_orientation_from_str(structure_connection_orientati
 def parse_loot_data():
     global json_loot_data
 
-    json_loot_data = commons.LOOT_DATA
+    json_loot_data = LOOT_DATA
     json_loot_data = sorted(json_loot_data, key=lambda x: x["id"])
 
     for loot_data in json_loot_data:
@@ -1516,7 +1522,7 @@ def get_loot_by_id_str(loot_id_str):
 def parse_entity_data():
     global json_entity_data
 
-    json_entity_data = commons.ENTITY_DATA
+    json_entity_data = ENTITY_DATA
     json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
 
 

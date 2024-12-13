@@ -11,6 +11,8 @@ class Tileset:
         height: int,
         rows: int = 1,
         columns: int = 1,
+        x_spacing: int = 0,
+        y_spacing: int = 0,
         x_offset: int = 0,
         y_offset: int = 0,
         scale_width: int | None = None,
@@ -18,72 +20,86 @@ class Tileset:
         colorkey: pygame.Color | None = None,
         alpha: int = 255,
     ) -> None:
-        self.tileset: list[list[pygame.Surface]] = []
-        for image_path in listdir(folder_path):
-            tiles: list[pygame.Surface] = []
-            image: pygame.Surface = pygame.image.load(
-                folder_path + image_path
-            ).convert_alpha()
-            for column in range(columns):
-                for row in range(rows):
-                    surface = pygame.Surface(
-                        (width, height),
-                        pygame.SRCALPHA,
-                    )
-                    surface.blit(
-                        image,
-                        (
-                            -row * (width + x_offset),
-                            -column * (height + y_offset),
-                        ),
-                    )
-                    if scale_width is not None:
-                        surface = pygame.transform.scale(
-                            surface, (scale_width, surface.get_height())
-                        )
-                    if scale_height is not None:
-                        surface = pygame.transform.scale(
-                            surface, (surface.get_width(), scale_height)
-                        )
-                    surface.set_colorkey(colorkey)
-                    surface.set_alpha(alpha)
-                    tiles.append(surface)
-            self.tileset.append(tiles)
+        self.tileset: list[pygame.Surface] = []
+        image: pygame.Surface = pygame.image.load(folder_path).convert_alpha()
+        for column in range(columns):
+            for row in range(rows):
+                surface = pygame.Surface(
+                    (width, height),
+                    pygame.SRCALPHA,
+                )
+                surface.blit(
+                    image,
+                    (
+                        -row * (width + x_spacing) - x_offset,
+                        -column * (height + y_spacing) - y_offset,
+                    ),
+                )
+                surface = pygame.transform.scale(
+                    surface,
+                    (
+                        scale_width if scale_width is not None else surface.get_width(),
+                        scale_height if scale_height is not None else surface.get_height()
+                    ),
+                )
+                surface.set_colorkey(colorkey)
+                surface.set_alpha(alpha)
+                self.tileset.append(surface)
 
-    def __getitem__(self, index) -> tuple[pygame.Surface]:
-        return tuple(self.tileset[index])
+    def __getitem__(self, index: int) -> pygame.Surface:
+        return self.tileset[index]
 
 
 tile_masks: Tileset = Tileset(
-    "assets/images/tile_masks/",
+    "assets/images/tile_masks/maskTileset.png",
     8,
     8,
     rows=13,
     columns=5,
-    x_offset=1,
-    y_offset=1,
+    x_spacing=1,
+    y_spacing=1,
     scale_width=commons.BLOCK_SIZE,
     scale_height=commons.BLOCK_SIZE,
 )
 misc_gui: Tileset = Tileset(
-    "assets/images/gui/",
+    "assets/images/gui/miscGUI.png",
     48,
     48,
     rows=11,
     colorkey=pygame.Color(255, 0, 255),
 )
-torsos: Tileset = Tileset(
-    "assets/images/player/body/",
-    width=20,
-    height=30,
-    rows=19,
+undershirts: Tileset = Tileset(
+    "assets/images/player/undershirts/undershirts.png",
+    45,
+    56,
+    rows=7,
     columns=4,
-    scale_width=40,
-    scale_height=60,
-    colorkey=pygame.Color(255, 0, 255),
+)
+shirts: Tileset = Tileset(
+    "assets/images/player/shirts/shirts.png",
+    45,
+    56,
+    rows=7,
+    columns=4,
+)
+sleeves: Tileset = Tileset(
+    "assets/images/player/sleeves/sleeves.png",
+    40,
+    56,
+    rows=7,
+    columns=4,
+    x_offset=80
+)
+arms: Tileset = Tileset(
+    "assets/images/player/arms/arms.png",
+    40,
+    56,
+    rows=7,
+    columns=4,
+    x_offset=80,
 )
 slimes: Tileset = Tileset(
-    "assets/images/enemies/slime/",
+    "assets/images/entities/slime/slimeTileset.png",
     16,
     12,
     rows=3,
@@ -94,18 +110,199 @@ slimes: Tileset = Tileset(
     alpha=120,
 )
 head: Tileset = Tileset(
-    "assets/images/player/head/",
+    "assets/images/player/head/head.png",
     40,
     56,
     columns=20,
-    scale_width=50,
-    scale_height=70,
 )
-hair: Tileset = Tileset(
-    "assets/images/player/hair/",
+eyes: Tileset = Tileset(
+    "assets/images/player/eyes/eye.png",
     40,
     56,
-    columns=14,
-    scale_width=50,
-    scale_height=70,
+    columns=20,
+)
+pupils: Tileset = Tileset(
+    "assets/images/player/eyes/pupil.png",
+    40,
+    56,
+    columns=20,
+)
+hair: tuple[Tileset, ...] = (
+    Tileset("assets/images/player/hair/Player_Hair_1.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_2.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_3.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_4.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_5.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_6.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_7.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_8.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_9.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_10.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_11.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_12.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_13.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_14.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_15.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_16.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_17.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_18.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_19.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_20.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_21.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_22.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_23.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_24.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_25.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_26.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_27.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_28.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_29.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_30.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_31.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_32.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_33.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_34.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_35.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_36.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_37.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_38.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_39.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_40.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_41.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_42.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_43.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_44.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_45.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_46.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_47.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_48.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_49.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_50.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_51.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_52.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_53.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_54.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_55.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_56.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_57.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_58.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_59.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_60.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_61.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_62.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_63.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_64.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_65.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_66.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_67.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_68.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_69.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_70.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_71.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_72.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_73.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_74.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_75.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_76.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_77.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_78.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_79.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_80.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_81.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_82.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_83.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_84.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_85.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_86.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_87.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_88.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_89.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_90.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_91.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_92.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_93.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_94.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_95.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_96.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_97.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_98.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_99.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_100.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_101.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_102.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_103.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_104.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_105.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_106.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_107.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_108.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_109.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_110.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_111.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_112.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_113.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_114.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_115.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_116.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_117.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_118.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_119.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_120.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_121.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_122.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_123.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_124.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_125.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_126.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_127.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_128.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_129.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_130.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_131.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_132.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_133.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_134.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_135.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_136.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_137.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_138.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_139.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_140.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_141.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_142.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_143.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_144.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_145.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_146.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_147.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_148.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_149.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_150.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_151.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_152.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_153.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_154.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_155.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_156.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_157.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_158.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_159.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_160.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_161.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_162.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_163.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_164.png", 40, 56, columns=14),
+    Tileset("assets/images/player/hair/Player_Hair_165.png", 40, 56, columns=14),
+)
+trousers: Tileset = Tileset(
+    "assets/images/player/trousers/trousers.png",
+    40,
+    56,
+    columns=20,
+)
+shoes: Tileset = Tileset(
+    "assets/images/player/shoes/shoes.png",
+    40,
+    56,
+    columns=20,
 )

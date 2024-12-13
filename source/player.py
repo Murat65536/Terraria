@@ -6,7 +6,7 @@ import random
 import pickle
 import datetime
 from pygame.locals import Rect
-
+from enum import Enum
 import game_data
 from item import ItemLocation, ItemSlotClickResult, ItemTag, Item
 
@@ -21,7 +21,7 @@ import entity_manager
 """=================================================================================================================
     player.get_death_message -> string
     
-    Uses the player's name,    the    thing that killed them,    and    the    worlds name    to generate    a random death message
+    Uses the player's name, the thing that killed them, and the worlds name to generate a random death message
 -----------------------------------------------------------------------------------------------------------------"""
 
 
@@ -36,13 +36,13 @@ def get_death_message(name, source):
 
 
 """=================================================================================================================    
-    player.update_player_model_using_model_data    -> void
+    player.update_player_model_using_model_data -> void
     
     Transfers the data stored in PLAYER_MODEL_DATA to PLAYER_MODEL
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def update_player_model_using_model_data():
+def update_player_model_using_model_data() -> None:
     assert type(commons.PLAYER_MODEL) is Model
 
     commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0][0]
@@ -67,7 +67,7 @@ def update_player_model_using_model_data():
         commons.PLAYER_MODEL_DATA[5][1],
         commons.PLAYER_MODEL_DATA[5][2],
     )
-    commons.PLAYER_MODEL.under_shirt_col = (
+    commons.PLAYER_MODEL.undershirt_col = (
         commons.PLAYER_MODEL_DATA[6][0],
         commons.PLAYER_MODEL_DATA[6][1],
         commons.PLAYER_MODEL_DATA[6][2],
@@ -83,11 +83,80 @@ def update_player_model_using_model_data():
         commons.PLAYER_MODEL_DATA[8][2],
     )
 
+class Movement(Enum):
+    LEFT = 0
+    RIGHT = 1
+    DOWN = 2
+    IDLE = 3
+
+class MovementFrames:
+    def __init__(self, total_frames: int, animation_speed, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
+        self.total_frames = total_frames
+        self.current_frame = 0
+        self.walk_range = walk_range
+        self.swing_range = swing_range
+        self.jump_frame = jump_frame
+        self.hold_frame = hold_frame
+        self.idle_frame = idle_frame
+        self.swinging = False
+        self.animation_speed = animation_speed
+        self.animation_tick = 0
+    def walk(self, swinging: bool) -> None:
+        if swinging and self.swing_range is not None:
+            self.swing()
+        else:
+            if self.animation_tick <= 0:
+                self.animation_tick += self.animation_speed
+                if self.walk_range is not None:
+                    self.current_frame = self.current_frame + 1 if self.walk_range[0] <= self.current_frame < self.walk_range[1] else self.walk_range[0]
+            else:
+                self.animation_tick -= commons.DELTA_TIME
+    def swing(self) -> None:
+        if self.animation_tick <= 0:
+            self.animation_tick += self.animation_speed
+            if self.swing_range is not None:
+                self.current_frame += 1
+                if self.current_frame >= self.swing_range[1]:
+                    self.idle(False)
+                if self.current_frame > self.swing_range[1] + 1:
+                    self.current_frame = self.swing_range[0]
+        else:
+            self.animation_tick -= commons.DELTA_TIME
+    def jump(self, swinging: bool) -> None:
+        if swinging and self.swing_range is not None:
+            self.swing()
+        else:
+            if self.animation_tick <= 0:
+                self.animation_tick += self.animation_speed
+                if self.jump_frame is not None:
+                    self.current_frame = self.jump_frame
+            else:
+                self.animation_tick -= commons.DELTA_TIME
+    def hold(self, swinging: bool) -> None:
+        if swinging and self.swing_range is not None:
+            self.swing()
+        else:
+            if self.animation_tick <= 0:
+                self.animation_tick += self.animation_speed
+                if self.hold_frame is not None:
+                    self.current_frame = self.hold_frame
+            else:
+                self.animation_tick -= commons.DELTA_TIME
+    def idle(self, swinging: bool) -> None:
+        if swinging and self.swing_range is not None:
+            self.swing()
+        else:
+            if self.animation_tick <= 0:
+                self.animation_tick += self.animation_speed
+                if self.idle_frame is not None:
+                    self.current_frame = self.idle_frame
+            else:
+                self.animation_tick -= commons.DELTA_TIME
 
 """=================================================================================================================    
     player.Model
     
-    Stores information about the appearance    of a player
+    Stores information about the appearance of a player
 -----------------------------------------------------------------------------------------------------------------"""
 
 
@@ -100,19 +169,128 @@ class Model:
         hair_col,
         eye_col,
         shirt_col,
-        under_shirt_col,
+        undershirt_col,
         trouser_col,
         shoe_col,
-    ):
+    ) -> None:
+        self.hair_frames = MovementFrames(14, 0.05)
+        self.head_frames = MovementFrames(20, 0.05)
+        self.eye_frames = MovementFrames(1, 0.05)
+        self.pupil_frames = MovementFrames(1, 0.05)
+        self.undershirt_frames = MovementFrames(1, 0.05)
+        self.shirt_frames = MovementFrames(1, 0.05)
+        self.trouser_frames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.shoe_frames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.arm_frames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.swinging = False
+        self.flip = False
+        self.moving_left = False
+        self.moving_right = False
+        self.moving_down = False
+
         self.sex = sex
         self.hair_id = hair_id
         self.skin_col = skin_col
         self.hair_col = hair_col
         self.eye_col = eye_col
         self.shirt_col = shirt_col
-        self.under_shirt_col = under_shirt_col
+        self.undershirt_col = undershirt_col
         self.trouser_col = trouser_col
         self.shoe_col = shoe_col
+
+    def create_sprite(self) -> pygame.Surface:
+        print(self.hair_id)
+        MIRROR_ARM_FRAME = 14
+        player_surface: pygame.Surface = pygame.Surface((40, 56), pygame.SRCALPHA)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shirts[self.shirt_frames.current_frame], self.shirt_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.trousers[self.trouser_frames.current_frame], self.trouser_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shoes[self.shoe_frames.current_frame], self.shoe_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.head[self.head_frames.current_frame], self.skin_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.hair[self.hair_id][self.hair_frames.current_frame], self.hair_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.eyes[self.eye_frames.current_frame], self.eye_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.pupils[self.pupil_frames.current_frame], (0, 0, 0)), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame], self.skin_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame + MIRROR_ARM_FRAME], self.skin_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame], self.undershirt_col), (0, 0))
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame + MIRROR_ARM_FRAME], self.undershirt_col), (0, 0))
+        player_surface = pygame.transform.flip(player_surface, self.flip, False)
+        return player_surface
+
+    def get_colors(self):
+        return [self.sex, self.hair_id, self.skin_col, self.hair_col, self.eye_col, self.shirt_col, self.undershirt_col, self.trouser_col, self.shoe_col]
+
+    def get_movement(self) -> Movement:
+        return Movement.IDLE if self.moving_left and self.moving_right else Movement.LEFT if self.moving_left else Movement.RIGHT if self.moving_right else Movement.IDLE
+
+    def get_flip(self) -> bool:
+        return True if self.get_movement() == Movement.LEFT else False if self.get_movement() == Movement.RIGHT else self.flip
+
+    def walk(self) -> None:
+        self.flip = self.get_flip()
+        self.hair_frames.walk(self.swinging)
+        self.head_frames.walk(self.swinging)
+        self.eye_frames.walk(self.swinging)
+        self.pupil_frames.walk(self.swinging)
+        self.undershirt_frames.walk(self.swinging)
+        self.shirt_frames.walk(self.swinging)
+        self.trouser_frames.walk(self.swinging)
+        self.shoe_frames.walk(self.swinging)
+        self.arm_frames.walk(self.swinging)
+        self.sleeve_frames.walk(self.swinging)
+
+    def swing(self) -> None:
+        self.flip = self.get_flip()
+        self.hair_frames.swing()
+        self.head_frames.swing()
+        self.eye_frames.swing()
+        self.pupil_frames.swing()
+        self.undershirt_frames.swing()
+        self.shirt_frames.swing()
+        self.trouser_frames.swing()
+        self.shoe_frames.swing()
+        self.arm_frames.swing()
+        self.sleeve_frames.swing()
+
+    def jump(self) -> None:
+        self.flip = self.get_flip()
+        self.hair_frames.jump(self.swinging)
+        self.head_frames.jump(self.swinging)
+        self.eye_frames.jump(self.swinging)
+        self.pupil_frames.jump(self.swinging)
+        self.undershirt_frames.jump(self.swinging)
+        self.shirt_frames.jump(self.swinging)
+        self.trouser_frames.jump(self.swinging)
+        self.shoe_frames.jump(self.swinging)
+        self.arm_frames.jump(self.swinging)
+        self.sleeve_frames.jump(self.swinging)
+
+    def hold(self) -> None:
+        self.flip = self.get_flip()
+        self.hair_frames.hold(self.swinging)
+        self.head_frames.hold(self.swinging)
+        self.eye_frames.hold(self.swinging)
+        self.pupil_frames.hold(self.swinging)
+        self.undershirt_frames.hold(self.swinging)
+        self.shirt_frames.hold(self.swinging)
+        self.trouser_frames.hold(self.swinging)
+        self.shoe_frames.hold(self.swinging)
+        self.arm_frames.hold(self.swinging)
+        self.sleeve_frames.hold(self.swinging)
+
+    def idle(self) -> None:
+        self.flip = self.get_flip()
+        self.hair_frames.idle(self.swinging)
+        self.head_frames.idle(self.swinging)
+        self.eye_frames.idle(self.swinging)
+        self.pupil_frames.idle(self.swinging)
+        self.undershirt_frames.idle(self.swinging)
+        self.shirt_frames.idle(self.swinging)
+        self.trouser_frames.idle(self.swinging)
+        self.shoe_frames.idle(self.swinging)
+        self.arm_frames.idle(self.swinging)
+        self.sleeve_frames.idle(self.swinging)
 
 
 """=================================================================================================================    
@@ -205,22 +383,19 @@ class Player:
         )  # hitbox
         self.velocity = (0, 0)
 
-        sprites = render_sprites(self.model)
-
-        self.sprites = sprites[0]
-        self.arm_sprites = sprites[1]
+        self.sprites = Model(*self.model)
 
         self.animation_tick = 0
-        self.animation_frame = 5
-        self.animation_speed = 0.025
+        self.animation_frame = 0
+        self.animation_speed = 0.05
 
         self.arm_animation_frame = 0
         self.arm_animation_tick = 0
-        self.arm_animation_speed = 0.015
+        self.arm_animation_speed = 0.25
 
         self.alive = True
         self.respawn_tick = 0
-        self.DeathFadeIn = 0
+        self.death_fade_in = 0
 
         self.invincible_timer = 2.0
         self.invincible = True
@@ -244,12 +419,6 @@ class Player:
             commons.WINDOW_WIDTH - 10 - self.hp - self.hp_text.get_width() * 0.5
         )
 
-        self.grounded = True
-
-        self.moving_left = False
-        self.moving_right = False
-
-        self.moving_down = False
         self.moving_down_tick = 0
         self.stop_moving_down = False
 
@@ -323,15 +492,15 @@ class Player:
                 else:
                     self.invincible_timer -= commons.DELTA_TIME
 
-            if self.moving_left and not self.moving_right:  # moves player left
+            if self.sprites.get_movement() == Movement.LEFT:
                 if not self.stop_left:
-                    if self.moving_down:
+                    if self.sprites.get_movement() == Movement.DOWN:
                         self.velocity = (-5, self.velocity[1])
                     else:
                         self.velocity = (-12, self.velocity[1])
-            if self.moving_right and not self.moving_left:  # moves player right
+            elif self.sprites.get_movement() == Movement.RIGHT:
                 if not self.stop_right:
-                    if self.moving_down:
+                    if self.sprites.get_movement() == Movement.DOWN:
                         self.velocity = (5, self.velocity[1])
                     else:
                         self.velocity = (12, self.velocity[1])
@@ -534,7 +703,7 @@ class Player:
                                                     self.rect.height,
                                                 ).colliderect(block_rect):
                                                     if is_platform:
-                                                        if self.moving_down:
+                                                        if self.sprites.get_movement() == Movement.DOWN:
                                                             collide = False
                                                         else:
                                                             if self.velocity[1] < 5:
@@ -585,9 +754,10 @@ class Player:
 
             if (
                 self.stop_moving_down
-            ):  # Wait before setting moving_down to false based    on player y    velocity
+            ):  # Wait before setting moving_down to false based on player y velocity
                 if self.moving_down_tick < 0:
-                    self.moving_down = False
+                    self.sprites.moving_left = False
+                    self.sprites.moving_right = False
                     self.stop_moving_down = False
                 else:
                     self.moving_down_tick -= self.velocity[1]
@@ -612,8 +782,8 @@ class Player:
                 self.respawn_tick -= commons.DELTA_TIME
             else:
                 self.respawn()
-            if self.DeathFadeIn > 0:
-                self.DeathFadeIn -= commons.DELTA_TIME
+            if self.death_fade_in > 0:
+                self.death_fade_in -= commons.DELTA_TIME
 
         self.update_inventory_old_slots()
 
@@ -665,7 +835,7 @@ class Player:
                             self.velocity[0] ** 2 + self.velocity[1] ** 2
                         )
 
-                    for i in range(int(10 * commons.PARTICLE_DENSITY)):  # blood
+                    for _ in range(int(10 * commons.PARTICLE_DENSITY)):  # blood
                         particle_pos = (
                             self.position[0]
                             + random.random() * commons.PLAYER_WIDTH
@@ -716,7 +886,7 @@ class Player:
         if self.alive:
             self.alive = False
             self.respawn_tick = random.randint(10, 15)  # respawn delay
-            self.DeathFadeIn = 5
+            self.death_fade_in = 5
             self.velocity = (0, 0)
 
             entity_manager.add_message(
@@ -839,95 +1009,16 @@ class Player:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def animate(self):
-        if self.animation_tick <= 0:  # Happens    every 'animation_speed'    frames
-            self.animation_tick += self.animation_speed
-            if self.grounded:
-                if (
-                    self.moving_left and not self.moving_right
-                ):  # If moving left, cycle through left frames
-                    if self.animation_frame < 29:
-                        self.animation_frame += 1
-                    else:
-                        self.animation_frame = 17
-                    return
-                elif (
-                    self.moving_right and not self.moving_left
-                ):  # If moving right, cycle through right frames
-                    if self.animation_frame < 14:
-                        self.animation_frame += 1
-                    else:
-                        self.animation_frame = 2
-                    return
-                else:  # If idle put arms down
-                    if self.direction == 0:
-                        self.animation_frame = 15
-                    elif self.direction == 1:
-                        self.animation_frame = 0
-            else:  # Puts arms in the air if not grounded
-                if self.direction == 0:
-                    self.animation_frame = 16
-                elif self.direction == 1:
-                    self.animation_frame = 1
-        else:
-            self.animation_tick -= commons.DELTA_TIME
-
-        if self.arm_animation_tick <= 0:
-            self.arm_animation_tick += self.arm_animation_speed
-
-            if self.swinging_arm:
-                if self.direction == 1:
-                    self.arm_animation_frame = math.floor(
-                        min(4, 1 + self.use_delta * 4)
-                    )
-                else:
-                    self.arm_animation_frame = math.floor(
-                        min(24, 21 + self.use_delta * 4)
-                    )
-
-            elif self.holding_arm:
-                if self.direction == 1:
-                    # self.arm_animation_frame = math.floor(min(4, 1 + self.use_delta    * 4))
-                    self.arm_animation_frame = 2
-                else:
-                    # self.arm_animation_frame = math.floor(min(24, 21 + self.use_delta *    4))
-                    self.arm_animation_frame = 1
-
+        self.sprites.swinging = self.swinging_arm
+        if self.holding_arm:
+            self.sprites.hold()
+        elif self.grounded:
+            if self.sprites.get_movement() == Movement.LEFT or self.sprites.get_movement() == Movement.RIGHT:
+                self.sprites.walk()
             else:
-                if self.grounded:
-                    if (
-                        self.moving_left and not self.moving_right
-                    ):  # If moving left,    cycle through left frames
-                        if self.arm_animation_frame < 38:
-                            self.arm_animation_frame += 1
-                        else:
-                            self.arm_animation_frame = 26
-                        return
-                    elif (
-                        self.moving_right and not self.moving_left
-                    ):  # If moving right,    cycle through right    frames
-                        if self.arm_animation_frame < 18:
-                            self.arm_animation_frame += 1
-                        else:
-                            self.arm_animation_frame = 6
-                        return
-                    else:  # If idle put arms down
-                        if self.direction == 0:
-                            self.arm_animation_frame = 20
-                        elif self.direction == 1:
-                            self.arm_animation_frame = 0
-                else:  # Puts arms in the air if not grounded
-                    if self.direction == 0:
-                        self.arm_animation_frame = 25
-                    elif self.direction == 1:
-                        self.arm_animation_frame = 5
+                self.sprites.idle()
         else:
-            self.arm_animation_tick -= commons.DELTA_TIME
-
-        if self.arm_out:
-            if self.direction == 1:
-                self.arm_animation_frame = 19
-            else:
-                self.arm_animation_frame = 39
+            self.sprites.jump()
 
     """=================================================================================================================    
         player.Player.use_item -> void
@@ -988,18 +1079,10 @@ class Player:
             if self.should_swing_arm:
                 if not self.swinging_arm:
                     self.swinging_arm = True
-                    if self.direction == 1:
-                        self.arm_animation_frame = 1
-                    else:
-                        self.arm_animation_frame = 20
 
             if self.should_hold_arm:
                 if not self.holding_arm:
                     self.holding_arm = True
-                    if self.direction == 1:
-                        self.arm_animation_frame = 1
-                    else:
-                        self.arm_animation_frame = 20
 
         else:
             if (
@@ -1477,7 +1560,7 @@ class Player:
                         self.give_item(Item(item.item_id + 1))
                         amount = 0
 
-                # Flag the position    for    a surface update
+                # Flag the position for a surface update
                 dat = [existing_slots[0][0], existing_slots[0][1]]
                 if dat not in self.old_inventory_positions:
                     self.old_inventory_positions.append(dat)
@@ -1489,8 +1572,8 @@ class Player:
 
             while (
                 len(free_slots) > 0 and amount > 0
-            ):  # No stacks left to fill so fill empty    slots
-                # Work out how many    to add to the stack
+            ):  # No stacks left to fill so fill empty slots
+                # Work out how many to add to the stack
                 fill_count = free_slots[0][2]
                 amount -= fill_count
                 if amount < 0:
@@ -1501,7 +1584,7 @@ class Player:
                     new_amount=fill_count
                 )
 
-                # Flag the position    for    a surface update
+                # Flag the position for a surface update
                 dat = [free_slots[0][0], free_slots[0][1]]
                 if dat not in self.old_inventory_positions:
                     self.old_inventory_positions.append(dat)
@@ -1517,15 +1600,15 @@ class Player:
 
         # Position specified
         else:
-            # Slot is free,    add
+            # Slot is free, add
             if self.items[position[0]][position[1]] is None:
                 self.items[position[0]][position[1]] = item.copy(new_amount=amount)
                 return [ItemSlotClickResult.GAVE_ALL]
 
-            # Slot has an item with    the    same Id
+            # Slot has an item with the same Id
             elif self.items[position[0]][position[1]].item_id == item.item_id:
                 max_stack = self.items[position[0]][position[1]].get_max_stack()
-                # Item is already at max stack,    swap
+                # Item is already at max stack, swap
                 if self.items[position[0]][position[1]].amount == max_stack:
                     return [
                         ItemSlotClickResult.SWAPPED,
@@ -1545,7 +1628,7 @@ class Player:
                     else:
                         return [ItemSlotClickResult.GAVE_ALL]
 
-            # Slot has an item with    a different    Id,    swap
+            # Slot has an item with a different Id, swap
             elif self.items[position[0]][position[1]].item_id != item.item_id:
                 return [
                     ItemSlotClickResult.SWAPPED,
@@ -1653,7 +1736,7 @@ class Player:
     def render_hotbar(self):
         self.hotbar_image.fill((255, 0, 255))
         for hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
-            self.hotbar_image.blit(tilesets.misc_gui[0][0], (48 * hotbar_index, 0))
+            self.hotbar_image.blit(tilesets.misc_gui[0], (48 * hotbar_index, 0))
             item = self.items[ItemLocation.HOTBAR][hotbar_index]
             if item is not None:
                 self.hotbar_image.blit(
@@ -1684,7 +1767,7 @@ class Player:
             slot_x = inventory_index % 10
             slot_y = inventory_index // 10
             self.inventory_image.blit(
-                tilesets.misc_gui[0][0], (48 * slot_x, 48 * slot_y)
+                tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y)
             )
             item = self.items[ItemLocation.INVENTORY][inventory_index]
             if item is not None:
@@ -1721,7 +1804,7 @@ class Player:
         for chest_index in range(len(self.items[ItemLocation.CHEST])):
             slot_x = chest_index % 5
             slot_y = chest_index // 5
-            self.chest_image.blit(tilesets.misc_gui[0][0], (48 * slot_x, 48 * slot_y))
+            self.chest_image.blit(tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y))
             item = self.items[ItemLocation.CHEST][chest_index]
             if item is not None:
                 self.chest_image.blit(
@@ -1751,7 +1834,7 @@ class Player:
         for data in self.old_inventory_positions:
             if data[0] == ItemLocation.HOTBAR:
                 item = self.items[ItemLocation.HOTBAR][data[1]]
-                self.hotbar_image.blit(tilesets.misc_gui[0][0], (data[1] * 48, 0))
+                self.hotbar_image.blit(tilesets.misc_gui[0], (data[1] * 48, 0))
                 if item is not None:
                     self.hotbar_image.blit(
                         item.get_resized_image(),
@@ -1772,7 +1855,7 @@ class Player:
                 slot_x = data[1] % 10
                 slot_y = data[1] // 10
                 self.inventory_image.blit(
-                    tilesets.misc_gui[0][0], (slot_x * 48, slot_y * 48)
+                    tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
                 )
                 if item is not None:
                     self.inventory_image.blit(
@@ -1795,7 +1878,7 @@ class Player:
                 slot_x = data[1] % 5
                 slot_y = data[1] // 5
                 self.chest_image.blit(
-                    tilesets.misc_gui[0][0], (slot_x * 48, slot_y * 48)
+                    tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
                 )
                 if item is not None:
                     self.chest_image.blit(
@@ -1837,7 +1920,7 @@ class Player:
         )
         self.craftable_items_surf.fill((255, 0, 255))
         for i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
-            self.craftable_items_surf.blit(tilesets.misc_gui[0][0], (0, i * 48))
+            self.craftable_items_surf.blit(tilesets.misc_gui[0], (0, i * 48))
             item_data = game_data.json_item_data[
                 self.items[ItemLocation.CRAFTING_MENU][i][0]
             ]
@@ -1868,7 +1951,7 @@ class Player:
         Uses various player    variables to draw the player in the    world
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def draw(self):  # Draw    player to screen
+    def draw(self): # Draw player to screen
         hit_rect = Rect(0, 0, 1, 1)
 
         if self.alive:
@@ -1883,8 +1966,8 @@ class Player:
                 + commons.WINDOW_HEIGHT * 0.5
             )
             commons.screen.blit(
-                self.sprites[self.animation_frame],
-                (screen_position_x - 20, screen_position_y - 33),
+                self.sprites.create_sprite(),
+                (screen_position_x - commons.PLAYER_WIDTH, screen_position_y - commons.PLAYER_HEIGHT + commons.BLOCK_SIZE // 2),
             )
 
             if self.arm_out:
@@ -2227,11 +2310,6 @@ class Player:
                     (screen_position_x + offset_x, screen_position_y + offset_y),
                 )
 
-            commons.screen.blit(
-                self.arm_sprites[self.arm_animation_frame],
-                (screen_position_x - 20, screen_position_y - 33),
-            )
-
             if commons.HITBOXES:  # Show hitbox
                 pygame.draw.rect(
                     commons.screen,
@@ -2286,7 +2364,7 @@ class Player:
     """=================================================================================================================    
         player.Player.save -> void
         
-        Packs the important    player data    into an array and serialises it using the pickle module
+        Packs the important player data    into an array and serialises it using the pickle module
     -----------------------------------------------------------------------------------------------------------------"""
 
     def save(self):
@@ -2346,7 +2424,7 @@ class Player:
     """=================================================================================================================    
         player.Player.jump -> void
         
-        Plays a    sound, spawns particles    and    sets the player's y    velocity
+        Plays a sound, spawns particles and sets the player's y velocity
     -----------------------------------------------------------------------------------------------------------------"""
 
     def jump(self):
@@ -2371,86 +2449,7 @@ class Player:
             self.grounded = False
 
     def get_date_created_string(self):
-        return str(str(self.creation_date)[:19])
+        return str(self.creation_date)[:19]
 
     def get_last_date_played_string(self):
-        return str(str(self.last_played_date)[:19])
-
-
-"""=================================================================================================================    
-    player.render_sprites -> [sprites, arm_sprites]
-    
-    Uses a model object    to render torso    and    arm    frames to surfaces so that they    can    be used    to draw    this player
------------------------------------------------------------------------------------------------------------------"""
-
-
-def render_sprites(
-    model, directions=2, arm_frame_count=20, torso_frame_count=15
-):  # create an array of surfs for the current character used for animation/blitting
-    sprites = []
-    arm_sprites = []
-    for j in range(directions):  # for both    directions
-        hair = shared_methods.transparent_color_surface(
-            tilesets.hair[model.hair_id][0], model.hair_col
-        )
-
-        if j == 1:  # flip if necessary
-            hair = pygame.transform.flip(hair, True, False)
-
-        torso = shared_methods.color_surface(tilesets.torsos[0][0], model.shirt_col)
-        if j == 0:  # flip if necessary
-            torso = pygame.transform.flip(torso, True, False)
-
-        head = shared_methods.transparent_color_surface(
-            tilesets.head[0][0], model.skin_col
-        )
-        pygame.draw.rect(head, (255, 254, 255), Rect(26, 26, 2, 4), 0)
-        pygame.draw.rect(head, model.eye_col, Rect(28, 26, 2, 4), 0)
-
-        if j == 1:  # flip if necessary
-            head = pygame.transform.flip(head, True, False)
-
-        for i in range(arm_frame_count):  # all    animation frames for one direction
-            arm_surf = pygame.Surface((44, 75))
-            arm_surf.fill((255, 0, 255))
-            arm_surf.set_colorkey((255, 0, 255))
-
-            arms = shared_methods.color_surface(
-                tilesets.torsos[0][i + 31], model.under_shirt_col
-            )
-            hands = shared_methods.color_surface(
-                tilesets.torsos[0][i + 51], model.skin_col
-            )
-            if j == 0:  # flip if necessary
-                arms = pygame.transform.flip(arms, True, False)
-                hands = pygame.transform.flip(hands, True, False)
-
-            arm_surf.blit(arms, (1, 5))
-            arm_surf.blit(hands, (1, 5))
-
-            arm_sprites.append(arm_surf)
-
-        for i in range(torso_frame_count):  # all animation    frames for one direction
-            body_surf = pygame.Surface((44, 75))
-            body_surf.fill((255, 0, 255))
-            body_surf.set_colorkey(
-                (255, 0, 255)
-            )  # create the surf for the whole    player with    a colorkey    of (255, 0, 255)
-            trousers = shared_methods.color_surface(
-                tilesets.torsos[0][i + 1], model.trouser_col
-            )
-            shoes = shared_methods.color_surface(
-                tilesets.torsos[0][i + 16], model.shoe_col
-            )
-            if j == 0:  # flip if necessary
-                trousers = pygame.transform.flip(trousers, True, False)
-                shoes = pygame.transform.flip(shoes, True, False)
-            body_surf.blit(torso, (1, 5))
-            body_surf.blit(trousers, (1, 5))
-            body_surf.blit(shoes, (1, 5))
-            body_surf.blit(head, (-4, -4))
-            body_surf.blit(hair, (-4, -4))
-
-            sprites.append(body_surf)
-
-    return [sprites, arm_sprites]
+        return str(self.last_played_date)[:19]

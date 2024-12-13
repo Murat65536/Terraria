@@ -22,7 +22,7 @@ pygame.init()
 pygame.mixer.init()
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     move_parallax -> void
 
     Moves the background by a set amount, looping back when necessary
@@ -63,7 +63,7 @@ def draw_death_message() -> None:
     death_text = shared_methods.outline_text(
         "You were slain...", (229, 127, 127), commons.LARGE_FONT
     )
-    alpha = math.floor((1 - entity_manager.client_player.DeathFadeIn * 0.15) * 255)
+    alpha = math.floor((1 - entity_manager.client_player.death_fade_in * 0.15) * 255)
     death_text.set_alpha(alpha)
     commons.screen.blit(
         death_text,
@@ -1704,18 +1704,10 @@ while True:
 
         elif commons.game_sub_state == "PLAYER_CREATION":
             commons.screen.blit(
-                commons.PLAYER_FRAMES[0][0],
+                commons.PLAYER_FRAMES,
                 (
                     commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[0][0].get_width() * 0.5,
-                    100,
-                ),
-            )
-            commons.screen.blit(
-                commons.PLAYER_FRAMES[1][0],
-                (
-                    commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[1][0].get_width() * 0.5,
+                    - commons.PLAYER_FRAMES.get_width() * 0.5,
                     100,
                 ),
             )
@@ -1881,18 +1873,10 @@ while True:
 
         elif commons.game_sub_state == "CLOTHES":
             commons.screen.blit(
-                commons.PLAYER_FRAMES[0][0],
+                commons.PLAYER_FRAMES,
                 (
                     commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[0][0].get_width() * 0.5,
-                    100,
-                ),
-            )
-            commons.screen.blit(
-                commons.PLAYER_FRAMES[1][0],
-                (
-                    commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[1][0].get_width() * 0.5,
+                    - commons.PLAYER_FRAMES.get_width() * 0.5,
                     100,
                 ),
             )
@@ -1913,18 +1897,10 @@ while True:
                 text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175)
             )
             commons.screen.blit(
-                commons.PLAYER_FRAMES[0][0],
+                commons.PLAYER_FRAMES,
                 (
                     commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[0][0].get_width() * 0.5,
-                    100,
-                ),
-            )
-            commons.screen.blit(
-                commons.PLAYER_FRAMES[1][0],
-                (
-                    commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[1][0].get_width() * 0.5,
+                    - commons.PLAYER_FRAMES.get_width() * 0.5,
                     100,
                 ),
             )
@@ -1953,29 +1929,8 @@ while True:
                     4
                 ] = entity_manager.client_color_picker.selected_y
                 player.update_player_model_using_model_data()
-                commons.PLAYER_FRAMES = player.render_sprites(
-                    commons.PLAYER_MODEL,
-                    directions=1,
-                    arm_frame_count=1,
-                    torso_frame_count=1,
-                )
-
-            commons.screen.blit(
-                commons.PLAYER_FRAMES[0][0],
-                (
-                    commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[0][0].get_width() * 0.5,
-                    100,
-                ),
-            )
-            commons.screen.blit(
-                commons.PLAYER_FRAMES[1][0],
-                (
-                    commons.WINDOW_WIDTH * 0.5
-                    - commons.PLAYER_FRAMES[1][0].get_width() * 0.5,
-                    100,
-                ),
-            )
+                commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
+            commons.screen.blit(commons.PLAYER_FRAMES, (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES.get_width() * 0.5, 100))
             entity_manager.client_color_picker.draw()
 
     # Draw a prompt if there is one
@@ -2048,39 +2003,17 @@ while True:
                         entity_manager.client_player.render_craftable_items_surf()
                         entity_manager.client_prompt = None
 
-                if event.key == pygame.K_a and event.key == pygame.K_d:
-                    entity_manager.client_player.moving_left = False
-                # Player Move Left
-                elif event.key == pygame.K_a:
-                    entity_manager.client_player.moving_left = True
-                    entity_manager.client_player.animation_frame = random.randint(
-                        17, 29
-                    )
-                    if (
-                        not entity_manager.client_player.swinging_arm
-                        and not entity_manager.client_player.holding_arm
-                    ):
-                        entity_manager.client_player.arm_animation_frame = (
-                            random.randint(26, 39)
-                        )
+                if event.key == pygame.K_a:
+                    entity_manager.client_player.sprites.moving_left = True
                     entity_manager.client_player.direction = 0
 
-                # Player Move Right
-                elif event.key == pygame.K_d:
-                    entity_manager.client_player.moving_right = True
-                    entity_manager.client_player.animation_frame = random.randint(2, 15)
-                    if (
-                        not entity_manager.client_player.swinging_arm
-                        and not entity_manager.client_player.holding_arm
-                    ):
-                        entity_manager.client_player.arm_animation_frame = (
-                            random.randint(6, 19)
-                        )
+                if event.key == pygame.K_d:
+                    entity_manager.client_player.sprites.moving_right = True
                     entity_manager.client_player.direction = 1
 
                 # Player Walk
-                elif event.key == pygame.K_s:
-                    entity_manager.client_player.moving_down = True
+                if event.key == pygame.K_s:
+                    entity_manager.client_player.sprites.moving_down = True
                     entity_manager.client_player.animation_speed = 0.05
 
                 # Player Jump
@@ -2441,10 +2374,11 @@ while True:
             # Key up Events
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
-                    entity_manager.client_player.moving_left = False
+                    entity_manager.client_player.sprites.moving_left = False
                 if event.key == pygame.K_d:
-                    entity_manager.client_player.moving_right = False
+                    entity_manager.client_player.sprites.moving_right = False
                 if event.key == pygame.K_s:
+                    entity_manager.client_player.sprites.moving_down = False
                     entity_manager.client_player.moving_down_tick = 5
                     entity_manager.client_player.stop_moving_down = True
                     entity_manager.client_player.animation_speed = 0.025
