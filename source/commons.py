@@ -149,7 +149,6 @@ PLAYER_HEIGHT: int = 40
 PLAYER_ARM_LENGTH: int = 20
 
 PLAYER_MODEL_DATA: list[list[int]] = []
-PLAYER_MODEL: object = None
 PLAYER_FRAMES: pygame.Surface = pygame.Surface((0, 0))
 PLAYER_REACH: int = 8
 PLAYER_MODEL_COLOR_INDEX: int = 0

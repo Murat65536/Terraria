@@ -180,6 +180,59 @@ class MenuObject:
             commons.screen.blit(self.alt_text_surface, (self.rect.left, self.rect.top))
 
 
+commons.PLAYER_MODEL_DATA = [
+    [0],
+    [0],
+    [127, 72, 36, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [95, 125, 127, 0, 0],
+    [48, 76, 127, 0, 0],
+    [129, 113, 45, 0, 0],
+    [80, 100, 45, 0, 0],
+]
+
+player_model = player.Model(
+    commons.PLAYER_MODEL_DATA[0][0],
+    commons.PLAYER_MODEL_DATA[1][0],
+    (
+        commons.PLAYER_MODEL_DATA[2][0],
+        commons.PLAYER_MODEL_DATA[2][1],
+        commons.PLAYER_MODEL_DATA[2][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[3][0],
+        commons.PLAYER_MODEL_DATA[3][1],
+        commons.PLAYER_MODEL_DATA[3][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[4][0],
+        commons.PLAYER_MODEL_DATA[4][1],
+        commons.PLAYER_MODEL_DATA[4][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[5][0],
+        commons.PLAYER_MODEL_DATA[5][1],
+        commons.PLAYER_MODEL_DATA[5][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[6][0],
+        commons.PLAYER_MODEL_DATA[6][1],
+        commons.PLAYER_MODEL_DATA[6][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[7][0],
+        commons.PLAYER_MODEL_DATA[7][1],
+        commons.PLAYER_MODEL_DATA[7][2],
+    ),
+    (
+        commons.PLAYER_MODEL_DATA[8][0],
+        commons.PLAYER_MODEL_DATA[8][1],
+        commons.PLAYER_MODEL_DATA[8][2],
+    ),
+)
+
+
 """================================================================================================================= 
     menu_manager.update_active_menu_buttons -> void
 
@@ -208,6 +261,7 @@ def update_active_menu_buttons():
 
 
 def update_menu_buttons():
+    global player_model
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
             if text.active:
@@ -242,7 +296,7 @@ def update_menu_buttons():
                                 [129, 113, 45, 0, 0],
                                 [80, 100, 45, 0, 0],
                             ]
-                            commons.PLAYER_MODEL = player.Model(
+                            player_model = player.Model(
                                 commons.PLAYER_MODEL_DATA[0][0],
                                 commons.PLAYER_MODEL_DATA[1][0],
                                 (
@@ -281,18 +335,16 @@ def update_menu_buttons():
                                     commons.PLAYER_MODEL_DATA[8][2],
                                 ),
                             )
-                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
+                            commons.PLAYER_FRAMES = player_model.create_sprite()
                         case PlayerSelectionButtons.BACK:
                             commons.game_sub_state = "MAIN"
                         case PlayerCreationButtons.HAIR_TYPE:
-                            if commons.PLAYER_MODEL.hair_id < 163:
-                                commons.PLAYER_MODEL.hair_id += 1
+                            if player_model.hair_id < 163:
+                                player_model.hair_id += 1
                             else:
-                                commons.PLAYER_MODEL.hair_id = 0
-                            commons.PLAYER_MODEL_DATA[1][
-                                0
-                            ] = commons.PLAYER_MODEL.hair_id
-                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
+                                player_model.hair_id = 0
+                            commons.PLAYER_MODEL_DATA[1][0] = player_model.hair_id
+                            commons.PLAYER_FRAMES = player_model.create_sprite()
                         case PlayerCreationButtons.HAIR_COLOR:
                             commons.game_sub_state = "COLOR_PICKER"
                             commons.PLAYER_MODEL_COLOR_INDEX = 3
@@ -370,8 +422,46 @@ def update_menu_buttons():
                                     0,
                                 ],
                             ]
-                            player.update_player_model_using_model_data()
-                            commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
+                            player_model = player.Model(
+                                commons.PLAYER_MODEL_DATA[0][0],
+                                commons.PLAYER_MODEL_DATA[1][0],
+                                (
+                                    commons.PLAYER_MODEL_DATA[2][0],
+                                    commons.PLAYER_MODEL_DATA[2][1],
+                                    commons.PLAYER_MODEL_DATA[2][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[3][0],
+                                    commons.PLAYER_MODEL_DATA[3][1],
+                                    commons.PLAYER_MODEL_DATA[3][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[4][0],
+                                    commons.PLAYER_MODEL_DATA[4][1],
+                                    commons.PLAYER_MODEL_DATA[4][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[5][0],
+                                    commons.PLAYER_MODEL_DATA[5][1],
+                                    commons.PLAYER_MODEL_DATA[5][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[6][0],
+                                    commons.PLAYER_MODEL_DATA[6][1],
+                                    commons.PLAYER_MODEL_DATA[6][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[7][0],
+                                    commons.PLAYER_MODEL_DATA[7][1],
+                                    commons.PLAYER_MODEL_DATA[7][2],
+                                ),
+                                (
+                                    commons.PLAYER_MODEL_DATA[8][0],
+                                    commons.PLAYER_MODEL_DATA[8][1],
+                                    commons.PLAYER_MODEL_DATA[8][2],
+                                ),
+                            )
+                            commons.PLAYER_FRAMES = player_model.create_sprite()
                         case PlayerCreationButtons.BACK:
                             commons.game_sub_state = "PLAYER_SELECTION"
                         case ColorPickerButtons.BACK:
@@ -393,7 +483,7 @@ def update_menu_buttons():
                         case PlayerNamingButtons.SET_NAME:
                             date = datetime.datetime.now()
                             commons.PLAYER_DATA["name"] = commons.TEXT_INPUT
-                            commons.PLAYER_DATA["model"] = commons.PLAYER_MODEL.get_colors()
+                            commons.PLAYER_DATA["model"] = player_model.get_colors()
                             commons.PLAYER_DATA["hotbar"] = []
                             commons.PLAYER_DATA["inventory"] = []
                             commons.PLAYER_DATA["hp"] = 100

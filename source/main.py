@@ -1928,9 +1928,54 @@ while True:
                 commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][
                     4
                 ] = entity_manager.client_color_picker.selected_y
-                player.update_player_model_using_model_data()
-                commons.PLAYER_FRAMES = commons.PLAYER_MODEL.create_sprite()
-            commons.screen.blit(commons.PLAYER_FRAMES, (commons.WINDOW_WIDTH * 0.5 - commons.PLAYER_FRAMES.get_width() * 0.5, 100))
+                menu_manager.player_model = player.Model(
+                    commons.PLAYER_MODEL_DATA[0][0],
+                    commons.PLAYER_MODEL_DATA[1][0],
+                    (
+                        commons.PLAYER_MODEL_DATA[2][0],
+                        commons.PLAYER_MODEL_DATA[2][1],
+                        commons.PLAYER_MODEL_DATA[2][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[3][0],
+                        commons.PLAYER_MODEL_DATA[3][1],
+                        commons.PLAYER_MODEL_DATA[3][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[4][0],
+                        commons.PLAYER_MODEL_DATA[4][1],
+                        commons.PLAYER_MODEL_DATA[4][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[5][0],
+                        commons.PLAYER_MODEL_DATA[5][1],
+                        commons.PLAYER_MODEL_DATA[5][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[6][0],
+                        commons.PLAYER_MODEL_DATA[6][1],
+                        commons.PLAYER_MODEL_DATA[6][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[7][0],
+                        commons.PLAYER_MODEL_DATA[7][1],
+                        commons.PLAYER_MODEL_DATA[7][2],
+                    ),
+                    (
+                        commons.PLAYER_MODEL_DATA[8][0],
+                        commons.PLAYER_MODEL_DATA[8][1],
+                        commons.PLAYER_MODEL_DATA[8][2],
+                    ),
+                )
+                commons.PLAYER_FRAMES = menu_manager.player_model.create_sprite()
+            commons.screen.blit(
+                commons.PLAYER_FRAMES,
+                (
+                    commons.WINDOW_WIDTH * 0.5
+                    - commons.PLAYER_FRAMES.get_width() * 0.5,
+                    100,
+                ),
+            )
             entity_manager.client_color_picker.draw()
 
     # Draw a prompt if there is one

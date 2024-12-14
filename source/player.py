@@ -34,55 +34,6 @@ def get_death_message(name, source):
     string = string.replace("<e>", source[1])
     return string
 
-
-"""=================================================================================================================    
-    player.update_player_model_using_model_data -> void
-    
-    Transfers the data stored in PLAYER_MODEL_DATA to PLAYER_MODEL
------------------------------------------------------------------------------------------------------------------"""
-
-
-def update_player_model_using_model_data() -> None:
-    assert type(commons.PLAYER_MODEL) is Model
-
-    commons.PLAYER_MODEL.sex = commons.PLAYER_MODEL_DATA[0][0]
-    commons.PLAYER_MODEL.hair_id = commons.PLAYER_MODEL_DATA[1][0]
-    commons.PLAYER_MODEL.skin_col = (
-        commons.PLAYER_MODEL_DATA[2][0],
-        commons.PLAYER_MODEL_DATA[2][1],
-        commons.PLAYER_MODEL_DATA[2][2],
-    )
-    commons.PLAYER_MODEL.hair_col = (
-        commons.PLAYER_MODEL_DATA[3][0],
-        commons.PLAYER_MODEL_DATA[3][1],
-        commons.PLAYER_MODEL_DATA[3][2],
-    )
-    commons.PLAYER_MODEL.eye_col = (
-        commons.PLAYER_MODEL_DATA[4][0],
-        commons.PLAYER_MODEL_DATA[4][1],
-        commons.PLAYER_MODEL_DATA[4][2],
-    )
-    commons.PLAYER_MODEL.shirt_col = (
-        commons.PLAYER_MODEL_DATA[5][0],
-        commons.PLAYER_MODEL_DATA[5][1],
-        commons.PLAYER_MODEL_DATA[5][2],
-    )
-    commons.PLAYER_MODEL.undershirt_col = (
-        commons.PLAYER_MODEL_DATA[6][0],
-        commons.PLAYER_MODEL_DATA[6][1],
-        commons.PLAYER_MODEL_DATA[6][2],
-    )
-    commons.PLAYER_MODEL.trouser_col = (
-        commons.PLAYER_MODEL_DATA[7][0],
-        commons.PLAYER_MODEL_DATA[7][1],
-        commons.PLAYER_MODEL_DATA[7][2],
-    )
-    commons.PLAYER_MODEL.shoe_col = (
-        commons.PLAYER_MODEL_DATA[8][0],
-        commons.PLAYER_MODEL_DATA[8][1],
-        commons.PLAYER_MODEL_DATA[8][2],
-    )
-
 class Movement(Enum):
     LEFT = 0
     RIGHT = 1
@@ -173,21 +124,21 @@ class Model:
         trouser_col,
         shoe_col,
     ) -> None:
-        self.hair_frames = MovementFrames(14, 0.05)
-        self.head_frames = MovementFrames(20, 0.05)
-        self.eye_frames = MovementFrames(1, 0.05)
-        self.pupil_frames = MovementFrames(1, 0.05)
-        self.undershirt_frames = MovementFrames(1, 0.05)
-        self.shirt_frames = MovementFrames(1, 0.05)
-        self.trouser_frames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.shoe_frames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.swinging = False
-        self.flip = False
-        self.moving_left = False
-        self.moving_right = False
-        self.moving_down = False
+        self.hair_frames: MovementFrames = MovementFrames(14, 0.05)
+        self.head_frames: MovementFrames = MovementFrames(20, 0.05)
+        self.eye_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.pupil_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.undershirt_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.shirt_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.trouser_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.shoe_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.swinging: bool = False
+        self.flip: bool = False
+        self.moving_left: bool = False
+        self.moving_right: bool = False
+        self.moving_down: bool = False
 
         self.sex = sex
         self.hair_id = hair_id
@@ -200,7 +151,6 @@ class Model:
         self.shoe_col = shoe_col
 
     def create_sprite(self) -> pygame.Surface:
-        print(self.hair_id)
         MIRROR_ARM_FRAME = 14
         player_surface: pygame.Surface = pygame.Surface((40, 56), pygame.SRCALPHA)
         player_surface.blit(shared_methods.transparent_color_surface(tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col), (0, 0))
