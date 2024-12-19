@@ -41,7 +41,7 @@ class Movement(Enum):
     IDLE = 3
 
 class MovementFrames:
-    def __init__(self, total_frames: int, animation_speed, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
+    def __init__(self, total_frames: int, animation_speed: float, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
         self.total_frames = total_frames
         self.current_frame = 0
         self.walk_range = walk_range
@@ -49,7 +49,6 @@ class MovementFrames:
         self.jump_frame = jump_frame
         self.hold_frame = hold_frame
         self.idle_frame = idle_frame
-        self.swinging = False
         self.animation_speed = animation_speed
         self.animation_tick = 0
     def walk(self, swinging: bool) -> None:
@@ -67,10 +66,9 @@ class MovementFrames:
             self.animation_tick += self.animation_speed
             if self.swing_range is not None:
                 self.current_frame += 1
-                if self.current_frame >= self.swing_range[1]:
-                    self.idle(False)
                 if self.current_frame > self.swing_range[1] + 1:
                     self.current_frame = self.swing_range[0]
+                    self.idle(False)
         else:
             self.animation_tick -= commons.DELTA_TIME
     def jump(self, swinging: bool) -> None:
@@ -124,21 +122,24 @@ class Model:
         trouser_col,
         shoe_col,
     ) -> None:
-        self.hair_frames: MovementFrames = MovementFrames(14, 0.05)
-        self.head_frames: MovementFrames = MovementFrames(20, 0.05)
-        self.eye_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.pupil_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.undershirt_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.shirt_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.trouser_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.shoe_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
         self.swinging: bool = False
         self.flip: bool = False
         self.moving_left: bool = False
         self.moving_right: bool = False
         self.moving_down: bool = False
+        self.body_animation_speed = 0.05
+        self.arm_animation_speed = 0.1
+
+        self.hair_frames: MovementFrames = MovementFrames(14, self.body_animation_speed)
+        self.head_frames: MovementFrames = MovementFrames(20, self.body_animation_speed)
+        self.eye_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
+        self.pupil_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
+        self.undershirt_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
+        self.shirt_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
+        self.trouser_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.shoe_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
 
         self.sex = sex
         self.hair_id = hair_id
@@ -176,6 +177,20 @@ class Model:
 
     def get_flip(self) -> bool:
         return True if self.get_movement() == Movement.LEFT else False if self.get_movement() == Movement.RIGHT else self.flip
+
+    def set_body_animation_speed(self, speed: float) -> None:
+        self.hair_frames.animation_speed = speed
+        self.head_frames.animation_speed = speed
+        self.eye_frames.animation_speed = speed
+        self.pupil_frames.animation_speed = speed
+        self.undershirt_frames.animation_speed = speed
+        self.shirt_frames.animation_speed = speed
+        self.trouser_frames.animation_speed = speed
+        self.shoe_frames.animation_speed = speed
+    
+    def set_arm_animation_speed(self, speed: float) -> None:
+        self.arm_frames.animation_speed = speed
+        self.sleeve_frames.animation_speed = speed
 
     def walk(self) -> None:
         self.flip = self.get_flip()
@@ -1958,6 +1973,10 @@ class Player:
                     item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
                 else:
                     item = commons.item_holding
+                if item is not None and item.has_tag(ItemTag.WEAPON):
+                    self.sprites.set_arm_animation_speed(item.get_attack_speed() * 0.002141)
+                else:
+                    self.sprites.set_arm_animation_speed(self.sprites.arm_animation_speed)
 
                 if item is not None and item.has_tag(ItemTag.WEAPON):
                     assert self.current_item_swing_image is not None
