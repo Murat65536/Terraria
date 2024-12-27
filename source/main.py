@@ -5,8 +5,10 @@ import random
 import _thread
 import datetime
 import pygame.locals
-from typing import List, Any, TypedDict
+from typing import List, Any
 import commons
+
+from background import BACKGROUND_DATA
 import shared_methods
 import entity_manager
 import world
@@ -20,7 +22,6 @@ import sound_manager
 pygame.mixer.pre_init(48000, -16, 2, 1024)
 pygame.init()
 pygame.mixer.init()
-
 
 """=================================================================================================================
     move_parallax -> void
@@ -954,59 +955,17 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
-    menu_background_speed = 0
-    for background in range(len(menu_backgrounds[menu_background_number])):
-        menu_background_width = menu_surfaces[background][
-            int(
-                menu_backgrounds[menu_background_number][background]["frame"]
-                / menu_backgrounds[menu_background_number][background]["delay"]
-            )
-        ].get_width()
-        menu_background_height = menu_surfaces[background][
-            int(
-                menu_backgrounds[menu_background_number][background]["frame"]
-                / menu_backgrounds[menu_background_number][background]["delay"]
-            )
-        ].get_height()
-        menu_background_speed += 8 / len(menu_backgrounds[menu_background_number])
-        if (
-            menu_background_width
-            - menu_backgrounds[menu_background_number][background]["position"]
-            * menu_background_speed
-            < 0
-        ):
-            menu_backgrounds[menu_background_number][background]["position"] = 0
-        for x in range(math.ceil(commons.WINDOW_WIDTH * 2 / menu_background_width + 1)):
+    for background in BACKGROUND_DATA:
+        for tile in range(math.ceil(commons.WINDOW_WIDTH * 2 / background.get_width())):
             commons.screen.blit(
-                menu_surfaces[background][
-                    int(
-                        menu_backgrounds[menu_background_number][background]["frame"]
-                        / menu_backgrounds[menu_background_number][background]["delay"]
-                    )
-                ],
+                background.get_surface(),
                 (
-                    x * menu_background_width
-                    - menu_backgrounds[menu_background_number][background]["position"]
-                    * menu_background_speed,
-                    commons.WINDOW_HEIGHT
-                    - menu_background_height
-                    + menu_backgrounds[menu_background_number][background]["offset"],
-                ),
+                    tile * background.get_width() - background.position,
+                    commons.WINDOW_HEIGHT - background.get_height() + background.offset,
+                )
             )
-        if (
-            len(menu_backgrounds[menu_background_number][background]["image"]) - 1
-        ) * menu_backgrounds[menu_background_number][background][
-            "delay"
-        ] <= menu_backgrounds[
-            menu_background_number
-        ][
-            background
-        ][
-            "frame"
-        ]:
-            menu_backgrounds[menu_background_number][background]["frame"] = 0
-        else:
-            menu_backgrounds[menu_background_number][background]["frame"] += 1
+    BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
+    BACKGROUND_DATA.update(commons.DELTA_TIME)
 
 
 good_color: tuple[int, int, int] = (10, 230, 10)
@@ -1058,265 +1017,6 @@ light_max_x = 0
 light_min_y = 0
 light_max_y = 0
 global_lighting = 255
-
-
-class MenuImages(TypedDict):
-    image: list[str]
-    offset: int
-    frame: int
-    delay: int
-    position: float
-
-
-menu_backgrounds: list[list[MenuImages]] = [
-    [
-        {
-            "image": ["background_0.png"],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_1.png"],
-            "offset": 25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_2.png"],
-            "offset": 25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_3.png"],
-            "offset": -100,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_4.png"],
-            "offset": -50,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_5.png"],
-            "offset": 175,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-    ],
-    [
-        {
-            "image": ["background_0.png"],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_1.png"],
-            "offset": -50,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_2.png"],
-            "offset": -25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_3.png"],
-            "offset": 25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_4.png"],
-            "offset": 100,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_5.png"],
-            "offset": 175,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-    ],
-    [
-        {
-            "image": ["background_0.png"],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_1.png"],
-            "offset": -50,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_2.png"],
-            "offset": -25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_3.png"],
-            "offset": 25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_4.png"],
-            "offset": 100,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_5.png"],
-            "offset": 175,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-    ],
-    [
-        {
-            "image": [
-                "background_0.png",
-            ],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": [
-                "background_1.png",
-            ],
-            "offset": -25,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": [
-                "background_2.png",
-            ],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": [
-                "background_3.png",
-            ],
-            "offset": 75,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": [
-                "background_4.png",
-            ],
-            "offset": 350,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-    ],
-    [
-        {
-            "image": ["background_0.png"],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_1.png", "background_2.png", "background_3.png"],
-            "offset": 100,
-            "frame": 0,
-            "delay": 20,
-            "position": 0,
-        },
-        {
-            "image": ["background_4.png", "background_5.png", "background_6.png"],
-            "offset": 225,
-            "frame": 0,
-            "delay": 20,
-            "position": 0,
-        },
-    ],
-    [
-        {
-            "image": ["background_0.png"],
-            "offset": 0,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-        {
-            "image": ["background_1.png", "background_2.png", "background_3.png"],
-            "offset": 100,
-            "frame": 0,
-            "delay": 20,
-            "position": 0,
-        },
-        {
-            "image": ["background_4.png", "background_5.png", "background_6.png"],
-            "offset": 225,
-            "frame": 0,
-            "delay": 20,
-            "position": 0,
-        },
-        {
-            "image": ["background_5.png"],
-            "offset": 200,
-            "frame": 0,
-            "delay": 1,
-            "position": 0,
-        },
-    ],
-]
-
-menu_background_number = random.randint(0, len(menu_backgrounds) - 1)
-menu_background_directory = (
-    f"assets/images/backgrounds/menu_backgrounds/background_{menu_background_number}"
-)
-menu_surfaces: list[list[pygame.Surface]] = []
-for background in menu_backgrounds[menu_background_number]:
-    animation: list[pygame.Surface] = []
-    for path in background["image"]:
-        menu_background_image = pygame.image.load(
-            f"{menu_background_directory}/{path}"
-        ).convert_alpha()
-        animation.append(menu_background_image)
-        background["position"] = random.randint(0, menu_background_image.get_width())
-    menu_surfaces.append(animation)
 
 
 LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
@@ -1629,8 +1329,6 @@ while True:
 
     elif commons.game_state == "MAIN_MENU":
         draw_menu_background()
-        for background in menu_backgrounds[menu_background_number]:
-            background["position"] += 10 * commons.DELTA_TIME
         menu_manager.update_menu_buttons()
         menu_manager.draw_menu_buttons()
         if commons.game_sub_state == "MAIN":

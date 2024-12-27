@@ -2030,10 +2030,7 @@ class Player:
                                 else:
                                     direction = 1
                                 damage = item.get_attack_damage()
-                                if random.random() <= item.get_crit_chance():
-                                    crit = True
-                                else:
-                                    crit = False
+                                crit = random.random() <= item.get_crit_chance()
 
                                 to_enemy = shared_methods.normalize_vec_2(
                                     (

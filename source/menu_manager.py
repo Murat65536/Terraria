@@ -20,31 +20,31 @@ import shared_methods
 
 
 class Type(Enum):
-    TEXT = (1,)
+    TEXT = 1
     BUTTON = 2
 
 
 class TitleScreenButtons(Enum):
-    SINGLE_PLAYER = (1,)
-    CREDITS = (2,)
-    CHANGES = (3,)
-    SETTINGS = (4,)
+    SINGLE_PLAYER = 1
+    CREDITS = 2
+    CHANGES = 3
+    SETTINGS = 4
     EXIT = 5
 
 
 class PlayerSelectionButtons(Enum):
-    NEW_PLAYER = (1,)
+    NEW_PLAYER = 1
     BACK = 2
 
 
 class PlayerCreationButtons(Enum):
-    HAIR_TYPE = (1,)
-    HAIR_COLOR = (2,)
-    EYE_COLOR = (3,)
-    SKIN_COLOR = (4,)
-    CLOTHES = (5,)
-    CREATE = (6,)
-    RANDOMIZE = (7,)
+    HAIR_TYPE = 1
+    HAIR_COLOR = 2
+    EYE_COLOR = 3
+    SKIN_COLOR = 4
+    CLOTHES = 5
+    CREATE = 6
+    RANDOMIZE = 7
     BACK = 8
 
 
@@ -53,33 +53,33 @@ class ColorPickerButtons(Enum):
 
 
 class ClothesButtons(Enum):
-    SHIRT_COLOR = (1,)
-    UNDERSHIRT_COLOR = (2,)
-    TROUSER_COLOR = (3,)
-    SHOE_COLOR = (4,)
+    SHIRT_COLOR = 1
+    UNDERSHIRT_COLOR = 2
+    TROUSER_COLOR = 3
+    SHOE_COLOR = 4
     BACK = 5
 
 
 class PlayerNamingButtons(Enum):
-    SET_NAME = (1,)
+    SET_NAME = 1
     BACK = 2
 
 
 class WorldSelectionButtons(Enum):
-    NEW_WORLD = (1,)
+    NEW_WORLD = 1
     BACK = 2
 
 
 class WorldCreationButtons(Enum):
-    TINY = (1,)
-    SMALL = (2,)
-    MEDIUM = (3,)
-    LARGE = (4,)
+    TINY = 1
+    SMALL = 2
+    MEDIUM = 3
+    LARGE = 4
     BACK = 5
 
 
 class WorldNamingButtons(Enum):
-    SET_NAME = (1,)
+    SET_NAME = 1
     BACK = 2
 
 
@@ -88,8 +88,8 @@ class CreditsButton(Enum):
 
 
 class ChangesButtons(Enum):
-    GITHUB = (1,)
-    TRELLO = (2,)
+    GITHUB = 1
+    TRELLO = 2
     BACK = 3
 
 
@@ -709,7 +709,7 @@ def load_menu_world_data():
     possible_loads = os.listdir(path)  # Get filenames
     commons.WORLD_SAVE_OPTIONS = []
     for i in range(len(possible_loads)):
-        if possible_loads[i][-3:] == "dat":  # if it's a dat file
+        if os.path.splitext(possible_loads[i])[1] == ".dat":  # if it's a dat file
             world.load(possible_loads[i][:-4], load_all=False)
 
             world_data_surf = pygame.Surface((315, 60))
