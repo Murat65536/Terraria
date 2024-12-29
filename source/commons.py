@@ -163,14 +163,4 @@ DELTA_TIME: int = 0
 
 CURRENT_SKY_LIGHTING: int = 255
 
-GAME_BACKGROUND: pygame.Surface = pygame.Surface(
-    (WINDOW_WIDTH + 2048, WINDOW_HEIGHT + 838)
-)
-GAME_BACKGROUND.blit(
-    pygame.image.load(
-        "assets/images/backgrounds/game_backgrounds/forest_background.png"
-    ),
-    (0, 0),
-)
-
 WORLD_SAVE_OPTIONS: list[tuple[str, pygame.Surface]] = []

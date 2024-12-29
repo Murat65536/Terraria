@@ -955,16 +955,8 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
-    BACKGROUND_DATA.biome = Biome.FOREST
-    for background in BACKGROUND_DATA:
-        for tile in range(math.ceil(commons.WINDOW_WIDTH * 2 / background.get_width())):
-            commons.screen.blit(
-                background.get_surface(),
-                (
-                    tile * background.get_width() - background.position,
-                    commons.WINDOW_HEIGHT - background.get_height() + background.offset,
-                )
-            )
+    BACKGROUND_DATA.update_biome(Biome.FOREST)
+    BACKGROUND_DATA.render()
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
 
@@ -1222,17 +1214,9 @@ while True:
                 commons.WAIT_TO_USE = True
 
         if commons.BACKGROUND:
-            if fade_back:
-                if fade_float < 1.0:
-                    fade_surf = commons.GAME_BACKGROUND.copy()
-                    fade_surf.set_alpha(int(fade_float * 255))
-                    fade_float += commons.DELTA_TIME
-                else:
-                    fade_back = False
-                    background_id = int(fade_background_id)
-            commons.screen.blit(commons.GAME_BACKGROUND, parallax_pos)
-            if fade_back:
-                commons.screen.blit(fade_surf, parallax_pos)
+            BACKGROUND_DATA.update_biome(Biome.FOREST)
+            BACKGROUND_DATA.render(parallax_pos[0], parallax_pos[1], 0.1)
+            BACKGROUND_DATA.update(commons.DELTA_TIME)
         else:
             commons.screen.fill((153, 217, 234))
 

@@ -536,7 +536,7 @@ def blit_generation_stage(string):
                     commons.WINDOW_HEIGHT - background.get_height() + background.offset,
                 )
             )
-    BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
+    BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
     text1 = shared_methods.outline_text(
         "Generating " + WORLD_NAME, (255, 255, 255), commons.EXTRA_LARGE_FONT
