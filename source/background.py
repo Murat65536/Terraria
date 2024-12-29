@@ -4,8 +4,10 @@ from pygame import Surface
 from random import randint
 from enum import Enum
 
+
 class Biome(Enum):
     FOREST = 1
+
 
 class Background:
     def __init__(
@@ -48,7 +50,9 @@ class Background:
 
 
 class BackgroundData:
-    def __init__(self, parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]]) -> None:
+    def __init__(
+        self, parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]]
+    ) -> None:
         self.parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]] = parallaxes
         self.biome: Biome = tuple(self.parallaxes.keys())[0]
         self.selected: int = randint(0, len(self.parallaxes[self.biome]) - 1)
@@ -71,238 +75,237 @@ class BackgroundData:
 
 BACKGROUND_DATA: BackgroundData = BackgroundData(
     {
-        Biome.FOREST:
-    (
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_0.png",
+        Biome.FOREST: (
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_1.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_1.png",
+                    ),
+                    25,
+                    0,
                 ),
-                25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_2.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_2.png",
+                    ),
+                    25,
+                    0,
                 ),
-                25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_3.png",
+                    ),
+                    -100,
+                    0,
                 ),
-                -100,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_4.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_4.png",
+                    ),
+                    -50,
+                    0,
                 ),
-                -50,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_0/background_5.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_0/background_5.png",
+                    ),
+                    175,
+                    0,
                 ),
-                175,
-                0,
             ),
-        ),
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_0.png",
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_1.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_1.png",
+                    ),
+                    -50,
+                    0,
                 ),
-                -50,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_2.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_2.png",
+                    ),
+                    -25,
+                    0,
                 ),
-                -25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_3.png",
+                    ),
+                    25,
+                    0,
                 ),
-                25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_4.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_4.png",
+                    ),
+                    100,
+                    0,
                 ),
-                100,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_1/background_5.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_1/background_5.png",
+                    ),
+                    175,
+                    0,
                 ),
-                175,
-                0,
             ),
-        ),
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_0.png",
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_1.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_1.png",
+                    ),
+                    -50,
+                    0,
                 ),
-                -50,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_2.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_2.png",
+                    ),
+                    -25,
+                    0,
                 ),
-                -25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_3.png",
+                    ),
+                    25,
+                    0,
                 ),
-                25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_4.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_4.png",
+                    ),
+                    100,
+                    0,
                 ),
-                100,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_2/background_5.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_2/background_5.png",
+                    ),
+                    175,
+                    0,
                 ),
-                175,
-                0,
             ),
-        ),
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_3/background_0.png",
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_3/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_3/background_1.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_3/background_1.png",
+                    ),
+                    -25,
+                    0,
                 ),
-                -25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_3/background_2.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_3/background_2.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_3/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_3/background_3.png",
+                    ),
+                    75,
+                    0,
                 ),
-                75,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_3/background_4.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_3/background_4.png",
+                    ),
+                    350,
+                    0,
                 ),
-                350,
-                0,
             ),
-        ),
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_4/background_0.png",
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_4/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_4/background_1.png",
-                    "assets/images/backgrounds/backgrounds/background_4/background_2.png",
-                    "assets/images/backgrounds/backgrounds/background_4/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_4/background_1.png",
+                        "assets/images/backgrounds/backgrounds/background_4/background_2.png",
+                        "assets/images/backgrounds/backgrounds/background_4/background_3.png",
+                    ),
+                    100,
+                    0.5,
                 ),
-                100,
-                0.5,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_4/background_4.png",
-                    "assets/images/backgrounds/backgrounds/background_4/background_5.png",
-                    "assets/images/backgrounds/backgrounds/background_4/background_6.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_4/background_4.png",
+                        "assets/images/backgrounds/backgrounds/background_4/background_5.png",
+                        "assets/images/backgrounds/backgrounds/background_4/background_6.png",
+                    ),
+                    225,
+                    0.5,
                 ),
-                225,
-                0.5,
             ),
-        ),
-        (
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_5/background_0.png",
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_5/background_0.png",
+                    ),
+                    0,
+                    0,
                 ),
-                0,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_5/background_1.png",
-                    "assets/images/backgrounds/backgrounds/background_5/background_2.png",
-                    "assets/images/backgrounds/backgrounds/background_5/background_3.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_5/background_1.png",
+                        "assets/images/backgrounds/backgrounds/background_5/background_2.png",
+                        "assets/images/backgrounds/backgrounds/background_5/background_3.png",
+                    ),
+                    100,
+                    0.5,
                 ),
-                100,
-                0.5,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_5/background_4.png",
-                    "assets/images/backgrounds/backgrounds/background_5/background_5.png",
-                    "assets/images/backgrounds/backgrounds/background_5/background_6.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_5/background_4.png",
+                        "assets/images/backgrounds/backgrounds/background_5/background_5.png",
+                        "assets/images/backgrounds/backgrounds/background_5/background_6.png",
+                    ),
+                    225,
+                    0.5,
                 ),
-                225,
-                0.5,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/backgrounds/background_5/background_7.png",
+                Background(
+                    (
+                        "assets/images/backgrounds/backgrounds/background_5/background_7.png",
+                    ),
+                    200,
+                    0,
                 ),
-                200,
-                0,
             ),
-        ),
-    )
+        )
     }
 )
