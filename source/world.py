@@ -15,6 +15,7 @@ from commons import TileTag, TileMaskType
 from game_data import get_item_id_by_id_str, find_structures_for_connection
 
 from datetime import datetime
+from background import BACKGROUND_DATA
 
 WORLD_SIZE_X = 0
 WORLD_SIZE_Y = 0
@@ -526,7 +527,17 @@ def get_mask_index_from_pos(i, j, tile_id):
 
 
 def blit_generation_stage(string):
-    commons.screen.blit(commons.GAME_BACKGROUND, (0, 0))
+    for background in BACKGROUND_DATA:
+        for tile in range(math.ceil(commons.WINDOW_WIDTH * 2 / background.get_width())):
+            commons.screen.blit(
+                background.get_surface(),
+                (
+                    tile * background.get_width() - background.position,
+                    commons.WINDOW_HEIGHT - background.get_height() + background.offset,
+                )
+            )
+    BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
+    BACKGROUND_DATA.update(commons.DELTA_TIME)
     text1 = shared_methods.outline_text(
         "Generating " + WORLD_NAME, (255, 255, 255), commons.EXTRA_LARGE_FONT
     )

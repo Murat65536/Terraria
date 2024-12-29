@@ -2,7 +2,10 @@ from typing import Generator
 from pygame.image import load
 from pygame import Surface
 from random import randint
+from enum import Enum
 
+class Biome(Enum):
+    FOREST = 1
 
 class Background:
     def __init__(
@@ -45,17 +48,17 @@ class Background:
 
 
 class BackgroundData:
-    def __init__(self, **parallaxes: tuple[tuple[Background, ...], ...]) -> None:
-        self.parallaxes: dict[str, tuple[tuple[Background, ...], ...]] = parallaxes
-        self.background_type: str = tuple(self.parallaxes.keys())[0]
-        self.selected: int = randint(0, len(self.parallaxes[self.background_type]) - 1)
+    def __init__(self, parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]]) -> None:
+        self.parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]] = parallaxes
+        self.biome: Biome = tuple(self.parallaxes.keys())[0]
+        self.selected: int = randint(0, len(self.parallaxes[self.biome]) - 1)
 
     def __iter__(self) -> Generator[Background, None, None]:
-        for parallax in self.parallaxes[self.background_type][self.selected]:
+        for parallax in self.parallaxes[self.biome][self.selected]:
             yield parallax
 
     def randomize_selected(self) -> None:
-        self.selected = randint(0, len(self.parallaxes[self.background_type]) - 1)
+        self.selected = randint(0, len(self.parallaxes[self.biome]) - 1)
 
     def update(self, interval: float) -> None:
         for background in self:
@@ -67,46 +70,48 @@ class BackgroundData:
 
 
 BACKGROUND_DATA: BackgroundData = BackgroundData(
-    forest=(
+    {
+        Biome.FOREST:
+    (
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_0/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_1.png",
-                ),
-                25,
-                0,
-            ),
-            Background(
-                (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_0/background_1.png",
                 ),
                 25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_0/background_2.png",
+                ),
+                25,
+                0,
+            ),
+            Background(
+                (
+                    "assets/images/backgrounds/backgrounds/background_0/background_3.png",
                 ),
                 -100,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_0/background_4.png",
                 ),
                 -50,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_0/background_5.png",
+                    "assets/images/backgrounds/backgrounds/background_0/background_5.png",
                 ),
                 175,
                 0,
@@ -115,42 +120,42 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_1.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_1.png",
                 ),
                 -50,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_2.png",
                 ),
                 -25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_3.png",
                 ),
                 25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_4.png",
                 ),
                 100,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_1/background_5.png",
+                    "assets/images/backgrounds/backgrounds/background_1/background_5.png",
                 ),
                 175,
                 0,
@@ -159,42 +164,42 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_1.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_1.png",
                 ),
                 -50,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_2.png",
                 ),
                 -25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_3.png",
                 ),
                 25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_4.png",
                 ),
                 100,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_2/background_5.png",
+                    "assets/images/backgrounds/backgrounds/background_2/background_5.png",
                 ),
                 175,
                 0,
@@ -203,35 +208,35 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_3/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_3/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_3/background_1.png",
+                    "assets/images/backgrounds/backgrounds/background_3/background_1.png",
                 ),
                 -25,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_3/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_3/background_2.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_3/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_3/background_3.png",
                 ),
                 75,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_3/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_3/background_4.png",
                 ),
                 350,
                 0,
@@ -240,25 +245,25 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_1.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_2.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_1.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_3.png",
                 ),
                 100,
                 0.5,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_4.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_5.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_4/background_6.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_5.png",
+                    "assets/images/backgrounds/backgrounds/background_4/background_6.png",
                 ),
                 225,
                 0.5,
@@ -267,36 +272,37 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
         (
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_0.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_0.png",
                 ),
                 0,
                 0,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_1.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_2.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_3.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_1.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_2.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_3.png",
                 ),
                 100,
                 0.5,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_4.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_5.png",
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_6.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_4.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_5.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_6.png",
                 ),
                 225,
                 0.5,
             ),
             Background(
                 (
-                    "assets/images/backgrounds/menu_backgrounds/background_5/background_7.png",
+                    "assets/images/backgrounds/backgrounds/background_5/background_7.png",
                 ),
                 200,
                 0,
             ),
         ),
     )
+    }
 )

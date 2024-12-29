@@ -8,7 +8,7 @@ import pygame.locals
 from typing import List, Any
 import commons
 
-from background import BACKGROUND_DATA
+from background import BACKGROUND_DATA, Biome
 import shared_methods
 import entity_manager
 import world
@@ -955,7 +955,7 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
-    BACKGROUND_DATA.background_type = "forest"
+    BACKGROUND_DATA.biome = Biome.FOREST
     for background in BACKGROUND_DATA:
         for tile in range(math.ceil(commons.WINDOW_WIDTH * 2 / background.get_width())):
             commons.screen.blit(
