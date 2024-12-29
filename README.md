@@ -4,10 +4,16 @@
 <table>
     <tr>
         <td>
-            <img src="/assets/images/readme/menu_screen.png?raw=true" />
+            <picture>
+                <source srcset="/assets/images/readme/menu_screen.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
+                <img src="/assets/images/readme/menu_screen.png?raw=true" />
+            </picture>
         </td>
         <td>
-            <img src="/assets/images/readme/gameplay.png?raw=true" />
+            <picture>
+                <source srcset="/assets/images/readme/gameplay.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
+                <img src="/assets/images/readme/gameplay.png?raw=true" />
+            </picture>
         </td>
     </tr>
 </table>
