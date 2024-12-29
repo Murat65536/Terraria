@@ -955,6 +955,7 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
+    BACKGROUND_DATA.background_type = "forest"
     for background in BACKGROUND_DATA:
         for tile in range(math.ceil(commons.WINDOW_WIDTH * 2 / background.get_width())):
             commons.screen.blit(
