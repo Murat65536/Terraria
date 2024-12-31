@@ -461,7 +461,7 @@ ITEM_DATA: list[
         "max_stack": 999,
         "buy_price": 5,
         "sell_price": 0,
-        "tile_id_str": "tile.none",
+        "tile_id_str": "tile.ice",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
