@@ -37,7 +37,6 @@ def get_death_message(name, source):
 class Movement(Enum):
     LEFT = 0
     RIGHT = 1
-    DOWN = 2
     IDLE = 3
 
 class MovementFrames:
@@ -127,8 +126,8 @@ class Model:
         self.moving_left: bool = False
         self.moving_right: bool = False
         self.moving_down: bool = False
-        self.body_animation_speed = 0.05
-        self.arm_animation_speed = 0.1
+        self.body_animation_speed: float = 0.05
+        self.arm_animation_speed: float = 0.1
 
         self.hair_frames: MovementFrames = MovementFrames(14, self.body_animation_speed)
         self.head_frames: MovementFrames = MovementFrames(20, self.body_animation_speed)
@@ -283,12 +282,7 @@ class Player:
         self.block_position = (0, 0)
         self.model = model
         self.name = name
-
-        # Set hp bits
-        if hp == 0:
-            self.hp = max_hp
-        else:
-            self.hp = hp
+        self.hp = hp if hp > 0 else max_hp
         self.max_hp = max_hp
 
         self.items = {
@@ -297,33 +291,11 @@ class Player:
             ItemLocation.CHEST: [None for _ in range(20)],
             ItemLocation.CRAFTING_MENU: [],
         }
-
-        # Set hotbar info
-        if hotbar is None:
-            self.items[ItemLocation.HOTBAR] = [
-                Item(
-                    game_data.get_item_id_by_id_str("item.copper_pickaxe"),
-                    auto_assign_prefix=False,
-                ),
-                Item(game_data.get_item_id_by_id_str("item.stone_block"), amount=100),
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-                None,
-            ]
-        else:
-            self.items[ItemLocation.HOTBAR] = hotbar
+        
+        self.items[ItemLocation.HOTBAR] = hotbar
         self.hotbar_index = 0
 
-        # Inventory    setup
-        if inventory is None:
-            self.items[ItemLocation.INVENTORY] = [None for _ in range(40)]
-        else:
-            self.items[ItemLocation.INVENTORY] = inventory
+        self.items[ItemLocation.INVENTORY] = inventory
 
         # Save stats
         self.playtime = playtime
@@ -349,14 +321,6 @@ class Player:
         self.velocity = (0, 0)
 
         self.sprites = Model(*self.model)
-
-        self.animation_tick = 0
-        self.animation_frame = 0
-        self.animation_speed = 0.05
-
-        self.arm_animation_frame = 0
-        self.arm_animation_tick = 0
-        self.arm_animation_speed = 0.25
 
         self.alive = True
         self.respawn_tick = 0
@@ -446,7 +410,7 @@ class Player:
     """=================================================================================================================    
         player.Player.update -> void
         
-        Updates    many variables within the player object
+        Updates many variables within the player object
     -----------------------------------------------------------------------------------------------------------------"""
 
     def update(self):
@@ -459,13 +423,13 @@ class Player:
 
             if self.sprites.get_movement() == Movement.LEFT:
                 if not self.stop_left:
-                    if self.sprites.get_movement() == Movement.DOWN:
+                    if self.sprites.moving_down:
                         self.velocity = (-5, self.velocity[1])
                     else:
                         self.velocity = (-12, self.velocity[1])
             elif self.sprites.get_movement() == Movement.RIGHT:
                 if not self.stop_right:
-                    if self.sprites.get_movement() == Movement.DOWN:
+                    if self.sprites.moving_down:
                         self.velocity = (5, self.velocity[1])
                     else:
                         self.velocity = (12, self.velocity[1])
@@ -668,7 +632,7 @@ class Player:
                                                     self.rect.height,
                                                 ).colliderect(block_rect):
                                                     if is_platform:
-                                                        if self.sprites.get_movement() == Movement.DOWN:
+                                                        if self.sprites.moving_down:
                                                             collide = False
                                                         else:
                                                             if self.velocity[1] < 5:
@@ -970,7 +934,7 @@ class Player:
     """=================================================================================================================    
         player.Player.animate -> void
         
-        Primarily updates the player's animation_frame and arm_animation_frame
+        Updates the player
     -----------------------------------------------------------------------------------------------------------------"""
 
     def animate(self):
