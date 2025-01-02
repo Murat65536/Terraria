@@ -88,7 +88,7 @@ for item in CONFIG_DATA:
     configData.append(item[1][:-1])
 WINDOW_WIDTH: int = int(configData[0].split(",")[0])
 WINDOW_HEIGHT: int = int(configData[0].split(",")[1])
-GRAVITY: float = 9.8 * BLOCK_SIZE * 0.666 * float(configData[1])  # 3 tiles = 1 metre
+GRAVITY: float = 9.8 * BLOCK_SIZE * 0.666 * float(configData[1])  # 3 tiles = 1 meter
 RUN_FULLSCREEN: bool = bool(int(configData[2]))
 PARTICLES: bool = bool(int(configData[3]))
 PARTICLE_DENSITY: float = float(configData[4])

@@ -177,6 +177,12 @@ class Model:
     def get_flip(self) -> bool:
         return True if self.get_movement() == Movement.LEFT else False if self.get_movement() == Movement.RIGHT else self.flip
 
+    def get_swing_frame(self) -> int:
+        if not self.flip:
+            return min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        else:
+            return min(range(len(self.swing_radians)), key=lambda x: abs(-self.swing_radians[x] - self.arm_radians))
+
     def set_body_animation_speed(self, speed: float) -> None:
         self.hair_frames.animation_speed = speed
         self.head_frames.animation_speed = speed
@@ -193,7 +199,7 @@ class Model:
 
     def walk(self) -> None:
         self.flip = self.get_flip()
-        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        swing_frame: int = self.get_swing_frame()
         self.hair_frames.walk(self.swinging, swing_frame)
         self.head_frames.walk(self.swinging, swing_frame)
         self.eye_frames.walk(self.swinging, swing_frame)
@@ -207,7 +213,7 @@ class Model:
 
     def jump(self) -> None:
         self.flip = self.get_flip()
-        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        swing_frame: int = self.get_swing_frame()
         self.hair_frames.jump(self.swinging, swing_frame)
         self.head_frames.jump(self.swinging, swing_frame)
         self.eye_frames.jump(self.swinging, swing_frame)
@@ -221,7 +227,7 @@ class Model:
 
     def hold(self) -> None:
         self.flip = self.get_flip()
-        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        swing_frame: int = self.get_swing_frame()
         self.hair_frames.hold(self.swinging, swing_frame)
         self.head_frames.hold(self.swinging, swing_frame)
         self.eye_frames.hold(self.swinging, swing_frame)
@@ -235,7 +241,7 @@ class Model:
 
     def idle(self) -> None:
         self.flip = self.get_flip()
-        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        swing_frame: int = self.get_swing_frame()
         self.hair_frames.idle(self.swinging, swing_frame)
         self.head_frames.idle(self.swinging, swing_frame)
         self.eye_frames.idle(self.swinging, swing_frame)
