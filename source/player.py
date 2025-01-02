@@ -179,9 +179,9 @@ class Model:
 
     def get_swing_frame(self) -> int:
         if not self.flip:
-            return min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+            return min(range(len(self.swing_radians)), key=lambda index: abs(self.swing_radians[index] - self.arm_radians))
         else:
-            return min(range(len(self.swing_radians)), key=lambda x: abs(-self.swing_radians[x] - self.arm_radians))
+            return min(range(len(self.swing_radians)), key=lambda index: abs(-self.swing_radians[index] - self.arm_radians))
 
     def set_body_animation_speed(self, speed: float) -> None:
         self.hair_frames.animation_speed = speed
