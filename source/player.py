@@ -50,9 +50,10 @@ class MovementFrames:
         self.idle_frame = idle_frame
         self.animation_speed = animation_speed
         self.animation_tick = 0
-    def walk(self, swinging: bool) -> None:
+
+    def walk(self, swinging: bool, swing_frame: int) -> None:
         if swinging and self.swing_range is not None:
-            self.swing()
+            self.swing(swing_frame)
         else:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
@@ -60,19 +61,14 @@ class MovementFrames:
                     self.current_frame = self.current_frame + 1 if self.walk_range[0] <= self.current_frame < self.walk_range[1] else self.walk_range[0]
             else:
                 self.animation_tick -= commons.DELTA_TIME
-    def swing(self) -> None:
-        if self.animation_tick <= 0:
-            self.animation_tick += self.animation_speed
-            if self.swing_range is not None:
-                self.current_frame += 1
-                if self.current_frame > self.swing_range[1] + 1:
-                    self.current_frame = self.swing_range[0]
-                    self.idle(False)
-        else:
-            self.animation_tick -= commons.DELTA_TIME
-    def jump(self, swinging: bool) -> None:
+
+    def swing(self, frame: int) -> None:
+        if self.swing_range is not None:
+            self.current_frame = min(self.swing_range[0] + frame, self.swing_range[1])
+
+    def jump(self, swinging: bool, swing_frame: int) -> None:
         if swinging and self.swing_range is not None:
-            self.swing()
+            self.swing(swing_frame)
         else:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
@@ -80,9 +76,10 @@ class MovementFrames:
                     self.current_frame = self.jump_frame
             else:
                 self.animation_tick -= commons.DELTA_TIME
-    def hold(self, swinging: bool) -> None:
+
+    def hold(self, swinging: bool, swing_frame: int) -> None:
         if swinging and self.swing_range is not None:
-            self.swing()
+            self.swing(swing_frame)
         else:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
@@ -90,9 +87,10 @@ class MovementFrames:
                     self.current_frame = self.hold_frame
             else:
                 self.animation_tick -= commons.DELTA_TIME
-    def idle(self, swinging: bool) -> None:
+
+    def idle(self, swinging: bool, swing_frame: int) -> None:
         if swinging and self.swing_range is not None:
-            self.swing()
+            self.swing(swing_frame)
         else:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
@@ -128,6 +126,8 @@ class Model:
         self.moving_down: bool = False
         self.body_animation_speed: float = 0.05
         self.arm_animation_speed: float = 0.1
+        self.arm_radians: float = 0
+        self.swing_radians: tuple[float, ...] = (math.radians(-130), math.radians(-85), math.radians(-40), math.radians(5), math.radians(50))
 
         self.hair_frames: MovementFrames = MovementFrames(14, self.body_animation_speed)
         self.head_frames: MovementFrames = MovementFrames(20, self.body_animation_speed)
@@ -137,8 +137,8 @@ class Model:
         self.shirt_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
         self.trouser_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
         self.shoe_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 3), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
 
         self.sex = sex
         self.hair_id = hair_id
@@ -193,68 +193,59 @@ class Model:
 
     def walk(self) -> None:
         self.flip = self.get_flip()
-        self.hair_frames.walk(self.swinging)
-        self.head_frames.walk(self.swinging)
-        self.eye_frames.walk(self.swinging)
-        self.pupil_frames.walk(self.swinging)
-        self.undershirt_frames.walk(self.swinging)
-        self.shirt_frames.walk(self.swinging)
-        self.trouser_frames.walk(self.swinging)
-        self.shoe_frames.walk(self.swinging)
-        self.arm_frames.walk(self.swinging)
-        self.sleeve_frames.walk(self.swinging)
-
-    def swing(self) -> None:
-        self.flip = self.get_flip()
-        self.hair_frames.swing()
-        self.head_frames.swing()
-        self.eye_frames.swing()
-        self.pupil_frames.swing()
-        self.undershirt_frames.swing()
-        self.shirt_frames.swing()
-        self.trouser_frames.swing()
-        self.shoe_frames.swing()
-        self.arm_frames.swing()
-        self.sleeve_frames.swing()
+        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        self.hair_frames.walk(self.swinging, swing_frame)
+        self.head_frames.walk(self.swinging, swing_frame)
+        self.eye_frames.walk(self.swinging, swing_frame)
+        self.pupil_frames.walk(self.swinging, swing_frame)
+        self.undershirt_frames.walk(self.swinging, swing_frame)
+        self.shirt_frames.walk(self.swinging, swing_frame)
+        self.trouser_frames.walk(self.swinging, swing_frame)
+        self.shoe_frames.walk(self.swinging, swing_frame)
+        self.arm_frames.walk(self.swinging, swing_frame)
+        self.sleeve_frames.walk(self.swinging, swing_frame)
 
     def jump(self) -> None:
         self.flip = self.get_flip()
-        self.hair_frames.jump(self.swinging)
-        self.head_frames.jump(self.swinging)
-        self.eye_frames.jump(self.swinging)
-        self.pupil_frames.jump(self.swinging)
-        self.undershirt_frames.jump(self.swinging)
-        self.shirt_frames.jump(self.swinging)
-        self.trouser_frames.jump(self.swinging)
-        self.shoe_frames.jump(self.swinging)
-        self.arm_frames.jump(self.swinging)
-        self.sleeve_frames.jump(self.swinging)
+        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        self.hair_frames.jump(self.swinging, swing_frame)
+        self.head_frames.jump(self.swinging, swing_frame)
+        self.eye_frames.jump(self.swinging, swing_frame)
+        self.pupil_frames.jump(self.swinging, swing_frame)
+        self.undershirt_frames.jump(self.swinging, swing_frame)
+        self.shirt_frames.jump(self.swinging, swing_frame)
+        self.trouser_frames.jump(self.swinging, swing_frame)
+        self.shoe_frames.jump(self.swinging, swing_frame)
+        self.arm_frames.jump(self.swinging, swing_frame)
+        self.sleeve_frames.jump(self.swinging, swing_frame)
 
     def hold(self) -> None:
         self.flip = self.get_flip()
-        self.hair_frames.hold(self.swinging)
-        self.head_frames.hold(self.swinging)
-        self.eye_frames.hold(self.swinging)
-        self.pupil_frames.hold(self.swinging)
-        self.undershirt_frames.hold(self.swinging)
-        self.shirt_frames.hold(self.swinging)
-        self.trouser_frames.hold(self.swinging)
-        self.shoe_frames.hold(self.swinging)
-        self.arm_frames.hold(self.swinging)
-        self.sleeve_frames.hold(self.swinging)
+        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        self.hair_frames.hold(self.swinging, swing_frame)
+        self.head_frames.hold(self.swinging, swing_frame)
+        self.eye_frames.hold(self.swinging, swing_frame)
+        self.pupil_frames.hold(self.swinging, swing_frame)
+        self.undershirt_frames.hold(self.swinging, swing_frame)
+        self.shirt_frames.hold(self.swinging, swing_frame)
+        self.trouser_frames.hold(self.swinging, swing_frame)
+        self.shoe_frames.hold(self.swinging, swing_frame)
+        self.arm_frames.hold(self.swinging, swing_frame)
+        self.sleeve_frames.hold(self.swinging, swing_frame)
 
     def idle(self) -> None:
         self.flip = self.get_flip()
-        self.hair_frames.idle(self.swinging)
-        self.head_frames.idle(self.swinging)
-        self.eye_frames.idle(self.swinging)
-        self.pupil_frames.idle(self.swinging)
-        self.undershirt_frames.idle(self.swinging)
-        self.shirt_frames.idle(self.swinging)
-        self.trouser_frames.idle(self.swinging)
-        self.shoe_frames.idle(self.swinging)
-        self.arm_frames.idle(self.swinging)
-        self.sleeve_frames.idle(self.swinging)
+        swing_frame: int = min(range(len(self.swing_radians)), key=lambda x: abs(self.swing_radians[x] - self.arm_radians))
+        self.hair_frames.idle(self.swinging, swing_frame)
+        self.head_frames.idle(self.swinging, swing_frame)
+        self.eye_frames.idle(self.swinging, swing_frame)
+        self.pupil_frames.idle(self.swinging, swing_frame)
+        self.undershirt_frames.idle(self.swinging, swing_frame)
+        self.shirt_frames.idle(self.swinging, swing_frame)
+        self.trouser_frames.idle(self.swinging, swing_frame)
+        self.shoe_frames.idle(self.swinging, swing_frame)
+        self.arm_frames.idle(self.swinging, swing_frame)
+        self.sleeve_frames.idle(self.swinging, swing_frame)
 
 
 """=================================================================================================================    
@@ -1938,7 +1929,7 @@ class Player:
                 else:
                     item = commons.item_holding
                 if item is not None and item.has_tag(ItemTag.WEAPON):
-                    self.sprites.set_arm_animation_speed(item.get_attack_speed() * 0.002141)
+                    self.sprites.set_arm_animation_speed(item.get_attack_speed() * 0.00185)
                 else:
                     self.sprites.set_arm_animation_speed(self.sprites.arm_animation_speed)
 
@@ -2062,6 +2053,7 @@ class Player:
                         - rotated_surface.get_height() * 0.5
                         + 2
                     )
+                    self.sprites.arm_radians = hand_angle_global_radians
                 # Looking left
                 else:
                     hand_angle_global_degrees = shared_methods.lerp_float(
@@ -2080,6 +2072,7 @@ class Player:
                         - rotated_surface.get_height() * 0.5
                         + 2
                     )
+                    self.sprites.arm_radians = hand_angle_global_radians
 
                 commons.screen.blit(
                     rotated_surface,
