@@ -31,10 +31,10 @@ class PhysicsItem:
         pickup_delay: int = 100,
     ):
 
-        self.item = item
+        self.item: Item = item
 
-        self.position = position
-        self.block_position = (0, 0)
+        self.position: tuple[float, float] = position
+        self.block_position: tuple[int, int] = (0, 0)
 
         if velocity == (0, 0):
             # angle = -random.random() * math.pi

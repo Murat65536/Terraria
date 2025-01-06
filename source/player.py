@@ -124,21 +124,19 @@ class Model:
         self.moving_left: bool = False
         self.moving_right: bool = False
         self.moving_down: bool = False
-        self.body_animation_speed: float = 0.05
-        self.arm_animation_speed: float = 0.1
         self.arm_radians: float = 0
         self.swing_radians: tuple[float, ...] = (math.radians(-130), math.radians(-85), math.radians(-40), math.radians(5), math.radians(50))
 
-        self.hair_frames: MovementFrames = MovementFrames(14, self.body_animation_speed)
-        self.head_frames: MovementFrames = MovementFrames(20, self.body_animation_speed)
-        self.eye_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
-        self.pupil_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
-        self.undershirt_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
-        self.shirt_frames: MovementFrames = MovementFrames(1, self.body_animation_speed)
-        self.trouser_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.shoe_frames: MovementFrames = MovementFrames(20, self.body_animation_speed, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames: MovementFrames = MovementFrames(28, self.arm_animation_speed, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.hair_frames: MovementFrames = MovementFrames(14, 0.05)
+        self.head_frames: MovementFrames = MovementFrames(20, 0.05)
+        self.eye_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.pupil_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.undershirt_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.shirt_frames: MovementFrames = MovementFrames(1, 0.05)
+        self.trouser_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.shoe_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
 
         self.sex = sex
         self.hair_id = hair_id
@@ -182,20 +180,6 @@ class Model:
             return min(range(len(self.swing_radians)), key=lambda index: abs(self.swing_radians[index] - self.arm_radians))
         else:
             return min(range(len(self.swing_radians)), key=lambda index: abs(-self.swing_radians[index] - self.arm_radians))
-
-    def set_body_animation_speed(self, speed: float) -> None:
-        self.hair_frames.animation_speed = speed
-        self.head_frames.animation_speed = speed
-        self.eye_frames.animation_speed = speed
-        self.pupil_frames.animation_speed = speed
-        self.undershirt_frames.animation_speed = speed
-        self.shirt_frames.animation_speed = speed
-        self.trouser_frames.animation_speed = speed
-        self.shoe_frames.animation_speed = speed
-    
-    def set_arm_animation_speed(self, speed: float) -> None:
-        self.arm_frames.animation_speed = speed
-        self.sleeve_frames.animation_speed = speed
 
     def walk(self) -> None:
         self.flip = self.get_flip()
@@ -1934,10 +1918,6 @@ class Player:
                     item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
                 else:
                     item = commons.item_holding
-                if item is not None and item.has_tag(ItemTag.WEAPON):
-                    self.sprites.set_arm_animation_speed(item.get_attack_speed() * 0.00185)
-                else:
-                    self.sprites.set_arm_animation_speed(self.sprites.arm_animation_speed)
 
                 if item is not None and item.has_tag(ItemTag.WEAPON):
                     assert self.current_item_swing_image is not None

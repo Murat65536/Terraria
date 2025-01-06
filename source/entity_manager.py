@@ -21,18 +21,32 @@ from color_picker import ColorPicker
 from item import Item
 
 
-class Messages(TypedDict):
+class Message(TypedDict):
     text: pygame.Surface
     lifespan: float
 
+class DamageNumber(TypedDict):
+    position: tuple[float, float]
+    rotation: tuple[float, float]
+    surface: pygame.Surface
+    lifespan: float
+
+
+class RecentPickup(TypedDict):
+    item_id: int
+    amount: int
+    surface: pygame.Surface
+    position: tuple[float, float]
+    velocity: tuple[float, float]
+    text_duration: float
 
 enemies: list[Enemy] = []
 particles: list[Particle] = []
 projectiles: list[Projectile] = []
 physics_items: list[PhysicsItem] = []
-messages: list[Messages] = []
-damage_numbers = []
-recent_pickups = []
+messages: list[Message] = []
+damage_numbers: list[DamageNumber] = []
+recent_pickups: list[RecentPickup] = []
 
 client_player = None
 client_prompt = None
@@ -60,8 +74,8 @@ def create_player():
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
     for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
-        loaded_item_data = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
-        item = Item(
+        loaded_item_data: tuple[int, str, int, str] = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
+        item: Item = Item(
             game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2]
         )
         item.assign_prefix(loaded_item_data[3])
@@ -245,60 +259,60 @@ def update_messages():
 
 
 def update_damage_numbers():
-    for damageNumber in damage_numbers:
-        damageNumber[1] = (damageNumber[1][0] * 0.95, damageNumber[1][1] * 0.95)
-        damageNumber[0] = (
-            damageNumber[0][0] + damageNumber[1][0] - camera_position_difference[0],
-            damageNumber[0][1] + damageNumber[1][1] - camera_position_difference[1],
+    for number in damage_numbers:
+        number["rotation"] = (number["rotation"][0] * 0.95, number["rotation"][1] * 0.95)
+        number["position"] = (
+            number["position"][0] + number["rotation"][0] - camera_position_difference[0],
+            number["position"][1] + number["rotation"][1] - camera_position_difference[1],
         )
-        damageNumber[3] -= commons.DELTA_TIME
-        if damageNumber[3] <= 0:
-            damage_numbers.remove(damageNumber)
+        number["lifespan"] -= commons.DELTA_TIME
+        if number["lifespan"] <= 0:
+            damage_numbers.remove(number)
 
 
 def update_recent_pickups():
     global recent_pickups
     to_remove = []
     for i in range(len(recent_pickups)):
-        recent_pickups[i][5] -= commons.DELTA_TIME
-        if recent_pickups[i][5] < 0.5:
-            recent_pickups[i][2].set_alpha(recent_pickups[i][5] * 510)
-            if recent_pickups[i][5] <= 0:
+        recent_pickups[i]["cooldown"] -= commons.DELTA_TIME
+        if recent_pickups[i]["cooldown"] < 0.5:
+            recent_pickups[i]["surface"].set_alpha(math.floor(recent_pickups[i]["cooldown"] * 510))
+            if recent_pickups[i]["cooldown"] <= 0:
                 to_remove.append(recent_pickups[i])
         for j in range(0, i):
             if i != j:
                 # Check if it is colliding with previous messages, if so, move up
                 if Rect(
-                    recent_pickups[i][3][0],
-                    recent_pickups[i][3][1],
-                    recent_pickups[i][2].get_width(),
-                    recent_pickups[i][2].get_height(),
+                    recent_pickups[i]["position"][0],
+                    recent_pickups[i]["position"][1],
+                    recent_pickups[i]["surface"].get_width(),
+                    recent_pickups[i]["surface"].get_height(),
                 ).colliderect(
                     Rect(
-                        recent_pickups[j][3][0],
-                        recent_pickups[j][3][1],
-                        recent_pickups[j][2].get_width(),
-                        recent_pickups[j][2].get_height(),
+                        recent_pickups[j]["position"][0],
+                        recent_pickups[j]["position"][1],
+                        recent_pickups[j]["surface"].get_width(),
+                        recent_pickups[j]["surface"].get_height(),
                     )
                 ):
-                    recent_pickups[i][4] = (
-                        recent_pickups[i][4][0],
-                        recent_pickups[i][4][1] - 1 * commons.DELTA_TIME,
+                    recent_pickups[i]["velocity"] = (
+                        recent_pickups[i]["velocity"][0],
+                        recent_pickups[i]["velocity"][1] - 1 * commons.DELTA_TIME,
                     )
-                    recent_pickups[i][3] = (
-                        recent_pickups[i][3][0],
-                        recent_pickups[i][3][1] - 50 * commons.DELTA_TIME,
+                    recent_pickups[i]["position"] = (
+                        recent_pickups[i]["position"][0],
+                        recent_pickups[i]["position"][1] - 50 * commons.DELTA_TIME,
                     )
         drag_factor = 1.0 - commons.DELTA_TIME * 10
-        recent_pickups[i][4] = (
-            recent_pickups[i][4][0] * drag_factor,
-            recent_pickups[i][4][1] * drag_factor,
+        recent_pickups[i]["velocity"] = (
+            recent_pickups[i]["velocity"][0] * drag_factor,
+            recent_pickups[i]["velocity"][1] * drag_factor,
         )
-        recent_pickups[i][3] = (
-            recent_pickups[i][3][0]
-            + recent_pickups[i][4][0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-            recent_pickups[i][3][1]
-            + recent_pickups[i][4][1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+        recent_pickups[i]["position"] = (
+            recent_pickups[i]["position"][0]
+            + recent_pickups[i]["velocity"][0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+            recent_pickups[i]["position"][1]
+            + recent_pickups[i]["velocity"][1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
         )
     for item in to_remove:
         recent_pickups.remove(item)
@@ -342,16 +356,16 @@ def draw_messages():
 
 def draw_damage_numbers():
     for damage_number in damage_numbers:
-        if damage_number[3] < 0.5:
-            damage_number[2].set_alpha(damage_number[3] * 510)
-        surf = damage_number[2].copy()
+        if damage_number["lifespan"] < 0.5:
+            damage_number["surface"].set_alpha(math.floor(damage_number["lifespan"] * 510))
+        surf = damage_number["surface"].copy()
         # surf = pygame.transform.scale2x(surf)
-        surf = shared_methods.rotate_surface(surf, -damage_number[1][0] * 35)
+        surf = shared_methods.rotate_surface(surf, -damage_number["rotation"][0] * 35)
         commons.screen.blit(
             surf,
             (
-                damage_number[0][0] - surf.get_width() * 0.5,
-                damage_number[0][1] - surf.get_height() * 0.5,
+                damage_number["position"][0] - surf.get_width() * 0.5,
+                damage_number["position"][1] - surf.get_height() * 0.5,
             ),
         )
 
@@ -359,13 +373,13 @@ def draw_damage_numbers():
 def draw_recent_pickups():
     for recent_pickup in recent_pickups:
         commons.screen.blit(
-            recent_pickup[2],
+            recent_pickup["surface"],
             (
-                recent_pickup[3][0]
-                - recent_pickup[2].get_width() * 0.5
+                recent_pickup["position"][0]
+                - recent_pickup["surface"].get_width() * 0.5
                 - camera_position[0]
                 + commons.WINDOW_WIDTH * 0.5,
-                recent_pickup[3][1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
+                recent_pickup["position"][1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
             ),
         )
 
@@ -590,27 +604,27 @@ def add_damage_number(
     surf.blit(t1, (midX, midY))
 
     damage_numbers.append(
-        [
-            (
+        {
+            "position": (
                 pos[0] - camera_position[0] + commons.WINDOW_WIDTH * 0.5,
                 pos[1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
             ),
-            (random.random() * 4 - 2, -1 - random.random() * 4),
-            surf,
-            1.5,
-        ]
+            "rotation": (random.random() * 4 - 2, -1 - random.random() * 4),
+            "surface": surf,
+            "lifespan": 1.5,
+        }
     )
 
 
-def add_recent_pickup(item_id, amount, tier, pos, unique=False, item=None):
+def add_recent_pickup(item_id: int, amount: int, tier, pos, unique=False, item=None):
     global recent_pickups
     if not unique:
         for recent_pickup in recent_pickups:
-            if recent_pickup[0] == item_id:
-                amount += recent_pickup[1]
+            if recent_pickup["item_id"] == item_id:
+                amount += recent_pickup["amount"]
                 recent_pickups.remove(recent_pickup)
     if amount > 1:
-        string = game_data.json_item_data[item_id]["name"] + "(" + str(amount) + ")"
+        string = game_data.json_item_data[item_id]["name"] + f"({amount})"
     else:
         if item is not None:
             string = item.get_name()
@@ -626,4 +640,4 @@ def add_recent_pickup(item_id, amount, tier, pos, unique=False, item=None):
         (1, 1),
     )
     vel = (random.random() * 2 - 1, -50.0)
-    recent_pickups.append([item_id, amount, surf, pos, vel, 3.0])
+    recent_pickups.append({"item_id": item_id, "amount": amount, "surface": surf, "position": pos, "velocity": vel, "text_duration": 3.0})
