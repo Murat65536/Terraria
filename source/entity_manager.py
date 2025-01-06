@@ -274,10 +274,10 @@ def update_recent_pickups():
     global recent_pickups
     to_remove = []
     for i in range(len(recent_pickups)):
-        recent_pickups[i]["cooldown"] -= commons.DELTA_TIME
-        if recent_pickups[i]["cooldown"] < 0.5:
-            recent_pickups[i]["surface"].set_alpha(math.floor(recent_pickups[i]["cooldown"] * 510))
-            if recent_pickups[i]["cooldown"] <= 0:
+        recent_pickups[i]["text_duration"] -= commons.DELTA_TIME
+        if recent_pickups[i]["text_duration"] < 0.5:
+            recent_pickups[i]["surface"].set_alpha(math.floor(recent_pickups[i]["text_duration"] * 510))
+            if recent_pickups[i]["text_duration"] <= 0:
                 to_remove.append(recent_pickups[i])
         for j in range(0, i):
             if i != j:
