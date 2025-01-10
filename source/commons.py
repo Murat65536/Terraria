@@ -55,10 +55,20 @@ class TileMaskType(Enum):
     NONE = 0
     NOISY = 1
 
+class PlayerAppearance(TypedDict):
+    sex: int
+    hair_id: int
+    skin_color: tuple[int, int, int]
+    hair_color: tuple[int, int, int]
+    eye_color: tuple[int, int, int]
+    shirt_color: tuple[int, int, int]
+    undershirt_color: tuple[int, int, int]
+    trouser_color: tuple[int, int, int]
+    shoe_color: tuple[int, int, int]
 
 class PlayerData(TypedDict):
     name: str
-    model: object
+    model_appearance: PlayerAppearance
     hotbar: list[tuple[int, str, int, str]]
     inventory: list[tuple[int, str, int, str]]
     hp: int
@@ -132,7 +142,17 @@ MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
 
 PLAYER_DATA: PlayerData = {
     "name": "",
-    "model": None,
+    "model_appearance": {
+        "sex": 0,
+        "hair_id": 0,
+        "skin_color": (0, 0, 0),
+        "hair_color": (0, 0, 0),
+        "eye_color": (0, 0, 0),
+        "shirt_color": (0, 0, 0),
+        "undershirt_color": (0, 0, 0),
+        "trouser_color": (0, 0, 0),
+        "shoe_color": (0, 0, 0)
+    },
     "hotbar": [],
     "inventory": [],
     "hp": 0,

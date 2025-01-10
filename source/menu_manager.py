@@ -193,43 +193,45 @@ commons.PLAYER_MODEL_DATA = [
 ]
 
 player_model = player.Model(
-    commons.PLAYER_MODEL_DATA[0][0],
-    commons.PLAYER_MODEL_DATA[1][0],
-    (
-        commons.PLAYER_MODEL_DATA[2][0],
-        commons.PLAYER_MODEL_DATA[2][1],
-        commons.PLAYER_MODEL_DATA[2][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[3][0],
-        commons.PLAYER_MODEL_DATA[3][1],
-        commons.PLAYER_MODEL_DATA[3][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[4][0],
-        commons.PLAYER_MODEL_DATA[4][1],
-        commons.PLAYER_MODEL_DATA[4][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[5][0],
-        commons.PLAYER_MODEL_DATA[5][1],
-        commons.PLAYER_MODEL_DATA[5][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[6][0],
-        commons.PLAYER_MODEL_DATA[6][1],
-        commons.PLAYER_MODEL_DATA[6][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[7][0],
-        commons.PLAYER_MODEL_DATA[7][1],
-        commons.PLAYER_MODEL_DATA[7][2],
-    ),
-    (
-        commons.PLAYER_MODEL_DATA[8][0],
-        commons.PLAYER_MODEL_DATA[8][1],
-        commons.PLAYER_MODEL_DATA[8][2],
-    ),
+    {
+        "sex": commons.PLAYER_MODEL_DATA[0][0],
+        "hair_id": commons.PLAYER_MODEL_DATA[1][0],
+        "skin_color": (
+            commons.PLAYER_MODEL_DATA[2][0],
+            commons.PLAYER_MODEL_DATA[2][1],
+            commons.PLAYER_MODEL_DATA[2][2],
+        ),
+        "hair_color": (
+            commons.PLAYER_MODEL_DATA[3][0],
+            commons.PLAYER_MODEL_DATA[3][1],
+            commons.PLAYER_MODEL_DATA[3][2],
+        ),
+        "eye_color": (
+            commons.PLAYER_MODEL_DATA[4][0],
+            commons.PLAYER_MODEL_DATA[4][1],
+            commons.PLAYER_MODEL_DATA[4][2],
+        ),
+        "shirt_color": (
+            commons.PLAYER_MODEL_DATA[5][0],
+            commons.PLAYER_MODEL_DATA[5][1],
+            commons.PLAYER_MODEL_DATA[5][2],
+        ),
+        "undershirt_color": (
+            commons.PLAYER_MODEL_DATA[6][0],
+            commons.PLAYER_MODEL_DATA[6][1],
+            commons.PLAYER_MODEL_DATA[6][2],
+        ),
+        "trouser_color": (
+            commons.PLAYER_MODEL_DATA[7][0],
+            commons.PLAYER_MODEL_DATA[7][1],
+            commons.PLAYER_MODEL_DATA[7][2],
+        ),
+        "shoe_color": (
+            commons.PLAYER_MODEL_DATA[8][0],
+            commons.PLAYER_MODEL_DATA[8][1],
+            commons.PLAYER_MODEL_DATA[8][2],
+        ),
+    }
 )
 
 
@@ -297,43 +299,45 @@ def update_menu_buttons():
                                 [80, 100, 45, 0, 0],
                             ]
                             player_model = player.Model(
-                                commons.PLAYER_MODEL_DATA[0][0],
-                                commons.PLAYER_MODEL_DATA[1][0],
-                                (
-                                    commons.PLAYER_MODEL_DATA[2][0],
-                                    commons.PLAYER_MODEL_DATA[2][1],
-                                    commons.PLAYER_MODEL_DATA[2][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[3][0],
-                                    commons.PLAYER_MODEL_DATA[3][1],
-                                    commons.PLAYER_MODEL_DATA[3][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[4][0],
-                                    commons.PLAYER_MODEL_DATA[4][1],
-                                    commons.PLAYER_MODEL_DATA[4][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[5][0],
-                                    commons.PLAYER_MODEL_DATA[5][1],
-                                    commons.PLAYER_MODEL_DATA[5][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[6][0],
-                                    commons.PLAYER_MODEL_DATA[6][1],
-                                    commons.PLAYER_MODEL_DATA[6][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[7][0],
-                                    commons.PLAYER_MODEL_DATA[7][1],
-                                    commons.PLAYER_MODEL_DATA[7][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[8][0],
-                                    commons.PLAYER_MODEL_DATA[8][1],
-                                    commons.PLAYER_MODEL_DATA[8][2],
-                                ),
+                                {
+                                    "sex": commons.PLAYER_MODEL_DATA[0][0],
+                                    "hair_id": commons.PLAYER_MODEL_DATA[1][0],
+                                    "skin_color": (
+                                        commons.PLAYER_MODEL_DATA[2][0],
+                                        commons.PLAYER_MODEL_DATA[2][1],
+                                        commons.PLAYER_MODEL_DATA[2][2],
+                                    ),
+                                    "hair_color": (
+                                        commons.PLAYER_MODEL_DATA[3][0],
+                                        commons.PLAYER_MODEL_DATA[3][1],
+                                        commons.PLAYER_MODEL_DATA[3][2],
+                                    ),
+                                    "eye_color": (
+                                        commons.PLAYER_MODEL_DATA[4][0],
+                                        commons.PLAYER_MODEL_DATA[4][1],
+                                        commons.PLAYER_MODEL_DATA[4][2],
+                                    ),
+                                    "shirt_color": (
+                                        commons.PLAYER_MODEL_DATA[5][0],
+                                        commons.PLAYER_MODEL_DATA[5][1],
+                                        commons.PLAYER_MODEL_DATA[5][2],
+                                    ),
+                                    "undershirt_color": (
+                                        commons.PLAYER_MODEL_DATA[6][0],
+                                        commons.PLAYER_MODEL_DATA[6][1],
+                                        commons.PLAYER_MODEL_DATA[6][2],
+                                    ),
+                                    "trouser_color": (
+                                        commons.PLAYER_MODEL_DATA[7][0],
+                                        commons.PLAYER_MODEL_DATA[7][1],
+                                        commons.PLAYER_MODEL_DATA[7][2],
+                                    ),
+                                    "shoe_color": (
+                                        commons.PLAYER_MODEL_DATA[8][0],
+                                        commons.PLAYER_MODEL_DATA[8][1],
+                                        commons.PLAYER_MODEL_DATA[8][2],
+                                    ),
+                                }
                             )
                             commons.PLAYER_FRAMES = player_model.create_sprite()
                         case PlayerSelectionButtons.BACK:
@@ -363,7 +367,7 @@ def update_menu_buttons():
                             commons.PLAYER_MODEL_DATA = [
                                 [0],
                                 [
-                                    random.randint(0, 8),
+                                    random.randint(0, len(tilesets.hair) - 1),
                                 ],
                                 [
                                     random.randint(0, 128),
@@ -423,43 +427,45 @@ def update_menu_buttons():
                                 ],
                             ]
                             player_model = player.Model(
-                                commons.PLAYER_MODEL_DATA[0][0],
-                                commons.PLAYER_MODEL_DATA[1][0],
-                                (
-                                    commons.PLAYER_MODEL_DATA[2][0],
-                                    commons.PLAYER_MODEL_DATA[2][1],
-                                    commons.PLAYER_MODEL_DATA[2][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[3][0],
-                                    commons.PLAYER_MODEL_DATA[3][1],
-                                    commons.PLAYER_MODEL_DATA[3][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[4][0],
-                                    commons.PLAYER_MODEL_DATA[4][1],
-                                    commons.PLAYER_MODEL_DATA[4][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[5][0],
-                                    commons.PLAYER_MODEL_DATA[5][1],
-                                    commons.PLAYER_MODEL_DATA[5][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[6][0],
-                                    commons.PLAYER_MODEL_DATA[6][1],
-                                    commons.PLAYER_MODEL_DATA[6][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[7][0],
-                                    commons.PLAYER_MODEL_DATA[7][1],
-                                    commons.PLAYER_MODEL_DATA[7][2],
-                                ),
-                                (
-                                    commons.PLAYER_MODEL_DATA[8][0],
-                                    commons.PLAYER_MODEL_DATA[8][1],
-                                    commons.PLAYER_MODEL_DATA[8][2],
-                                ),
+                                {
+                                    "sex": commons.PLAYER_MODEL_DATA[0][0],
+                                    "hair_id": commons.PLAYER_MODEL_DATA[1][0],
+                                    "skin_color": (
+                                        commons.PLAYER_MODEL_DATA[2][0],
+                                        commons.PLAYER_MODEL_DATA[2][1],
+                                        commons.PLAYER_MODEL_DATA[2][2],
+                                    ),
+                                    "hair_color": (
+                                        commons.PLAYER_MODEL_DATA[3][0],
+                                        commons.PLAYER_MODEL_DATA[3][1],
+                                        commons.PLAYER_MODEL_DATA[3][2],
+                                    ),
+                                    "eye_color": (
+                                        commons.PLAYER_MODEL_DATA[4][0],
+                                        commons.PLAYER_MODEL_DATA[4][1],
+                                        commons.PLAYER_MODEL_DATA[4][2],
+                                    ),
+                                    "shirt_color": (
+                                        commons.PLAYER_MODEL_DATA[5][0],
+                                        commons.PLAYER_MODEL_DATA[5][1],
+                                        commons.PLAYER_MODEL_DATA[5][2],
+                                    ),
+                                    "undershirt_color": (
+                                        commons.PLAYER_MODEL_DATA[6][0],
+                                        commons.PLAYER_MODEL_DATA[6][1],
+                                        commons.PLAYER_MODEL_DATA[6][2],
+                                    ),
+                                    "trouser_color": (
+                                        commons.PLAYER_MODEL_DATA[7][0],
+                                        commons.PLAYER_MODEL_DATA[7][1],
+                                        commons.PLAYER_MODEL_DATA[7][2],
+                                    ),
+                                    "shoe_color": (
+                                        commons.PLAYER_MODEL_DATA[8][0],
+                                        commons.PLAYER_MODEL_DATA[8][1],
+                                        commons.PLAYER_MODEL_DATA[8][2],
+                                    ),
+                                }
                             )
                             commons.PLAYER_FRAMES = player_model.create_sprite()
                         case PlayerCreationButtons.BACK:
@@ -483,7 +489,9 @@ def update_menu_buttons():
                         case PlayerNamingButtons.SET_NAME:
                             date = datetime.datetime.now()
                             commons.PLAYER_DATA["name"] = commons.TEXT_INPUT
-                            commons.PLAYER_DATA["model"] = player_model.get_colors()
+                            commons.PLAYER_DATA["model_appearance"] = (
+                                player_model.get_appearance()
+                            )
                             commons.PLAYER_DATA["hotbar"] = []
                             commons.PLAYER_DATA["inventory"] = []
                             commons.PLAYER_DATA["hp"] = 100
@@ -690,7 +698,7 @@ def load_menu_player_data():
             ),
             (90, 40),
         )  # playtime
-        sprites = player.Model(*dat["model"]).create_sprite()
+        sprites = player.Model(dat["model_appearance"]).create_sprite()
         player_data_surf.blit(sprites, (270, 0))
         commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
 

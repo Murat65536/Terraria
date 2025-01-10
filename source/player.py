@@ -109,15 +109,7 @@ class MovementFrames:
 class Model:
     def __init__(
         self,
-        sex,
-        hair_id,
-        skin_col,
-        hair_col,
-        eye_col,
-        shirt_col,
-        undershirt_col,
-        trouser_col,
-        shoe_col,
+        model_appearance: commons.PlayerAppearance
     ) -> None:
         self.swinging: bool = False
         self.flip: bool = False
@@ -138,15 +130,15 @@ class Model:
         self.arm_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
         self.sleeve_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
 
-        self.sex = sex
-        self.hair_id = hair_id
-        self.skin_col = skin_col
-        self.hair_col = hair_col
-        self.eye_col = eye_col
-        self.shirt_col = shirt_col
-        self.undershirt_col = undershirt_col
-        self.trouser_col = trouser_col
-        self.shoe_col = shoe_col
+        self.sex = model_appearance["sex"]
+        self.hair_id = model_appearance["hair_id"]
+        self.skin_col = model_appearance["skin_color"]
+        self.hair_col = model_appearance["hair_color"]
+        self.eye_col = model_appearance["eye_color"]
+        self.shirt_col = model_appearance["shirt_color"]
+        self.undershirt_col = model_appearance["undershirt_color"]
+        self.trouser_col = model_appearance["trouser_color"]
+        self.shoe_col = model_appearance["shoe_color"]
 
     def create_sprite(self) -> pygame.Surface:
         MIRROR_ARM_FRAME = 14
@@ -166,8 +158,18 @@ class Model:
         player_surface = pygame.transform.flip(player_surface, self.flip, False)
         return player_surface
 
-    def get_colors(self):
-        return [self.sex, self.hair_id, self.skin_col, self.hair_col, self.eye_col, self.shirt_col, self.undershirt_col, self.trouser_col, self.shoe_col]
+    def get_appearance(self) -> commons.PlayerAppearance:
+        return {
+            "sex": self.sex,
+            "hair_id": self.hair_id,
+            "skin_color": self.skin_col,
+            "hair_color": self.hair_col,
+            "eye_color": self.eye_col,
+            "shirt_color": self.shirt_col,
+            "undershirt_color": self.undershirt_col,
+            "trouser_color": self.trouser_col,
+            "shoe_color": self.shoe_col
+        }
 
     def get_movement(self) -> Movement:
         return Movement.IDLE if self.moving_left and self.moving_right else Movement.LEFT if self.moving_left else Movement.RIGHT if self.moving_right else Movement.IDLE
@@ -301,7 +303,7 @@ class Player:
         )  # hitbox
         self.velocity = (0, 0)
 
-        self.sprites = Model(*self.model)
+        self.sprites = Model(self.model)
 
         self.alive = True
         self.respawn_tick = 0
@@ -434,8 +436,8 @@ class Player:
             self.rect.top = self.position[1] - commons.PLAYER_HEIGHT * 0.5
 
             self.block_position = (
-                math.floor(self.position[1] // commons.BLOCK_SIZE),
-                math.floor(self.position[0] // commons.BLOCK_SIZE),
+                int(self.position[1] // commons.BLOCK_SIZE),
+                int(self.position[0] // commons.BLOCK_SIZE),
             )
 
             self.grounded = False
@@ -2317,7 +2319,7 @@ class Player:
 
         # Save the data    to disk    and    display    a message
         commons.PLAYER_DATA["name"] = self.name
-        commons.PLAYER_DATA["model"] = self.model
+        commons.PLAYER_DATA["model_appearance"] = self.model
         commons.PLAYER_DATA["hotbar"] = formatted_hotbar
         commons.PLAYER_DATA["inventory"] = formatted_inventory
         commons.PLAYER_DATA["hp"] = self.hp

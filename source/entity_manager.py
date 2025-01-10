@@ -13,6 +13,7 @@ import world
 import shared_methods
 
 from player import Player
+from prompt import Prompt
 from enemy import Enemy
 from particle import Particle
 from projectile import Projectile
@@ -48,15 +49,15 @@ messages: list[Message] = []
 damage_numbers: list[DamageNumber] = []
 recent_pickups: list[RecentPickup] = []
 
-client_player = None
-client_prompt = None
-client_color_picker = ColorPicker(
+client_player: Player | None = None
+client_prompt: Prompt | None = None
+client_color_picker: ColorPicker = ColorPicker(
     (int(commons.WINDOW_WIDTH * 0.5 - 155), 190), 300, 300
 )
 
-camera_position = (0, 0)
-old_camera_position = (0, 0)
-camera_position_difference = (0, 0)
+camera_position: tuple[float, float] = (0, 0)
+old_camera_position: tuple[float, float] = (0, 0)
+camera_position_difference: tuple[float, float] = (0, 0)
 
 
 """================================================================================================================= 
@@ -68,8 +69,8 @@ camera_position_difference = (0, 0)
 
 def create_player():
     global client_player
-    name = commons.PLAYER_DATA["name"]
-    model = commons.PLAYER_DATA["model"]
+    name: str = commons.PLAYER_DATA["name"]
+    model: commons.PlayerAppearance = commons.PLAYER_DATA["model_appearance"]
 
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
@@ -122,9 +123,7 @@ def check_enemy_spawn():
         if commons.ENEMY_SPAWN_TICK <= 0:
             commons.ENEMY_SPAWN_TICK += 1.0
             assert client_player is not None
-            val = int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30))
-            if val < 1:
-                val = 1
+            val = min(int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1)
             if (
                 len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5)
                 and random.randint(1, val) == 1
@@ -276,7 +275,7 @@ def update_recent_pickups():
     for i in range(len(recent_pickups)):
         recent_pickups[i]["text_duration"] -= commons.DELTA_TIME
         if recent_pickups[i]["text_duration"] < 0.5:
-            recent_pickups[i]["surface"].set_alpha(math.floor(recent_pickups[i]["text_duration"] * 510))
+            recent_pickups[i]["surface"].set_alpha(int(recent_pickups[i]["text_duration"] * 510))
             if recent_pickups[i]["text_duration"] <= 0:
                 to_remove.append(recent_pickups[i])
         for j in range(0, i):
@@ -357,9 +356,8 @@ def draw_messages():
 def draw_damage_numbers():
     for damage_number in damage_numbers:
         if damage_number["lifespan"] < 0.5:
-            damage_number["surface"].set_alpha(math.floor(damage_number["lifespan"] * 510))
+            damage_number["surface"].set_alpha(int(damage_number["lifespan"] * 510))
         surf = damage_number["surface"].copy()
-        # surf = pygame.transform.scale2x(surf)
         surf = shared_methods.rotate_surface(surf, -damage_number["rotation"][0] * 35)
         commons.screen.blit(
             surf,

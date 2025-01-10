@@ -111,9 +111,9 @@ class Enemy:
                 self.position[0] - self.rect.width * 0.5
             )  # updating rect
             self.rect.top = int(self.position[1] - self.rect.height * 0.5)
-            self.block_pos = math.floor(
+            self.block_pos = int(
                 self.position[1] // commons.BLOCK_SIZE
-            ), math.floor(self.position[0] // commons.BLOCK_SIZE)
+            ), int(self.position[0] // commons.BLOCK_SIZE)
             self.grounded = False
 
             if self.velocity[0] < 0:

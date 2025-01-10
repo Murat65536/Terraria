@@ -64,7 +64,7 @@ def draw_death_message() -> None:
     death_text = shared_methods.outline_text(
         "You were slain...", (229, 127, 127), commons.LARGE_FONT
     )
-    alpha = math.floor((1 - entity_manager.client_player.death_fade_in * 0.15) * 255)
+    alpha = int((1 - entity_manager.client_player.death_fade_in * 0.15) * 255)
     death_text.set_alpha(alpha)
     commons.screen.blit(
         death_text,
@@ -131,12 +131,12 @@ def run_splash_screen() -> None:
             black_surf.set_alpha(255)
 
         elif 0.5 < age < 1.5:
-            alpha = math.floor((1.5 - age) * 255)
+            alpha = int((1.5 - age) * 255)
             black_surf.set_alpha(alpha)
 
         elif 4.5 < age < 5.5:
             entity_manager.update_particles()
-            alpha = math.floor((age - 4.5) * 255)
+            alpha = int((age - 4.5) * 255)
             black_surf.set_alpha(alpha)
 
         elif age > 6.0:
@@ -1338,9 +1338,9 @@ while True:
                             commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[
                                 i
                             ][0]["name"]
-                            commons.PLAYER_DATA["model"] = commons.PLAYER_SAVE_OPTIONS[
-                                i
-                            ][0]["model"]
+                            commons.PLAYER_DATA["model_appearance"] = (
+                                commons.PLAYER_SAVE_OPTIONS[i][0]["model_appearance"]
+                            )
                             commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[
                                 i
                             ][0]["hotbar"]
@@ -1612,43 +1612,45 @@ while True:
                     4
                 ] = entity_manager.client_color_picker.selected_y
                 menu_manager.player_model = player.Model(
-                    commons.PLAYER_MODEL_DATA[0][0],
-                    commons.PLAYER_MODEL_DATA[1][0],
-                    (
-                        commons.PLAYER_MODEL_DATA[2][0],
-                        commons.PLAYER_MODEL_DATA[2][1],
-                        commons.PLAYER_MODEL_DATA[2][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[3][0],
-                        commons.PLAYER_MODEL_DATA[3][1],
-                        commons.PLAYER_MODEL_DATA[3][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[4][0],
-                        commons.PLAYER_MODEL_DATA[4][1],
-                        commons.PLAYER_MODEL_DATA[4][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[5][0],
-                        commons.PLAYER_MODEL_DATA[5][1],
-                        commons.PLAYER_MODEL_DATA[5][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[6][0],
-                        commons.PLAYER_MODEL_DATA[6][1],
-                        commons.PLAYER_MODEL_DATA[6][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[7][0],
-                        commons.PLAYER_MODEL_DATA[7][1],
-                        commons.PLAYER_MODEL_DATA[7][2],
-                    ),
-                    (
-                        commons.PLAYER_MODEL_DATA[8][0],
-                        commons.PLAYER_MODEL_DATA[8][1],
-                        commons.PLAYER_MODEL_DATA[8][2],
-                    ),
+                    {
+                        "sex": commons.PLAYER_MODEL_DATA[0][0],
+                        "hair_id": commons.PLAYER_MODEL_DATA[1][0],
+                        "skin_color": (
+                            commons.PLAYER_MODEL_DATA[2][0],
+                            commons.PLAYER_MODEL_DATA[2][1],
+                            commons.PLAYER_MODEL_DATA[2][2],
+                        ),
+                        "hair_color": (
+                            commons.PLAYER_MODEL_DATA[3][0],
+                            commons.PLAYER_MODEL_DATA[3][1],
+                            commons.PLAYER_MODEL_DATA[3][2],
+                        ),
+                        "eye_color": (
+                            commons.PLAYER_MODEL_DATA[4][0],
+                            commons.PLAYER_MODEL_DATA[4][1],
+                            commons.PLAYER_MODEL_DATA[4][2],
+                        ),
+                        "shirt_color": (
+                            commons.PLAYER_MODEL_DATA[5][0],
+                            commons.PLAYER_MODEL_DATA[5][1],
+                            commons.PLAYER_MODEL_DATA[5][2],
+                        ),
+                        "undershirt_color": (
+                            commons.PLAYER_MODEL_DATA[6][0],
+                            commons.PLAYER_MODEL_DATA[6][1],
+                            commons.PLAYER_MODEL_DATA[6][2],
+                        ),
+                        "trouser_color": (
+                            commons.PLAYER_MODEL_DATA[7][0],
+                            commons.PLAYER_MODEL_DATA[7][1],
+                            commons.PLAYER_MODEL_DATA[7][2],
+                        ),
+                        "shoe_color": (
+                            commons.PLAYER_MODEL_DATA[8][0],
+                            commons.PLAYER_MODEL_DATA[8][1],
+                            commons.PLAYER_MODEL_DATA[8][2],
+                        ),
+                    }
                 )
                 commons.PLAYER_FRAMES = menu_manager.player_model.create_sprite()
             commons.screen.blit(

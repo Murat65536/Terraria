@@ -90,8 +90,8 @@ class Projectile:
         self.rect.left = self.position[0] - self.size * 0.5
         self.rect.top = self.position[1] - self.size * 0.5
         block_position = (
-            math.floor(self.position[1] // commons.BLOCK_SIZE),
-            math.floor(self.position[0] // commons.BLOCK_SIZE),
+            int(self.position[1] // commons.BLOCK_SIZE),
+            int(self.position[0] // commons.BLOCK_SIZE),
         )
         if self.trail is not None:
             if self.trail_tick <= 0:

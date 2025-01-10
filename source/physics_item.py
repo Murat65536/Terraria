@@ -145,8 +145,8 @@ class PhysicsItem:
             )
             self.rect.center = tuple(self.position)
             self.block_position = (
-                math.floor(self.position[1] // commons.BLOCK_SIZE),
-                math.floor(self.position[0] // commons.BLOCK_SIZE),
+                int(self.position[1] // commons.BLOCK_SIZE),
+                int(self.position[0] // commons.BLOCK_SIZE),
             )
 
             self.grounded = False
