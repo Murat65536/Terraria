@@ -1765,6 +1765,7 @@ while True:
                 if event.key == pygame.K_f:
                     if commons.SHIFT_ACTIVE:
                         entity_manager.spawn_enemy(
+                            random.randint(1, 5),
                             (
                                 entity_manager.camera_position[0]
                                 - commons.WINDOW_WIDTH * 0.5

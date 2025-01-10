@@ -69,9 +69,6 @@ camera_position_difference: tuple[float, float] = (0, 0)
 
 def create_player():
     global client_player
-    name: str = commons.PLAYER_DATA["name"]
-    model: commons.PlayerAppearance = commons.PLAYER_DATA["model_appearance"]
-
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
     for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
@@ -92,22 +89,17 @@ def create_player():
         item.assign_prefix(loaded_item_data[3])
         inventory[loaded_item_data[0]] = item
 
-    hp = commons.PLAYER_DATA["hp"]
-    max_hp = commons.PLAYER_DATA["max_hp"]
-    playtime = commons.PLAYER_DATA["playtime"]
-    creation_date = commons.PLAYER_DATA["creation_date"]
-    last_played_date = commons.PLAYER_DATA["last_played_date"]
     client_player = Player(
         (0, 0),
-        model,
-        name=name,
-        hp=hp,
-        max_hp=max_hp,
+        commons.PLAYER_DATA["model_appearance"],
+        name=commons.PLAYER_DATA["name"],
+        hp=commons.PLAYER_DATA["hp"],
+        max_hp=commons.PLAYER_DATA["max_hp"],
         hotbar=hotbar,
         inventory=inventory,
-        playtime=playtime,
-        creation_date=creation_date,
-        last_played_date=last_played_date,
+        playtime=commons.PLAYER_DATA["playtime"],
+        creation_date=commons.PLAYER_DATA["creation_date"],
+        last_played_date=commons.PLAYER_DATA["last_played_date"],
     )
 
 
@@ -128,7 +120,7 @@ def check_enemy_spawn():
                 len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5)
                 and random.randint(1, val) == 1
             ):  # Reduce enemy spawns
-                spawn_enemy()
+                spawn_enemy(random.randint(1, 5))
         else:
             commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
 
@@ -148,20 +140,12 @@ def draw_enemy_hover_text():
     for enemy in enemies:
         if enemy.rect.collidepoint(transformed_MOUSE_POSITION):
             text1 = commons.MEDIUM_FONT.render(
-                enemy.name
-                + ": "
-                + str(math.ceil(enemy.health))
-                + "/"
-                + str(enemy.max_health),
+                f"{enemy.name}: {math.ceil(enemy.health)}/{enemy.max_health}",
                 True,
                 (255, 255, 255),
             )
             text2 = commons.MEDIUM_FONT.render(
-                enemy.name
-                + ": "
-                + str(math.ceil(enemy.health))
-                + "/"
-                + str(enemy.max_health),
+                f"{enemy.name}: {math.ceil(enemy.health)}/{enemy.max_health}",
                 True,
                 (0, 0, 0),
             )
@@ -389,16 +373,9 @@ def draw_recent_pickups():
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def spawn_enemy(position=None, enemy_id=None):
+def spawn_enemy(enemy_id: int, position=None):
     if client_player is None:
         return
-    if enemy_id is None:
-        if client_player.position[1] < 200 * commons.BLOCK_SIZE:
-            enemy_id = random.randint(1, 2)
-        elif client_player.position[1] < 300 * commons.BLOCK_SIZE:
-            enemy_id = random.randint(2, 3)
-        elif client_player.position[1] >= 300 * commons.BLOCK_SIZE:
-            enemy_id = random.randint(4, 5)
     if position is None:
         player_block_pos = (
             int(camera_position[0]) // commons.BLOCK_SIZE,
