@@ -11,6 +11,7 @@ import game_data
 from item import ItemLocation, ItemSlotClickResult, ItemTag, Item
 
 import commons
+import item
 import world
 
 import shared_methods
@@ -868,20 +869,20 @@ class Player:
 
     def render_current_item_image(self):
         if not commons.is_holding_item:
-            item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+            current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
         else:
-            item = commons.item_holding
-        if item is not None:
-            self.current_item_image = item.get_image()
+            current_item = item.item_holding
+        if current_item is not None:
+            self.current_item_image = current_item.get_image()
 
             # Item swing surface
             swing_surface = self.current_item_image
-            if item.has_tag(ItemTag.WEAPON):
-                world_override_image = item.get_world_override_image()
+            if current_item.has_tag(ItemTag.WEAPON):
+                world_override_image = current_item.get_world_override_image()
                 if world_override_image is not None:
                     swing_surface = world_override_image
 
-            item_scale = item.get_scale()
+            item_scale = current_item.get_scale()
             inner_dimensions = (
                 int(swing_surface.get_width() * item_scale),
                 int(swing_surface.get_height() * item_scale),
@@ -939,14 +940,14 @@ class Player:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def use_item(self, right_click=False):
-        item: Item | None = None
+        current_item: Item | None = None
 
         if commons.is_holding_item:
-            item = commons.item_holding
+            current_item = current_item.item_holding
         elif not self.inventory_open:
-            item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+            current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
 
-        if item is None and not right_click:
+        if current_item is None and not right_click:
             return
 
         screen_position_x = (
@@ -966,27 +967,27 @@ class Player:
 
             assert item is not None
 
-            if item.has_tag(ItemTag.TILE):
-                self.place_block(screen_position_x, screen_position_y, item, True)
+            if current_item.has_tag(ItemTag.TILE):
+                self.place_block(screen_position_x, screen_position_y, current_item, True)
 
-            if item.has_tag(ItemTag.WALL):
-                self.place_block(screen_position_x, screen_position_y, item, False)
+            if current_item.has_tag(ItemTag.WALL):
+                self.place_block(screen_position_x, screen_position_y, current_item, False)
 
             elif (
-                item.has_tag(ItemTag.PICKAXE)
-                or item.has_tag(ItemTag.HAMMER)
-                or item.has_tag(ItemTag.AXE)
+                current_item.has_tag(ItemTag.PICKAXE)
+                or current_item.has_tag(ItemTag.HAMMER)
+                or current_item.has_tag(ItemTag.AXE)
             ):
-                self.use_tool(screen_position_x, screen_position_y, item)
+                self.use_tool(screen_position_x, screen_position_y, current_item)
 
-            elif item.has_tag(ItemTag.LONGSWORD):
-                self.use_longsword_weapon(item)
+            elif current_item.has_tag(ItemTag.LONGSWORD):
+                self.use_longsword_weapon(current_item)
 
-            elif item.has_tag(ItemTag.SHORTSWORD):
-                self.use_shortsword_weapon(item)
+            elif current_item.has_tag(ItemTag.SHORTSWORD):
+                self.use_shortsword_weapon(current_item)
 
-            elif item.has_tag(ItemTag.RANGED):
-                self.use_ranged_weapon(screen_position_x, screen_position_y, item)
+            elif current_item.has_tag(ItemTag.RANGED):
+                self.use_ranged_weapon(screen_position_x, screen_position_y, current_item)
 
             if self.should_swing_arm:
                 if not self.swinging_arm:
@@ -1199,10 +1200,10 @@ class Player:
                                     ] = None
                             else:
                                 commons.WAIT_TO_USE = True
-                                assert commons.item_holding is not None
-                                commons.item_holding.amount -= 1
-                                if commons.item_holding.amount <= 0:
-                                    commons.item_holding = None
+                                assert current_item.item_holding is not None
+                                current_item.item_holding.amount -= 1
+                                if current_item.item_holding.amount <= 0:
+                                    current_item.item_holding = None
                                     commons.is_holding_item = False
 
     """=================================================================================================================    
@@ -1434,12 +1435,13 @@ class Player:
         just place it in an empty slot
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def give_item(self, item, amount=1, position=None):
+    def give_item(self, current_item, amount=1, position=None):
         # No position specified
         if position is None:
-            is_coin = item.has_tag(ItemTag.COIN)
+            is_coin = current_item.has_tag(ItemTag.COIN)
             # Find all suitable    slots
-            existing_slots = self.find_existing_item_stacks(item.item_id)
+            existing_slots = self.find_existing_item_stacks(
+                current_item.item_id)
             # Slots    that already have the item
             while len(existing_slots) > 0 and amount > 0:
                 # Work out how many    to add to the stack
@@ -1469,7 +1471,7 @@ class Player:
                             self.items[existing_slots[0][0]][
                                 existing_slots[0][1]
                             ] = None
-                        self.give_item(Item(item.item_id + 1))
+                        self.give_item(Item(current_item.item_id + 1))
                         amount = 0
 
                 # Flag the position for a surface update
@@ -1480,7 +1482,7 @@ class Player:
                 existing_slots.pop(0)
 
             # Free slots
-            free_slots = self.find_free_spaces(item.json_item["max_stack"])
+            free_slots = self.find_free_spaces(current_item.json_item["max_stack"])
 
             while (
                 len(free_slots) > 0 and amount > 0
@@ -1492,7 +1494,7 @@ class Player:
                     fill_count += amount
 
                 # Add that number to the free slot
-                self.items[free_slots[0][0]][free_slots[0][1]] = item.copy(
+                self.items[free_slots[0][0]][free_slots[0][1]] = current_item.copy(
                     new_amount=fill_count
                 )
 
@@ -1506,19 +1508,19 @@ class Player:
             if amount <= 0:
                 return [ItemSlotClickResult.GAVE_ALL]
             else:
-                if item.item_id not in self.un_pickupable_items:
-                    self.un_pickupable_items.append(item.item_id)
+                if current_item.item_id not in self.un_pickupable_items:
+                    self.un_pickupable_items.append(current_item.item_id)
                 return [ItemSlotClickResult.GAVE_SOME, amount]
 
         # Position specified
         else:
             # Slot is free, add
             if self.items[position[0]][position[1]] is None:
-                self.items[position[0]][position[1]] = item.copy(new_amount=amount)
+                self.items[position[0]][position[1]] = current_item.copy(new_amount=amount)
                 return [ItemSlotClickResult.GAVE_ALL]
 
             # Slot has an item with the same Id
-            elif self.items[position[0]][position[1]].item_id == item.item_id:
+            elif self.items[position[0]][position[1]].item_id == current_item.item_id:
                 max_stack = self.items[position[0]][position[1]].get_max_stack()
                 # Item is already at max stack, swap
                 if self.items[position[0]][position[1]].amount == max_stack:
@@ -1541,7 +1543,7 @@ class Player:
                         return [ItemSlotClickResult.GAVE_ALL]
 
             # Slot has an item with a different Id, swap
-            elif self.items[position[0]][position[1]].item_id != item.item_id:
+            elif self.items[position[0]][position[1]].item_id != current_item.item_id:
                 return [
                     ItemSlotClickResult.SWAPPED,
                     self.items[position[0]][position[1]],
@@ -1555,8 +1557,8 @@ class Player:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def remove_item(self, position, remove_count=None):
-        item = self.items[position[0]][position[1]]
-        if item is not None:
+        current_item = self.items[position[0]][position[1]]
+        if current_item is not None:
             if remove_count is None:
                 self.items[position[0]][position[1]] = None
             else:
@@ -1568,9 +1570,9 @@ class Player:
                 self.old_inventory_positions.append(position)
 
             if remove_count is None:
-                return item.copy()
+                return current_item.copy()
             else:
-                return item.copy(new_amount=remove_count)
+                return current_item.copy(new_amount=remove_count)
 
     """=================================================================================================================    
         player.Player.find_existing_item_stacks    -> existing    space list
@@ -1587,9 +1589,9 @@ class Player:
 
         if search_hotbar:
             for hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
-                item = self.items[ItemLocation.HOTBAR][hotbar_index]
-                if item != None:
-                    if item.item_id == item_id:
+                current_item = self.items[ItemLocation.HOTBAR][hotbar_index]
+                if current_item != None:
+                    if current_item.item_id == item_id:
                         available = (
                             item_data["max_stack"]
                             - self.items[ItemLocation.HOTBAR][hotbar_index].amount
@@ -1600,9 +1602,9 @@ class Player:
 
         if search_inventory:
             for inventory_index in range(len(self.items[ItemLocation.INVENTORY])):
-                item = self.items[ItemLocation.INVENTORY][inventory_index]
-                if item is not None:
-                    if item.item_id == item_id:
+                current_item = self.items[ItemLocation.INVENTORY][inventory_index]
+                if current_item is not None:
+                    if current_item.item_id == item_id:
                         available = (
                             item_data["max_stack"]
                             - self.items[ItemLocation.INVENTORY][inventory_index].amount
@@ -1649,19 +1651,20 @@ class Player:
         self.hotbar_image.fill((255, 0, 255))
         for hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
             self.hotbar_image.blit(tilesets.misc_gui[0], (48 * hotbar_index, 0))
-            item = self.items[ItemLocation.HOTBAR][hotbar_index]
-            if item is not None:
+            current_item = self.items[ItemLocation.HOTBAR][hotbar_index]
+            if current_item is not None:
                 self.hotbar_image.blit(
-                    item.get_resized_image(),
+                    current_item.get_resized_image(),
                     (
-                        item.get_resized_offset_x() + 48 * hotbar_index,
-                        item.get_resized_offset_y(),
+                        current_item.get_resized_offset_x() + 48 * hotbar_index,
+                        current_item.get_resized_offset_y(),
                     ),
                 )
-                if item.amount > 1:
+                if current_item.amount > 1:
                     self.hotbar_image.blit(
                         shared_methods.outline_text(
-                            str(item.amount), (255, 255, 255), commons.SMALL_FONT
+                            str(current_item.amount), (255,
+                                                       255, 255), commons.SMALL_FONT
                         ),
                         (24 + 48 * hotbar_index, 30),
                     )
@@ -1681,13 +1684,13 @@ class Player:
             self.inventory_image.blit(
                 tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y)
             )
-            item = self.items[ItemLocation.INVENTORY][inventory_index]
-            if item is not None:
+            current_item = self.items[ItemLocation.INVENTORY][inventory_index]
+            if current_item is not None:
                 self.inventory_image.blit(
-                    item.get_resized_image(),
+                    current_item.get_resized_image(),
                     (
-                        item.get_resized_offset_x() + 48 * slot_x,
-                        item.get_resized_offset_y() + 48 * slot_y,
+                        current_item.get_resized_offset_x() + 48 * slot_x,
+                        current_item.get_resized_offset_y() + 48 * slot_y,
                     ),
                 )
                 if self.items[ItemLocation.INVENTORY][inventory_index].amount > 1:
@@ -1717,13 +1720,13 @@ class Player:
             slot_x = chest_index % 5
             slot_y = chest_index // 5
             self.chest_image.blit(tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y))
-            item = self.items[ItemLocation.CHEST][chest_index]
-            if item is not None:
+            current_item = self.items[ItemLocation.CHEST][chest_index]
+            if current_item is not None:
                 self.chest_image.blit(
-                    item.get_resized_image(),
+                    current_item.get_resized_image(),
                     (
-                        item.get_resized_offset_x() + 48 * slot_x,
-                        item.get_resized_offset_y() + 48 * slot_y,
+                        current_item.get_resized_offset_x() + 48 * slot_x,
+                        current_item.get_resized_offset_y() + 48 * slot_y,
                     ),
                 )
                 if self.items[ItemLocation.CHEST][chest_index].amount > 1:
@@ -1745,65 +1748,68 @@ class Player:
     def update_inventory_old_slots(self):
         for data in self.old_inventory_positions:
             if data[0] == ItemLocation.HOTBAR:
-                item = self.items[ItemLocation.HOTBAR][data[1]]
+                current_item = self.items[ItemLocation.HOTBAR][data[1]]
                 self.hotbar_image.blit(tilesets.misc_gui[0], (data[1] * 48, 0))
-                if item is not None:
+                if current_item is not None:
                     self.hotbar_image.blit(
-                        item.get_resized_image(),
+                        current_item.get_resized_image(),
                         (
-                            item.get_resized_offset_x() + 48 * data[1],
-                            item.get_resized_offset_y(),
+                            current_item.get_resized_offset_x() + 48 * data[1],
+                            current_item.get_resized_offset_y(),
                         ),
                     )
-                    if item.amount > 1:
+                    if current_item.amount > 1:
                         self.hotbar_image.blit(
                             shared_methods.outline_text(
-                                str(item.amount), (255, 255, 255), commons.SMALL_FONT
+                                str(current_item.amount), (255,
+                                                           255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * data[1], 30),
                         )
             elif data[0] == ItemLocation.INVENTORY:
-                item = self.items[ItemLocation.INVENTORY][data[1]]
+                current_item = self.items[ItemLocation.INVENTORY][data[1]]
                 slot_x = data[1] % 10
                 slot_y = data[1] // 10
                 self.inventory_image.blit(
                     tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
                 )
-                if item is not None:
+                if current_item is not None:
                     self.inventory_image.blit(
-                        item.get_resized_image(),
+                        current_item.get_resized_image(),
                         (
-                            item.get_resized_offset_x() + slot_x * 48,
-                            item.get_resized_offset_y() + slot_y * 48,
+                            current_item.get_resized_offset_x() + slot_x * 48,
+                            current_item.get_resized_offset_y() + slot_y * 48,
                         ),
                     )
-                    if item.amount > 1:
+                    if current_item.amount > 1:
                         self.inventory_image.blit(
                             shared_methods.outline_text(
-                                str(item.amount), (255, 255, 255), commons.SMALL_FONT
+                                str(current_item.amount), (255,
+                                                           255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * slot_x, 30 + 48 * slot_y),
                         )
 
             elif data[0] == ItemLocation.CHEST:
-                item = self.items[ItemLocation.CHEST][data[1]]
+                current_item = self.items[ItemLocation.CHEST][data[1]]
                 slot_x = data[1] % 5
                 slot_y = data[1] // 5
                 self.chest_image.blit(
                     tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
                 )
-                if item is not None:
+                if current_item is not None:
                     self.chest_image.blit(
-                        item.get_resized_image(),
+                        current_item.get_resized_image(),
                         (
-                            item.get_resized_offset_x() + slot_x * 48,
-                            item.get_resized_offset_y() + slot_y * 48,
+                            current_item.get_resized_offset_x() + slot_x * 48,
+                            current_item.get_resized_offset_y() + slot_y * 48,
                         ),
                     )
-                    if item.amount > 1:
+                    if current_item.amount > 1:
                         self.chest_image.blit(
                             shared_methods.outline_text(
-                                str(item.amount), (255, 255, 255), commons.SMALL_FONT
+                                str(current_item.amount), (255,
+                                                           255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * slot_x, 30 + 48 * slot_y),
                         )
@@ -1884,19 +1890,19 @@ class Player:
 
             if self.arm_out:
                 if not commons.is_holding_item:
-                    item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+                    current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
                 else:
-                    item = commons.item_holding
+                    current_item = current_item.item_holding
 
-                assert item is not None
-                if item.get_world_override_image() is not None:
+                assert current_item is not None
+                if current_item.get_world_override_image() is not None:
                     rotated_item_surf = shared_methods.rotate_surface(
-                        item.get_world_override_image(),
+                        current_item.get_world_override_image(),
                         self.arm_out_angle * 180 / math.pi,
                     )
                 else:
                     rotated_item_surf = shared_methods.rotate_surface(
-                        item.get_image(), self.arm_out_angle * 180 / math.pi
+                        current_item.get_image(), self.arm_out_angle * 180 / math.pi
                     )
                 if self.direction == 1:
                     offset_x = 10
@@ -1917,11 +1923,11 @@ class Player:
 
             elif self.item_swing:
                 if not commons.is_holding_item:
-                    item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+                    current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
                 else:
-                    item = commons.item_holding
+                    current_item = current_item.item_holding
 
-                if item is not None and item.has_tag(ItemTag.WEAPON):
+                if current_item is not None and current_item.has_tag(ItemTag.WEAPON):
                     assert self.current_item_swing_image is not None
                     if self.direction == 1:
                         hit_rect = Rect(
@@ -1972,8 +1978,8 @@ class Player:
                                     direction = -1
                                 else:
                                     direction = 1
-                                damage = item.get_attack_damage()
-                                crit = random.random() <= item.get_crit_chance()
+                                damage = current_item.get_attack_damage()
+                                crit = random.random() <= current_item.get_crit_chance()
 
                                 to_enemy = shared_methods.normalize_vec_2(
                                     (
@@ -1985,7 +1991,7 @@ class Player:
                                 enemy.damage(
                                     damage,
                                     ["longsword", "Player"],
-                                    item.get_knockback(),
+                                    current_item.get_knockback(),
                                     direction=direction,
                                     crit=crit,
                                     source_velocity=(
@@ -2009,16 +2015,16 @@ class Player:
                     self.current_item_swing_image, self.swing_angle
                 )
 
-                if item is not None:
-                    if item.has_tag(ItemTag.SHORTSWORD):
+                if current_item is not None:
+                    if current_item.has_tag(ItemTag.SHORTSWORD):
                         total_offset = (
                             commons.PLAYER_ARM_LENGTH
-                            + self.current_item_extend_offset * item.get_hold_offset()
+                            + self.current_item_extend_offset * current_item.get_hold_offset()
                         )
                     else:
                         total_offset = (
                             commons.PLAYER_ARM_LENGTH
-                            + self.current_item_swing_offset * item.get_hold_offset()
+                            + self.current_item_swing_offset * current_item.get_hold_offset()
                         )
                 else:
                     total_offset = commons.PLAYER_ARM_LENGTH
@@ -2070,11 +2076,11 @@ class Player:
             elif self.item_extend:
                 print("test")
                 if not commons.is_holding_item:
-                    item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
+                    current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
                 else:
-                    item = commons.item_holding
+                    current_item = current_item.item_holding
 
-                if item is not None and item.has_tag(ItemTag.WEAPON):
+                if current_item is not None and current_item.has_tag(ItemTag.WEAPON):
                     assert self.current_item_extend_image is not None
                     if self.direction == 1:
                         hit_rect = Rect(
@@ -2125,8 +2131,8 @@ class Player:
                                     direction = -1
                                 else:
                                     direction = 1
-                                damage = item.get_attack_damage()
-                                if random.random() <= item.get_crit_chance():
+                                damage = current_item.get_attack_damage()
+                                if random.random() <= current_item.get_crit_chance():
                                     crit = True
                                 else:
                                     crit = False
@@ -2141,7 +2147,7 @@ class Player:
                                 enemy.damage(
                                     damage,
                                     ["shortsword", "Player"],
-                                    item.get_knockback(),
+                                    current_item.get_knockback(),
                                     direction=direction,
                                     crit=crit,
                                     source_velocity=(
@@ -2165,16 +2171,16 @@ class Player:
                     self.current_item_swing_image, self.swing_angle
                 )
 
-                if item is not None:
-                    if item.has_tag(ItemTag.SHORTSWORD):
+                if current_item is not None:
+                    if current_item.has_tag(ItemTag.SHORTSWORD):
                         total_offset = (
                             commons.PLAYER_ARM_LENGTH
-                            + self.current_item_extend_offset * item.get_hold_offset()
+                            + self.current_item_extend_offset * current_item.get_hold_offset()
                         )
                     else:
                         total_offset = (
                             commons.PLAYER_ARM_LENGTH
-                            + self.current_item_swing_offset * item.get_hold_offset()
+                            + self.current_item_swing_offset * current_item.get_hold_offset()
                         )
                 else:
                     total_offset = commons.PLAYER_ARM_LENGTH
@@ -2282,38 +2288,38 @@ class Player:
         # Convert the items    in the hotbar to a less    data heavy format
         formatted_hotbar = []
         for item_index in range(len(self.items[ItemLocation.HOTBAR])):
-            item = self.items[ItemLocation.HOTBAR][item_index]
-            if item is not None:
-                if item.prefix_data is None:
+            current_item = self.items[ItemLocation.HOTBAR][item_index]
+            if current_item is not None:
+                if current_item.prefix_data is None:
                     formatted_hotbar.append(
-                        [item_index, item.get_id_str(), item.amount, None]
+                        [item_index, current_item.get_id_str(), current_item.amount, None]
                     )
                 else:
                     formatted_hotbar.append(
                         [
                             item_index,
-                            item.get_id_str(),
-                            item.amount,
-                            item.get_prefix_name(),
+                            current_item.get_id_str(),
+                            current_item.amount,
+                            current_item.get_prefix_name(),
                         ]
                     )
 
         # Convert the items    in the inventory to a less data    heavy format
         formatted_inventory = []
         for item_index in range(len(self.items[ItemLocation.INVENTORY])):
-            item = self.items[ItemLocation.INVENTORY][item_index]
-            if item is not None:
-                if item.prefix_data is None:
+            current_item = self.items[ItemLocation.INVENTORY][item_index]
+            if current_item is not None:
+                if current_item.prefix_data is None:
                     formatted_inventory.append(
-                        (item_index, item.get_id_str(), item.amount, "")
+                        (item_index, current_item.get_id_str(), current_item.amount, "")
                     )
                 else:
                     formatted_inventory.append(
                         (
                             item_index,
-                            item.get_id_str(),
-                            item.amount,
-                            item.get_prefix_name(),
+                            current_item.get_id_str(),
+                            current_item.amount,
+                            current_item.get_prefix_name(),
                         )
                     )
 

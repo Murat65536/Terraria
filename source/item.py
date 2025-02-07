@@ -493,3 +493,6 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
             spawn_list.append(None)
 
     return spawn_list
+
+
+item_holding: Item = Item(0)

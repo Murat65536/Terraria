@@ -26,6 +26,7 @@ class Message(TypedDict):
     text: pygame.Surface
     lifespan: float
 
+
 class DamageNumber(TypedDict):
     position: tuple[float, float]
     rotation: tuple[float, float]
@@ -40,6 +41,7 @@ class RecentPickup(TypedDict):
     position: tuple[float, float]
     velocity: tuple[float, float]
     text_duration: float
+
 
 enemies: list[Enemy] = []
 particles: list[Particle] = []
@@ -72,7 +74,9 @@ def create_player():
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
     for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
-        loaded_item_data: tuple[int, str, int, str] = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
+        loaded_item_data: tuple[int, str, int, str] = commons.PLAYER_DATA["hotbar"][
+            loaded_hotbar_index
+        ]
         item: Item = Item(
             game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2]
         )
@@ -115,7 +119,9 @@ def check_enemy_spawn():
         if commons.ENEMY_SPAWN_TICK <= 0:
             commons.ENEMY_SPAWN_TICK += 1.0
             assert client_player is not None
-            val = min(int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1)
+            val = min(
+                int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1
+            )
             if (
                 len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5)
                 and random.randint(1, val) == 1
@@ -243,10 +249,17 @@ def update_messages():
 
 def update_damage_numbers():
     for number in damage_numbers:
-        number["rotation"] = (number["rotation"][0] * 0.95, number["rotation"][1] * 0.95)
+        number["rotation"] = (
+            number["rotation"][0] * 0.95,
+            number["rotation"][1] * 0.95,
+        )
         number["position"] = (
-            number["position"][0] + number["rotation"][0] - camera_position_difference[0],
-            number["position"][1] + number["rotation"][1] - camera_position_difference[1],
+            number["position"][0]
+            + number["rotation"][0]
+            - camera_position_difference[0],
+            number["position"][1]
+            + number["rotation"][1]
+            - camera_position_difference[1],
         )
         number["lifespan"] -= commons.DELTA_TIME
         if number["lifespan"] <= 0:
@@ -259,7 +272,9 @@ def update_recent_pickups():
     for i in range(len(recent_pickups)):
         recent_pickups[i]["text_duration"] -= commons.DELTA_TIME
         if recent_pickups[i]["text_duration"] < 0.5:
-            recent_pickups[i]["surface"].set_alpha(int(recent_pickups[i]["text_duration"] * 510))
+            recent_pickups[i]["surface"].set_alpha(
+                int(recent_pickups[i]["text_duration"] * 510)
+            )
             if recent_pickups[i]["text_duration"] <= 0:
                 to_remove.append(recent_pickups[i])
         for j in range(0, i):
@@ -293,9 +308,13 @@ def update_recent_pickups():
         )
         recent_pickups[i]["position"] = (
             recent_pickups[i]["position"][0]
-            + recent_pickups[i]["velocity"][0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+            + recent_pickups[i]["velocity"][0]
+            * commons.DELTA_TIME
+            * commons.BLOCK_SIZE,
             recent_pickups[i]["position"][1]
-            + recent_pickups[i]["velocity"][1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+            + recent_pickups[i]["velocity"][1]
+            * commons.DELTA_TIME
+            * commons.BLOCK_SIZE,
         )
     for item in to_remove:
         recent_pickups.remove(item)
@@ -361,7 +380,9 @@ def draw_recent_pickups():
                 - recent_pickup["surface"].get_width() * 0.5
                 - camera_position[0]
                 + commons.WINDOW_WIDTH * 0.5,
-                recent_pickup["position"][1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
+                recent_pickup["position"][1]
+                - camera_position[1]
+                + commons.WINDOW_HEIGHT * 0.5,
             ),
         )
 
@@ -382,6 +403,16 @@ def spawn_enemy(enemy_id: int, position=None):
             int(camera_position[1]) // commons.BLOCK_SIZE,
         )
         for _ in range(500):
+            # direction_x: int = round(random.random()) * 2 - 1
+            # direction_y: int = round(random.random()) * 2 - 1
+            # x = random.randint(
+            #     player_block_pos[0] + direction_x * commons.MIN_ENEMY_SPAWN_TILES_X,
+            #     player_block_pos[0] + direction_x * commons.MAX_ENEMY_SPAWN_TILES_X,
+            # )
+            # y = random.randint(
+            #     player_block_pos[1] + direction_y * commons.MIN_ENEMY_SPAWN_TILES_Y,
+            #     player_block_pos[1] + direction_y * commons.MAX_ENEMY_SPAWN_TILES_Y,
+            # )
             if random.random() < 0.5:
                 x = random.randint(
                     player_block_pos[0] - commons.MAX_ENEMY_SPAWN_TILES_X,
@@ -413,27 +444,23 @@ def spawn_enemy(enemy_id: int, position=None):
                         player_block_pos[1] + commons.MAX_ENEMY_SPAWN_TILES_Y,
                     )
             if world.tile_in_map(x, y, width=2):
-                if world.world.tile_data[x][y][0] == game_data.air_tile_id:
-                    if world.world.tile_data[x - 1][y][0] == game_data.air_tile_id:
-                        if world.world.tile_data[x][y - 1][0] == game_data.air_tile_id:
-                            if (
-                                world.world.tile_data[x + 1][y][0]
-                                == game_data.air_tile_id
-                            ):
-                                if (
-                                    world.world.tile_data[x][y + 1][0]
-                                    == game_data.air_tile_id
-                                ):
-                                    enemies.append(
-                                        Enemy(
-                                            (
-                                                x * commons.BLOCK_SIZE,
-                                                y * commons.BLOCK_SIZE,
-                                            ),
-                                            enemy_id,
-                                        )
-                                    )
-                                    return
+                if (
+                    world.world.tile_data[x][y][0] == game_data.air_tile_id
+                    and world.world.tile_data[x - 1][y][0] == game_data.air_tile_id
+                    and world.world.tile_data[x][y - 1][0] == game_data.air_tile_id
+                    and world.world.tile_data[x + 1][y][0] == game_data.air_tile_id
+                    and world.world.tile_data[x][y + 1][0] == game_data.air_tile_id
+                ):
+                    enemies.append(
+                        Enemy(
+                            (
+                                x * commons.BLOCK_SIZE,
+                                y * commons.BLOCK_SIZE,
+                            ),
+                            enemy_id,
+                        )
+                    )
+                    return
     else:
         enemies.append(Enemy(position, enemy_id))
 
@@ -615,4 +642,13 @@ def add_recent_pickup(item_id: int, amount: int, tier, pos, unique=False, item=N
         (1, 1),
     )
     vel = (random.random() * 2 - 1, -50.0)
-    recent_pickups.append({"item_id": item_id, "amount": amount, "surface": surf, "position": pos, "velocity": vel, "text_duration": 3.0})
+    recent_pickups.append(
+        {
+            "item_id": item_id,
+            "amount": amount,
+            "surface": surf,
+            "position": pos,
+            "velocity": vel,
+            "text_duration": 3.0,
+        }
+    )

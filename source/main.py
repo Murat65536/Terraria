@@ -725,7 +725,7 @@ def draw_inventory_hover_text() -> None:
         ):
             if pygame.mouse.get_pressed()[0]:
                 if not commons.is_holding_item:
-                    commons.item_holding = item.Item(
+                    item.item_holding = item.Item(
                         entity_manager.client_player.items[
                             item.ItemLocation.CRAFTING_MENU
                         ][array_index][0],
@@ -737,19 +737,19 @@ def draw_inventory_hover_text() -> None:
                     commons.is_holding_item = True
                     can_pickup_item = False
                     can_drop_holding = False
-                    game_data.play_sound(commons.item_holding.get_pickup_sound_id_str())
-                elif can_drop_holding and commons.item_holding != None:
+                    game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
+                elif can_drop_holding and item.item_holding != None:
                     if (
-                        commons.item_holding.item_id
+                        item.item_holding.item_id
                         == entity_manager.client_player.items[
                             item.ItemLocation.CRAFTING_MENU
                         ][array_index][0]
                     ):
                         if (
-                            commons.item_holding.amount
-                            < commons.item_holding.get_max_stack()
+                            item.item_holding.amount
+                            < item.item_holding.get_max_stack()
                         ):
-                            commons.item_holding.amount += (
+                            item.item_holding.amount += (
                                 entity_manager.client_player.items[
                                     item.ItemLocation.CRAFTING_MENU
                                 ][array_index][1]
@@ -770,9 +770,9 @@ def draw_inventory_hover_text() -> None:
 
         if mouse_buttons[0] or mouse_buttons[2]:
             # Dropping holding item
-            if can_drop_holding and commons.item_holding is not None:
+            if can_drop_holding and item.item_holding is not None:
                 if mouse_buttons[0]:
-                    amount = commons.item_holding.amount
+                    amount = item.item_holding.amount
                 else:
                     amount = 1
 
@@ -780,7 +780,7 @@ def draw_inventory_hover_text() -> None:
 
                 if mouse_buttons[0] or item_drop_tick <= 0:
                     item_add_data = entity_manager.client_player.give_item(
-                        commons.item_holding, amount, position=pos
+                        item.item_holding, amount, position=pos
                     )
 
                 if item_add_data is not None:
@@ -789,30 +789,30 @@ def draw_inventory_hover_text() -> None:
                     # Items are being dropped
                     if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
                         game_data.play_sound(
-                            commons.item_holding.get_drop_sound_id_str()
+                            item.item_holding.get_drop_sound_id_str()
                         )
                         if mouse_buttons[0]:
-                            commons.item_holding = None
+                            item.item_holding = None
                             commons.is_holding_item = False
                         else:
-                            commons.item_holding.amount -= 1
+                            item.item_holding.amount -= 1
 
                     # Dropping some of the items in hand
                     elif item_add_data[0] == item.ItemSlotClickResult.GAVE_SOME:
                         game_data.play_sound(
-                            commons.item_holding.get_drop_sound_id_str()
+                            item.item_holding.get_drop_sound_id_str()
                         )
-                        commons.item_holding.amount = int(item_add_data[1])
+                        item.item_holding.amount = int(item_add_data[1])
 
                     # Items are being swapped
                     elif item_add_data[0] == item.ItemSlotClickResult.SWAPPED:
                         game_data.play_sound(
-                            commons.item_holding.get_drop_sound_id_str()
+                            item.item_holding.get_drop_sound_id_str()
                         )
                         entity_manager.client_player.items[item_add_data[2]][
                             pos[1]
-                        ] = commons.item_holding
-                        commons.item_holding = item_add_data[1]
+                        ] = item.item_holding
+                        item.item_holding = item_add_data[1]
 
                     if pos not in entity_manager.client_player.old_inventory_positions:
                         entity_manager.client_player.old_inventory_positions.append(pos)
@@ -823,10 +823,10 @@ def draw_inventory_hover_text() -> None:
                         item_drop_rate = 0
                     item_drop_tick = int(item_drop_rate)
                     if (
-                        commons.item_holding is not None
-                        and commons.item_holding.amount <= 0
+                        item.item_holding is not None
+                        and item.item_holding.amount <= 0
                     ):
-                        commons.item_holding = None
+                        item.item_holding = None
                         commons.is_holding_item = False
                 else:
                     item_drop_tick -= commons.DELTA_TIME
@@ -834,9 +834,9 @@ def draw_inventory_hover_text() -> None:
             # Picking up item
             elif can_pickup_item and not mouse_buttons[2]:
                 can_pickup_item = False
-                commons.item_holding = entity_manager.client_player.remove_item(pos)
-                if commons.item_holding is not None:
-                    game_data.play_sound(commons.item_holding.get_pickup_sound_id_str())
+                item.item_holding = entity_manager.client_player.remove_item(pos)
+                if item.item_holding is not None:
+                    game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
                     commons.is_holding_item = True
                 entity_manager.client_player.render_current_item_image()
 
@@ -853,14 +853,14 @@ def draw_inventory_hover_text() -> None:
             velocity = (-32, random.random() * 2)
 
         entity_manager.spawn_physics_item(
-            commons.item_holding,
+            item.item_holding,
             entity_manager.client_player.position,
             velocity=velocity,
         )
 
         commons.is_holding_item = False
         can_drop_holding = False
-        commons.item_holding = None
+        item.item_holding = None
 
 
 """================================================================================================================= 
@@ -871,15 +871,15 @@ def draw_inventory_hover_text() -> None:
 
 
 def draw_item_holding() -> None:
-    if commons.is_holding_item and commons.item_holding != None:
+    if commons.is_holding_item and item.item_holding != None:
         commons.screen.blit(
-            commons.item_holding.get_image(),
+            item.item_holding.get_image(),
             (commons.MOUSE_POSITION[0] + 10, commons.MOUSE_POSITION[1] + 10),
         )
-        if commons.item_holding.amount > 1:
+        if item.item_holding.amount > 1:
             commons.screen.blit(
                 shared_methods.outline_text(
-                    str(commons.item_holding.amount),
+                    str(item.item_holding.amount),
                     (255, 255, 255),
                     commons.SMALL_FONT,
                 ),

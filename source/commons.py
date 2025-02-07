@@ -175,7 +175,6 @@ PLAYER_MODEL_COLOR_INDEX: int = 0
 TEXT_INPUT: str = ""
 
 is_holding_item: bool = False
-item_holding: object = None
 
 
 OLD_TIME_MILLISECONDS: int = pygame.time.get_ticks()
