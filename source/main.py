@@ -61,6 +61,7 @@ def fade_background(new_background_id: int) -> None:
 
 
 def draw_death_message() -> None:
+    assert type(entity_manager.client_player) == entity_manager.Player
     death_text = shared_methods.outline_text(
         "You were slain...", (229, 127, 127), commons.LARGE_FONT
     )
@@ -84,6 +85,7 @@ def draw_death_message() -> None:
 
 def render_hand_text() -> None:
     global hand_text
+    assert type(entity_manager.client_player) == entity_manager.Player
     equipped = entity_manager.client_player.items[item.ItemLocation.HOTBAR][
         entity_manager.client_player.hotbar_index
     ]
@@ -165,6 +167,7 @@ def run_splash_screen() -> None:
 
 def render_stats_text(pos: List[Any]) -> bool:
     global stats_text, last_hovered_item
+    assert type(entity_manager.client_player) == entity_manager.Player
 
     if pos[0] == item.ItemLocation.CRAFTING_MENU:
         equipped = item.Item(
@@ -678,6 +681,7 @@ def add_plus(string: str) -> str:
 
 def draw_inventory_hover_text() -> None:
     global can_drop_holding, can_pickup_item, item_drop_tick, item_drop_rate
+    assert type(entity_manager.client_player) == entity_manager.Player
     pos = None
 
     # Inventory
@@ -1031,6 +1035,7 @@ menu_logo = pygame.image.load("assets/images/logo/logo.png")
 old_time_milliseconds = pygame.time.get_ticks()
 
 while True:
+    assert type(entity_manager.client_player) == entity_manager.Player
     commons.MOUSE_POSITION = pygame.mouse.get_pos()
     commons.HOVERED_TILE = (
         int(

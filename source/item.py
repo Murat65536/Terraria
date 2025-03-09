@@ -305,14 +305,17 @@ class Item:
                 return self.json_item["world_override_image"]
             except KeyError:
                 return
+        raise NameError("json_item is None.")
 
     def get_tile_id_str(self):
         if self.json_item != None:
             return self.json_item["tile_id_str"]
+        raise NameError("json_item is None.")
 
     def get_wall_id_str(self):
         if self.json_item != None:
             return self.json_item["wall_id_str"]
+        raise NameError("json_item is None.")
 
     def get_hold_offset(self):
         if self.json_item != None:
@@ -321,70 +324,87 @@ class Item:
     def get_ranged_projectile_id_str(self):
         if self.json_item != None:
             return self.json_item["ranged_projectile_id_str"]
+        raise NameError("json_item is None.")
 
     def get_ranged_ammo_type(self):
         if self.json_item != None:
             return self.json_item["ranged_ammo_type"]
+        raise NameError("json_item is None.")
 
     def get_ranged_accuracy(self):
         if self.json_item != None:
             return self.json_item["ranged_accuracy"]
+        raise NameError("json_item is None.")
 
     def get_ranged_num_projectiles(self):
         if self.json_item != None:
             return self.json_item["ranged_num_projectiles"]
+        raise NameError("json_item is None.")
 
     def get_pickaxe_power(self):
         if self.json_item != None:
             return self.json_item["pickaxe_power"]
+        raise NameError("json_item is None.")
 
     def get_axe_power(self):
         if self.json_item != None:
             return self.json_item["axe_power"]
+        raise NameError("json_item is None.")
 
     def get_hammer_power(self):
         if self.json_item != None:
             return self.json_item["hammer_power"]
+        raise NameError("json_item is None.")
 
     def get_grapple_speed(self):
         if self.json_item != None:
             return self.json_item["grapple_speed"]
+        raise NameError("json_item is None.")
 
     def get_grapple_chain_length(self):
         if self.json_item != None:
             return self.json_item["grapple_chain_length"]
+        raise NameError("json_item is None.")
 
     def get_grapple_max_chains(self):
         if self.json_item != None:
             return self.json_item["grapple_max_chains"]
+        raise NameError("json_item is None.")
 
     def get_grapple_chain_image(self):
         if self.json_item != None:
             return self.json_item["grapple_chain_image"]
+        raise NameError("json_item is None.")
 
     def get_grapple_claw_image(self):
         if self.json_item != None:
             return self.json_item["grapple_claw_image"]
+        raise NameError("json_item is None.")
 
-    def get_max_stack(self):
+    def get_max_stack(self) -> int:
         if self.json_item != None:
             return self.json_item["max_stack"]
+        raise NameError("json_item is None.")
 
-    def get_buy_price(self):
+    def get_buy_price(self) -> int:
         if self.json_item != None:
             return self.json_item["buy_price"]
+        raise NameError("json_item is None.")
 
-    def get_sell_price(self):
+    def get_sell_price(self) -> int:
         if self.json_item != None:
             return self.json_item["sell_price"]
+        raise NameError("json_item is None.")
 
-    def get_pickup_sound_id_str(self):
+    def get_pickup_sound_id_str(self) -> str:
         if self.json_item != None:
             return self.json_item["pickup_sound"]
+        raise NameError("json_item is None.")
 
-    def get_drop_sound_id_str(self):
+    def get_drop_sound_id_str(self) -> str:
         if self.json_item != None:
             return self.json_item["drop_sound"]
+        raise NameError("json_item is None.")
 
 
 def get_coins_from_int(coin_int: int) -> list[Item]:

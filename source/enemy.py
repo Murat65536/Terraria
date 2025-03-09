@@ -65,6 +65,7 @@ class Enemy:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def update(self) -> None:
+        assert type(entity_manager.client_player) == entity_manager.Player
         if self.alive:
             if self.world_invincible:
                 if self.world_invincible_timer <= 0:
@@ -450,6 +451,7 @@ class Enemy:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def despawn_radius(self):
+        assert type(entity_manager.client_player) == entity_manager.Player
         if (
             self.position[0]
             < entity_manager.client_player.position[0]
@@ -544,6 +546,7 @@ class Enemy:
     -----------------------------------------------------------------------------------------------------------------"""
 
     def run_ai(self):
+        assert type(entity_manager.client_player) == entity_manager.Player
         if self.type == "Slime":
             if self.grounded:
                 if self.jump_tick <= 0:
