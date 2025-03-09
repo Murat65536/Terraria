@@ -1035,7 +1035,6 @@ menu_logo = pygame.image.load("assets/images/logo/logo.png")
 old_time_milliseconds = pygame.time.get_ticks()
 
 while True:
-    assert type(entity_manager.client_player) == entity_manager.Player
     commons.MOUSE_POSITION = pygame.mouse.get_pos()
     commons.HOVERED_TILE = (
         int(
@@ -1069,6 +1068,7 @@ while True:
         commons.SHIFT_ACTIVE = False
 
     if commons.game_state == "PLAYING":
+        assert type(entity_manager.client_player) == entity_manager.Player
         # TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
         base_zero_to_one_float = (
             math.sin(
