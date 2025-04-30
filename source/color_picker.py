@@ -143,7 +143,7 @@ class ColorPicker:
                 channel = int(channel * (0.5 - new_shade) * 2 + 255 * new_shade * 2)
 
             col[index] = channel
-        return (col[0], col[1], col[2])
+        return col[0], col[1], col[2]
 
     """================================================================================================================= 
         color_picker.ColorPicker.update -> void

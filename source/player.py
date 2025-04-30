@@ -251,7 +251,7 @@ class Model:
 class Player:
     def __init__(
         self,
-        position,
+        position: tuple[float, float],
         model,
         name="unassigned",
         hp=0,

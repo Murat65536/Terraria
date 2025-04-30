@@ -17,7 +17,6 @@ class Biome(Enum):
     DESERT = 7
     OCEAN = 8
 
-
 class Background:
     def __init__(
         self, images: tuple[str, ...], offset: int, animation_delay: float=0
@@ -144,7 +143,7 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
                     (
                         "assets/images/backgrounds/game_backgrounds/Background_0.png",
                     ),
-                    0
+                    0,
                 ),
                 Background(
                     (
@@ -182,7 +181,7 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
                     (
                         "assets/images/backgrounds/game_backgrounds/Background_0.png",
                     ),
-                    0
+                    0,
                 ),
                 Background(
                     (
@@ -213,6 +212,70 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
                         "assets/images/backgrounds/game_backgrounds/Background_55.png",
                     ),
                     175,
+                ),
+            ),
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_24.png",
+                    ),
+                    -100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_90.png",
+                    ),
+                    -50,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_91.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_11.png",
+                    ),
+                    150,
+                ),
+            ),
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_24.png",
+                    ),
+                    -100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_90.png",
+                    ),
+                    -50,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_91.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_92.png",
+                    ),
+                    200,
                 ),
             ),
         )
