@@ -8,12 +8,19 @@ from math import ceil
 
 
 class Biome(Enum):
-    FOREST = 1
+    TREE = 1
+    CORRUPT = 2
+    JUNGLE = 3
+    SNOW = 4
+    HALLOW = 5
+    CRIMSON = 6
+    DESERT = 7
+    OCEAN = 8
 
 
 class Background:
     def __init__(
-        self, images: tuple[str, ...], offset: int, animation_delay: float
+        self, images: tuple[str, ...], offset: int, animation_delay: float=0
     ) -> None:
         self.images: tuple[str, ...] = images
         self.offset: int = offset
@@ -93,235 +100,81 @@ class BackgroundData:
 
 BACKGROUND_DATA: BackgroundData = BackgroundData(
     {
-        Biome.FOREST: (
+        Biome.TREE: (
             (
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_0.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
                     ),
-                    0,
                     0,
                 ),
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_1.png",
-                    ),
-                    25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_2.png",
-                    ),
-                    25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_3.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_7.png",
                     ),
                     -100,
-                    0,
                 ),
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_4.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_8.png",
                     ),
                     -50,
-                    0,
                 ),
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_0/background_5.png",
-                    ),
-                    175,
-                    0,
-                ),
-            ),
-            (
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_0.png",
-                    ),
-                    0,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_1.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_9.png",
                     ),
                     -50,
-                    0,
                 ),
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_2.png",
-                    ),
-                    -25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_3.png",
-                    ),
-                    25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_4.png",
-                    ),
-                    100,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_1/background_5.png",
-                    ),
-                    175,
-                    0,
-                ),
-            ),
-            (
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_0.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_10.png",
                     ),
                     0,
-                    0,
                 ),
                 Background(
                     (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_1.png",
-                    ),
-                    -50,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_2.png",
-                    ),
-                    -25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_3.png",
-                    ),
-                    25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_4.png",
-                    ),
-                    100,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_2/background_5.png",
-                    ),
-                    175,
-                    0,
-                ),
-            ),
-            (
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_3/background_0.png",
-                    ),
-                    0,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_3/background_1.png",
-                    ),
-                    -25,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_3/background_2.png",
-                    ),
-                    0,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_3/background_3.png",
-                    ),
-                    75,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_3/background_4.png",
-                    ),
-                    350,
-                    0,
-                ),
-            ),
-            (
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_0.png",
-                    ),
-                    0,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_1.png",
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_2.png",
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_3.png",
-                    ),
-                    100,
-                    0.5,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_4.png",
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_5.png",
-                        "assets/images/backgrounds/game_backgrounds/background_4/background_6.png",
-                    ),
-                    225,
-                    0.5,
-                ),
-            ),
-            (
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_0.png",
-                    ),
-                    0,
-                    0,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_1.png",
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_2.png",
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_3.png",
-                    ),
-                    100,
-                    0.5,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_4.png",
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_5.png",
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_6.png",
-                    ),
-                    225,
-                    0.5,
-                ),
-                Background(
-                    (
-                        "assets/images/backgrounds/game_backgrounds/background_5/background_7.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_11.png",
                     ),
                     200,
-                    0,
+                ),
+            ),
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
+                    ),
+                    0
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_7.png",
+                    ),
+                    -100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_8.png",
+                    ),
+                    -50,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_50.png",
+                    ),
+                    75,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_51.png",
+                    ),
+                    125,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_52.png",
+                    ),
+                    175,
                 ),
             ),
         )

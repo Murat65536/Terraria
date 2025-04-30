@@ -90,7 +90,7 @@ game_state: str = "MAIN_MENU"
 game_sub_state: str = "MAIN"
 
 # Config loading
-CONFIG: TextIO = open("CONFIG.txt", "r")
+CONFIG: TextIO = open("config.txt", "r")
 CONFIG_DATA: list[str] = CONFIG.readlines()
 configData: list[str] = []
 for item in CONFIG_DATA:

@@ -121,7 +121,7 @@ def run_splash_screen() -> None:
         ) * 0.001
         commons.OLD_TIME_MILLISECONDS = pygame.time.get_ticks()
         splashscreen = pygame.image.load(
-            f"assets/images/backgrounds/splash_screens/Splash_{splash_screen_num}.png"
+            f"assets/images/backgrounds/splash_screens/splash_{splash_screen_num}.png"
         )
         splashscreen = pygame.transform.scale(
             splashscreen, (commons.WINDOW_WIDTH, commons.WINDOW_HEIGHT)
@@ -959,7 +959,7 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
-    BACKGROUND_DATA.update_biome(Biome.FOREST)
+    BACKGROUND_DATA.update_biome(Biome.TREE)
     BACKGROUND_DATA.render()
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
@@ -1219,7 +1219,7 @@ while True:
                 commons.WAIT_TO_USE = True
 
         if commons.BACKGROUND:
-            BACKGROUND_DATA.update_biome(Biome.FOREST)
+            BACKGROUND_DATA.update_biome(Biome.TREE)
             BACKGROUND_DATA.render(parallax_pos[0], parallax_pos[1], 0.1)
             BACKGROUND_DATA.update(commons.DELTA_TIME)
         else:
