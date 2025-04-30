@@ -177,6 +177,44 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
                     175,
                 ),
             ),
+(
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
+                    ),
+                    0
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_7.png",
+                    ),
+                    -100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_8.png",
+                    ),
+                    -50,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_53.png",
+                    ),
+                    75,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_54.png",
+                    ),
+                    125,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_55.png",
+                    ),
+                    175,
+                ),
+            ),
         )
     }
 )
