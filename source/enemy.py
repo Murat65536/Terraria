@@ -271,7 +271,7 @@ class Enemy:
         self,
         value: float,
         source: list[str],
-        knockback: int = 0,
+        knockback: float = 0,
         direction: int = 0,
         crit: bool = False,
         source_velocity: tuple[float, float] = (0, 0),
@@ -342,7 +342,7 @@ class Enemy:
                 self.kill(source_velocity)
 
             if knockback != 0:
-                remaining_knockback = max(0, knockback - self.knockback_resistance)
+                remaining_knockback: float = max(0.0, knockback - self.knockback_resistance)
                 self.velocity = (
                     self.velocity[0] + direction * remaining_knockback * 3.0,
                     remaining_knockback * -5.0,
@@ -522,22 +522,14 @@ class Enemy:
                 Rect(left + 2, top + 32, (self.rect.width - 4) * health_float, 6),
                 0,
             )
-        if commons.HITBOXES:
-            pygame.draw.rect(
-                commons.screen,
-                (255, 0, 0),
-                Rect(
-                    self.rect.left
-                    - entity_manager.camera_position[0]
-                    + commons.WINDOW_WIDTH * 0.5,
-                    self.rect.top
-                    - entity_manager.camera_position[1]
-                    + commons.WINDOW_HEIGHT * 0.5,
-                    self.rect.width,
-                    self.rect.height,
-                ),
-                1,
-            )
+        shared_methods.draw_hitbox(
+            entity_manager.camera_position[0],
+            entity_manager.camera_position[1],
+            self.rect.left,
+            self.rect.top,
+            self.rect.width,
+            self.rect.height
+        )
 
     """================================================================================================================= 
         enemy.Enemy.run_ai -> void

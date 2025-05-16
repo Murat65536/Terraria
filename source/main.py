@@ -964,7 +964,6 @@ def draw_menu_background() -> None:
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
 
-
 good_color: tuple[int, int, int] = (10, 230, 10)
 bad_color: tuple[int, int, int] = (230, 10, 10)
 

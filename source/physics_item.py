@@ -25,13 +25,13 @@ import item
 class PhysicsItem:
     def __init__(
         self,
-        item: Item,
+        physics_item: Item,
         position: tuple[float, float],
         velocity: tuple[float, float] = (0, 0),
         pickup_delay: int = 100,
     ):
 
-        self.item: Item = item
+        self.item: Item = physics_item
 
         self.position: tuple[float, float] = position
         self.block_position: tuple[int, int] = (0, 0)
@@ -309,19 +309,11 @@ class PhysicsItem:
                 ),
             )
 
-        if commons.HITBOXES:
-            pygame.draw.rect(
-                commons.screen,
-                (255, 0, 0),
-                Rect(
-                    self.rect.left
-                    - entity_manager.camera_position[0]
-                    + commons.WINDOW_WIDTH * 0.5,
-                    self.rect.top
-                    - entity_manager.camera_position[1]
-                    + commons.WINDOW_HEIGHT * 0.5,
-                    self.rect.width,
-                    self.rect.height,
-                ),
-                1,
-            )
+        shared_methods.draw_hitbox(
+            entity_manager.camera_position[0],
+            entity_manager.camera_position[1],
+            self.rect.left,
+            self.rect.top,
+            self.rect.width,
+            self.rect.height
+        )

@@ -11,7 +11,6 @@ import world
 
 import entity_manager
 import shared_methods
-import tilesets
 
 
 """================================================================================================================= 
@@ -238,19 +237,11 @@ class Projectile:
                 + commons.WINDOW_HEIGHT * 0.5,
             ),
         )
-        if commons.HITBOXES:
-            pygame.draw.rect(
-                commons.screen,
-                (255, 0, 0),
-                Rect(
-                    self.rect.left
-                    - entity_manager.camera_position[0]
-                    + commons.WINDOW_WIDTH * 0.5,
-                    self.rect.top
-                    - entity_manager.camera_position[1]
-                    + commons.WINDOW_HEIGHT * 0.5,
-                    self.rect.width,
-                    self.rect.height,
-                ),
-                1,
-            )
+        shared_methods.draw_hitbox(
+            entity_manager.camera_position[0],
+            entity_manager.camera_position[1],
+            self.rect.left,
+            self.rect.top,
+            self.rect.width,
+            self.rect.height
+        )

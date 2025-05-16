@@ -1018,7 +1018,7 @@ def use_special_tile(i, j):
             tile_cycle_offset = tile_data["cycle_facing_right_tile_offset"]
             tile_cycle_sound = tile_data["cycle_facing_right_sound"]
 
-        if TileTag.MULTITILE in tile_cycle_data["tags"]:
+        if TileTag.MULTI_TILE in tile_cycle_data["tags"]:
             tile_cycle_dimensions = tile_cycle_data["multitile_dimensions"]
         else:
             tile_cycle_dimensions = 1, 1
@@ -1027,7 +1027,7 @@ def use_special_tile(i, j):
 
         can_cycle = True
 
-        if TileTag.MULTITILE in tile_data["tags"]:
+        if TileTag.MULTI_TILE in tile_data["tags"]:
             current_tile_dimensions = tile_data["multitile_dimensions"]
         else:
             current_tile_dimensions = 1, 1
@@ -1059,7 +1059,7 @@ def use_special_tile(i, j):
             game_data.play_sound(tile_cycle_sound)
 
             # Remove existing cyclable
-            if TileTag.MULTITILE in tile_data["tags"]:
+            if TileTag.MULTI_TILE in tile_data["tags"]:
                 for x in range(current_tile_dimensions[0]):
                     for y in range(current_tile_dimensions[1]):
                         world.tile_data[i + x][j + y][0] = game_data.air_tile_id
@@ -1127,7 +1127,7 @@ def update_terrain_surface(i, j, affect_others=True):
                 tile[0], tile[1], tile_dat[0]
             )  # Get the mask at i, j and store it in the tile_mask_data array
 
-            if TileTag.MULTITILE in json_tile_dat["tags"]:
+            if TileTag.MULTI_TILE in json_tile_dat["tags"]:
                 tile_img = pygame.Surface(
                     (commons.BLOCK_SIZE, commons.BLOCK_SIZE)
                 ).convert()
@@ -1361,7 +1361,7 @@ def spawn_structure(
                     world.tile_data[world_x][world_y][0]
                 )
 
-                if TileTag.MULTITILE in existing_tile_data["tags"]:
+                if TileTag.MULTI_TILE in existing_tile_data["tags"]:
                     tile_origin = get_multitile_origin(world_x, world_y)
                     remove_multitile(tile_origin, False, False, False)
                 else:
@@ -1380,7 +1380,7 @@ def spawn_structure(
             tile_data = structure_data["tile_data"][x][y]
             if tile_data[0] is not None:
                 new_tile = game_data.get_tile_by_id_str(tile_data[0])
-                if TileTag.MULTITILE in new_tile["tags"]:
+                if TileTag.MULTI_TILE in new_tile["tags"]:
                     place_multitile(
                         world_x,
                         world_y,
@@ -1599,7 +1599,7 @@ def spawn_pot(pos_x, pos_y):
                 random_choice = pot_options[random.randint(0, len(pot_options) - 1)]
                 random_choice_tile_data = game_data.get_tile_by_id_str(random_choice)
 
-                if TileTag.MULTITILE in random_choice_tile_data["tags"]:
+                if TileTag.MULTI_TILE in random_choice_tile_data["tags"]:
                     tile_dimensions = random_choice_tile_data["multitile_dimensions"]
                     place_multitile(
                         pos_x,

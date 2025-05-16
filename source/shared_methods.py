@@ -2,11 +2,9 @@
 
 import pygame
 import math
-import math
 
 import commons
 import tilesets
-import game_data
 
 """================================================================================================================= 
     shared_methods.normalize_vec_2 -> tuple
@@ -255,3 +253,27 @@ def ease_in_zero_to_one(zero_to_one_float, iterations):
             zero_to_one_float * math.pi * 0.5 - math.pi * 0.5
         )
     return zero_to_one_float
+
+"""================================================================================================================= 
+    draw_hitbox -> void
+
+    Draws a hitbox
+-----------------------------------------------------------------------------------------------------------------"""
+
+def draw_hitbox(camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float) -> None:
+    if commons.HITBOXES:
+        pygame.draw.rect(
+            commons.screen,
+            (255, 0, 0),
+            pygame.Rect(
+                x
+                - camera_position_x
+                + commons.WINDOW_WIDTH * 0.5,
+                y
+                - camera_position_y
+                + commons.WINDOW_HEIGHT * 0.5,
+                width,
+                height,
+            ),
+            1,
+        )

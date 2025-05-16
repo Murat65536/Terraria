@@ -35,7 +35,7 @@ class TileTag(Enum):
     TRANSPARENT = 0
     NO_DRAW = 1
     NO_COLLIDE = 2
-    MULTITILE = 3
+    MULTI_TILE = 3
     CYCLABLE = 4
     CHEST = 5
     BREAKABLE = 6
