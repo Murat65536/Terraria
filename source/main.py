@@ -959,7 +959,7 @@ def draw_interactive_block_hover() -> None:
 
 
 def draw_menu_background() -> None:
-    BACKGROUND_DATA.update_biome(Biome.TREE)
+    BACKGROUND_DATA.update_biome(Biome.CORRUPT)
     BACKGROUND_DATA.render()
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)

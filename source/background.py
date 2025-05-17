@@ -63,7 +63,7 @@ class BackgroundData:
     ) -> None:
         self.parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]] = parallaxes
         self.biome: Biome = tuple(self.parallaxes.keys())[0]
-        self.selected: int = 8
+        self.selected: int = randint(0, len(self.parallaxes[self.biome]) - 1)
 
     def __iter__(self) -> Generator[Background, None, None]:
         for parallax in self.parallaxes[self.biome][self.selected]:
@@ -389,6 +389,90 @@ BACKGROUND_DATA: BackgroundData = BackgroundData(
                     0.25,
                 ),
             ),
-        )
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_0.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_179.png",
+                    ),
+                    100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_184.png",
+                    ),
+                    200,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_180.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_181.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_182.png",
+                        "assets/images/backgrounds/game_backgrounds/Background_183.png",
+                    ),
+                    150,
+                    0.25,
+                ),
+            ),
+        ),
+        Biome.CORRUPT: (
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_49.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_12.png",
+                    ),
+                    -75,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_13.png",
+                    ),
+                    -25,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_14.png",
+                    ),
+                    150,
+                ),
+            ),
+            (
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_49.png",
+                    ),
+                    0,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_56.png",
+                    ),
+                    25,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_57.png",
+                    ),
+                    100,
+                ),
+                Background(
+                    (
+                        "assets/images/backgrounds/game_backgrounds/Background_58.png",
+                    ),
+                    150,
+                ),
+            ),
+        ),
     }
 )
