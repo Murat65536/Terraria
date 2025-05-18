@@ -28,5 +28,4 @@
     <li>Heavy inspiration taken from Fergus Griggs</li>
     <li>Assets obtained from The Spriters Resource</li>
     <li>This project is VERY incomplete</li>
-    <li>Feel free to contribute</li>
 </ul>
