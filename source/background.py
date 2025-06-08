@@ -63,7 +63,8 @@ class BackgroundData:
     ) -> None:
         self.parallaxes: dict[Biome, tuple[tuple[Background, ...], ...]] = parallaxes
         self.biome: Biome = tuple(self.parallaxes.keys())[0]
-        self.selected: int = randint(0, len(self.parallaxes[self.biome]) - 1)
+        self.selected = 0
+        self.randomize_selected()
 
     def __iter__(self) -> Generator[Background, None, None]:
         for parallax in self.parallaxes[self.biome][self.selected]:
@@ -83,7 +84,7 @@ class BackgroundData:
     def update_biome(self, biome: Biome):
         if self.biome != biome:
             self.biome = biome
-            self.selected = randint(0, len(self.parallaxes[self.biome]) - 1)
+            self.randomize_selected()
 
     def render(self, offset_x: float=0, offset_y: float=0, magnitude: float=1) -> None:
         for number, background in enumerate(self.parallaxes[self.biome][self.selected]):
