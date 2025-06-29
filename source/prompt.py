@@ -1,5 +1,3 @@
-# prompt.py
-
 import pygame
 from pygame.locals import Rect
 
@@ -139,9 +137,9 @@ class Prompt:
         offset_x = 20
 
         if self.shop:
-            shop_col = (230, 230, 10)
+            shop_col = pygame.Color(230, 230, 10)
             if self.shop_hover:
-                shop_col = (255, 255, 255)
+                shop_col = pygame.Color(255, 255, 255)
             commons.screen.blit(
                 shared_methods.outline_text("Shop", shop_col, commons.DEFAULT_FONT),
                 (self.left + offset_x, self.bot),
@@ -149,9 +147,9 @@ class Prompt:
             offset_x += 60
 
         if self.button_1_name is not None:
-            button_1_col = (230, 230, 10)
+            button_1_col = pygame.Color(230, 230, 10)
             if self.button_1_hover:
-                button_1_col = (255, 255, 255)
+                button_1_col = pygame.Color(255, 255, 255)
             commons.screen.blit(
                 shared_methods.outline_text(
                     self.button_1_name, button_1_col, commons.DEFAULT_FONT
@@ -159,10 +157,10 @@ class Prompt:
                 (self.left + offset_x, self.bot),
             )
             offset_x += commons.DEFAULT_FONT.size(self.button_1_name)[0] + 20
-        close_col = (230, 230, 10)
+        close_col = pygame.Color(230, 230, 10)
 
         if self.close_hover:
-            close_col = (255, 255, 255)
+            close_col = pygame.Color(255, 255, 255)
 
         commons.screen.blit(
             shared_methods.outline_text("Close", close_col, commons.DEFAULT_FONT),

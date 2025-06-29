@@ -5,27 +5,25 @@
     <tr>
         <td>
             <picture>
-                <source srcset="/assets/images/readme/menu_screen.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
-                <img src="/assets/images/readme/menu_screen.png?raw=true" />
+                <source srcset="./assets/images/readme/menu_screen.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
+                <img src="./assets/images/readme/menu_screen.png?raw=true" alt="Menu screen"/>
             </picture>
         </td>
         <td>
             <picture>
-                <source srcset="/assets/images/readme/gameplay.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
-                <img src="/assets/images/readme/gameplay.png?raw=true" />
+                <source srcset="./assets/images/readme/gameplay.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
+                <img src="./assets/images/readme/gameplay.png?raw=true" alt="Gameplay"/>
             </picture>
         </td>
     </tr>
 </table>
-<br />
-<h3>Install Modules:</h3>
-<p>To install the modules, simply run: <code>pip install -r requirements.txt</code></p>
 
-<h3>Notes:</h3>
-<ul>
-    <li>You can turn off and on settings in the 'config.txt' file</li>
-    <li>Sounds are from Terraria</li>
-    <li>Heavy inspiration taken from Fergus Griggs</li>
-    <li>Assets obtained from The Spriters Resource</li>
-    <li>This project is VERY incomplete</li>
-</ul>
+### Install Modules:
+To install the modules, run: `pip install -r requirements.txt`
+
+### Notes:
+- You can turn off and on settings in the `config.txt` file
+- Sounds are from Terraria
+- Heavy inspiration taken from Fergus Griggs
+- Assets obtained from The Spriters Resource
+- This project is VERY incomplete

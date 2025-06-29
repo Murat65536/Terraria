@@ -163,5 +163,3 @@ cython_debug/
 assets/players/
 assets/worlds/
 assets/images/world_snapshots/
-
-__pycache__/

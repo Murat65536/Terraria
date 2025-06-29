@@ -1,4 +1,5 @@
 # game_data.py
+from unittest import case
 
 import pygame
 from enum import Enum
@@ -11,7 +12,6 @@ from data.wall import WallData, WALL_DATA
 from data.sound import SoundData, SOUND_DATA
 from data.structure import StructureData, STRUCTURE_DATA
 from data.loot import LootData, LOOT_DATA
-from data.entity import EntityData, ENTITY_DATA
 
 class UniversalPrefixData(TypedDict):
     name: str
@@ -140,9 +140,6 @@ structure_id_str_hash_table: dict[str, int] = {}
 
 json_loot_data: list[LootData] = []
 loot_id_str_hash_table: dict[str, int] = {}
-
-json_entity_data: list[EntityData] = []
-entity_id_str_hash_table: dict[str, int] = {}
 
 sound_volume_multiplier: float = commons.CONFIG_SOUND_VOLUME
 music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
@@ -1313,7 +1310,7 @@ def play_sound(sound_id_str: str) -> None:
 
     if commons.SOUND:
         sound_data = get_sound_by_id_str(sound_id_str)
-        if sound_data != None:
+        if sound_data is not None:
             sound_index = random.randint(0, len(sound_data["variations"]) - 1)
             sound = sound_data["variations"][sound_index]
             sound.set_volume(sound_data["volume"] * sound_volume_multiplier)
@@ -1323,28 +1320,28 @@ def play_sound(sound_id_str: str) -> None:
 def play_tile_hit_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
-        if tile_data != None:
+        if tile_data is not None:
             play_sound(tile_data["hit_sound"])
 
 
 def play_tile_place_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
-        if tile_data != None:
+        if tile_data is not None:
             play_sound(tile_data["place_sound"])
 
 
 def play_wall_hit_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
-        if wall_data != None:
+        if wall_data is not None:
             play_sound(wall_data["hit_sound"])
 
 
 def play_wall_place_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
-        if wall_data != None:
+        if wall_data is not None:
             play_sound(wall_data["place_sound"])
 
 
@@ -1453,26 +1450,29 @@ def find_structures_for_connection(connection_type, connection_orientation):
     return out_connections
 
 
-def get_opposite_structure_connection_orientation(structure_connection_orientation):
-    if structure_connection_orientation == StructureConnectionOrientation.DOWN:
-        return StructureConnectionOrientation.UP
-    elif structure_connection_orientation == StructureConnectionOrientation.LEFT:
-        return StructureConnectionOrientation.RIGHT
-    elif structure_connection_orientation == StructureConnectionOrientation.UP:
-        return StructureConnectionOrientation.DOWN
-    elif structure_connection_orientation == StructureConnectionOrientation.RIGHT:
-        return StructureConnectionOrientation.LEFT
-
+def get_opposite_structure_connection_orientation(structure_connection_orientation: StructureConnectionOrientation) -> StructureConnectionOrientation:
+    match structure_connection_orientation:
+        case StructureConnectionOrientation.UP:
+            return StructureConnectionOrientation.DOWN
+        case StructureConnectionOrientation.DOWN:
+            return StructureConnectionOrientation.UP
+        case StructureConnectionOrientation.LEFT:
+            return StructureConnectionOrientation.RIGHT
+        case StructureConnectionOrientation.RIGHT:
+            return StructureConnectionOrientation.LEFT
+    raise RuntimeError()
 
 def get_structure_connection_orientation_from_str(structure_connection_orientation_str):
-    if structure_connection_orientation_str == "Up":
-        return StructureConnectionOrientation.UP
-    elif structure_connection_orientation_str == "Right":
-        return StructureConnectionOrientation.RIGHT
-    elif structure_connection_orientation_str == "Down":
-        return StructureConnectionOrientation.DOWN
-    elif structure_connection_orientation_str == "Left":
-        return StructureConnectionOrientation.LEFT
+    match structure_connection_orientation_str:
+        case "Up":
+            return StructureConnectionOrientation.UP
+        case "Down":
+            return StructureConnectionOrientation.DOWN
+        case "Left":
+            return StructureConnectionOrientation.LEFT
+        case "Right":
+            return StructureConnectionOrientation.RIGHT
+    raise RuntimeError()
 
 
 def parse_loot_data():
@@ -1518,22 +1518,6 @@ def get_loot_id_by_id_str(loot_id_str):
 def get_loot_by_id_str(loot_id_str):
     return get_loot_by_id(get_loot_id_by_id_str(loot_id_str))
 
-
-def parse_entity_data():
-    global json_entity_data
-
-    json_entity_data = ENTITY_DATA
-    json_entity_data = sorted(json_entity_data, key=lambda x: x["id"])
-
-
-def create_entity_id_str_hash_table():
-    global entity_id_str_hash_table
-    for entity_index in range(len(json_entity_data)):
-        entity_id_str_hash_table[json_entity_data[entity_index]["id_str"]] = (
-            entity_index
-        )
-
-
 parse_item_data()
 create_item_id_str_hash_table()
 
@@ -1553,9 +1537,6 @@ create_structure_id_str_hash_table()
 
 parse_loot_data()
 create_loot_id_str_hash_table()
-
-parse_entity_data()
-create_entity_id_str_hash_table()
 
 air_tile_id = get_tile_id_by_id_str("tile.none")
 grass_tile_id = get_tile_id_by_id_str("tile.grass")

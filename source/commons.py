@@ -3,7 +3,6 @@ from typing import TextIO, TypedDict
 from datetime import datetime
 from enum import Enum
 
-
 class ItemTag(Enum):
     TILE = 0
     WALL = 1
@@ -17,7 +16,7 @@ class ItemTag(Enum):
     PICKAXE = 9
     AXE = 10
     HAMMER = 11
-    GRAPPLE = 12  # TODO The code for the grappling hook is incomplete.
+    GRAPPLE = 12  # TODO The code for the grappling hook
     COIN = 13
     SHORTSWORD = 14
 
@@ -58,13 +57,13 @@ class TileMaskType(Enum):
 class PlayerAppearance(TypedDict):
     sex: int
     hair_id: int
-    skin_color: tuple[int, int, int]
-    hair_color: tuple[int, int, int]
-    eye_color: tuple[int, int, int]
-    shirt_color: tuple[int, int, int]
-    undershirt_color: tuple[int, int, int]
-    trouser_color: tuple[int, int, int]
-    shoe_color: tuple[int, int, int]
+    skin_color: pygame.Color
+    hair_color: pygame.Color
+    eye_color: pygame.Color
+    shirt_color: pygame.Color
+    undershirt_color: pygame.Color
+    trouser_color: pygame.Color
+    shoe_color: pygame.Color
 
 class PlayerData(TypedDict):
     name: str
@@ -135,23 +134,23 @@ WAIT_TO_USE: bool = False
 
 ENEMY_SPAWN_TICK: int = 0
 
-MIN_ENEMY_SPAWN_TILES_X: int = int((WINDOW_WIDTH // BLOCK_SIZE) * 0.5)
-MAX_ENEMY_SPAWN_TILES_X: int = int(MIN_ENEMY_SPAWN_TILES_X * 2)
-MIN_ENEMY_SPAWN_TILES_Y: int = int((WINDOW_HEIGHT // BLOCK_SIZE) * 0.5)
-MAX_ENEMY_SPAWN_TILES_Y: int = int(MIN_ENEMY_SPAWN_TILES_Y * 2)
+MIN_ENEMY_SPAWN_TILES_X: int = int(WINDOW_WIDTH // BLOCK_SIZE * 0.5)
+MAX_ENEMY_SPAWN_TILES_X: int = MIN_ENEMY_SPAWN_TILES_X * 2
+MIN_ENEMY_SPAWN_TILES_Y: int = int(WINDOW_HEIGHT // BLOCK_SIZE * 0.5)
+MAX_ENEMY_SPAWN_TILES_Y: int = MIN_ENEMY_SPAWN_TILES_Y * 2
 
 PLAYER_DATA: PlayerData = {
     "name": "",
     "model_appearance": {
         "sex": 0,
         "hair_id": 0,
-        "skin_color": (0, 0, 0),
-        "hair_color": (0, 0, 0),
-        "eye_color": (0, 0, 0),
-        "shirt_color": (0, 0, 0),
-        "undershirt_color": (0, 0, 0),
-        "trouser_color": (0, 0, 0),
-        "shoe_color": (0, 0, 0)
+        "skin_color": pygame.Color(0, 0, 0),
+        "hair_color": pygame.Color(0, 0, 0),
+        "eye_color": pygame.Color(0, 0, 0),
+        "shirt_color": pygame.Color(0, 0, 0),
+        "undershirt_color": pygame.Color(0, 0, 0),
+        "trouser_color": pygame.Color(0, 0, 0),
+        "shoe_color": pygame.Color(0, 0, 0)
     },
     "hotbar": [],
     "inventory": [],
@@ -161,11 +160,10 @@ PLAYER_DATA: PlayerData = {
     "creation_date": datetime(1, 1, 1),
     "last_played_date": datetime(1, 1, 1),
 }
-
 PLAYER_SAVE_OPTIONS: list[list[PlayerData]] = []
 
-PLAYER_WIDTH: int = 20
-PLAYER_HEIGHT: int = 40
+PLAYER_WIDTH: int = 30
+PLAYER_HEIGHT: int = 50
 PLAYER_ARM_LENGTH: int = 20
 
 PLAYER_MODEL_DATA: list[list[int]] = []
@@ -175,7 +173,6 @@ PLAYER_MODEL_COLOR_INDEX: int = 0
 TEXT_INPUT: str = ""
 
 is_holding_item: bool = False
-
 
 OLD_TIME_MILLISECONDS: int = pygame.time.get_ticks()
 DELTA_TIME: int = 0

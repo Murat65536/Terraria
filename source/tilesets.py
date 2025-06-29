@@ -1,7 +1,5 @@
 import pygame
 import commons
-from os import listdir
-
 
 class Tileset:
     def __init__(

@@ -1,5 +1,3 @@
-# shared_methods.py
-
 import pygame
 import math
 
@@ -36,8 +34,8 @@ def get_on_off(bool_var):
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def darken_color(color: tuple[int, int, int], factor: float = 0.6):
-    return int(color[0] * factor), int(color[1] * factor), int(color[2] * factor)
+def darken_color(color: pygame.Color, factor: float = 0.6):
+    return int(color.r * factor), int(color.g * factor), int(color.b * factor)
 
 
 """================================================================================================================= 
@@ -47,33 +45,33 @@ def darken_color(color: tuple[int, int, int], factor: float = 0.6):
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def get_tier_color(tier):
+def get_tier_color(tier) -> pygame.Color:
     if tier < 0:
-        return 150, 150, 150  # Gray
+        return pygame.Color(150, 150, 150)  # Gray
     elif tier == 1:
-        return 146, 146, 249  # Blue
+        return pygame.Color(146, 146, 249)  # Blue
     elif tier == 2:
-        return 146, 249, 146  # Green
+        return pygame.Color(146, 249, 146)  # Green
     elif tier == 3:
-        return 233, 182, 137  # Orange
+        return pygame.Color(233, 182, 137)  # Orange
     elif tier == 4:
-        return 253, 148, 148  # Light Red
+        return pygame.Color(253, 148, 148)  # Light Red
     elif tier == 5:
-        return 249, 146, 249  # Pink
+        return pygame.Color(249, 146, 249)  # Pink
     elif tier == 6:
-        return 191, 146, 233  # Light Purple
+        return pygame.Color(191, 146, 233)  # Light Purple
     elif tier == 7:
-        return 139, 237, 9  # Lime
+        return pygame.Color(139, 237, 9)  # Lime
     elif tier == 8:
-        return 233, 233, 9  # Yellow
+        return pygame.Color(233, 233, 9)  # Yellow
     elif tier == 9:
-        return 3, 138, 177  # Cyan
+        return pygame.Color(3, 138, 177)  # Cyan
     elif tier == 10:
-        return 229, 35, 89  # Red
+        return pygame.Color(229, 35, 89)  # Red
     elif tier > 10:
-        return 170, 37, 241  # Purple
+        return pygame.Color(170, 37, 241)  # Purple
     else:
-        return 255, 255, 255, 255  # White
+        return pygame.Color(255, 255, 255)  # White
 
 
 """================================================================================================================= 
@@ -100,7 +98,7 @@ def rotate_surface(image, angle):
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def outline_text(string, color, font, outline_color=(0, 0, 0)):
+def outline_text(string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color=pygame.Color(0, 0, 0)):
     text1 = font.render(string, False, color)
     if commons.FANCY_TEXT:
         text2 = font.render(string, False, outline_color)
@@ -171,7 +169,7 @@ def create_menu_surface(width, height, body):
             lines[-1] += " " + word
     for i in range(len(lines)):
         surf.blit(
-            outline_text(lines[i], (255, 255, 255), commons.DEFAULT_FONT),
+            outline_text(lines[i], pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
             (15, 15 + i * 20),
         )
     return surf
@@ -198,7 +196,7 @@ def color_surface(gray_surf, col) -> pygame.Surface:
     color = pygame.Surface((x, y))
     color.fill(col)  # create a blank surf with the color of the hair
     surf.blit(
-        color, (0, 0), None, BLEND_RGB_ADD
+        color, (0, 0), None, pygame.BLEND_RGB_ADD
     )  # blit the new surf to the hair with an add blend flag
     return surf
 
@@ -210,16 +208,11 @@ def color_surface(gray_surf, col) -> pygame.Surface:
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def transparent_color_surface(surf, col):
-    grayscale = (128, 128, 128)
-    colored_surface = pygame.Surface(surf.get_size(), pygame.SRCALPHA)
-    colored_surface.blit(surf, (0, 0), None, pygame.BLEND_RGBA_ADD)
-    grayscale_surface = pygame.Surface(surf.get_size())
-    grayscale_surface.fill(grayscale)
-    colored_surface.blit(grayscale_surface, (0, 0), None, pygame.BLEND_RGB_MULT)
-    color = pygame.Surface(surf.get_size())
+def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pygame.Surface:
+    colored_surface = surface.copy()
+    color = pygame.Surface(surface.get_size(), pygame.SRCALPHA)
     color.fill(col)
-    colored_surface.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)
+    colored_surface.blit(color, (0, 0), None, pygame.BLEND_RGB_MULT)
     return colored_surface
 
 

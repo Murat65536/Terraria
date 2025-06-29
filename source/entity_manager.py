@@ -1,5 +1,3 @@
-# entity_manager.py
-
 import pygame
 import math
 import random
@@ -139,12 +137,12 @@ def check_enemy_spawn():
 
 
 def draw_enemy_hover_text():
-    transformed_MOUSE_POSITION = (
+    transformed_mouse_position = (
         commons.MOUSE_POSITION[0] + camera_position[0] - commons.WINDOW_WIDTH * 0.5,
         commons.MOUSE_POSITION[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5,
     )
     for enemy in enemies:
-        if enemy.rect.collidepoint(transformed_MOUSE_POSITION):
+        if enemy.rect.collidepoint(transformed_mouse_position):
             text1 = commons.MEDIUM_FONT.render(
                 f"{enemy.name}: {math.ceil(enemy.health)}/{enemy.max_health}",
                 True,
@@ -543,9 +541,9 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 
 def add_message(
     text: str,
-    color: tuple[int, int, int],
+    color: pygame.Color,
     life: float = 5.0,
-    outline_color: tuple[int, int, int] = (0, 0, 0),
+    outline_color: pygame.Color = (0, 0, 0),
 ):
     global messages
     text1 = commons.DEFAULT_FONT.render(text, False, color)
@@ -594,16 +592,16 @@ def add_damage_number(
 
     surf = pygame.Surface((size, size), pygame.SRCALPHA)
 
-    midX = size * 0.5 - width * 0.5
-    midY = size * 0.5 - height * 0.5
+    mid_x = size * 0.5 - width * 0.5
+    mid_y = size * 0.5 - height * 0.5
 
     if commons.FANCY_TEXT:
-        surf.blit(t2, (midX - 2, midY))
-        surf.blit(t2, (midX + 2, midY))
-        surf.blit(t2, (midX, midY - 2))
-        surf.blit(t2, (midX, midY + 2))
+        surf.blit(t2, (mid_x - 2, mid_y))
+        surf.blit(t2, (mid_x + 2, mid_y))
+        surf.blit(t2, (mid_x, mid_y - 2))
+        surf.blit(t2, (mid_x, mid_y + 2))
 
-    surf.blit(t1, (midX, midY))
+    surf.blit(t1, (mid_x, mid_y))
 
     damage_numbers.append(
         {

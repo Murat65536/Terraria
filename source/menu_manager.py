@@ -110,11 +110,10 @@ class MenuObject:
         self,
         text: str,
         position: tuple[float, float],
-        font,
-        click_sound_id,
+        font: pygame.font.Font,
         type: Type,
-        color=(153, 153, 153),
-        outline_color=(0, 0, 0),
+        color: pygame.Color=pygame.Color(153, 153, 153),
+        outline_color: pygame.Color=pygame.Color(0, 0, 0),
         function=None,
     ):
         self.text = text
@@ -122,12 +121,14 @@ class MenuObject:
         self.type = type
         self.color = color
         self.function = function
+        self.font_size = font.size(text)[1]
+        self.hover_multiplier = 1.25
         self.text_surface = shared_methods.outline_text(
             text, self.color, font, outline_color
         )
         if self.type == Type.BUTTON:
             self.alt_text_surface = shared_methods.outline_text(
-                text, (255, 255, 0), font
+                text, pygame.Color(255, 255, 0), pygame.font.Font(commons.FONT_FILE_PATH, int(self.font_size * self.hover_multiplier))
             )
         self.rect = Rect(
             self.position[0] - self.text_surface.get_width() * 0.5,
@@ -137,7 +138,6 @@ class MenuObject:
         )
         self.hovered = False
         self.clicked = False
-        self.click_sound_id = click_sound_id
         self.active = False
 
     """================================================================================================================= 
@@ -171,62 +171,64 @@ class MenuObject:
 
     def draw(self):
         if not self.hovered:
-            if self.text == "Terraria":
-                commons.screen.blit(
-                    self.text_surface, (self.rect.left, self.rect.top + 3)
-                )
             commons.screen.blit(self.text_surface, (self.rect.left, self.rect.top))
         else:
-            commons.screen.blit(self.alt_text_surface, (self.rect.left, self.rect.top))
+            commons.screen.blit(
+                self.alt_text_surface,
+                (
+                    self.rect.left - (self.alt_text_surface.get_width() * 0.5 - self.text_surface.get_width() * 0.5),
+                    self.rect.top - (self.alt_text_surface.get_height() * 0.5 - self.text_surface.get_height() * 0.5)
+                )
+            )
 
 
 commons.PLAYER_MODEL_DATA = [
     [0],
     [0],
-    [127, 72, 36, 0, 0],
-    [0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0],
-    [95, 125, 127, 0, 0],
-    [48, 76, 127, 0, 0],
-    [129, 113, 45, 0, 0],
-    [80, 100, 45, 0, 0],
+    [255, 125, 90, 0, 0],
+    [215, 90, 55, 0, 0],
+    [105, 90, 75, 0, 0],
+    [175, 165, 140, 0, 0],
+    [160, 180, 215, 0, 0],
+    [255, 230, 175, 0, 0],
+    [160, 105, 60, 0, 0],
 ]
 
 player_model = player.Model(
     {
         "sex": commons.PLAYER_MODEL_DATA[0][0],
         "hair_id": commons.PLAYER_MODEL_DATA[1][0],
-        "skin_color": (
+        "skin_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[2][0],
             commons.PLAYER_MODEL_DATA[2][1],
             commons.PLAYER_MODEL_DATA[2][2],
         ),
-        "hair_color": (
+        "hair_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[3][0],
             commons.PLAYER_MODEL_DATA[3][1],
             commons.PLAYER_MODEL_DATA[3][2],
         ),
-        "eye_color": (
+        "eye_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[4][0],
             commons.PLAYER_MODEL_DATA[4][1],
             commons.PLAYER_MODEL_DATA[4][2],
         ),
-        "shirt_color": (
+        "shirt_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[5][0],
             commons.PLAYER_MODEL_DATA[5][1],
             commons.PLAYER_MODEL_DATA[5][2],
         ),
-        "undershirt_color": (
+        "undershirt_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[6][0],
             commons.PLAYER_MODEL_DATA[6][1],
             commons.PLAYER_MODEL_DATA[6][2],
         ),
-        "trouser_color": (
+        "trouser_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[7][0],
             commons.PLAYER_MODEL_DATA[7][1],
             commons.PLAYER_MODEL_DATA[7][2],
         ),
-        "shoe_color": (
+        "shoe_color": pygame.Color(
             commons.PLAYER_MODEL_DATA[8][0],
             commons.PLAYER_MODEL_DATA[8][1],
             commons.PLAYER_MODEL_DATA[8][2],
@@ -264,6 +266,9 @@ def update_active_menu_buttons():
 
 def update_menu_buttons():
     global player_model
+    player_model.walk()
+    commons.PLAYER_FRAMES = player_model.create_sprite()
+
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
             if text.active:
@@ -290,49 +295,49 @@ def update_menu_buttons():
                             commons.PLAYER_MODEL_DATA = [
                                 [0],
                                 [0],
-                                [127, 72, 36, 0, 0],
-                                [0, 0, 0, 0, 0],
-                                [0, 0, 0, 0, 0],
-                                [95, 125, 127, 0, 0],
-                                [48, 76, 127, 0, 0],
-                                [129, 113, 45, 0, 0],
-                                [80, 100, 45, 0, 0],
+                                [255, 125, 90, 0, 0],
+                                [215, 90, 55, 0, 0],
+                                [105, 90, 75, 0, 0],
+                                [175, 165, 140, 0, 0],
+                                [160, 180, 215, 0, 0],
+                                [255, 230, 175, 0, 0],
+                                [160, 105, 60, 0, 0],
                             ]
                             player_model = player.Model(
                                 {
                                     "sex": commons.PLAYER_MODEL_DATA[0][0],
                                     "hair_id": commons.PLAYER_MODEL_DATA[1][0],
-                                    "skin_color": (
+                                    "skin_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[2][0],
                                         commons.PLAYER_MODEL_DATA[2][1],
                                         commons.PLAYER_MODEL_DATA[2][2],
                                     ),
-                                    "hair_color": (
+                                    "hair_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[3][0],
                                         commons.PLAYER_MODEL_DATA[3][1],
                                         commons.PLAYER_MODEL_DATA[3][2],
                                     ),
-                                    "eye_color": (
+                                    "eye_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[4][0],
                                         commons.PLAYER_MODEL_DATA[4][1],
                                         commons.PLAYER_MODEL_DATA[4][2],
                                     ),
-                                    "shirt_color": (
+                                    "shirt_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[5][0],
                                         commons.PLAYER_MODEL_DATA[5][1],
                                         commons.PLAYER_MODEL_DATA[5][2],
                                     ),
-                                    "undershirt_color": (
+                                    "undershirt_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[6][0],
                                         commons.PLAYER_MODEL_DATA[6][1],
                                         commons.PLAYER_MODEL_DATA[6][2],
                                     ),
-                                    "trouser_color": (
+                                    "trouser_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[7][0],
                                         commons.PLAYER_MODEL_DATA[7][1],
                                         commons.PLAYER_MODEL_DATA[7][2],
                                     ),
-                                    "shoe_color": (
+                                    "shoe_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[8][0],
                                         commons.PLAYER_MODEL_DATA[8][1],
                                         commons.PLAYER_MODEL_DATA[8][2],
@@ -370,58 +375,58 @@ def update_menu_buttons():
                                     random.randint(0, len(tilesets.hair) - 1),
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
                                 [
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
-                                    random.randint(0, 128),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
+                                    random.randint(0, 255),
                                     0,
                                     0,
                                 ],
@@ -430,37 +435,37 @@ def update_menu_buttons():
                                 {
                                     "sex": commons.PLAYER_MODEL_DATA[0][0],
                                     "hair_id": commons.PLAYER_MODEL_DATA[1][0],
-                                    "skin_color": (
+                                    "skin_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[2][0],
                                         commons.PLAYER_MODEL_DATA[2][1],
                                         commons.PLAYER_MODEL_DATA[2][2],
                                     ),
-                                    "hair_color": (
+                                    "hair_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[3][0],
                                         commons.PLAYER_MODEL_DATA[3][1],
                                         commons.PLAYER_MODEL_DATA[3][2],
                                     ),
-                                    "eye_color": (
+                                    "eye_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[4][0],
                                         commons.PLAYER_MODEL_DATA[4][1],
                                         commons.PLAYER_MODEL_DATA[4][2],
                                     ),
-                                    "shirt_color": (
+                                    "shirt_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[5][0],
                                         commons.PLAYER_MODEL_DATA[5][1],
                                         commons.PLAYER_MODEL_DATA[5][2],
                                     ),
-                                    "undershirt_color": (
+                                    "undershirt_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[6][0],
                                         commons.PLAYER_MODEL_DATA[6][1],
                                         commons.PLAYER_MODEL_DATA[6][2],
                                     ),
-                                    "trouser_color": (
+                                    "trouser_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[7][0],
                                         commons.PLAYER_MODEL_DATA[7][1],
                                         commons.PLAYER_MODEL_DATA[7][2],
                                     ),
-                                    "shoe_color": (
+                                    "shoe_color": pygame.Color(
                                         commons.PLAYER_MODEL_DATA[8][0],
                                         commons.PLAYER_MODEL_DATA[8][1],
                                         commons.PLAYER_MODEL_DATA[8][2],
@@ -646,43 +651,43 @@ def load_menu_player_data():
         pygame.draw.rect(player_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
         player_data_surf.blit(
             shared_methods.outline_text(
-                dat["name"], (255, 255, 255), commons.DEFAULT_FONT
+                dat["name"], pygame.Color(255, 255, 255), commons.DEFAULT_FONT
             ),
             (5, 3),
         )  # Name
         player_data_surf.blit(
             shared_methods.outline_text(
-                "Created: ", (255, 255, 255), commons.DEFAULT_FONT
+                "Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
             ),
             (5, 20),
         )  # Creation date
         player_data_surf.blit(
             shared_methods.outline_text(
-                "Playtime: ", (255, 255, 255), commons.DEFAULT_FONT
+                "Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
             ),
             (5, 40),
         )  # Playtime
         player_data_surf.blit(
             shared_methods.outline_text(
-                str(dat["creation_date"])[:19], (230, 230, 0), commons.DEFAULT_FONT
+                str(dat["creation_date"])[:19], pygame.Color(230, 230, 0), commons.DEFAULT_FONT
             ),
             (80, 20),
         )  # Creation date
         player_data_surf.blit(
             shared_methods.outline_text(
                 str(dat["hp"]) + "HP",
-                (230, 10, 10),
+                pygame.Color(230, 10, 10),
                 commons.DEFAULT_FONT,
-                outline_color=(128, 5, 5),
+                outline_color=pygame.Color(128, 5, 5),
             ),
             (155, 3),
         )  # hp
         player_data_surf.blit(
             shared_methods.outline_text(
                 "100MNA",
-                (80, 102, 244),
+                pygame.Color(80, 102, 244),
                 commons.DEFAULT_FONT,
-                outline_color=(30, 41, 122),
+                outline_color=pygame.Color(30, 41, 122),
             ),
             (205, 3),
         )  # mana
@@ -693,7 +698,7 @@ def load_menu_player_data():
                 + str(int(dat["playtime"] // 60 % 60)).zfill(2)
                 + ":"
                 + str(int(dat["playtime"] % 60)).zfill(2),
-                (230, 230, 0),
+                pygame.Color(230, 230, 0),
                 commons.DEFAULT_FONT,
             ),
             (90, 40),
@@ -722,30 +727,30 @@ def load_menu_world_data():
 
             world_data_surf = pygame.Surface((315, 60))
             world_data_surf.fill((50, 50, 50))
-            pygame.draw.rect(world_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
+            pygame.draw.rect(world_data_surf, pygame.Color(60, 60, 60), Rect(0, 0, 315, 60), 4)
 
             world_data_surf.blit(
                 shared_methods.outline_text(
-                    world.world.name, (255, 255, 255), commons.DEFAULT_FONT
+                    world.world.name, pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                 ),
                 (5, 3),
             )  # name
             world_data_surf.blit(
                 shared_methods.outline_text(
-                    "Created: ", (255, 255, 255), commons.DEFAULT_FONT
+                    "Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                 ),
                 (5, 20),
             )  # Creation date
             world_data_surf.blit(
                 shared_methods.outline_text(
-                    "Playtime: ", (255, 255, 255), commons.DEFAULT_FONT
+                    "Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                 ),
                 (5, 40),
             )  # Playtime
             world_data_surf.blit(
                 shared_methods.outline_text(
                     world.world.get_creation_date_string(),
-                    (230, 230, 0),
+                    pygame.Color(230, 230, 0),
                     commons.DEFAULT_FONT,
                 ),
                 (80, 20),
@@ -757,7 +762,7 @@ def load_menu_world_data():
                     + str(int(world.world.playtime // 60 % 60)).zfill(2)
                     + ":"
                     + str(int(world.world.playtime % 60)).zfill(2),
-                    (230, 230, 0),
+                    pygame.Color(230, 230, 0),
                     commons.DEFAULT_FONT,
                 ),
                 (90, 40),
@@ -774,7 +779,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Single Player",
             (commons.WINDOW_WIDTH * 0.5, 250),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=TitleScreenButtons.SINGLE_PLAYER,
         ),
@@ -782,7 +786,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Credits",
             (commons.WINDOW_WIDTH * 0.5, 305),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=TitleScreenButtons.CREDITS,
         ),
@@ -790,7 +793,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Changes",
             (commons.WINDOW_WIDTH * 0.5, 360),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=TitleScreenButtons.CHANGES,
         ),
@@ -798,7 +800,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Settings",
             (commons.WINDOW_WIDTH * 0.5, 415),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=TitleScreenButtons.SETTINGS,
         ),
@@ -806,7 +807,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Exit",
             (commons.WINDOW_WIDTH * 0.5, 470),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=TitleScreenButtons.EXIT,
         ),
@@ -816,22 +816,19 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Select Player",
             (commons.WINDOW_WIDTH * 0.5, 90),
             commons.LARGE_FONT,
-            24,
             Type.TEXT,
         ),
         MenuObject(
             "New Player",
-            (commons.WINDOW_WIDTH * 0.5, 530),
+            (commons.WINDOW_WIDTH * 0.5, 550),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerSelectionButtons.NEW_PLAYER,
         ),
         MenuObject(
             "Back",
-            (commons.WINDOW_WIDTH * 0.5, 570),
+            (commons.WINDOW_WIDTH * 0.5, 600),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=PlayerSelectionButtons.BACK,
         ),
@@ -841,63 +838,55 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Hair Type",
             (commons.WINDOW_WIDTH * 0.5, 200),
             commons.LARGE_FONT,
-            26,
             Type.BUTTON,
             function=PlayerCreationButtons.HAIR_TYPE,
         ),
         MenuObject(
             "Hair Color",
-            (commons.WINDOW_WIDTH * 0.5, 240),
+            (commons.WINDOW_WIDTH * 0.5, 260),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerCreationButtons.HAIR_COLOR,
         ),
         MenuObject(
             "Eye Color",
-            (commons.WINDOW_WIDTH * 0.5, 280),
+            (commons.WINDOW_WIDTH * 0.5, 320),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerCreationButtons.EYE_COLOR,
         ),
         MenuObject(
             "Skin Color",
-            (commons.WINDOW_WIDTH * 0.5, 320),
+            (commons.WINDOW_WIDTH * 0.5, 380),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerCreationButtons.SKIN_COLOR,
         ),
         MenuObject(
             "Clothes",
-            (commons.WINDOW_WIDTH * 0.5, 360),
+            (commons.WINDOW_WIDTH * 0.5, 440),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerCreationButtons.CLOTHES,
         ),
         MenuObject(
             "Create",
-            (commons.WINDOW_WIDTH * 0.5, 450),
+            (commons.WINDOW_WIDTH * 0.5, 500),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerCreationButtons.CREATE,
         ),
         MenuObject(
             "Randomize",
-            (commons.WINDOW_WIDTH * 0.5, 490),
+            (commons.WINDOW_WIDTH * 0.5, 600),
             commons.LARGE_FONT,
-            26,
             Type.BUTTON,
             function=PlayerCreationButtons.RANDOMIZE,
         ),
         MenuObject(
             "Back",
-            (commons.WINDOW_WIDTH * 0.5, 570),
+            (commons.WINDOW_WIDTH * 0.5, 660),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=PlayerCreationButtons.BACK,
         ),
@@ -907,7 +896,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=ColorPickerButtons.BACK,
         )
@@ -917,39 +905,34 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Shirt Color",
             (commons.WINDOW_WIDTH * 0.5, 240),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ClothesButtons.SHIRT_COLOR,
         ),
         MenuObject(
             "Undershirt Color",
-            (commons.WINDOW_WIDTH * 0.5, 280),
+            (commons.WINDOW_WIDTH * 0.5, 300),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ClothesButtons.UNDERSHIRT_COLOR,
         ),
         MenuObject(
             "Trouser Color",
-            (commons.WINDOW_WIDTH * 0.5, 320),
+            (commons.WINDOW_WIDTH * 0.5, 360),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ClothesButtons.TROUSER_COLOR,
         ),
         MenuObject(
             "Shoe Color",
-            (commons.WINDOW_WIDTH * 0.5, 360),
+            (commons.WINDOW_WIDTH * 0.5, 420),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ClothesButtons.SHOE_COLOR,
         ),
         MenuObject(
             "Back",
-            (commons.WINDOW_WIDTH * 0.5, 570),
+            (commons.WINDOW_WIDTH * 0.5, 540),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=ClothesButtons.BACK,
         ),
@@ -959,7 +942,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Set Player Name",
             (commons.WINDOW_WIDTH * 0.5, 450),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=PlayerNamingButtons.SET_NAME,
         ),
@@ -967,7 +949,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=PlayerNamingButtons.BACK,
         ),
@@ -977,14 +958,12 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Select World",
             (commons.WINDOW_WIDTH * 0.5, 90),
             commons.LARGE_FONT,
-            24,
             Type.TEXT,
         ),
         MenuObject(
             "New World",
             (commons.WINDOW_WIDTH * 0.5, 530),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=WorldSelectionButtons.NEW_WORLD,
         ),
@@ -992,7 +971,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=WorldSelectionButtons.BACK,
         ),
@@ -1002,14 +980,12 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "World Size",
             (commons.WINDOW_WIDTH * 0.5, 120),
             commons.EXTRA_LARGE_FONT,
-            24,
             Type.TEXT,
         ),
         MenuObject(
             "Tiny (100x350)",
             (commons.WINDOW_WIDTH * 0.5, 240),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=WorldCreationButtons.TINY,
         ),
@@ -1017,7 +993,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Small (200x400)",
             (commons.WINDOW_WIDTH * 0.5, 280),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=WorldCreationButtons.SMALL,
         ),
@@ -1025,7 +1000,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Medium (400x450)",
             (commons.WINDOW_WIDTH * 0.5, 320),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=WorldCreationButtons.MEDIUM,
         ),
@@ -1033,17 +1007,15 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Large (700x550)",
             (commons.WINDOW_WIDTH * 0.5, 360),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
-            (200, 0, 0),
-            (100, 0, 0),
+            pygame.Color(200, 0, 0),
+            pygame.Color(100, 0, 0),
             function=WorldCreationButtons.LARGE,
         ),
         MenuObject(
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=WorldCreationButtons.BACK,
         ),
@@ -1053,7 +1025,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Set World Name",
             (commons.WINDOW_WIDTH * 0.5, 450),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=WorldNamingButtons.SET_NAME,
         ),
@@ -1061,7 +1032,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=WorldNamingButtons.BACK,
         ),
@@ -1071,28 +1041,24 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Credits",
             (commons.WINDOW_WIDTH * 0.5, 120),
             commons.EXTRA_LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "Images: Re-Logic",
             (commons.WINDOW_WIDTH * 0.5, 270),
             commons.LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "Sounds: Re-Logic",
             (commons.WINDOW_WIDTH * 0.5, 310),
             commons.LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=CreditsButton.BACK,
         ),
@@ -1102,14 +1068,12 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Changes",
             (commons.WINDOW_WIDTH * 0.5, 120),
             commons.EXTRA_LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "GitHub Repo",
             (commons.WINDOW_WIDTH * 0.5, 320),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ChangesButtons.GITHUB,
         ),
@@ -1117,7 +1081,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Trello Board",
             (commons.WINDOW_WIDTH * 0.5, 400),
             commons.LARGE_FONT,
-            24,
             Type.BUTTON,
             function=ChangesButtons.TRELLO,
         ),
@@ -1125,7 +1088,6 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=ChangesButtons.BACK,
         ),
@@ -1135,21 +1097,18 @@ active_menu_buttons: dict[str, list[MenuObject]] = {
             "Settings",
             (commons.WINDOW_WIDTH * 0.5, 120),
             commons.EXTRA_LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "Coming soon",
             (commons.WINDOW_WIDTH * 0.5, 300),
             commons.LARGE_FONT,
-            25,
             Type.TEXT,
         ),
         MenuObject(
             "Back",
             (commons.WINDOW_WIDTH * 0.5, 570),
             commons.LARGE_FONT,
-            25,
             Type.BUTTON,
             function=SettingsButtons.BACK,
         ),

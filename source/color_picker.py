@@ -1,5 +1,3 @@
-# color_picker.py
-
 import pygame
 from pygame.locals import Rect
 

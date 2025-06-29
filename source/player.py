@@ -1,5 +1,3 @@
-# player.py
-
 import pygame
 import math
 import random
@@ -41,7 +39,7 @@ class Movement(Enum):
     IDLE = 3
 
 class MovementFrames:
-    def __init__(self, total_frames: int, animation_speed: float, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
+    def __init__(self, total_frames: int, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
         self.total_frames = total_frames
         self.current_frame = 0
         self.walk_range = walk_range
@@ -49,7 +47,7 @@ class MovementFrames:
         self.jump_frame = jump_frame
         self.hold_frame = hold_frame
         self.idle_frame = idle_frame
-        self.animation_speed = animation_speed
+        self.animation_speed = 0.5 / (self.walk_range[1] - self.walk_range[0]) if self.walk_range is not None else 1
         self.animation_tick = 0
 
     def walk(self, swinging: bool, swing_frame: int) -> None:
@@ -70,11 +68,10 @@ class MovementFrames:
     def jump(self, swinging: bool, swing_frame: int) -> None:
         if swinging and self.swing_range is not None:
             self.swing(swing_frame)
-        else:
+        elif self.jump_frame is not None:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
-                if self.jump_frame is not None:
-                    self.current_frame = self.jump_frame
+                self.current_frame = self.jump_frame
             else:
                 self.animation_tick -= commons.DELTA_TIME
 
@@ -120,16 +117,16 @@ class Model:
         self.arm_radians: float = 0
         self.swing_radians: tuple[float, ...] = (math.radians(-130), math.radians(-85), math.radians(-40), math.radians(5), math.radians(50))
 
-        self.hair_frames: MovementFrames = MovementFrames(14, 0.05)
-        self.head_frames: MovementFrames = MovementFrames(20, 0.05)
-        self.eye_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.pupil_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.undershirt_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.shirt_frames: MovementFrames = MovementFrames(1, 0.05)
-        self.trouser_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.shoe_frames: MovementFrames = MovementFrames(20, 0.05, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames: MovementFrames = MovementFrames(28, 0.05, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.hair_frames: MovementFrames = MovementFrames(14)
+        self.head_frames: MovementFrames = MovementFrames(20)
+        self.eye_frames: MovementFrames = MovementFrames(20)
+        self.pupil_frames: MovementFrames = MovementFrames(20)
+        self.undershirt_frames: MovementFrames = MovementFrames(1)
+        self.shirt_frames: MovementFrames = MovementFrames(1)
+        self.trouser_frames: MovementFrames = MovementFrames(20, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.shoe_frames: MovementFrames = MovementFrames(20, walk_range=(6, 19), jump_frame=5, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.sleeve_frames: MovementFrames = MovementFrames(28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
 
         self.sex = model_appearance["sex"]
         self.hair_id = model_appearance["hair_id"]
@@ -141,21 +138,25 @@ class Model:
         self.trouser_col = model_appearance["trouser_color"]
         self.shoe_col = model_appearance["shoe_color"]
 
+        self.SURFACE_WIDTH = 40
+        self.SURFACE_HEIGHT = 56
+
     def create_sprite(self) -> pygame.Surface:
-        MIRROR_ARM_FRAME = 14
-        player_surface: pygame.Surface = pygame.Surface((40, 56), pygame.SRCALPHA)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shirts[self.shirt_frames.current_frame], self.shirt_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.trousers[self.trouser_frames.current_frame], self.trouser_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shoes[self.shoe_frames.current_frame], self.shoe_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.head[self.head_frames.current_frame], self.skin_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.hair[self.hair_id][self.hair_frames.current_frame], self.hair_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.eyes[self.eye_frames.current_frame], (255, 255, 255)), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.pupils[self.pupil_frames.current_frame], self.eye_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame], self.skin_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame + MIRROR_ARM_FRAME], self.skin_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame], self.undershirt_col), (0, 0))
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame + MIRROR_ARM_FRAME], self.undershirt_col), (0, 0))
+        mirror_arm_frame = 14
+        offset = (0, 0)
+        player_surface: pygame.Surface = pygame.Surface((self.SURFACE_WIDTH, self.SURFACE_HEIGHT), pygame.SRCALPHA)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shirts[self.shirt_frames.current_frame], self.shirt_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.trousers[self.trouser_frames.current_frame], self.trouser_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shoes[self.shoe_frames.current_frame], self.shoe_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.head[self.head_frames.current_frame], self.skin_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.hair[self.hair_id][self.hair_frames.current_frame], self.hair_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.eyes[self.eye_frames.current_frame], pygame.Color(255, 255, 255)), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.pupils[self.pupil_frames.current_frame], self.eye_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame], self.skin_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame + mirror_arm_frame], self.skin_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame], self.undershirt_col), offset)
+        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame + mirror_arm_frame], self.undershirt_col), offset)
         player_surface = pygame.transform.flip(player_surface, self.flip, False)
         return player_surface
 
@@ -173,10 +174,15 @@ class Model:
         }
 
     def get_movement(self) -> Movement:
-        return Movement.IDLE if self.moving_left and self.moving_right else Movement.LEFT if self.moving_left else Movement.RIGHT if self.moving_right else Movement.IDLE
+        if self.moving_left ^ self.moving_right:
+            if self.moving_left:
+                return Movement.LEFT
+            else:
+                return Movement.RIGHT
+        return Movement.IDLE
 
     def get_flip(self) -> bool:
-        return True if self.get_movement() == Movement.LEFT else False if self.get_movement() == Movement.RIGHT else self.flip
+        return self.get_movement() == Movement.LEFT or (not self.get_movement() == Movement.RIGHT and self.flip)
 
     def get_swing_frame(self) -> int:
         if not self.flip:
@@ -240,6 +246,12 @@ class Model:
         self.arm_frames.idle(self.swinging, swing_frame)
         self.sleeve_frames.idle(self.swinging, swing_frame)
 
+class ItemStorage:
+    def __init__(self, hotbar = None, inventory = None):
+        self.hotbar: list[None] | list[Item] = hotbar
+        self.inventory: list[None] | list[Item] = inventory
+        self.chest: list[None] | list[Item] = [None for _ in range(20)]
+        self.crafting_menu: list[None] | list[Item] = []
 
 """=================================================================================================================    
     player.Player
@@ -262,24 +274,22 @@ class Player:
         creation_date=None,
         last_played_date=None,
     ):
-        self.position = position
+        self.grounded = False
+        self.position: tuple[float, float] = position
         self.block_position = (0, 0)
         self.model = model
         self.name = name
         self.hp = hp if hp > 0 else max_hp
         self.max_hp = max_hp
 
-        self.items = {
-            ItemLocation.HOTBAR: [None for _ in range(10)],
-            ItemLocation.INVENTORY: [None for _ in range(40)],
+        self.items: dict[ItemLocation, list[None] | list[Item]] = {
+            ItemLocation.HOTBAR: hotbar,
+            ItemLocation.INVENTORY: inventory,
             ItemLocation.CHEST: [None for _ in range(20)],
-            ItemLocation.CRAFTING_MENU: [],
+            ItemLocation.CRAFTING_MENU: []
         }
-        
-        self.items[ItemLocation.HOTBAR] = hotbar
-        self.hotbar_index = 0
 
-        self.items[ItemLocation.INVENTORY] = inventory
+        self.hotbar_index = 0
 
         # Save stats
         self.playtime = playtime
@@ -296,36 +306,37 @@ class Player:
         else:
             self.last_played_date = last_played_date
 
+        self.sprites = Model(self.model)
+
         self.rect = Rect(
             self.position[0] - commons.PLAYER_WIDTH * 0.5,
             self.position[1] - commons.PLAYER_HEIGHT * 0.5,
             commons.PLAYER_WIDTH,
             commons.PLAYER_HEIGHT,
-        )  # hitbox
+        )
         self.velocity = (0, 0)
 
-        self.sprites = Model(self.model)
-
         self.alive = True
-        self.respawn_tick = 0
-        self.death_fade_in = 0
+        self.respawn_time = 3
+        self.respawn_time_remaining = self.respawn_time
+        self.death_message_alpha = 0
 
         self.invincible_timer = 2.0
         self.invincible = True
 
-        hp_text_color = (
-            255 * (1 - self.hp / self.max_hp),
-            255 * (self.hp / self.max_hp),
+        hp_text_color = pygame.Color(
+            int(255 * (1 - self.hp / self.max_hp)),
+            int(255 * (self.hp / self.max_hp)),
             0,
         )
         self.hp_text = shared_methods.outline_text(
             str(self.hp),
             hp_text_color,
             commons.DEFAULT_FONT,
-            outline_color=(
-                hp_text_color[0] * 0.5,
-                hp_text_color[1] * 0.5,
-                hp_text_color[2] * 0.5,
+            outline_color=pygame.Color(
+                hp_text_color[0] // 2,
+                hp_text_color[1] // 2,
+                hp_text_color[2] // 2,
             ),
         )
         self.hp_x_position = (
@@ -431,9 +442,7 @@ class Player:
                 + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
             )
 
-            self.rect.left = (
-                self.position[0] - commons.PLAYER_WIDTH * 0.5
-            )  # updating rect
+            self.rect.left = self.position[0] - commons.PLAYER_WIDTH * 0.5
             self.rect.top = self.position[1] - commons.PLAYER_HEIGHT * 0.5
 
             self.block_position = (
@@ -446,7 +455,7 @@ class Player:
             self.stop_left = False
             self.stop_right = False
 
-            fall_damaged = False  # so fall    damage is only applied once
+            fall_damaged = False
 
             if not self.can_use:
                 if self.use_tick > self.use_delay:
@@ -658,16 +667,14 @@ class Player:
                                                             - commons.PLAYER_HEIGHT
                                                             * 0.5
                                                             + 1,
-                                                        )  # Move player    up
+                                                        )  # Move player up
                                                         self.velocity = (
                                                             self.velocity[0] * 0.5,
                                                             0,
-                                                        )  # Slow    down player    horizontally and stop player vertically
+                                                        )  # Slow down player horizontally and stop player vertically
                                                         self.grounded = True
 
-            if (
-                self.stop_moving_down
-            ):  # Wait before setting moving_down to false based on player y velocity
+            if self.stop_moving_down:
                 if self.moving_down_tick < 0:
                     self.sprites.moving_left = False
                     self.sprites.moving_right = False
@@ -690,20 +697,20 @@ class Player:
                 elif self.crafting_menu_offset_y > 120:
                     self.crafting_menu_offset_y = 120
 
-        else:  # if player is not alive, wait to respawn
-            if self.respawn_tick > 0:
-                self.respawn_tick -= commons.DELTA_TIME
+        else:
+            if self.respawn_time_remaining > 0:
+                self.respawn_time_remaining -= commons.DELTA_TIME
             else:
                 self.respawn()
-            if self.death_fade_in > 0:
-                self.death_fade_in -= commons.DELTA_TIME
+            if self.death_message_alpha > 0:
+                self.death_message_alpha -= commons.DELTA_TIME / self.respawn_time
 
         self.update_inventory_old_slots()
 
     """=================================================================================================================    
         player.Player.damage -> void
         
-        Kills the player, adds a death message,    spawns particles, plays    a sound
+        Kills the player, adds a death message, spawns particles, plays a sound
     -----------------------------------------------------------------------------------------------------------------"""
 
     def damage(
@@ -729,8 +736,8 @@ class Player:
             if self.hp < 0:
                 self.hp = 0
 
-            if self.hp > 0:  # check if the    player has died    from damage
-                game_data.play_sound("sound.player_hurt")  # hurt sound
+            if self.hp > 0:
+                game_data.play_sound("sound.player_hurt")
 
                 if commons.PARTICLES:
                     if source_velocity != (0, 0):
@@ -781,9 +788,9 @@ class Player:
         hp_float = self.hp / self.max_hp
         self.hp_text = shared_methods.outline_text(
             str(self.hp),
-            ((1 - hp_float) * 255, hp_float * 255, 0),
+            pygame.Color(int((1 - hp_float) * 255), int(hp_float * 255), 0),
             commons.DEFAULT_FONT,
-            outline_color=((1 - hp_float) * 180, hp_float * 180, 0),
+            outline_color=pygame.Color(int((1 - hp_float) * 180), int(hp_float * 180), 0),
         )
         self.hp_x_position = (
             commons.WINDOW_WIDTH - 10 - hp_float * 100 - self.hp_text.get_width() * 0.5
@@ -792,18 +799,18 @@ class Player:
     """=================================================================================================================    
         player.Player.kill -> void
         
-        Kills the player, adds a death message,    spawns particles, plays    a sound
+        Kills the player, adds a death message, spawns particles, and plays a sound
     -----------------------------------------------------------------------------------------------------------------"""
 
     def kill(self, source, source_velocity=None):
         if self.alive:
             self.alive = False
-            self.respawn_tick = random.randint(10, 15)  # respawn delay
-            self.death_fade_in = 5
+            self.respawn_time_remaining = self.respawn_time
+            self.death_message_alpha = 1
             self.velocity = (0, 0)
 
             entity_manager.add_message(
-                get_death_message(self.name, source), (255, 0, 0)
+                get_death_message(self.name, source), pygame.Color(255, 0, 0)
             )
 
             if commons.PARTICLES:
@@ -842,7 +849,7 @@ class Player:
     """=================================================================================================================    
         player.Player.respawn -> void
         
-        Sets the player's position to the world's spawn    point and resets some variables
+        Sets the player's position to the world's spawn point and resets some variables
     -----------------------------------------------------------------------------------------------------------------"""
 
     def respawn(self):
@@ -851,9 +858,9 @@ class Player:
         )  # set position to world.world.spawn_point
         self.velocity = (0, 0)
         self.alive = True
-        self.hp = int(self.max_hp)  # reset    hp
+        self.hp = int(self.max_hp)  # reset hp
         self.hp_text = shared_methods.outline_text(
-            str(self.hp), (0, 255, 0), commons.DEFAULT_FONT, outline_color=(0, 180, 0)
+            str(self.hp), pygame.Color(0, 255, 0), commons.DEFAULT_FONT, outline_color=pygame.Color(0, 180, 0)
         )
         self.hp_x_position = (
             commons.WINDOW_WIDTH - 10 - 100 - self.hp_text.get_width() * 0.5
@@ -1442,20 +1449,20 @@ class Player:
             # Find all suitable    slots
             existing_slots = self.find_existing_item_stacks(
                 current_item.item_id)
-            # Slots    that already have the item
+            # Slots that already have the item
             while len(existing_slots) > 0 and amount > 0:
-                # Work out how many    to add to the stack
+                # Work out how many to add to the stack
                 fill_count = existing_slots[0][2]
                 amount -= fill_count
                 if amount < 0:
                     fill_count += amount
 
-                # Increase the amount    of the chosen slot
+                # Increase the amount of the chosen slot
                 self.items[existing_slots[0][0]][
                     existing_slots[0][1]
                 ].amount += fill_count
 
-                # Automatically    craft new coins
+                # Automatically craft new coins
                 if is_coin:
                     if (
                         self.items[existing_slots[0][0]][existing_slots[0][1]].amount
@@ -1519,8 +1526,8 @@ class Player:
                 self.items[position[0]][position[1]] = current_item.copy(new_amount=amount)
                 return [ItemSlotClickResult.GAVE_ALL]
 
-            # Slot has an item with the same Id
-            elif self.items[position[0]][position[1]].item_id == current_item.item_id:
+            # Slot has an item with the same ID
+            if self.items[position[0]][position[1]].item_id == current_item.item_id:
                 max_stack = self.items[position[0]][position[1]].get_max_stack()
                 # Item is already at max stack, swap
                 if self.items[position[0]][position[1]].amount == max_stack:
@@ -1542,18 +1549,19 @@ class Player:
                     else:
                         return [ItemSlotClickResult.GAVE_ALL]
 
-            # Slot has an item with a different Id, swap
+            # Slot has an item with a different ID, swap
             elif self.items[position[0]][position[1]].item_id != current_item.item_id:
                 return [
                     ItemSlotClickResult.SWAPPED,
                     self.items[position[0]][position[1]],
                     position[0],
                 ]
+            return None
 
     """=================================================================================================================    
         player.Player.remove_item -> item
         
-        Removes    all    the    items from a slot in one of the    player's available item    slots
+        Removes all the items from a slot in one of the player's available item slots
     -----------------------------------------------------------------------------------------------------------------"""
 
     def remove_item(self, position, remove_count=None):
@@ -1573,11 +1581,12 @@ class Player:
                 return current_item.copy()
             else:
                 return current_item.copy(new_amount=remove_count)
+        return None
 
     """=================================================================================================================    
-        player.Player.find_existing_item_stacks    -> existing    space list
+        player.Player.find_existing_item_stacks -> existing space list
         
-        Finds any occurrences of an item in the    player's inventory or hotbar
+        Finds any occurrences of an item in the player's inventory or hotbar
     -----------------------------------------------------------------------------------------------------------------"""
 
     def find_existing_item_stacks(
@@ -1663,8 +1672,7 @@ class Player:
                 if current_item.amount > 1:
                     self.hotbar_image.blit(
                         shared_methods.outline_text(
-                            str(current_item.amount), (255,
-                                                       255, 255), commons.SMALL_FONT
+                            str(current_item.amount), pygame.Color(255, 255, 255), commons.SMALL_FONT
                         ),
                         (24 + 48 * hotbar_index, 30),
                     )
@@ -1701,7 +1709,7 @@ class Player:
                                     inventory_index
                                 ].amount
                             ),
-                            (255, 255, 255),
+                            pygame.Color(255, 255, 255),
                             commons.SMALL_FONT,
                         ),
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
@@ -1710,7 +1718,7 @@ class Player:
     """=================================================================================================================    
         player.Player.render_chest -> void
         
-        Fully renders the chest    the    player has open    to the chest_image surface,    including all the items    in the open    chest 
+        Fully renders the chest the player has open to the chest_image surface, including all the items in the open chest 
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_chest(self):
@@ -1733,7 +1741,7 @@ class Player:
                     self.chest_image.blit(
                         shared_methods.outline_text(
                             str(self.items[ItemLocation.CHEST][chest_index].amount),
-                            (255, 255, 255),
+                            pygame.Color(255, 255, 255),
                             commons.SMALL_FONT,
                         ),
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
@@ -1742,7 +1750,7 @@ class Player:
     """=================================================================================================================    
         player.Player.update_inventory_old_slots -> void
         
-        Uses a list    of outdated    positions in the hotbar, inventory or an open chest    to update the respective area's    surfaces
+        Uses a list of outdated positions in the hotbar, inventory or an open chest to update the respective area's surfaces
     -----------------------------------------------------------------------------------------------------------------"""
 
     def update_inventory_old_slots(self):
@@ -1761,8 +1769,7 @@ class Player:
                     if current_item.amount > 1:
                         self.hotbar_image.blit(
                             shared_methods.outline_text(
-                                str(current_item.amount), (255,
-                                                           255, 255), commons.SMALL_FONT
+                                str(current_item.amount), pygame.Color(255, 255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * data[1], 30),
                         )
@@ -1784,8 +1791,7 @@ class Player:
                     if current_item.amount > 1:
                         self.inventory_image.blit(
                             shared_methods.outline_text(
-                                str(current_item.amount), (255,
-                                                           255, 255), commons.SMALL_FONT
+                                str(current_item.amount), pygame.Color(255, 255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * slot_x, 30 + 48 * slot_y),
                         )
@@ -1808,8 +1814,7 @@ class Player:
                     if current_item.amount > 1:
                         self.chest_image.blit(
                             shared_methods.outline_text(
-                                str(current_item.amount), (255,
-                                                           255, 255), commons.SMALL_FONT
+                                str(current_item.amount), pygame.Color(255, 255, 255), commons.SMALL_FONT
                             ),
                             (24 + 48 * slot_x, 30 + 48 * slot_y),
                         )
@@ -1818,7 +1823,7 @@ class Player:
     """=================================================================================================================    
         player.Player.update_craftable_items -> void
         
-        Creates    a list of items    that can be crafted    with the current materials List    structure [item_id,    amount]
+        Creates a list of items that can be crafted with the current materials List structure [item_id, amount]
     -----------------------------------------------------------------------------------------------------------------"""
 
     def update_craftable_items(self):
@@ -1829,7 +1834,7 @@ class Player:
     """=================================================================================================================    
         player.Player.render_craftable_items_surf -> void
         
-        Uses the craftable_items list to create    a surface that displays    all    the    items the player can craft
+        Uses the craftable_items list to create a surface that displays all the items the player can craft
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_craftable_items_surf(self):
@@ -1866,12 +1871,10 @@ class Player:
     """=================================================================================================================    
         player.Player.draw -> void
         
-        Uses various player    variables to draw the player in the    world
+        Uses various player variables to draw the player in the world
     -----------------------------------------------------------------------------------------------------------------"""
 
     def draw(self): # Draw player to screen
-        hit_rect = Rect(0, 0, 1, 1)
-
         if self.alive:
             screen_position_x = (
                 self.position[0]
@@ -1885,7 +1888,10 @@ class Player:
             )
             commons.screen.blit(
                 self.sprites.create_sprite(),
-                (screen_position_x - commons.PLAYER_WIDTH, screen_position_y - commons.PLAYER_HEIGHT + commons.BLOCK_SIZE // 2),
+                (
+                    screen_position_x - self.sprites.SURFACE_WIDTH * 0.5,
+                    screen_position_y - self.sprites.SURFACE_HEIGHT * 0.5
+                )
             )
 
             if self.arm_out:
@@ -1894,7 +1900,6 @@ class Player:
                 else:
                     current_item = item.item_holding
 
-                assert current_item is not None
                 if current_item.get_world_override_image() is not None:
                     rotated_item_surf = shared_methods.rotate_surface(
                         current_item.get_world_override_image(),
@@ -1905,9 +1910,9 @@ class Player:
                         current_item.get_image(), self.arm_out_angle * 180 / math.pi
                     )
                 if self.direction == 1:
-                    offset_x = 10
+                    offset_x = commons.PLAYER_WIDTH * 0.5
                 else:
-                    offset_x = -10
+                    offset_x = 0
                     rotated_item_surf = pygame.transform.flip(
                         rotated_item_surf, True, False
                     )
@@ -2251,7 +2256,7 @@ class Player:
             hp_float = self.hp / self.max_hp
             col: tuple[int, int, int] = (
                 int((1 - hp_float) * 255),
-                int((hp_float) * 255),
+                int(hp_float * 255),
                 0,
             )
             pygame.draw.rect(commons.screen, col, rect, 0)
@@ -2263,7 +2268,7 @@ class Player:
     """=================================================================================================================    
         player.Player.open_chest -> void
         
-        Plays the chest    opening    sound, opens the inventory and updates the items that the player can craft
+        Plays the chest opening sound, opens the inventory and updates the items that the player can craft
     -----------------------------------------------------------------------------------------------------------------"""
 
     def open_chest(self, items):
@@ -2306,7 +2311,7 @@ class Player:
         # Convert the items    in the inventory to a less data    heavy format
         formatted_inventory = []
         for item_index in range(len(self.items[ItemLocation.INVENTORY])):
-            current_item = self.items[ItemLocation.INVENTORY][item_index]
+            current_item: None | Item = self.items[ItemLocation.INVENTORY][item_index]
             if current_item is not None:
                 if current_item.prefix_data is None:
                     formatted_inventory.append(
@@ -2322,7 +2327,7 @@ class Player:
                         )
                     )
 
-        # Save the data    to disk    and    display    a message
+        # Save the data to disk and display a message
         commons.PLAYER_DATA["name"] = self.name
         commons.PLAYER_DATA["model_appearance"] = self.model
         commons.PLAYER_DATA["hotbar"] = formatted_hotbar
@@ -2335,7 +2340,7 @@ class Player:
         pickle.dump(
             commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb")
         )  # Save player array
-        entity_manager.add_message("Saved Player: " + self.name + "!", (255, 255, 255))
+        entity_manager.add_message("Saved Player: " + self.name + "!", pygame.Color(255, 255, 255))
 
     """=================================================================================================================    
         player.Player.jump -> void

@@ -1,6 +1,3 @@
-# physics_item.py
-
-import pygame
 import math
 import random
 from pygame.locals import Rect

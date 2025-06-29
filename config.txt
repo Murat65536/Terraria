@@ -17,5 +17,5 @@
 (bool)SPLASHSCREEN = 1
 (float/seconds)AUTO_SAVE_FREQUENCY = 600
 (bool)EXPERIMENTAL_LIGHTING = 1
-(bool)SMOOTH_CAM = 1
+(bool)SMOOTH_CAM = 0
 (bool)DRAW_UI = 1

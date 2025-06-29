@@ -1090,10 +1090,10 @@ ITEM_DATA: list[
             "assets/images/items/grappling_hook.png"
         ).convert_alpha(),
         "grapple_chain_image": image.load(
-            "assets/images/grappling_hook_chain.png"
+            "assets/images/chains/grappling_hook_chain.png"
         ).convert_alpha(),
         "grapple_claw_image": image.load(
-            "assets/images/grappling_hook_claw.png"
+            "assets/images/projectiles/grappling_hook_claw.png"
         ).convert_alpha(),
     },
     {

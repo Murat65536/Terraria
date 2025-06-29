@@ -63,17 +63,18 @@ def fade_background(new_background_id: int) -> None:
 def draw_death_message() -> None:
     assert type(entity_manager.client_player) == entity_manager.Player
     death_text = shared_methods.outline_text(
-        "You were slain...", (229, 127, 127), commons.LARGE_FONT
+        "You were slain...", pygame.Color(255, 127, 127), commons.LARGE_FONT
     )
-    alpha = int((1 - entity_manager.client_player.death_fade_in * 0.15) * 255)
+    respawn_text = shared_methods.outline_text(
+        str(int(entity_manager.client_player.respawn_time_remaining) + 1),
+        pygame.Color(255, 127, 127),
+        commons.LARGE_FONT,
+    )
+    alpha = int((1 - entity_manager.client_player.death_message_alpha) * 255)
     death_text.set_alpha(alpha)
-    commons.screen.blit(
-        death_text,
-        (
-            commons.WINDOW_WIDTH * 0.5 - death_text.get_width() * 0.5,
-            commons.WINDOW_HEIGHT * 0.5,
-        ),
-    )
+    respawn_text.set_alpha(alpha)
+    commons.screen.blit(death_text, (commons.WINDOW_WIDTH * 0.5 - death_text.get_width() * 0.5, commons.WINDOW_HEIGHT * 0.5))
+    commons.screen.blit(respawn_text, (commons.WINDOW_WIDTH * 0.5 - respawn_text.get_width() * 0.5, commons.WINDOW_HEIGHT * 0.5 + death_text.get_height()))
 
 
 """================================================================================================================= 
@@ -96,7 +97,7 @@ def render_hand_text() -> None:
         )
     else:
         hand_text = shared_methods.outline_text(
-            "", (255, 255, 255), commons.DEFAULT_FONT
+            "", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
         )
 
 
@@ -194,28 +195,28 @@ def render_stats_text(pos: List[Any]) -> bool:
                 stats.append(
                     shared_methods.outline_text(
                         f"{str(round(equipped.get_attack_damage(), 1)).rstrip('0').rstrip('.')} true melee damage",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         f"{str(round(equipped.get_crit_chance() * 100, 1)).rstrip('0').rstrip('.')} % critical strike chance",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         get_speed_text(equipped.get_attack_speed()),
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         get_knockback_text(equipped.get_knockback()),
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
@@ -223,34 +224,34 @@ def render_stats_text(pos: List[Any]) -> bool:
             if equipped.has_tag(item.ItemTag.AMMO):
                 stats.append(
                     shared_methods.outline_text(
-                        "Ammunition", (255, 255, 255), commons.DEFAULT_FONT
+                        "Ammunition", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         f"{equipped.get_ammo_damage()} damage",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         f"{round(equipped.get_ammo_knockback_modifier() * 100, 1)} % knockback",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         f"{round(equipped.get_ammo_gravity_modifier() * 100, 1)} % gravity",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
                 stats.append(
                     shared_methods.outline_text(
                         f"{round(equipped.get_ammo_drag() * 100, 1)} % drag",
-                        (255, 255, 255),
+                        pygame.Color(255, 255, 255),
                         commons.DEFAULT_FONT,
                     )
                 )
@@ -258,18 +259,18 @@ def render_stats_text(pos: List[Any]) -> bool:
             if equipped.has_tag(item.ItemTag.TILE):
                 stats.append(
                     shared_methods.outline_text(
-                        "Can be placed", (255, 255, 255), commons.DEFAULT_FONT
+                        "Can be placed", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                     )
                 )
 
             if equipped.has_tag(item.ItemTag.MATERIAL):
                 stats.append(
                     shared_methods.outline_text(
-                        "Material", (255, 255, 255), commons.DEFAULT_FONT
+                        "Material", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
                     )
                 )
 
-            if equipped.has_prefix and equipped.prefix_data != None:
+            if equipped.has_prefix and equipped.prefix_data is not None:
                 if equipped.prefix_data[1]["damage"] != 0:
                     if equipped.prefix_data[1]["damage"] > 0:
                         color = good_color
@@ -742,7 +743,7 @@ def draw_inventory_hover_text() -> None:
                     can_pickup_item = False
                     can_drop_holding = False
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
-                elif can_drop_holding and item.item_holding != None:
+                elif can_drop_holding and item.item_holding is not None:
                     if (
                         item.item_holding.item_id
                         == entity_manager.client_player.items[
@@ -884,7 +885,7 @@ def draw_item_holding() -> None:
             commons.screen.blit(
                 shared_methods.outline_text(
                     str(item.item_holding.amount),
-                    (255, 255, 255),
+                    pygame.Color(255, 255, 255),
                     commons.SMALL_FONT,
                 ),
                 (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40),
@@ -906,7 +907,7 @@ def draw_exit_button() -> None:
         if not exit_button_hover:
             exit_button_hover = True
             game_data.play_sound("sound.menu_select")
-        color = (230, 230, 0)
+        color = pygame.Color(230, 230, 0)
         if pygame.mouse.get_pressed()[0]:
             entity_manager.client_player.inventory_open = False
             entity_manager.client_player.chest_open = False
@@ -920,7 +921,7 @@ def draw_exit_button() -> None:
             )
             commons.WAIT_TO_USE = True
     else:
-        color = (255, 255, 255)
+        color = pygame.Color(255, 255, 255)
         exit_button_hover = False
     exit_text = shared_methods.outline_text(
         "Save and Quit", color, commons.DEFAULT_FONT
@@ -964,8 +965,8 @@ def draw_menu_background() -> None:
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
 
-good_color: tuple[int, int, int] = (10, 230, 10)
-bad_color: tuple[int, int, int] = (230, 10, 10)
+good_color: pygame.Color = pygame.Color(10, 230, 10)
+bad_color: pygame.Color = pygame.Color(230, 10, 10)
 
 # MAX SURF WIDTH IS 16383
 
@@ -982,7 +983,7 @@ clock = pygame.time.Clock()
 if commons.SPLASHSCREEN:
     run_splash_screen()
 
-fps_text = shared_methods.outline_text(str(0), (255, 255, 255), commons.DEFAULT_FONT)
+fps_text = shared_methods.outline_text(str(0), pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
 hand_text = pygame.Surface((0, 0))
 stats_text = pygame.Surface((0, 0))
 
@@ -1220,6 +1221,7 @@ while True:
         if commons.BACKGROUND:
             BACKGROUND_DATA.update_biome(Biome.TREE)
             BACKGROUND_DATA.render(parallax_pos[0], parallax_pos[1], 0.1)
+            BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.01)
             BACKGROUND_DATA.update(commons.DELTA_TIME)
         else:
             commons.screen.fill((153, 217, 234))
@@ -1450,19 +1452,19 @@ while True:
 
                             text0 = shared_methods.outline_text(
                                 f"Greetings {entity_manager.client_player.name}, bear with us while",
-                                (255, 255, 255),
+                                pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
                             text1 = shared_methods.outline_text(
                                 f"we load up '{world.world.name}'",
-                                (255, 255, 255),
+                                pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
                             text2 = shared_methods.outline_text(
                                 game_data.TIPS[
                                     random.randint(0, len(game_data.TIPS) - 1)
                                 ],
-                                (255, 255, 255),
+                                pygame.Color(255, 255, 255),
                                 commons.DEFAULT_FONT,
                             )
 
@@ -1570,7 +1572,7 @@ while True:
 
         elif commons.game_sub_state == "WORLD_NAMING":
             text = shared_methods.outline_text(
-                f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT
+                f"{commons.TEXT_INPUT}|", pygame.Color(255, 255, 255), commons.LARGE_FONT
             )
             commons.screen.blit(
                 text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175)
@@ -1578,7 +1580,7 @@ while True:
 
         elif commons.game_sub_state == "PLAYER_NAMING":
             text = shared_methods.outline_text(
-                f"{commons.TEXT_INPUT}|", (255, 255, 255), commons.LARGE_FONT
+                f"{commons.TEXT_INPUT}|", pygame.Color(255, 255, 255), commons.LARGE_FONT
             )
             commons.screen.blit(
                 text, (commons.WINDOW_WIDTH * 0.5 - text.get_width() * 0.5, 175)
@@ -1619,37 +1621,37 @@ while True:
                     {
                         "sex": commons.PLAYER_MODEL_DATA[0][0],
                         "hair_id": commons.PLAYER_MODEL_DATA[1][0],
-                        "skin_color": (
+                        "skin_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[2][0],
                             commons.PLAYER_MODEL_DATA[2][1],
                             commons.PLAYER_MODEL_DATA[2][2],
                         ),
-                        "hair_color": (
+                        "hair_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[3][0],
                             commons.PLAYER_MODEL_DATA[3][1],
                             commons.PLAYER_MODEL_DATA[3][2],
                         ),
-                        "eye_color": (
+                        "eye_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[4][0],
                             commons.PLAYER_MODEL_DATA[4][1],
                             commons.PLAYER_MODEL_DATA[4][2],
                         ),
-                        "shirt_color": (
+                        "shirt_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[5][0],
                             commons.PLAYER_MODEL_DATA[5][1],
                             commons.PLAYER_MODEL_DATA[5][2],
                         ),
-                        "undershirt_color": (
+                        "undershirt_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[6][0],
                             commons.PLAYER_MODEL_DATA[6][1],
                             commons.PLAYER_MODEL_DATA[6][2],
                         ),
-                        "trouser_color": (
+                        "trouser_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[7][0],
                             commons.PLAYER_MODEL_DATA[7][1],
                             commons.PLAYER_MODEL_DATA[7][2],
                         ),
-                        "shoe_color": (
+                        "shoe_color": pygame.Color(
                             commons.PLAYER_MODEL_DATA[8][0],
                             commons.PLAYER_MODEL_DATA[8][1],
                             commons.PLAYER_MODEL_DATA[8][2],
@@ -1681,7 +1683,7 @@ while True:
             if commons.DELTA_TIME > 0:
                 fps_text = shared_methods.outline_text(
                     str(int(1.0 / commons.DELTA_TIME)),
-                    (255, 255, 255),
+                    pygame.Color(255, 255, 255),
                     commons.DEFAULT_FONT,
                 )
         else:
@@ -1761,8 +1763,8 @@ while True:
                             entity_manager.enemies[0].kill((0, -50))
                         entity_manager.add_message(
                             "All enemies killed",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                 # Spawn Enemy Cheat
@@ -1780,7 +1782,7 @@ while True:
                             )
                         )
                         entity_manager.add_message(
-                            "Spawned enemy", (255, 223, 10), outline_color=(80, 70, 3)
+                            "Spawned enemy", pygame.Color(255, 223, 10), outline_color=pygame.Color(80, 70, 3)
                         )
 
                 # Respawn Cheats
@@ -1792,8 +1794,8 @@ while True:
                         )
                         entity_manager.add_message(
                             f"Spawn point moved to {str(world.world.spawn_position)}",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
                     else:
                         if commons.PARTICLES:
@@ -1811,8 +1813,8 @@ while True:
                         entity_manager.client_player.respawn()
                         entity_manager.add_message(
                             "Player respawned",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                         if commons.PARTICLES:
@@ -1894,7 +1896,7 @@ while True:
                                     1.0, max(0.0, (tile_y - 55) / 110)
                                 )
                                 color = shared_methods.darken_color(
-                                    (135, 206, 234), int(sky_darken_factor)
+                                    pygame.Color(135, 206, 234), int(sky_darken_factor)
                                 )
                                 pygame.draw.rect(
                                     world_surf,
@@ -1911,8 +1913,8 @@ while True:
                         pygame.image.save(world_surf, path)
                         entity_manager.add_message(
                             f"World Snapshot Saved to: '{path}'",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                 # Gravity Reverse Cheat
@@ -1921,8 +1923,8 @@ while True:
                         commons.GRAVITY = -commons.GRAVITY
                         entity_manager.add_message(
                             "Gravity reversed",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                 # Random Item Prefix Cheat
@@ -1944,7 +1946,7 @@ while True:
                             )
                             entity_manager.add_message(
                                 "Item prefix randomized",
-                                (
+                                pygame.Color(
                                     random.randint(0, 255),
                                     random.randint(0, 255),
                                     random.randint(0, 255),
@@ -1960,8 +1962,8 @@ while True:
                         entity_manager.client_prompt = prompt.Prompt("test", "Test")
                         entity_manager.add_message(
                             "Random prompt deployed",
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                 # Get Tile and Wall IDS
@@ -1980,8 +1982,8 @@ while True:
                                 + str(commons.HOVERED_TILE[1])
                                 + ") has ID: "
                                 + str(wallID),
-                                (255, 223, 10),
-                                outline_color=(80, 70, 3),
+                                pygame.Color(255, 223, 10),
+                                outline_color=pygame.Color(80, 70, 3),
                             )
                     else:
                         if world.tile_in_map(
@@ -1997,8 +1999,8 @@ while True:
                                 + str(commons.HOVERED_TILE[1])
                                 + ") has ID: "
                                 + str(tileID),
-                                (255, 223, 10),
-                                outline_color=(80, 70, 3),
+                                pygame.Color(255, 223, 10),
+                                outline_color=pygame.Color(80, 70, 3),
                             )
 
                 # Toggle UI
@@ -2006,8 +2008,8 @@ while True:
                     commons.DRAW_UI = not commons.DRAW_UI
                     entity_manager.add_message(
                         "UI " + shared_methods.get_on_off(commons.DRAW_UI),
-                        (255, 223, 10),
-                        outline_color=(80, 70, 3),
+                        pygame.Color(255, 223, 10),
+                        outline_color=pygame.Color(80, 70, 3),
                     )
 
                 # Toggle SMOOTH_CAM
@@ -2016,8 +2018,8 @@ while True:
                     entity_manager.add_message(
                         "Smooth camera "
                         + shared_methods.get_on_off(commons.SMOOTH_CAM),
-                        (255, 223, 10),
-                        outline_color=(80, 70, 3),
+                        pygame.Color(255, 223, 10),
+                        outline_color=pygame.Color(80, 70, 3),
                     )
 
                 # Toggle HITBOXES
@@ -2025,8 +2027,8 @@ while True:
                     commons.HITBOXES = not commons.HITBOXES
                     entity_manager.add_message(
                         "Hitboxes " + shared_methods.get_on_off(commons.HITBOXES),
-                        (255, 223, 10),
-                        outline_color=(80, 70, 3),
+                        pygame.Color(255, 223, 10),
+                        outline_color=pygame.Color(80, 70, 3),
                     )
 
                 # Hotbar Item Selection
@@ -2075,8 +2077,8 @@ while True:
                     entity_manager.add_message(
                         "Experimental lighting "
                         + shared_methods.get_on_off(commons.EXPERIMENTAL_LIGHTING),
-                        (255, 223, 10),
-                        outline_color=(80, 70, 3),
+                        pygame.Color(255, 223, 10),
+                        outline_color=pygame.Color(80, 70, 3),
                     )
 
                 # Toggle Background
@@ -2086,8 +2088,8 @@ while True:
                         entity_manager.add_message(
                             "Background "
                             + shared_methods.get_on_off(commons.BACKGROUND),
-                            (255, 223, 10),
-                            outline_color=(80, 70, 3),
+                            pygame.Color(255, 223, 10),
+                            outline_color=pygame.Color(80, 70, 3),
                         )
 
                 # Music Volume Up

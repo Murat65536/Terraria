@@ -17,33 +17,6 @@ from game_data import get_item_id_by_id_str, find_structures_for_connection
 from datetime import datetime
 from background import BACKGROUND_DATA
 
-WORLD_SIZE_X = 0
-WORLD_SIZE_Y = 0
-
-world = None
-
-terrain_surface = pygame.Surface((0, 0))
-
-border_down = 0
-border_up = 0
-border_left = 0
-border_right = 0
-
-biome_border_x_1 = 0
-biome_border_x_2 = 0
-
-WORLD_NAME = ""
-
-grass_grow_delay = 2.5
-grass_grow_tick = grass_grow_delay
-
-structure_rectangles = []
-
-tile_mask_data: list[list[int]] = []
-wall_tile_mask_data: list[list[int]] = []
-
-leaf_tile: int = 0
-
 
 class WorldSize(Enum):
     TINY = 0
@@ -102,14 +75,15 @@ class World:
         self.playtime = 0
         self.spawn_position = (0, 0)
         self.chest_data = []
+        self.tile_id_str_lookup = []
         self.tile_data: list[list[list[int]]] = []
         self.tile_mask_data = []
 
     def get_creation_date_string(self):
-        return str(str(self.creation_date)[:19])
+        return str(self.creation_date)[:19]
 
     def get_last_played_date_string(self):
-        return str(str(self.last_played_date)[:19])
+        return str(self.last_played_date)[:19]
 
     def save(self):
         # Save chest data using a better format
@@ -149,7 +123,7 @@ class World:
             "wall_id_str_lookup": game_data.get_current_wall_id_str_lookup(),
         }
 
-        pickle.dump(save_map, open(f"assets/worlds/{self.name}.dat", "wb"))  # save dat
+        pickle.dump(save_map, open(f"assets/worlds/{self.name}.dat", "wb")) # save dat
         pickle.dump(
             self.tile_data, open(f"assets/worlds/{self.name}.wrld", "wb")
         )  # save wrld
@@ -182,12 +156,12 @@ class World:
                 self.chest_data[chest_data_index][0] = formatted_chest_data_at_index[0]
                 for item_data_index in range(len(formatted_chest_data_at_index[1])):
                     loaded_item_data = formatted_chest_data_at_index[1][item_data_index]
-                    item = Item(
+                    chest_item = Item(
                         game_data.get_item_id_by_id_str(loaded_item_data[1]),
                         loaded_item_data[2],
                     )
-                    item.assign_prefix(loaded_item_data[3])
-                    self.chest_data[chest_data_index][1][loaded_item_data[0]] = item
+                    chest_item.assign_prefix(loaded_item_data[3])
+                    self.chest_data[chest_data_index][1][loaded_item_data[0]] = chest_item
 
             # Open selected save wrld file
             self.tile_data = pickle.load(open(f"assets/worlds/{world_name}.wrld", "rb"))
@@ -212,6 +186,32 @@ class World:
                         game_data.get_wall_id_by_id_str(existing_wall_id_str)
                     )
 
+WORLD_SIZE_X = 0
+WORLD_SIZE_Y = 0
+
+terrain_surface = pygame.Surface((0, 0))
+
+border_down = 0
+border_up = 0
+border_left = 0
+border_right = 0
+
+biome_border_x_1 = 0
+biome_border_x_2 = 0
+
+WORLD_NAME = ""
+
+grass_grow_delay = 2.5
+grass_grow_tick = grass_grow_delay
+
+structure_rectangles = []
+
+tile_mask_data: list[list[int]] = []
+wall_tile_mask_data: list[list[int]] = []
+
+leaf_tile: int = 0
+
+world: World | None = None
 
 """================================================================================================================= 
     World save and load functions
@@ -223,7 +223,7 @@ class World:
 def save():
     assert world is not None
     world.save()
-    entity_manager.add_message(f"Saved World: {world.name}!", (255, 255, 255))
+    entity_manager.add_message(f"Saved World: {world.name}!", pygame.Color(255, 255, 255))
 
 
 def load(world_name, load_all=True):
@@ -384,6 +384,7 @@ def get_mask_type_from_adjacent_blocks(adjacent_blocks):
             return MaskType.MIDDLE
         case [1, 1, 1, 0]:
             return MaskType.TOP_MID
+    raise ValueError(f"Unknown mask type: {adjacent_blocks}")
 
 
 """================================================================================================================= 
@@ -427,6 +428,7 @@ def get_mask_index_from_type(mask_type):
             return 53 + int(random.randint(0, 2) * 2)
         case MaskType.MIDDLE:
             return 14
+    raise ValueError(f"Unknown mask type: {mask_type}")
 
 
 """================================================================================================================= 
@@ -467,6 +469,8 @@ def get_mask_type_from_index(index):
         return MaskType.CORNER_BOT_LEFT
     elif index == 53 or index == 55 or index == 57:
         return MaskType.CORNER_BOT_RIGHT
+    else:
+        return None
 
 
 """================================================================================================================= 
@@ -477,7 +481,6 @@ def get_mask_type_from_index(index):
 
 
 def get_wall_mask_index_from_pos(i, j, wall_id):
-    assert world is not None
     merge_blocks = [1, 1, 1, 1]
     if i > 0:
         if not check_wall_merge(world.tile_data[i - 1][j][1], wall_id):
@@ -502,7 +505,6 @@ def get_wall_mask_index_from_pos(i, j, wall_id):
 
 
 def get_mask_index_from_pos(i, j, tile_id):
-    assert world is not None
     merge_blocks = [1, 1, 1, 1]
     if i > 0:
         if not check_tile_merge(world.tile_data[i - 1][j][0], tile_id):
@@ -539,9 +541,9 @@ def blit_generation_stage(string):
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 2)
     BACKGROUND_DATA.update(commons.DELTA_TIME)
     text1 = shared_methods.outline_text(
-        "Generating " + WORLD_NAME, (255, 255, 255), commons.EXTRA_LARGE_FONT
+        "Generating " + WORLD_NAME, pygame.Color(255, 255, 255), commons.EXTRA_LARGE_FONT
     )
-    text2 = shared_methods.outline_text(string, (255, 255, 255), commons.LARGE_FONT)
+    text2 = shared_methods.outline_text(string, pygame.Color(255, 255, 255), commons.LARGE_FONT)
     commons.screen.blit(
         text1, (commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5, 120)
     )
@@ -559,7 +561,7 @@ def blit_generation_stage(string):
 
 
 def generate_terrain(gen_type, blit_progress=False):
-    global world, tile_mask_data, wall_tile_mask_data, world_data
+    global world, tile_mask_data, wall_tile_mask_data
 
     global biome_border_x_1, biome_border_x_2
     biome_border_x_1 = WORLD_SIZE_X * 0.333333
@@ -596,9 +598,7 @@ def generate_terrain(gen_type, blit_progress=False):
     ]  # Randomly generate offsets
 
     if gen_type == "ice caves":
-        world.tile_data = [
-            [[-1, 0] for _ in range(WORLD_SIZE_X)] for _ in range(WORLD_SIZE_Y)
-        ]
+        world.tile_data = [[[-1, 0] for _ in range(WORLD_SIZE_X)] for _ in range(WORLD_SIZE_Y)]
 
         for map_index_x in range(WORLD_SIZE_X):
             for map_index_y in range(WORLD_SIZE_Y):
@@ -914,7 +914,6 @@ def place_multitile(top_left_x, top_left_y, dimensions, tile_id, update_surface)
 
 
 def get_multitile_origin(x, y):
-    assert world is not None
     tile_data = world.tile_data[x][y]
     return x - tile_data[2][0], y - tile_data[2][1]
 

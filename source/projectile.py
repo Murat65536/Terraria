@@ -1,5 +1,3 @@
-# projectile.py
-
 import pygame
 import math
 import random

@@ -84,7 +84,7 @@ class Particle:
     """================================================================================================================= 
         particle.Particle.draw -> void
 
-        Draws the particle instance, optionally with an outline
+        Draws the particle instance
     -----------------------------------------------------------------------------------------------------------------"""
 
     def draw(self):

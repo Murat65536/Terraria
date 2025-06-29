@@ -1,5 +1,3 @@
-# enemy.py
-
 import pygame, math
 from pygame.locals import Rect
 from random import random, randint
@@ -11,7 +9,7 @@ import tilesets
 import shared_methods
 import item
 from data.tile import TileData, DamagingTileData, MultitileData, DoorTileData, LootTileData, LootMultitileData
-
+from source.data.entity import ENTITY_DATA
 
 """================================================================================================================= 
     enemy.Enemy
@@ -21,23 +19,19 @@ from data.tile import TileData, DamagingTileData, MultitileData, DoorTileData, L
 
 
 class Enemy:
-    def __init__(self, position: tuple[float, float], enemy_id: int) -> None:
+    def __init__(self, position, enemy_id) -> None:
         self.position: tuple[float, float] = position
         self.block_pos: tuple[int, int] = (0, 0)
         self.velocity: tuple[float, float] = (0, 0)
         self.enemy_id: int = enemy_id
-        self.name: str = game_data.json_entity_data[self.enemy_id]["name"]
-        self.type: str = game_data.json_entity_data[self.enemy_id]["type"]
-        self.health: float = game_data.json_entity_data[self.enemy_id]["health"]
+        self.name: str = ENTITY_DATA[self.enemy_id].name
+        self.type: str = ENTITY_DATA[self.enemy_id].species
+        self.health: float = ENTITY_DATA[self.enemy_id].health
         self.max_health: float = self.health
-        self.defense: int = game_data.json_entity_data[self.enemy_id]["defense"]
-        self.knockback_resistance: float = game_data.json_entity_data[self.enemy_id][
-            "knockback_resistance"
-        ]
-        self.attack_damage: int = game_data.json_entity_data[self.enemy_id][
-            "attack_damage"
-        ]
-        self.color: pygame.Color = game_data.json_entity_data[self.enemy_id]["color"]
+        self.defense: int = ENTITY_DATA[self.enemy_id].defense
+        self.knockback_resistance: float = ENTITY_DATA[self.enemy_id].knockback_resistance
+        self.attack_damage: int = ENTITY_DATA[self.enemy_id].attack_damage
+        self.color: pygame.Color = ENTITY_DATA[self.enemy_id].color
         self.rect: pygame.Rect = Rect(
             self.position[0] - commons.BLOCK_SIZE,
             self.position[1] - commons.BLOCK_SIZE / 1.5,
@@ -360,36 +354,27 @@ class Enemy:
         if self.alive:
             self.alive = False
 
-            coin_range: tuple[int, int] = game_data.json_entity_data[self.enemy_id][
-                "coin_drop_range"
-            ]
+            coin_range: tuple[int, int] = ENTITY_DATA[self.enemy_id].coin_drop_range
             coin_drop_range: list[item.Item] = item.get_coins_from_int(
                 randint(coin_range[0], coin_range[1])
             )
-            item_drops = game_data.json_entity_data[self.enemy_id]["item_drops"]
+            item_drops = ENTITY_DATA[self.enemy_id].item_drops
 
             for coin_item in coin_drop_range:
                 entity_manager.spawn_physics_item(
-                    coin_item, self.position, pickup_delay=10
+                    coin_item,
+                    self.position,
+                    pickup_delay=10
                 )
-
-            total_weight = 0
             for item_drop in item_drops:
-                total_weight += item_drop["item_weight"]
-
-            random_number = randint(0, total_weight)
-
-            for item_drop in item_drops:
-                if random_number <= item_drop["item_weight"]:
-                    amount = randint(
-                        item_drop["item_minimum_drops"], item_drop["item_maximum_drops"]
-                    )
-                    item_id = game_data.get_item_id_by_id_str(item_drop["item_name"])
-                    entity_manager.spawn_physics_item(
-                        item.Item(item_id, amount), self.position, pickup_delay=10
-                    )
-                else:
-                    random_number -= item_drop["item_weight"]
+                entity_manager.spawn_physics_item(
+                    item.Item(
+                        game_data.get_item_id_by_id_str(item_drop.name),
+                        randint(item_drop.drop_range[0], item_drop.drop_range[1])
+                    ),
+                    self.position,
+                    pickup_delay=10
+                )
 
             if commons.PARTICLES:
                 if source_velocity is not None:
@@ -505,7 +490,7 @@ class Enemy:
         )
         if self.health < self.max_health:
             health_float = self.health / self.max_health
-            col: tuple[int, int, int] = (
+            col: pygame.Color = pygame.Color(
                 int(255 * (1 - health_float)),
                 int(255 * health_float),
                 0,

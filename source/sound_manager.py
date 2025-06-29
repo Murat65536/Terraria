@@ -1,5 +1,3 @@
-# sound_manager.py
-
 import pygame
 
 import commons
@@ -72,8 +70,8 @@ def change_music_volume(amount: float) -> None:
     pygame.mixer.music.set_volume(music_volume)
     entity_manager.add_message(
         "Music volume set to " + str(round(music_volume, 2)),
-        (255, 223, 10),
-        outline_color=(80, 70, 3),
+        pygame.Color(255, 223, 10),
+        outline_color=pygame.Color(80, 70, 3),
     )
 
 
