@@ -9,7 +9,8 @@ import pygame
 import shared_methods
 import tilesets
 import world
-from data.tile import DamagingTileData, DoorTileData, LootMultitileData, LootTileData, MultitileData, TileData
+from data.tile import (DamagingTileData, DoorTileData, LootMultitileData,
+                       LootTileData, MultitileData, TileData)
 from pygame.locals import Rect
 
 from source.data.entity import ENTITY_DATA

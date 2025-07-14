@@ -5,33 +5,17 @@ from typing import TypedDict
 
 import commons
 import pygame
-from data.item import (
-    ITEM_DATA,
-    AmmunitionItemData,
-    AxeItemData,
-    GrapplingHookItemData,
-    HammerItemData,
-    ImplacableTileItemData,
-    MagicalWeaponItemData,
-    MaterialItemData,
-    PickaxeItemData,
-    PlacableTileItemData,
-    RangedItemData,
-    SwordItemData,
-    WallItemData,
-)
+from data.item import (ITEM_DATA, AmmunitionItemData, AxeItemData,
+                       GrapplingHookItemData, HammerItemData,
+                       ImplacableTileItemData, MagicalWeaponItemData,
+                       MaterialItemData, PickaxeItemData, PlacableTileItemData,
+                       RangedItemData, SwordItemData, WallItemData)
 from data.loot import LOOT_DATA, LootData
 from data.sound import SOUND_DATA, SoundData
 from data.structure import STRUCTURE_DATA, StructureData
-from data.tile import (
-    TILE_DATA,
-    DamagingTileData,
-    DoorTileData,
-    LootMultitileData,
-    LootTileData,
-    MultitileData,
-    TileData,
-)
+from data.tile import (TILE_DATA, DamagingTileData, DoorTileData,
+                       LootMultitileData, LootTileData, MultitileData,
+                       TileData)
 from data.wall import WALL_DATA, WallData
 
 
