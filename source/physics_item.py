@@ -1,18 +1,16 @@
 import math
 import random
-from pygame.locals import Rect
-from item import Item
 
 import commons
-import game_data
-import world
-
 import entity_manager
-import shared_methods
+import game_data
 import item
+import shared_methods
+import world
+from item import Item
+from pygame.locals import Rect
 
-
-"""================================================================================================================= 
+"""=================================================================================================================
     physics_item.PhysicsItem
 
     Holds all the information required to update and draw a single PhysicsItem (An item that can collide with tiles)
@@ -62,7 +60,7 @@ class PhysicsItem:
         self.stationary = False
         self.time_stationary = 0
 
-    """================================================================================================================= 
+    """=================================================================================================================
         physics_item.PhysicsItem.render_image -> void
 
         Gives the image an invisible border so that it can be rotated without clipping
@@ -73,35 +71,23 @@ class PhysicsItem:
         self.image = self.item.get_image()
         self.half_image_size = self.image.get_width() * 0.5
 
-    """================================================================================================================= 
+    """=================================================================================================================
         physics_item.PhysicsItem.check_despawn -> void
 
         Checks to see if the PhysicsItem is off screen, if it is then remove it from the physics items list
     -----------------------------------------------------------------------------------------------------------------"""
 
     def check_despawn(self):
-        if (
-            self.position[0]
-            < entity_manager.client_player.position[0] - commons.WINDOW_WIDTH * 0.5
-        ):
+        if self.position[0] < entity_manager.client_player.position[0] - commons.WINDOW_WIDTH * 0.5:
             entity_manager.physics_items.remove(self)
-        elif (
-            self.position[0]
-            > entity_manager.client_player.position[0] + commons.WINDOW_WIDTH * 0.5
-        ):
+        elif self.position[0] > entity_manager.client_player.position[0] + commons.WINDOW_WIDTH * 0.5:
             entity_manager.physics_items.remove(self)
-        elif (
-            self.position[1]
-            < entity_manager.client_player.position[1] - commons.WINDOW_HEIGHT * 0.5
-        ):
+        elif self.position[1] < entity_manager.client_player.position[1] - commons.WINDOW_HEIGHT * 0.5:
             entity_manager.physics_items.remove(self)
-        elif (
-            self.position[1]
-            > entity_manager.client_player.position[1] + commons.WINDOW_HEIGHT * 0.5
-        ):
+        elif self.position[1] > entity_manager.client_player.position[1] + commons.WINDOW_HEIGHT * 0.5:
             entity_manager.physics_items.remove(self)
 
-    """================================================================================================================= 
+    """=================================================================================================================
         physics_item.PhysicsItem.update -> void
 
         Runs the despawn logic and physics for the PhysicsItem instance
@@ -135,10 +121,8 @@ class PhysicsItem:
                 self.velocity[1] * drag_factor,
             )
             self.position = (
-                self.position[0]
-                + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-                self.position[1]
-                + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+                self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+                self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
             )
             self.rect.center = tuple(self.position)
             self.block_position = (
@@ -153,10 +137,8 @@ class PhysicsItem:
         if self.item.item_id not in entity_manager.client_player.un_pickupable_items:
             if self.pickup_delay <= 0:
                 if (
-                    abs(self.position[0] - entity_manager.client_player.position[0])
-                    < commons.BLOCK_SIZE * 3.5
-                    and abs(self.position[1] - entity_manager.client_player.position[1])
-                    < commons.BLOCK_SIZE * 3.5
+                    abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCK_SIZE * 3.5
+                    and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCK_SIZE * 3.5
                 ):
                     collide = False
                     self.stationary = False
@@ -172,9 +154,7 @@ class PhysicsItem:
                     )
 
                     if entity_manager.client_player.rect.colliderect(self.rect):
-                        item_add_data = entity_manager.client_player.give_item(
-                            self.item, amount=self.item.amount
-                        )
+                        item_add_data = entity_manager.client_player.give_item(self.item, amount=self.item.amount)
                         assert item_add_data is not None
 
                         if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
@@ -199,12 +179,8 @@ class PhysicsItem:
         if collide:
             for j in range(-2, 3):
                 for i in range(-2, 3):
-                    if world.tile_in_map(
-                        self.block_position[1] + j, self.block_position[0] + i
-                    ):
-                        tile_id = world.world.tile_data[self.block_position[1] + j][
-                            self.block_position[0] + i
-                        ][0]
+                    if world.tile_in_map(self.block_position[1] + j, self.block_position[0] + i):
+                        tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
                         tile_data = game_data.get_tile_by_id(tile_id)
                         if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
                             block_rect = Rect(
@@ -240,8 +216,7 @@ class PhysicsItem:
                                         if self.velocity[1] < 0:
                                             self.position = (
                                                 self.position[0],
-                                                block_rect.bottom
-                                                + self.rect.height * 0.5,
+                                                block_rect.bottom + self.rect.height * 0.5,
                                             )  # Move item down
                                             self.velocity = (
                                                 self.velocity[0],
@@ -251,9 +226,7 @@ class PhysicsItem:
                                         if self.velocity[1] > 0:
                                             self.position = (
                                                 self.position[0],
-                                                block_rect.top
-                                                - self.rect.height * 0.5
-                                                + 1,
+                                                block_rect.top - self.rect.height * 0.5 + 1,
                                             )  # Move item up
                                             self.velocity = (
                                                 self.velocity[0],
@@ -261,7 +234,7 @@ class PhysicsItem:
                                             )  # Stop item vertically
                                             self.grounded = True
 
-    """================================================================================================================= 
+    """=================================================================================================================
         physics_item.PhysicsItem.draw -> void
 
         Draws the PhysicsItem instance, rotating using the x velocity
@@ -275,9 +248,7 @@ class PhysicsItem:
 
         if not self.stationary or self.rotated_surf is None:
             assert self.image is not None
-            self.rotated_surf = shared_methods.rotate_surface(
-                self.image.copy(), velocity_angle
-            )
+            self.rotated_surf = shared_methods.rotate_surface(self.image.copy(), velocity_angle)
             commons.screen.blit(
                 self.rotated_surf,
                 (
@@ -312,5 +283,5 @@ class PhysicsItem:
             self.rect.left,
             self.rect.top,
             self.rect.width,
-            self.rect.height
+            self.rect.height,
         )

@@ -1,22 +1,21 @@
-import pygame
-import random
-import os
-import sys
-import pickle
-import webbrowser
 import datetime
-from pygame.locals import Rect
+import os
+import pickle
+import random
+import sys
+import webbrowser
 from enum import Enum
-import player
 
 import commons
-import game_data
-import prompt
-import world
-
 import entity_manager
-import tilesets
+import game_data
+import player
+import prompt
+import pygame
 import shared_methods
+import tilesets
+import world
+from pygame.locals import Rect
 
 
 class Type(Enum):
@@ -97,7 +96,7 @@ class SettingsButtons(Enum):
     BACK = 1
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.MenuObject
 
     Stores information about a single button, the visibility of a given button is set by the active_menu_buttons
@@ -112,8 +111,8 @@ class MenuObject:
         position: tuple[float, float],
         font: pygame.font.Font,
         type: Type,
-        color: pygame.Color=pygame.Color(153, 153, 153),
-        outline_color: pygame.Color=pygame.Color(0, 0, 0),
+        color: pygame.Color = pygame.Color(153, 153, 153),
+        outline_color: pygame.Color = pygame.Color(0, 0, 0),
         function=None,
     ):
         self.text = text
@@ -123,12 +122,12 @@ class MenuObject:
         self.function = function
         self.font_size = font.size(text)[1]
         self.hover_multiplier = 1.25
-        self.text_surface = shared_methods.outline_text(
-            text, self.color, font, outline_color
-        )
+        self.text_surface = shared_methods.outline_text(text, self.color, font, outline_color)
         if self.type == Type.BUTTON:
             self.alt_text_surface = shared_methods.outline_text(
-                text, pygame.Color(255, 255, 0), pygame.font.Font(commons.FONT_FILE_PATH, int(self.font_size * self.hover_multiplier))
+                text,
+                pygame.Color(255, 255, 0),
+                pygame.font.Font(commons.FONT_FILE_PATH, int(self.font_size * self.hover_multiplier)),
             )
         self.rect = Rect(
             self.position[0] - self.text_surface.get_width() * 0.5,
@@ -140,7 +139,7 @@ class MenuObject:
         self.clicked = False
         self.active = False
 
-    """================================================================================================================= 
+    """=================================================================================================================
         menu_manager.MenuObject.update -> void
 
         Checks to see if the mouse is interacting with the button instance, performing all the related logic
@@ -163,7 +162,7 @@ class MenuObject:
                 self.hovered = False
                 self.clicked = False
 
-    """================================================================================================================= 
+    """=================================================================================================================
         menu_manager.MenuObject.draw -> void
 
         Draws the button's text surface or alt_text_surface depending on the hover state of the button
@@ -177,8 +176,8 @@ class MenuObject:
                 self.alt_text_surface,
                 (
                     self.rect.left - (self.alt_text_surface.get_width() * 0.5 - self.text_surface.get_width() * 0.5),
-                    self.rect.top - (self.alt_text_surface.get_height() * 0.5 - self.text_surface.get_height() * 0.5)
-                )
+                    self.rect.top - (self.alt_text_surface.get_height() * 0.5 - self.text_surface.get_height() * 0.5),
+                ),
             )
 
 
@@ -237,10 +236,10 @@ player_model = player.Model(
 )
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.update_active_menu_buttons -> void
 
-    Sets the active state of all buttons to false and then re-adds buttons based on the current game sub state 
+    Sets the active state of all buttons to false and then re-adds buttons based on the current game sub state
     and data in the 'active_menu_buttons' table
 -----------------------------------------------------------------------------------------------------------------"""
 
@@ -257,7 +256,7 @@ def update_active_menu_buttons():
             break
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.update_menu_buttons -> void
 
     Calls update on all active button instances, handles unique button press logic
@@ -494,9 +493,7 @@ def update_menu_buttons():
                         case PlayerNamingButtons.SET_NAME:
                             date = datetime.datetime.now()
                             commons.PLAYER_DATA["name"] = commons.TEXT_INPUT
-                            commons.PLAYER_DATA["model_appearance"] = (
-                                player_model.get_appearance()
-                            )
+                            commons.PLAYER_DATA["model_appearance"] = player_model.get_appearance()
                             commons.PLAYER_DATA["hotbar"] = []
                             commons.PLAYER_DATA["inventory"] = []
                             commons.PLAYER_DATA["hp"] = 100
@@ -506,9 +503,7 @@ def update_menu_buttons():
                             commons.PLAYER_DATA["last_played_date"] = date
                             pickle.dump(
                                 commons.PLAYER_DATA,
-                                open(
-                                    f"assets/players/{commons.TEXT_INPUT}.player", "wb"
-                                ),
+                                open(f"assets/players/{commons.TEXT_INPUT}.player", "wb"),
                             )  # Save player array
                             commons.game_sub_state = "PLAYER_SELECTION"
                             load_menu_player_data()
@@ -563,9 +558,7 @@ def update_menu_buttons():
                                 "Trello board opened in a new tab.",
                                 size=(5, 2),
                             )
-                            webbrowser.open(
-                                "https://trello.com/b/tI74vC1t/terraria-trello-board"
-                            )
+                            webbrowser.open("https://trello.com/b/tI74vC1t/terraria-trello-board")
                         case ChangesButtons.BACK:
                             commons.game_sub_state = "MAIN"
                         case SettingsButtons.BACK:
@@ -573,49 +566,30 @@ def update_menu_buttons():
 
                     if commons.game_sub_state == "COLOR_PICKER":
                         if (
-                            commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][
-                                0
-                            ]
-                            is not None
-                            or commons.PLAYER_MODEL_DATA[
+                            commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] is not None
+                            or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None
+                            or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] is not None
+                        ):
+                            entity_manager.client_color_picker.selected_red = commons.PLAYER_MODEL_DATA[
+                                commons.PLAYER_MODEL_COLOR_INDEX
+                            ][0]
+                            entity_manager.client_color_picker.selected_green = commons.PLAYER_MODEL_DATA[
                                 commons.PLAYER_MODEL_COLOR_INDEX
                             ][1]
-                            is not None
-                            or commons.PLAYER_MODEL_DATA[
+                            entity_manager.client_color_picker.selected_blue = commons.PLAYER_MODEL_DATA[
                                 commons.PLAYER_MODEL_COLOR_INDEX
                             ][2]
-                            is not None
-                        ):
-                            entity_manager.client_color_picker.selected_red = (
-                                commons.PLAYER_MODEL_DATA[
-                                    commons.PLAYER_MODEL_COLOR_INDEX
-                                ][0]
-                            )
-                            entity_manager.client_color_picker.selected_green = (
-                                commons.PLAYER_MODEL_DATA[
-                                    commons.PLAYER_MODEL_COLOR_INDEX
-                                ][1]
-                            )
-                            entity_manager.client_color_picker.selected_blue = (
-                                commons.PLAYER_MODEL_DATA[
-                                    commons.PLAYER_MODEL_COLOR_INDEX
-                                ][2]
-                            )
-                            entity_manager.client_color_picker.selected_x = (
-                                commons.PLAYER_MODEL_DATA[
-                                    commons.PLAYER_MODEL_COLOR_INDEX
-                                ][3]
-                            )
-                            entity_manager.client_color_picker.selected_y = (
-                                commons.PLAYER_MODEL_DATA[
-                                    commons.PLAYER_MODEL_COLOR_INDEX
-                                ][4]
-                            )
+                            entity_manager.client_color_picker.selected_x = commons.PLAYER_MODEL_DATA[
+                                commons.PLAYER_MODEL_COLOR_INDEX
+                            ][3]
+                            entity_manager.client_color_picker.selected_y = commons.PLAYER_MODEL_DATA[
+                                commons.PLAYER_MODEL_COLOR_INDEX
+                            ][4]
 
                     update_active_menu_buttons()
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.draw_menu_buttons -> void
 
     Calls draw on all active button instances
@@ -629,7 +603,7 @@ def draw_menu_buttons():
                 text.draw()
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.load_menu_player_data -> void
 
     Loads all player save metadata and creates a surface for each one
@@ -650,21 +624,15 @@ def load_menu_player_data():
         player_data_surf.fill((50, 50, 50))
         pygame.draw.rect(player_data_surf, (60, 60, 60), Rect(0, 0, 315, 60), 4)
         player_data_surf.blit(
-            shared_methods.outline_text(
-                dat["name"], pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-            ),
+            shared_methods.outline_text(dat["name"], pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
             (5, 3),
         )  # Name
         player_data_surf.blit(
-            shared_methods.outline_text(
-                "Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-            ),
+            shared_methods.outline_text("Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
             (5, 20),
         )  # Creation date
         player_data_surf.blit(
-            shared_methods.outline_text(
-                "Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-            ),
+            shared_methods.outline_text("Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
             (5, 40),
         )  # Playtime
         player_data_surf.blit(
@@ -708,7 +676,7 @@ def load_menu_player_data():
         commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     menu_manager.load_menu_world_data -> void
 
     Loads all world save metadata and creates a surface for each one
@@ -730,21 +698,15 @@ def load_menu_world_data():
             pygame.draw.rect(world_data_surf, pygame.Color(60, 60, 60), Rect(0, 0, 315, 60), 4)
 
             world_data_surf.blit(
-                shared_methods.outline_text(
-                    world.world.name, pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-                ),
+                shared_methods.outline_text(world.world.name, pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
                 (5, 3),
             )  # name
             world_data_surf.blit(
-                shared_methods.outline_text(
-                    "Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-                ),
+                shared_methods.outline_text("Created: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
                 (5, 20),
             )  # Creation date
             world_data_surf.blit(
-                shared_methods.outline_text(
-                    "Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT
-                ),
+                shared_methods.outline_text("Playtime: ", pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
                 (5, 40),
             )  # Playtime
             world_data_surf.blit(

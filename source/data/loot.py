@@ -1,5 +1,6 @@
 from typing import TypedDict
 
+
 class ItemLootData(TypedDict):
     item_id_str: str
     item_spawn_weight: int
@@ -16,6 +17,7 @@ class LootData(TypedDict):
     item_spawn_count_range: tuple[int, int]
     item_list_data: list[ItemLootData]
     coin_spawn_range: tuple[int, int]
+
 
 LOOT_DATA: list[LootData] = [
     {

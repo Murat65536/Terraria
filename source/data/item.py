@@ -1,6 +1,8 @@
 from typing import TypedDict
-from commons import ItemTag, ItemPrefixGroup
+
+from commons import ItemPrefixGroup, ItemTag
 from pygame import Surface, image
+
 
 class PlacableTileItemData(TypedDict):
     id: int
@@ -246,6 +248,7 @@ class MagicalWeaponItemData(TypedDict):
     image: Surface
     world_override_image: Surface | None
 
+
 ITEM_DATA: list[
     PlacableTileItemData
     | ImplacableTileItemData
@@ -294,9 +297,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/iron_pickaxe.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/iron_pickaxe.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -312,9 +313,7 @@ ITEM_DATA: list[
         "tile_id_str": "tile.dirt",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "image": image.load(
-            "assets/images/items/dirt_block.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/dirt_block.png").convert_alpha(),
     },
     {
         "id": 3,
@@ -329,9 +328,7 @@ ITEM_DATA: list[
         "tile_id_str": "tile.stone",
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
-        "image": image.load(
-            "assets/images/items/stone_block.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/stone_block.png").convert_alpha(),
     },
     {
         "id": 4,
@@ -355,9 +352,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/iron_broadsword.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/iron_broadsword.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -418,9 +413,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "wall_id_str": "wall.stone",
-        "image": image.load(
-            "assets/images/items/stone_wall.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/stone_wall.png").convert_alpha(),
     },
     {
         "id": 9,
@@ -525,9 +518,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "image": image.load(
-            "assets/images/items/copper_ore.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_ore.png").convert_alpha(),
     },
     {
         "id": 16,
@@ -542,9 +533,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "image": image.load(
-            "assets/images/items/silver_ore.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/silver_ore.png").convert_alpha(),
     },
     {
         "id": 17,
@@ -574,9 +563,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
         "wall_id_str": "wall.hardened_sand",
-        "image": image.load(
-            "assets/images/items/hardened_sand_wall.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/hardened_sand_wall.png").convert_alpha(),
     },
     {
         "id": 19,
@@ -606,9 +593,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
         "wall_id_str": "wall.sandstone",
-        "image": image.load(
-            "assets/images/items/sandstone_wall.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/sandstone_wall.png").convert_alpha(),
     },
     {
         "id": 21,
@@ -623,9 +608,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "image": image.load(
-            "assets/images/items/wood_platform.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/wood_platform.png").convert_alpha(),
     },
     {
         "id": 22,
@@ -649,9 +632,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/copper_broadsword.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_broadsword.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -701,9 +682,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/wood_broadsword.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/wood_broadsword.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -753,12 +732,8 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
         "ricochet_amount": 1,
-        "image": image.load(
-            "assets/images/items/wooden_arrow.png"
-        ).convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/wooden_arrow.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/wooden_arrow.png").convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/wooden_arrow.png").convert_alpha(),
     },
     {
         "id": 27,
@@ -807,12 +782,8 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
         "ricochet_amount": 1,
-        "image": image.load(
-            "assets/images/items/musket_ball.png"
-        ).convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/musket_ball.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/musket_ball.png").convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     },
     {
         "id": 29,
@@ -831,12 +802,8 @@ ITEM_DATA: list[
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
         "ricochet_amount": 1,
-        "image": image.load(
-            "assets/images/items/copper_coin.png"
-        ).convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/musket_ball.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_coin.png").convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     },
     {
         "id": 30,
@@ -855,12 +822,8 @@ ITEM_DATA: list[
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
         "ricochet_amount": 1,
-        "image": image.load(
-            "assets/images/items/silver_coin.png"
-        ).convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/musket_ball.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/silver_coin.png").convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     },
     {
         "id": 31,
@@ -880,9 +843,7 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "ricochet_amount": 1,
         "image": image.load("assets/images/items/gold_coin.png").convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/musket_ball.png"
-        ).convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     },
     {
         "id": 32,
@@ -901,12 +862,8 @@ ITEM_DATA: list[
         "drop_sound": "sound.coins",
         "hold_offset": 0.0,
         "ricochet_amount": 1,
-        "image": image.load(
-            "assets/images/items/platinum_coin.png"
-        ).convert_alpha(),
-        "ammo_image": image.load(
-            "assets/images/projectiles/musket_ball.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/platinum_coin.png").convert_alpha(),
+        "ammo_image": image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     },
     {
         "id": 33,
@@ -927,9 +884,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/copper_pickaxe.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_pickaxe.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -951,9 +906,7 @@ ITEM_DATA: list[
         "use_sound": "sound.swing",
         "hammer_power": 0,
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/copper_hammer.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_hammer.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -975,9 +928,7 @@ ITEM_DATA: list[
         "use_sound": "sound.swing",
         "hammer_power": 0,
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/wood_hammer.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/wood_hammer.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -1007,9 +958,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "image": image.load(
-            "assets/images/items/wood_chest.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/wood_chest.png").convert_alpha(),
     },
     {
         "id": 38,
@@ -1086,15 +1035,9 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "hold_offset": 0.0,
-        "image": image.load(
-            "assets/images/items/grappling_hook.png"
-        ).convert_alpha(),
-        "grapple_chain_image": image.load(
-            "assets/images/chains/grappling_hook_chain.png"
-        ).convert_alpha(),
-        "grapple_claw_image": image.load(
-            "assets/images/projectiles/grappling_hook_claw.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/grappling_hook.png").convert_alpha(),
+        "grapple_chain_image": image.load("assets/images/chains/grappling_hook_chain.png").convert_alpha(),
+        "grapple_claw_image": image.load("assets/images/projectiles/grappling_hook_claw.png").convert_alpha(),
     },
     {
         "id": 43,
@@ -1115,9 +1058,7 @@ ITEM_DATA: list[
         "hold_offset": 0.0,
         "use_sound": "sound.swing",
         "mana_cost": 20,
-        "image": image.load(
-            "assets/images/items/water_bolt.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/water_bolt.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -1133,9 +1074,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "tile_id_str": "tile.painting_a",
-        "image": image.load(
-            "assets/images/items/painting_a.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/painting_a.png").convert_alpha(),
     },
     {
         "id": 45,
@@ -1150,9 +1089,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "tile_id_str": "tile.painting_b",
-        "image": image.load(
-            "assets/images/items/painting_b.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/painting_b.png").convert_alpha(),
     },
     {
         "id": 46,
@@ -1167,9 +1104,7 @@ ITEM_DATA: list[
         "pickup_sound": "sound.grab",
         "drop_sound": "sound.grab",
         "tile_id_str": "tile.painting_c",
-        "image": image.load(
-            "assets/images/items/painting_c.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/painting_c.png").convert_alpha(),
     },
     {
         "id": 47,
@@ -1190,9 +1125,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/copper_axe.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/copper_axe.png").convert_alpha(),
         "world_override_image": None,
     },
     {
@@ -1217,9 +1150,7 @@ ITEM_DATA: list[
         "drop_sound": "sound.grab",
         "use_sound": "sound.swing",
         "hold_offset": 0.8,
-        "image": image.load(
-            "assets/images/items/iron_shortsword.png"
-        ).convert_alpha(),
+        "image": image.load("assets/images/items/iron_shortsword.png").convert_alpha(),
         "world_override_image": None,
     },
 ]

@@ -1,10 +1,10 @@
-import pygame
 import math
 
 import commons
+import pygame
 import tilesets
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.normalize_vec_2 -> tuple
 
     Performs vector normalization on the given vector (scalar tuple)
@@ -16,7 +16,7 @@ def normalize_vec_2(vector):
     return vector[0] / magnitude, vector[1] / magnitude
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.get_on_off -> string
 
     Given a bool, returns either "on" or "off"
@@ -27,7 +27,7 @@ def get_on_off(bool_var):
     return "on" if bool_var else "off"
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.darken_color -> tuple
 
     Multiplies all three components of a color tuple by a given float
@@ -38,7 +38,7 @@ def darken_color(color: pygame.Color, factor: float = 0.6):
     return int(color.r * factor), int(color.g * factor), int(color.b * factor)
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.get_tier_color -> tuple
 
     Given an item tier, a color representing that tier is returned
@@ -74,7 +74,7 @@ def get_tier_color(tier) -> pygame.Color:
         return pygame.Color(255, 255, 255)  # White
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.rotate_surface -> pygame.Surface
 
     Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
@@ -90,7 +90,7 @@ def rotate_surface(image, angle):
     return rotated_image
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.outline_text -> pygame.Surface
 
     Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
@@ -98,7 +98,9 @@ def rotate_surface(image, angle):
 -----------------------------------------------------------------------------------------------------------------"""
 
 
-def outline_text(string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color=pygame.Color(0, 0, 0)):
+def outline_text(
+    string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color = pygame.Color(0, 0, 0)
+):
     text1 = font.render(string, False, color)
     if commons.FANCY_TEXT:
         text2 = font.render(string, False, outline_color)
@@ -120,7 +122,7 @@ def outline_text(string, color: pygame.Color, font: pygame.font.Font, outline_co
         return text1
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.create_menu_surface -> pygame.Surface
 
     Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some
@@ -175,7 +177,7 @@ def create_menu_surface(width, height, body):
     return surf
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.color_surface -> pygame.Surface
 
     Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
@@ -190,18 +192,14 @@ def color_surface(gray_surf, col) -> pygame.Surface:
     surf = pygame.Surface((x, y))
     surf.fill((255, 255, 255))
     surf.set_colorkey((255, 255, 255))  # set the colorkey to white
-    surf.blit(
-        gray_surf, (0, 0)
-    )  # create a surf with the given hair and white background
+    surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
     color = pygame.Surface((x, y))
     color.fill(col)  # create a blank surf with the color of the hair
-    surf.blit(
-        color, (0, 0), None, pygame.BLEND_RGB_ADD
-    )  # blit the new surf to the hair with an add blend flag
+    surf.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
     return surf
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.transparent_color_surface -> pygame.Surface
 
     Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
@@ -216,7 +214,7 @@ def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pyg
     return colored_surface
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     shared_methods.lerp_float -> float
 
     Simple linear interpolation
@@ -242,29 +240,27 @@ def ease_out_zero_to_one(zero_to_one_float, iterations):
 
 def ease_in_zero_to_one(zero_to_one_float, iterations):
     for _ in range(iterations):
-        zero_to_one_float = 1.0 + math.sin(
-            zero_to_one_float * math.pi * 0.5 - math.pi * 0.5
-        )
+        zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
     return zero_to_one_float
 
-"""================================================================================================================= 
+
+"""=================================================================================================================
     draw_hitbox -> void
 
     Draws a hitbox
 -----------------------------------------------------------------------------------------------------------------"""
 
-def draw_hitbox(camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float) -> None:
+
+def draw_hitbox(
+    camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float
+) -> None:
     if commons.HITBOXES:
         pygame.draw.rect(
             commons.screen,
             (255, 0, 0),
             pygame.Rect(
-                x
-                - camera_position_x
-                + commons.WINDOW_WIDTH * 0.5,
-                y
-                - camera_position_y
-                + commons.WINDOW_HEIGHT * 0.5,
+                x - camera_position_x + commons.WINDOW_WIDTH * 0.5,
+                y - camera_position_y + commons.WINDOW_HEIGHT * 0.5,
                 width,
                 height,
             ),

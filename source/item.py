@@ -1,12 +1,11 @@
 # item.py
 
 import random
-import pygame
+from enum import Enum
 
 import game_data
+import pygame
 from commons import ItemPrefixGroup, ItemTag
-
-from enum import Enum
 
 
 class ItemLocation(Enum):
@@ -22,7 +21,7 @@ class ItemSlotClickResult(Enum):
     SWAPPED = 2
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     item.get_random_item_prefix -> [prefix category, prefix]
 
     Gets a random prefix from the prefix category
@@ -32,17 +31,15 @@ class ItemSlotClickResult(Enum):
 def get_random_item_prefix(prefix_category):
     return [
         prefix_category,
-        game_data.prefix_data[prefix_category][
-            random.randint(0, len(game_data.prefix_data[prefix_category]) - 1)
-        ],
+        game_data.prefix_data[prefix_category][random.randint(0, len(game_data.prefix_data[prefix_category]) - 1)],
     ]
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     item.Item
 
     Stores information about an item
-    
+
     Weapons, pickaxes etc will be automatically given a random prefix from the appropriate category when
     constructed
 -----------------------------------------------------------------------------------------------------------------"""
@@ -64,9 +61,7 @@ class Item:
                     # 15% chance to be given a prefix if it has a prefix category
                     if len(self.json_item["prefixes"]) > 0 and random.random() < 0.85:
                         self.prefix_data = get_random_item_prefix(
-                            self.json_item["prefixes"][
-                                random.randint(0, len(self.json_item["prefixes"]) - 1)
-                            ]
+                            self.json_item["prefixes"][random.randint(0, len(self.json_item["prefixes"]) - 1)]
                         )
                         self.has_prefix = True
 
@@ -102,8 +97,7 @@ class Item:
                 return max(
                     min(
                         1.0,
-                        self.json_item["crit_chance"]
-                        + self.prefix_data[1]["crit_chance"],
+                        self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"],
                     ),
                     0.0,
                 )
@@ -111,8 +105,7 @@ class Item:
                 return max(
                     min(
                         1.0,
-                        self.json_item["crit_chance"]
-                        + self.prefix_data[1]["crit_chance"],
+                        self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"],
                     ),
                     0.0,
                 )
@@ -122,17 +115,11 @@ class Item:
     def get_knockback(self):
         if self.prefix_data is not None:
             if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-                return self.json_item["knockback"] * (
-                    1 + self.prefix_data[1]["knockback"]
-                )
+                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
             elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-                return self.json_item["knockback"] * (
-                    1 + self.prefix_data[1]["knockback"]
-                )
+                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
             else:
-                return self.json_item["knockback"] * (
-                    1 + self.prefix_data[1]["knockback"]
-                )
+                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
         else:
             return self.json_item["knockback"]
 
@@ -140,17 +127,11 @@ class Item:
         if self.json_item is not None:
             if self.prefix_data is not None:
                 if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-                    return min(
-                        max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10
-                    )
+                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
                 elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-                    return min(
-                        max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10
-                    )
+                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
                 else:
-                    return min(
-                        max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10
-                    )
+                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
             else:
                 return self.json_item["tier"]
         raise NameError("json_item is None.")
@@ -165,34 +146,21 @@ class Item:
 
     def get_scale(self):
         if self.prefix_data is not None:
-            if (
-                self.prefix_data[0] == ItemPrefixGroup.LONGSWORD
-                or self.prefix_data[0] == ItemPrefixGroup.SHORTSWORD
-            ):
+            if self.prefix_data[0] == ItemPrefixGroup.LONGSWORD or self.prefix_data[0] == ItemPrefixGroup.SHORTSWORD:
                 return 1 + self.prefix_data[1]["size"]
         return 1.0
 
     def get_ranged_projectile_speed(self):
         if self.json_item is not None:
-            if (
-                self.prefix_data is not None
-                    and self.prefix_data[0] == ItemPrefixGroup.RANGED
-            ):
-                return self.json_item["ranged_projectile_speed"] * (
-                    1 + self.prefix_data[1]["velocity"]
-                )
+            if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.RANGED:
+                return self.json_item["ranged_projectile_speed"] * (1 + self.prefix_data[1]["velocity"])
             return self.json_item["ranged_projectile_speed"]
         raise NameError("json_item is None.")
 
     def get_mana_cost(self):
         if self.json_item is not None:
-            if (
-                self.prefix_data is not None
-                and self.prefix_data[0] == ItemPrefixGroup.MAGICAL
-            ):
-                return self.json_item["mana_cost"] * (
-                    1 + self.prefix_data[1]["mana_cost"]
-                )
+            if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
+                return self.json_item["mana_cost"] * (1 + self.prefix_data[1]["mana_cost"])
             return self.json_item["mana_cost"]
         raise NameError("json_item is None.")
 
@@ -239,10 +207,8 @@ class Item:
                 image = pygame.transform.scale(
                     image,
                     (
-                        image.get_width()
-                        * (32 / max(image.get_width(), image.get_height())),
-                        image.get_height()
-                        * (32 / max(image.get_width(), image.get_height())),
+                        image.get_width() * (32 / max(image.get_width(), image.get_height())),
+                        image.get_height() * (32 / max(image.get_width(), image.get_height())),
                     ),
                 )
             return image
@@ -420,21 +386,13 @@ def get_coins_from_int(coin_int: int) -> list[Item]:
 
     item_list: list[Item] = []
     if plat_coins != 0:
-        item_list.append(
-            Item(game_data.get_item_id_by_id_str("item.platinum_coin"), plat_coins)
-        )
+        item_list.append(Item(game_data.get_item_id_by_id_str("item.platinum_coin"), plat_coins))
     if gold_coins != 0:
-        item_list.append(
-            Item(game_data.get_item_id_by_id_str("item.gold_coin"), gold_coins)
-        )
+        item_list.append(Item(game_data.get_item_id_by_id_str("item.gold_coin"), gold_coins))
     if silver_coins != 0:
-        item_list.append(
-            Item(game_data.get_item_id_by_id_str("item.silver_coin"), silver_coins)
-        )
+        item_list.append(Item(game_data.get_item_id_by_id_str("item.silver_coin"), silver_coins))
     if copper_coins != 0:
-        item_list.append(
-            Item(game_data.get_item_id_by_id_str("item.copper_coin"), copper_coins)
-        )
+        item_list.append(Item(game_data.get_item_id_by_id_str("item.copper_coin"), copper_coins))
 
     return item_list
 
@@ -468,9 +426,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
             if possible_item_index not in void_indices:
                 possible_item = possible_items[possible_item_index]
                 if random_num <= possible_item[1]:
-                    random_count = random.randint(
-                        possible_item[3][0], possible_item[3][1]
-                    )
+                    random_count = random.randint(possible_item[3][0], possible_item[3][1])
                     new_item_id = game_data.get_item_id_by_id_str(possible_item[0])
 
                     should_add_instance = True
@@ -478,9 +434,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
                         if spawn_list[item_index][0] == new_item_id:
                             spawn_list[item_index][1] += random_count
                             if spawn_list[item_index][0] is not None:
-                                max_stack = game_data.get_item_by_id(
-                                    spawn_list[item_index][0]
-                                )["max_stack"]
+                                max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["max_stack"]
                                 if spawn_list[item_index][1] > max_stack:
                                     random_count = spawn_list[item_index][1] - max_stack
                                     spawn_list[item_index][1] = max_stack
@@ -500,9 +454,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
     spawn_list = sorted(spawn_list, key=lambda x: int(x[2]))
     for item_index in range(len(spawn_list)):
         spawn_item_data = spawn_list[item_index]
-        spawn_list[item_index] = Item(
-            spawn_item_data[0], spawn_item_data[1], auto_assign_prefix=True
-        )
+        spawn_list[item_index] = Item(spawn_item_data[0], spawn_item_data[1], auto_assign_prefix=True)
 
     # Coins
     assert loot_data is not None

@@ -1,17 +1,39 @@
 # game_data.py
-from unittest import case
-
-import pygame
-from enum import Enum
-import commons
 import random
+from enum import Enum
 from typing import TypedDict
-from data.item import PlacableTileItemData, ImplacableTileItemData, MaterialItemData, WallItemData, PickaxeItemData, HammerItemData, AxeItemData, SwordItemData, RangedItemData, AmmunitionItemData, GrapplingHookItemData, MagicalWeaponItemData, ITEM_DATA
-from data.tile import TileData, DamagingTileData, MultitileData, DoorTileData, LootTileData, LootMultitileData, TILE_DATA
-from data.wall import WallData, WALL_DATA
-from data.sound import SoundData, SOUND_DATA
-from data.structure import StructureData, STRUCTURE_DATA
-from data.loot import LootData, LOOT_DATA
+
+import commons
+import pygame
+from data.item import (
+    ITEM_DATA,
+    AmmunitionItemData,
+    AxeItemData,
+    GrapplingHookItemData,
+    HammerItemData,
+    ImplacableTileItemData,
+    MagicalWeaponItemData,
+    MaterialItemData,
+    PickaxeItemData,
+    PlacableTileItemData,
+    RangedItemData,
+    SwordItemData,
+    WallItemData,
+)
+from data.loot import LOOT_DATA, LootData
+from data.sound import SOUND_DATA, SoundData
+from data.structure import STRUCTURE_DATA, StructureData
+from data.tile import (
+    TILE_DATA,
+    DamagingTileData,
+    DoorTileData,
+    LootMultitileData,
+    LootTileData,
+    MultitileData,
+    TileData,
+)
+from data.wall import WALL_DATA, WallData
+
 
 class UniversalPrefixData(TypedDict):
     name: str
@@ -117,14 +139,7 @@ json_item_data: list[
 ] = []
 item_id_str_hash_table: dict[str, int] = {}
 
-json_tile_data: list[
-    TileData
-    | DamagingTileData
-    | MultitileData
-    | DoorTileData
-    | LootTileData
-    | LootMultitileData
-] = []
+json_tile_data: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = []
 tile_id_str_hash_table: dict[str, int] = {}
 tile_id_light_reduction_lookup: list[int] = []
 tile_id_light_emission_lookup: list[int] = []
@@ -1170,30 +1185,19 @@ def create_tile_light_reduction_lookup():
     global tile_id_light_reduction_lookup
     tile_id_light_reduction_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_reduction_lookup.append(
-            json_tile_data[tile_index]["light_reduction"]
-        )
+        tile_id_light_reduction_lookup.append(json_tile_data[tile_index]["light_reduction"])
 
 
 def create_tile_light_emission_lookup():
     global tile_id_light_emission_lookup
     tile_id_light_emission_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_emission_lookup.append(
-            json_tile_data[tile_index]["light_emission"]
-        )
+        tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
 
 
 def get_tile_by_id(
     tile_id: int,
-) -> (
-    TileData
-    | DamagingTileData
-    | MultitileData
-    | DoorTileData
-    | LootTileData
-    | LootMultitileData
-):
+) -> TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData:
     if tile_id < len(json_tile_data):
         return json_tile_data[tile_id]
     else:
@@ -1383,25 +1387,19 @@ def parse_structure_data():
                             if data_str_id == 0:
                                 tile_data[-1][-1][0] = data_str_split[1]
                             elif data_str_id == 2:
-                                structure_data["chest_loot"].append(
-                                    [(x_pos, y_pos), data_str_split[1]]
-                                )
+                                structure_data["chest_loot"].append([(x_pos, y_pos), data_str_split[1]])
                             elif data_str_id == 3:
                                 tile_data[-1][-1][1] = data_str_split[1]
                             elif data_str_id == 1:
                                 split_str = data_str_split[1].split(",")
-                                tile_data[-1][-1][2] = int(split_str[0]), int(
-                                    split_str[1]
-                                )
+                                tile_data[-1][-1][2] = int(split_str[0]), int(split_str[1])
                             elif data_str_id == 4:
                                 connection_data = data_str_split[1].split(",")
                                 structure_data["connections"].append(
                                     [
                                         (x_pos, y_pos),
                                         connection_data[0],
-                                        get_structure_connection_orientation_from_str(
-                                            connection_data[1]
-                                        ),
+                                        get_structure_connection_orientation_from_str(connection_data[1]),
                                     ]
                                 )
                 char_index += 1
@@ -1412,18 +1410,14 @@ def parse_structure_data():
 def create_structure_id_str_hash_table():
     global structure_id_str_hash_table
     for structure_index in range(len(json_structure_data)):
-        structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = (
-            structure_index
-        )
+        structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = structure_index
 
 
 def get_structure_by_id(structure_id):
     if structure_id < len(json_structure_data):
         return json_structure_data[structure_id]
     else:
-        raise ValueError(
-            "Inserted structure ID greater than maximum structure ID length."
-        )
+        raise ValueError("Inserted structure ID greater than maximum structure ID length.")
 
 
 def get_structure_id_by_id_str(structure_id_str):
@@ -1436,21 +1430,18 @@ def get_structure_by_id_str(structure_id_str):
 
 def find_structures_for_connection(connection_type, connection_orientation):
     out_connections = []
-    opposite_connection_orientation = get_opposite_structure_connection_orientation(
-        connection_orientation
-    )
+    opposite_connection_orientation = get_opposite_structure_connection_orientation(connection_orientation)
     for structure in json_structure_data:
         for connection in structure["connections"]:
-            if (
-                connection[1] == connection_type
-                and connection[2] == opposite_connection_orientation
-            ):
+            if connection[1] == connection_type and connection[2] == opposite_connection_orientation:
                 out_connections.append([structure["id_str"], connection[0]])
 
     return out_connections
 
 
-def get_opposite_structure_connection_orientation(structure_connection_orientation: StructureConnectionOrientation) -> StructureConnectionOrientation:
+def get_opposite_structure_connection_orientation(
+    structure_connection_orientation: StructureConnectionOrientation,
+) -> StructureConnectionOrientation:
     match structure_connection_orientation:
         case StructureConnectionOrientation.UP:
             return StructureConnectionOrientation.DOWN
@@ -1461,6 +1452,7 @@ def get_opposite_structure_connection_orientation(structure_connection_orientati
         case StructureConnectionOrientation.RIGHT:
             return StructureConnectionOrientation.LEFT
     raise RuntimeError()
+
 
 def get_structure_connection_orientation_from_str(structure_connection_orientation_str):
     match structure_connection_orientation_str:
@@ -1517,6 +1509,7 @@ def get_loot_id_by_id_str(loot_id_str):
 
 def get_loot_by_id_str(loot_id_str):
     return get_loot_by_id(get_loot_id_by_id_str(loot_id_str))
+
 
 parse_item_data()
 create_item_id_str_hash_table()

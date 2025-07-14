@@ -1,5 +1,6 @@
-import pygame
 import commons
+import pygame
+
 
 class Tileset:
     def __init__(
@@ -37,7 +38,7 @@ class Tileset:
                     surface,
                     (
                         scale_width if scale_width is not None else surface.get_width(),
-                        scale_height if scale_height is not None else surface.get_height()
+                        scale_height if scale_height is not None else surface.get_height(),
                     ),
                 )
                 surface.set_colorkey(colorkey)
@@ -80,14 +81,7 @@ shirts: Tileset = Tileset(
     rows=7,
     columns=4,
 )
-sleeves: Tileset = Tileset(
-    "assets/images/player/sleeves/sleeves.png",
-    40,
-    56,
-    rows=7,
-    columns=4,
-    x_offset=80
-)
+sleeves: Tileset = Tileset("assets/images/player/sleeves/sleeves.png", 40, 56, rows=7, columns=4, x_offset=80)
 arms: Tileset = Tileset(
     "assets/images/player/arms/arms.png",
     40,

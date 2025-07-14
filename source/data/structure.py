@@ -1,5 +1,6 @@
 from typing import TypedDict
 
+
 class StructureData(TypedDict):
     id: int
     id_str: str
@@ -8,6 +9,7 @@ class StructureData(TypedDict):
     height: int
     spawn_weight: int
     tile_data: list[str]
+
 
 STRUCTURE_DATA: list[StructureData] = [
     {

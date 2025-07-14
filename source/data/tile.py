@@ -1,6 +1,8 @@
 from typing import TypedDict
-from commons import TileStrengthType, TileMaskType, TileTag, BLOCK_SIZE
+
+from commons import BLOCK_SIZE, TileMaskType, TileStrengthType, TileTag
 from pygame import Surface, image, transform
+
 
 class TileData(TypedDict):
     id: int
@@ -125,14 +127,8 @@ class LootTileData(TypedDict):
     hit_sound: str
     image: Surface
 
-TILE_DATA: list[
-    TileData
-    | DamagingTileData
-    | MultitileData
-    | DoorTileData
-    | LootTileData
-    | LootMultitileData
-] = [
+
+TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = [
     {
         "id": 0,
         "id_str": "tile.UNNAMED",
@@ -505,9 +501,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/chest_wood.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/chest_wood.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -534,9 +528,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/crafting_table.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/crafting_table.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -569,9 +561,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/door_wood_open_left.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/door_wood_open_left.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -599,9 +589,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/door_wood_closed.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/door_wood_closed.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -634,9 +622,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/door_wood_open_right.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/door_wood_open_right.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -664,9 +650,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/pot_tall_gray.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/pot_tall_gray.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -694,9 +678,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/pot_tall_brown.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/pot_tall_brown.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -724,9 +706,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/pot_thick_brown.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/pot_thick_brown.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -754,9 +734,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/pot_thick_brown.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/pot_thick_brown.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -798,9 +776,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/pot_short_brown.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/pot_short_brown.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -822,9 +798,7 @@ TILE_DATA: list[
         "place_sound": "sound.dig",
         "hit_sound": "sound.dig",
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/tree_canopy_a.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/tree_canopy_a.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -846,9 +820,7 @@ TILE_DATA: list[
         "multitile_dimensions": (3, 2),
         "multitile_required_solids": [],
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/painting_a.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/painting_a.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -870,9 +842,7 @@ TILE_DATA: list[
         "multitile_dimensions": (2, 2),
         "multitile_required_solids": [],
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/painting_b.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/painting_b.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },
@@ -894,9 +864,7 @@ TILE_DATA: list[
         "multitile_dimensions": (3, 2),
         "multitile_required_solids": [],
         "image": transform.scale(
-            image.load(
-                "assets/images/tiles/multitiles/painting_c.png"
-            ).convert_alpha(),
+            image.load("assets/images/tiles/multitiles/painting_c.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     },

@@ -714,9 +714,7 @@ class TileableNoise(BaseNoise):
             fz,
             lerp(
                 fy,
-                lerp(
-                    fx, grad3(perm[AA + k], x, y, z), grad3(perm[BA + k], x - 1, y, z)
-                ),
+                lerp(fx, grad3(perm[AA + k], x, y, z), grad3(perm[BA + k], x - 1, y, z)),
                 lerp(
                     fx,
                     grad3(perm[AB + k], x, y - 1, z),

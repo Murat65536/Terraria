@@ -1,21 +1,23 @@
 from pygame import Color
 
+
 class EntityData:
     class ItemDrop:
         def __init__(self, name: str, drop_range: tuple[int, int]):
             self.name = name
             self.drop_range = drop_range
+
     def __init__(
-            self,
-            name: str,
-            species: str,
-            health: float,
-            defense: int,
-            knockback_resistance: float,
-            attack_damage: int,
-            color: Color,
-            item_drops: list[ItemDrop],
-            coin_drop_range: tuple[int, int],
+        self,
+        name: str,
+        species: str,
+        health: float,
+        defense: int,
+        knockback_resistance: float,
+        attack_damage: int,
+        color: Color,
+        item_drops: list[ItemDrop],
+        coin_drop_range: tuple[int, int],
     ):
         self.name = name
         self.species = species
@@ -26,6 +28,7 @@ class EntityData:
         self.color = color
         self.item_drops = item_drops
         self.coin_drop_range = coin_drop_range
+
 
 ENTITY_DATA: list[EntityData] = [
     EntityData(
@@ -42,7 +45,7 @@ ENTITY_DATA: list[EntityData] = [
                 (0, 0),
             )
         ],
-        (0, 0)
+        (0, 0),
     ),
     EntityData(
         "Green Slime",
