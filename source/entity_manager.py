@@ -1,23 +1,21 @@
-import pygame
 import math
 import random
-from pygame.locals import Rect
 from typing import TypedDict
 
 import commons
 import game_data
-import world
-
+import pygame
 import shared_methods
-
-from player import Player
-from prompt import Prompt
-from enemy import Enemy
-from particle import Particle
-from projectile import Projectile
-from physics_item import PhysicsItem
+import world
 from color_picker import ColorPicker
+from enemy import Enemy
 from item import Item
+from particle import Particle
+from physics_item import PhysicsItem
+from player import Player
+from projectile import Projectile
+from prompt import Prompt
+from pygame.locals import Rect
 
 
 class Message(TypedDict):
@@ -51,16 +49,14 @@ recent_pickups: list[RecentPickup] = []
 
 client_player: Player | None = None
 client_prompt: Prompt | None = None
-client_color_picker: ColorPicker = ColorPicker(
-    (int(commons.WINDOW_WIDTH * 0.5 - 155), 190), 300, 300
-)
+client_color_picker: ColorPicker = ColorPicker((int(commons.WINDOW_WIDTH * 0.5 - 155), 190), 300, 300)
 
 camera_position: tuple[float, float] = (0, 0)
 old_camera_position: tuple[float, float] = (0, 0)
 camera_position_difference: tuple[float, float] = (0, 0)
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     entity_manager.create_player -> void
 
     Sets the client player to a new player instance created with the data in PLAYER_DATA
@@ -72,12 +68,8 @@ def create_player():
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
     for loaded_hotbar_index in range(len(commons.PLAYER_DATA["hotbar"])):
-        loaded_item_data: tuple[int, str, int, str] = commons.PLAYER_DATA["hotbar"][
-            loaded_hotbar_index
-        ]
-        item: Item = Item(
-            game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2]
-        )
+        loaded_item_data: tuple[int, str, int, str] = commons.PLAYER_DATA["hotbar"][loaded_hotbar_index]
+        item: Item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
         item.assign_prefix(loaded_item_data[3])
         hotbar[loaded_item_data[0]] = item
 
@@ -85,9 +77,7 @@ def create_player():
     inventory: list[Item | None] = [None for _ in range(40)]
     for loaded_inventory_index in range(len(commons.PLAYER_DATA["inventory"])):
         loaded_item_data = commons.PLAYER_DATA["inventory"][loaded_inventory_index]
-        item = Item(
-            game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2]
-        )
+        item = Item(game_data.get_item_id_by_id_str(loaded_item_data[1]), loaded_item_data[2])
         item.assign_prefix(loaded_item_data[3])
         inventory[loaded_item_data[0]] = item
 
@@ -105,7 +95,7 @@ def create_player():
     )
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     entity_manager.check_enemy_spawn -> void
 
     Checks if an enemy needs to spawn around the player
@@ -117,19 +107,16 @@ def check_enemy_spawn():
         if commons.ENEMY_SPAWN_TICK <= 0:
             commons.ENEMY_SPAWN_TICK += 1.0
             assert client_player is not None
-            val = min(
-                int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1
-            )
+            val = min(int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1)
             if (
-                len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5)
-                and random.randint(1, val) == 1
+                len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1
             ):  # Reduce enemy spawns
                 spawn_enemy(random.randint(1, 5))
         else:
             commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     entity_manager.draw_enemy_hover_text -> void
 
     Checks if an enemy is being hovered over by the mouse, if it is, draw it's name and it's health
@@ -193,7 +180,7 @@ def draw_enemy_hover_text():
             break
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     entity_manager.kill_all_entities -> void
 
     Kills all entities, used before quitting a world
@@ -210,7 +197,7 @@ def kill_all_entities():
     recent_pickups.clear()
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     Entity Update Functions
 
     Calls update on every entity in their respective list
@@ -252,12 +239,8 @@ def update_damage_numbers():
             number["rotation"][1] * 0.95,
         )
         number["position"] = (
-            number["position"][0]
-            + number["rotation"][0]
-            - camera_position_difference[0],
-            number["position"][1]
-            + number["rotation"][1]
-            - camera_position_difference[1],
+            number["position"][0] + number["rotation"][0] - camera_position_difference[0],
+            number["position"][1] + number["rotation"][1] - camera_position_difference[1],
         )
         number["lifespan"] -= commons.DELTA_TIME
         if number["lifespan"] <= 0:
@@ -270,9 +253,7 @@ def update_recent_pickups():
     for i in range(len(recent_pickups)):
         recent_pickups[i]["text_duration"] -= commons.DELTA_TIME
         if recent_pickups[i]["text_duration"] < 0.5:
-            recent_pickups[i]["surface"].set_alpha(
-                int(recent_pickups[i]["text_duration"] * 510)
-            )
+            recent_pickups[i]["surface"].set_alpha(int(recent_pickups[i]["text_duration"] * 510))
             if recent_pickups[i]["text_duration"] <= 0:
                 to_remove.append(recent_pickups[i])
         for j in range(0, i):
@@ -306,19 +287,15 @@ def update_recent_pickups():
         )
         recent_pickups[i]["position"] = (
             recent_pickups[i]["position"][0]
-            + recent_pickups[i]["velocity"][0]
-            * commons.DELTA_TIME
-            * commons.BLOCK_SIZE,
+            + recent_pickups[i]["velocity"][0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
             recent_pickups[i]["position"][1]
-            + recent_pickups[i]["velocity"][1]
-            * commons.DELTA_TIME
-            * commons.BLOCK_SIZE,
+            + recent_pickups[i]["velocity"][1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
         )
     for item in to_remove:
         recent_pickups.remove(item)
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     Entity Draw Functions
 
     Calls draw on every entity in their respective list
@@ -349,9 +326,7 @@ def draw_messages():
     for i in range(len(messages)):
         if messages[i]["lifespan"] < 1.0:
             messages[i]["text"].set_alpha(int(messages[i]["lifespan"] * 255))
-        commons.screen.blit(
-            messages[i]["text"], (10, commons.WINDOW_HEIGHT - 25 - i * 20)
-        )
+        commons.screen.blit(messages[i]["text"], (10, commons.WINDOW_HEIGHT - 25 - i * 20))
 
 
 def draw_damage_numbers():
@@ -378,14 +353,12 @@ def draw_recent_pickups():
                 - recent_pickup["surface"].get_width() * 0.5
                 - camera_position[0]
                 + commons.WINDOW_WIDTH * 0.5,
-                recent_pickup["position"][1]
-                - camera_position[1]
-                + commons.WINDOW_HEIGHT * 0.5,
+                recent_pickup["position"][1] - camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
             ),
         )
 
 
-"""================================================================================================================= 
+"""=================================================================================================================
     Entity Spawn Functions
 
     Construct an instance of an entity and append it to their respective list
@@ -548,9 +521,7 @@ def add_message(
     global messages
     text1 = commons.DEFAULT_FONT.render(text, False, color)
     text2 = commons.DEFAULT_FONT.render(text, False, outline_color)
-    surf = pygame.Surface(
-        (text1.get_width() + 2, text1.get_height() + 2), pygame.SRCALPHA
-    )
+    surf = pygame.Surface((text1.get_width() + 2, text1.get_height() + 2), pygame.SRCALPHA)
     if commons.FANCY_TEXT:
         surf.blit(text2, (-1, 1))
         surf.blit(text2, (3, 1))
@@ -634,9 +605,7 @@ def add_recent_pickup(item_id: int, amount: int, tier, pos, unique=False, item=N
     size = (size[0] + 2, size[1] + 2)
     surf = pygame.Surface(size, pygame.SRCALPHA)
     surf.blit(
-        shared_methods.outline_text(
-            string, shared_methods.get_tier_color(tier), commons.DEFAULT_FONT
-        ),
+        shared_methods.outline_text(string, shared_methods.get_tier_color(tier), commons.DEFAULT_FONT),
         (1, 1),
     )
     vel = (random.random() * 2 - 1, -50.0)

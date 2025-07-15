@@ -1,10 +1,12 @@
 from typing import TypedDict
 
+
 class SoundData(TypedDict):
     id: int
     id_str: str
     variation_paths: list[str]
     volume: float
+
 
 SOUND_DATA: list[SoundData] = [
     {"id": 0, "id_str": "sound.INVALID", "variation_paths": [], "volume": 1},

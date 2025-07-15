@@ -1,45 +1,51 @@
-import pygame
-import math
-import random
-import pickle
 import datetime
-from pygame.locals import Rect
+import math
+import pickle
+import random
 from enum import Enum
-import game_data
-from item import ItemLocation, ItemSlotClickResult, ItemTag, Item
 
 import commons
+import entity_manager
+import game_data
 import item
-import world
-
+import pygame
 import shared_methods
 import tilesets
-import entity_manager
-
+import world
+from item import Item, ItemLocation, ItemSlotClickResult, ItemTag
+from pygame.locals import Rect
 
 """=================================================================================================================
     player.get_death_message -> string
-    
+
     Uses the player's name, the thing that killed them, and the worlds name to generate a random death message
 -----------------------------------------------------------------------------------------------------------------"""
 
 
 def get_death_message(name, source):
-    string = game_data.DEATH_LINES[source[0]][
-        random.randint(0, len(game_data.DEATH_LINES[source[0]]) - 1)
-    ]
+    string = game_data.DEATH_LINES[source[0]][random.randint(0, len(game_data.DEATH_LINES[source[0]]) - 1)]
     string = string.replace("<p>", name)
     string = string.replace("<w>", world.world.name)
     string = string.replace("<e>", source[1])
     return string
+
 
 class Movement(Enum):
     LEFT = 0
     RIGHT = 1
     IDLE = 3
 
+
 class MovementFrames:
-    def __init__(self, total_frames: int, walk_range: tuple[int, int] | None = None, swing_range: tuple[int, int] | None = None, jump_frame: int | None = None, hold_frame: int | None = None, idle_frame: int | None = None) -> None:
+    def __init__(
+        self,
+        total_frames: int,
+        walk_range: tuple[int, int] | None = None,
+        swing_range: tuple[int, int] | None = None,
+        jump_frame: int | None = None,
+        hold_frame: int | None = None,
+        idle_frame: int | None = None,
+    ) -> None:
         self.total_frames = total_frames
         self.current_frame = 0
         self.walk_range = walk_range
@@ -57,7 +63,11 @@ class MovementFrames:
             if self.animation_tick <= 0:
                 self.animation_tick += self.animation_speed
                 if self.walk_range is not None:
-                    self.current_frame = self.current_frame + 1 if self.walk_range[0] <= self.current_frame < self.walk_range[1] else self.walk_range[0]
+                    self.current_frame = (
+                        self.current_frame + 1
+                        if self.walk_range[0] <= self.current_frame < self.walk_range[1]
+                        else self.walk_range[0]
+                    )
             else:
                 self.animation_tick -= commons.DELTA_TIME
 
@@ -97,25 +107,29 @@ class MovementFrames:
             else:
                 self.animation_tick -= commons.DELTA_TIME
 
-"""=================================================================================================================    
+
+"""=================================================================================================================
     player.Model
-    
+
     Stores information about the appearance of a player
 -----------------------------------------------------------------------------------------------------------------"""
 
 
 class Model:
-    def __init__(
-        self,
-        model_appearance: commons.PlayerAppearance
-    ) -> None:
+    def __init__(self, model_appearance: commons.PlayerAppearance) -> None:
         self.swinging: bool = False
         self.flip: bool = False
         self.moving_left: bool = False
         self.moving_right: bool = False
         self.moving_down: bool = False
         self.arm_radians: float = 0
-        self.swing_radians: tuple[float, ...] = (math.radians(-130), math.radians(-85), math.radians(-40), math.radians(5), math.radians(50))
+        self.swing_radians: tuple[float, ...] = (
+            math.radians(-130),
+            math.radians(-85),
+            math.radians(-40),
+            math.radians(5),
+            math.radians(50),
+        )
 
         self.hair_frames: MovementFrames = MovementFrames(14)
         self.head_frames: MovementFrames = MovementFrames(20)
@@ -125,8 +139,12 @@ class Model:
         self.shirt_frames: MovementFrames = MovementFrames(1)
         self.trouser_frames: MovementFrames = MovementFrames(20, walk_range=(6, 19), jump_frame=5, idle_frame=0)
         self.shoe_frames: MovementFrames = MovementFrames(20, walk_range=(6, 19), jump_frame=5, idle_frame=0)
-        self.arm_frames: MovementFrames = MovementFrames(28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
-        self.sleeve_frames: MovementFrames = MovementFrames(28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0)
+        self.arm_frames: MovementFrames = MovementFrames(
+            28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0
+        )
+        self.sleeve_frames: MovementFrames = MovementFrames(
+            28, walk_range=(8, 11), swing_range=(1, 4), jump_frame=7, hold_frame=3, idle_frame=0
+        )
 
         self.sex = model_appearance["sex"]
         self.hair_id = model_appearance["hair_id"]
@@ -145,18 +163,68 @@ class Model:
         mirror_arm_frame = 14
         offset = (0, 0)
         player_surface: pygame.Surface = pygame.Surface((self.SURFACE_WIDTH, self.SURFACE_HEIGHT), pygame.SRCALPHA)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shirts[self.shirt_frames.current_frame], self.shirt_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.trousers[self.trouser_frames.current_frame], self.trouser_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.shoes[self.shoe_frames.current_frame], self.shoe_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.head[self.head_frames.current_frame], self.skin_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.hair[self.hair_id][self.hair_frames.current_frame], self.hair_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.eyes[self.eye_frames.current_frame], pygame.Color(255, 255, 255)), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.pupils[self.pupil_frames.current_frame], self.eye_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame], self.skin_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame + mirror_arm_frame], self.skin_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame], self.undershirt_col), offset)
-        player_surface.blit(shared_methods.transparent_color_surface(tilesets.sleeves[self.sleeve_frames.current_frame + mirror_arm_frame], self.undershirt_col), offset)
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.undershirts[self.undershirt_frames.current_frame], self.undershirt_col
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(tilesets.shirts[self.shirt_frames.current_frame], self.shirt_col),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.trousers[self.trouser_frames.current_frame], self.trouser_col
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(tilesets.shoes[self.shoe_frames.current_frame], self.shoe_col),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(tilesets.head[self.head_frames.current_frame], self.skin_col),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.hair[self.hair_id][self.hair_frames.current_frame], self.hair_col
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.eyes[self.eye_frames.current_frame], pygame.Color(255, 255, 255)
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(tilesets.pupils[self.pupil_frames.current_frame], self.eye_col),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(tilesets.arms[self.arm_frames.current_frame], self.skin_col),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.arms[self.arm_frames.current_frame + mirror_arm_frame], self.skin_col
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.sleeves[self.sleeve_frames.current_frame], self.undershirt_col
+            ),
+            offset,
+        )
+        player_surface.blit(
+            shared_methods.transparent_color_surface(
+                tilesets.sleeves[self.sleeve_frames.current_frame + mirror_arm_frame], self.undershirt_col
+            ),
+            offset,
+        )
         player_surface = pygame.transform.flip(player_surface, self.flip, False)
         return player_surface
 
@@ -170,7 +238,7 @@ class Model:
             "shirt_color": self.shirt_col,
             "undershirt_color": self.undershirt_col,
             "trouser_color": self.trouser_col,
-            "shoe_color": self.shoe_col
+            "shoe_color": self.shoe_col,
         }
 
     def get_movement(self) -> Movement:
@@ -186,9 +254,13 @@ class Model:
 
     def get_swing_frame(self) -> int:
         if not self.flip:
-            return min(range(len(self.swing_radians)), key=lambda index: abs(self.swing_radians[index] - self.arm_radians))
+            return min(
+                range(len(self.swing_radians)), key=lambda index: abs(self.swing_radians[index] - self.arm_radians)
+            )
         else:
-            return min(range(len(self.swing_radians)), key=lambda index: abs(-self.swing_radians[index] - self.arm_radians))
+            return min(
+                range(len(self.swing_radians)), key=lambda index: abs(-self.swing_radians[index] - self.arm_radians)
+            )
 
     def walk(self) -> None:
         self.flip = self.get_flip()
@@ -246,16 +318,18 @@ class Model:
         self.arm_frames.idle(self.swinging, swing_frame)
         self.sleeve_frames.idle(self.swinging, swing_frame)
 
+
 class ItemStorage:
-    def __init__(self, hotbar = None, inventory = None):
+    def __init__(self, hotbar=None, inventory=None):
         self.hotbar: list[None] | list[Item] = hotbar
         self.inventory: list[None] | list[Item] = inventory
         self.chest: list[None] | list[Item] = [None for _ in range(20)]
         self.crafting_menu: list[None] | list[Item] = []
 
-"""=================================================================================================================    
+
+"""=================================================================================================================
     player.Player
-    
+
     Performs physics and renders a player within the current world
 -----------------------------------------------------------------------------------------------------------------"""
 
@@ -286,7 +360,7 @@ class Player:
             ItemLocation.HOTBAR: hotbar,
             ItemLocation.INVENTORY: inventory,
             ItemLocation.CHEST: [None for _ in range(20)],
-            ItemLocation.CRAFTING_MENU: []
+            ItemLocation.CRAFTING_MENU: [],
         }
 
         self.hotbar_index = 0
@@ -339,9 +413,7 @@ class Player:
                 hp_text_color[2] // 2,
             ),
         )
-        self.hp_x_position = (
-            commons.WINDOW_WIDTH - 10 - self.hp - self.hp_text.get_width() * 0.5
-        )
+        self.hp_x_position = commons.WINDOW_WIDTH - 10 - self.hp - self.hp_text.get_width() * 0.5
 
         self.moving_down_tick = 0
         self.stop_moving_down = False
@@ -402,9 +474,9 @@ class Player:
 
         self.old_inventory_positions = []
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.update -> void
-        
+
         Updates many variables within the player object
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -436,10 +508,8 @@ class Player:
                 self.velocity[1] * drag_factor + commons.GRAVITY * commons.DELTA_TIME,
             )
             self.position: tuple[float, float] = (
-                self.position[0]
-                + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-                self.position[1]
-                + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+                self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+                self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
             )
 
             self.rect.left = self.position[0] - commons.PLAYER_WIDTH * 0.5
@@ -497,24 +567,16 @@ class Player:
                             50,
                             20,
                         ).collidepoint(commons.MOUSE_POSITION)
-                        and not Rect(5, 270, 48, 288).collidepoint(
-                            commons.MOUSE_POSITION
-                        )
+                        and not Rect(5, 270, 48, 288).collidepoint(commons.MOUSE_POSITION)
                     ):
                         if self.chest_open:
-                            if not Rect(245, 265, 240, 192).collidepoint(
-                                commons.MOUSE_POSITION
-                            ):
+                            if not Rect(245, 265, 240, 192).collidepoint(commons.MOUSE_POSITION):
                                 use = True
                         else:
                             use = True
                 else:
                     use = True
-                if (
-                    use
-                    and entity_manager.client_prompt is None
-                    and not commons.WAIT_TO_USE
-                ):
+                if use and entity_manager.client_prompt is None and not commons.WAIT_TO_USE:
                     if pygame.mouse.get_pressed()[0]:
                         self.use_item()
                     elif pygame.mouse.get_pressed()[2]:
@@ -524,13 +586,9 @@ class Player:
 
             for j in range(-2, 3):
                 for i in range(-2, 3):
-                    if world.tile_in_map(
-                        self.block_position[1] + j, self.block_position[0] + i
-                    ):
+                    if world.tile_in_map(self.block_position[1] + j, self.block_position[0] + i):
                         if self.block_position[1] + j >= 0:
-                            tile_id = world.world.tile_data[self.block_position[1] + j][
-                                self.block_position[0] + i
-                            ][0]
+                            tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
                             tile_data = game_data.get_tile_by_id(tile_id)
                             if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
                                 block_rect = Rect(
@@ -548,24 +606,16 @@ class Player:
                                         1,
                                         int(self.rect.height - 4),
                                     ):
-                                        self.stop_left = (
-                                            True  # is there a solid block left
-                                        )
+                                        self.stop_left = True  # is there a solid block left
                                     if block_rect.colliderect(
                                         int(self.rect.right + 1),
                                         int(self.rect.top + 2),
                                         1,
                                         int(self.rect.height - 4),
                                     ):
-                                        self.stop_right = (
-                                            True  # is there a solid block right
-                                        )
+                                        self.stop_right = True  # is there a solid block right
                                 if block_rect.colliderect(self.rect):
-                                    if (
-                                        not self.invincible
-                                        and commons.TileTag.DAMAGING
-                                        in tile_data["tags"]
-                                    ):
+                                    if not self.invincible and commons.TileTag.DAMAGING in tile_data["tags"]:
                                         self.damage(
                                             tile_data["tile_damage"],
                                             (tile_data["tile_damage_name"], "World"),
@@ -577,8 +627,7 @@ class Player:
                                         if delta_x > 0:
                                             if not is_platform:
                                                 self.position = (
-                                                    block_rect.right
-                                                    + commons.PLAYER_WIDTH * 0.5,
+                                                    block_rect.right + commons.PLAYER_WIDTH * 0.5,
                                                     self.position[1],
                                                 )  # Move player right
                                                 self.velocity = (
@@ -588,8 +637,7 @@ class Player:
                                         else:
                                             if not is_platform:
                                                 self.position = (
-                                                    block_rect.left
-                                                    - commons.PLAYER_WIDTH * 0.5,
+                                                    block_rect.left - commons.PLAYER_WIDTH * 0.5,
                                                     self.position[1],
                                                 )  # Move player left
                                                 self.velocity = (
@@ -608,9 +656,7 @@ class Player:
                                                     ).colliderect(block_rect):
                                                         self.position = (
                                                             self.position[0],
-                                                            block_rect.bottom
-                                                            + commons.PLAYER_HEIGHT
-                                                            * 0.5,
+                                                            block_rect.bottom + commons.PLAYER_HEIGHT * 0.5,
                                                         )  # Move player down
                                                         self.velocity = (
                                                             self.velocity[0],
@@ -630,8 +676,7 @@ class Player:
                                                         else:
                                                             if self.velocity[1] < 5:
                                                                 if (
-                                                                    self.position[1]
-                                                                    + commons.BLOCK_SIZE
+                                                                    self.position[1] + commons.BLOCK_SIZE
                                                                     < block_rect.top
                                                                 ):
                                                                     collide = True
@@ -643,11 +688,7 @@ class Player:
                                                         if not fall_damaged:
                                                             if self.velocity[1] > 58:
                                                                 damage = int(
-                                                                    (
-                                                                        self.velocity[1]
-                                                                        - 57
-                                                                    )
-                                                                    ** 2
+                                                                    (self.velocity[1] - 57) ** 2
                                                                 )  # Work out fall damage
                                                                 self.damage(
                                                                     damage,
@@ -657,16 +698,11 @@ class Player:
                                                                     ),
                                                                 )  # Apply fall damage once
                                                                 fall_damaged = True
-                                                        self.last_block_on = int(
-                                                            tile_id
-                                                        )
+                                                        self.last_block_on = int(tile_id)
                                                         self.moving_down_tick = -1
                                                         self.position = (
                                                             self.position[0],
-                                                            block_rect.top
-                                                            - commons.PLAYER_HEIGHT
-                                                            * 0.5
-                                                            + 1,
+                                                            block_rect.top - commons.PLAYER_HEIGHT * 0.5 + 1,
                                                         )  # Move player up
                                                         self.velocity = (
                                                             self.velocity[0] * 0.5,
@@ -684,16 +720,9 @@ class Player:
 
             if self.inventory_open:
                 self.crafting_menu_offset_velocity_y *= 1.0 - commons.DELTA_TIME * 10
-                self.crafting_menu_offset_y += (
-                    self.crafting_menu_offset_velocity_y * commons.DELTA_TIME
-                )
-                if (
-                    self.crafting_menu_offset_y
-                    < -len(self.items[ItemLocation.CRAFTING_MENU]) * 48 + 168
-                ):
-                    self.crafting_menu_offset_y = (
-                        -len(self.items[ItemLocation.CRAFTING_MENU]) * 48 + 168
-                    )
+                self.crafting_menu_offset_y += self.crafting_menu_offset_velocity_y * commons.DELTA_TIME
+                if self.crafting_menu_offset_y < -len(self.items[ItemLocation.CRAFTING_MENU]) * 48 + 168:
+                    self.crafting_menu_offset_y = -len(self.items[ItemLocation.CRAFTING_MENU]) * 48 + 168
                 elif self.crafting_menu_offset_y > 120:
                     self.crafting_menu_offset_y = 120
 
@@ -707,9 +736,9 @@ class Player:
 
         self.update_inventory_old_slots()
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.damage -> void
-        
+
         Kills the player, adds a death message, spawns particles, plays a sound
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -746,23 +775,16 @@ class Player:
                             self.velocity[0] + source_velocity[1],
                         )
                         velocity_magnitude = math.sqrt(
-                            (self.velocity[0] + source_velocity[0]) ** 2
-                            + (self.velocity[1] + source_velocity[1]) ** 2
+                            (self.velocity[0] + source_velocity[0]) ** 2 + (self.velocity[1] + source_velocity[1]) ** 2
                         )
                     else:
                         velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
-                        velocity_magnitude = math.sqrt(
-                            self.velocity[0] ** 2 + self.velocity[1] ** 2
-                        )
+                        velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
 
                     for _ in range(int(10 * commons.PARTICLE_DENSITY)):  # blood
                         particle_pos = (
-                            self.position[0]
-                            + random.random() * commons.PLAYER_WIDTH
-                            - commons.PLAYER_WIDTH * 0.5,
-                            self.position[1]
-                            + random.random() * commons.PLAYER_HEIGHT
-                            - commons.PLAYER_HEIGHT * 0.5,
+                            self.position[0] + random.random() * commons.PLAYER_WIDTH - commons.PLAYER_WIDTH * 0.5,
+                            self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5,
                         )
                         entity_manager.spawn_particle(
                             particle_pos,
@@ -792,13 +814,11 @@ class Player:
             commons.DEFAULT_FONT,
             outline_color=pygame.Color(int((1 - hp_float) * 180), int(hp_float * 180), 0),
         )
-        self.hp_x_position = (
-            commons.WINDOW_WIDTH - 10 - hp_float * 100 - self.hp_text.get_width() * 0.5
-        )
+        self.hp_x_position = commons.WINDOW_WIDTH - 10 - hp_float * 100 - self.hp_text.get_width() * 0.5
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.kill -> void
-        
+
         Kills the player, adds a death message, spawns particles, and plays a sound
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -809,9 +829,7 @@ class Player:
             self.death_message_alpha = 1
             self.velocity = (0, 0)
 
-            entity_manager.add_message(
-                get_death_message(self.name, source), pygame.Color(255, 0, 0)
-            )
+            entity_manager.add_message(get_death_message(self.name, source), pygame.Color(255, 0, 0))
 
             if commons.PARTICLES:
                 if source_velocity is not None:
@@ -821,19 +839,13 @@ class Player:
                     )
 
                 velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
-                velocity_magnitude = math.sqrt(
-                    self.velocity[0] ** 2 + self.velocity[1] ** 2
-                )
+                velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
 
                 for i in range(int(35 * commons.PARTICLE_DENSITY)):  # more blood
                     entity_manager.spawn_particle(
                         (
-                            self.position[0]
-                            + random.random() * commons.PLAYER_WIDTH
-                            - commons.PLAYER_WIDTH * 0.5,
-                            self.position[1]
-                            + random.random() * commons.PLAYER_HEIGHT
-                            - commons.PLAYER_HEIGHT * 0.5,
+                            self.position[0] + random.random() * commons.PLAYER_WIDTH - commons.PLAYER_WIDTH * 0.5,
+                            self.position[1] + random.random() * commons.PLAYER_HEIGHT - commons.PLAYER_HEIGHT * 0.5,
                         ),
                         pygame.Color(230, 0, 0),
                         life=1,
@@ -846,31 +858,27 @@ class Player:
                     )
             game_data.play_sound("sound.player_death")  # death sound
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.respawn -> void
-        
+
         Sets the player's position to the world's spawn point and resets some variables
     -----------------------------------------------------------------------------------------------------------------"""
 
     def respawn(self):
-        self.position = (
-            world.world.spawn_position
-        )  # set position to world.world.spawn_point
+        self.position = world.world.spawn_position  # set position to world.world.spawn_point
         self.velocity = (0, 0)
         self.alive = True
         self.hp = int(self.max_hp)  # reset hp
         self.hp_text = shared_methods.outline_text(
             str(self.hp), pygame.Color(0, 255, 0), commons.DEFAULT_FONT, outline_color=pygame.Color(0, 180, 0)
         )
-        self.hp_x_position = (
-            commons.WINDOW_WIDTH - 10 - 100 - self.hp_text.get_width() * 0.5
-        )
+        self.hp_x_position = commons.WINDOW_WIDTH - 10 - 100 - self.hp_text.get_width() * 0.5
         self.invincible = True  # When you spawn, you are invincible for 3 seconds.
         self.invincible_timer = 3.0
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.render_current_item_image    -> void
-        
+
         Renders the item that the player is currently holding to the current_item_image surface
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -909,22 +917,16 @@ class Player:
             )
             self.current_item_swing_image = padded_surface
             self.current_item_swing_offset = (
-                math.sqrt(
-                    (inner_dimensions[0] * 0.5) ** 2 + (inner_dimensions[1] * 0.5) ** 2
-                )
-                * 0.8
+                math.sqrt((inner_dimensions[0] * 0.5) ** 2 + (inner_dimensions[1] * 0.5) ** 2) * 0.8
             )
             self.current_item_extend_image = padded_surface
             self.current_item_extend_offset = (
-                math.sqrt(
-                    (inner_dimensions[0] * 0.5) ** 2 + (inner_dimensions[1] * 0.5) ** 2
-                )
-                * 0.8
+                math.sqrt((inner_dimensions[0] * 0.5) ** 2 + (inner_dimensions[1] * 0.5) ** 2) * 0.8
             )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.animate -> void
-        
+
         Updates the player
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -940,9 +942,9 @@ class Player:
         else:
             self.sprites.jump()
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.use_item -> void
-        
+
         Gets the item that the player is holding and calls the correct use function
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -957,16 +959,8 @@ class Player:
         if current_item is None and not right_click:
             return
 
-        screen_position_x = (
-            self.position[0]
-            - entity_manager.camera_position[0]
-            + commons.WINDOW_WIDTH * 0.5
-        )
-        screen_position_y = (
-            self.position[1]
-            - entity_manager.camera_position[1]
-            + commons.WINDOW_HEIGHT * 0.5
-        )
+        screen_position_x = self.position[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
+        screen_position_y = self.position[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
 
         if not right_click:
             self.should_swing_arm = False
@@ -1039,9 +1033,9 @@ class Player:
                         origin = block_position
                     world.use_special_tile(origin[0], origin[1])
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.place_block -> void
-        
+
         Uses a screen position and a block item    to place a block in the    world
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -1065,9 +1059,7 @@ class Player:
                 if not block_rect.colliderect(self.rect):
                     block_placed = False
                     if is_tile:
-                        tile_to_place = game_data.get_tile_by_id_str(
-                            block_item.get_tile_id_str()
-                        )
+                        tile_to_place = game_data.get_tile_by_id_str(block_item.get_tile_id_str())
 
                         if commons.TileTag.MULTI_TILE in tile_to_place["tags"]:
                             can_place = True
@@ -1077,9 +1069,7 @@ class Player:
                             for x in range(tile_dimensions[0]):
                                 for y in range(tile_dimensions[1]):
                                     if (
-                                        not world.world.tile_data[
-                                            block_position[0] + x
-                                        ][block_position[1] + y][0]
+                                        not world.world.tile_data[block_position[0] + x][block_position[1] + y][0]
                                         == game_data.air_tile_id
                                     ):
                                         can_place = False
@@ -1087,9 +1077,9 @@ class Player:
                             required_solids = tile_to_place["multitile_required_solids"]
 
                             for i in range(len(required_solids)):
-                                tile_id = world.world.tile_data[
-                                    block_position[0] + required_solids[i][0]
-                                ][block_position[1] + required_solids[i][1]][0]
+                                tile_id = world.world.tile_data[block_position[0] + required_solids[i][0]][
+                                    block_position[1] + required_solids[i][1]
+                                ][0]
                                 tile_data = game_data.get_tile_by_id(tile_id)
                                 if commons.TileTag.NO_COLLIDE in tile_data["tags"]:
                                     can_place = False
@@ -1104,77 +1094,41 @@ class Player:
                                 )
 
                                 if commons.TileTag.CHEST in tile_to_place["tags"]:
-                                    world.world.chest_data.append(
-                                        [block_position, [None for _ in range(20)]]
-                                    )
+                                    world.world.chest_data.append([block_position, [None for _ in range(20)]])
 
                                 block_placed = True
 
                                 game_data.play_tile_place_sfx(tile_to_place["id"])
 
                         else:
-                            if (
-                                world.world.tile_data[block_position[0]][
-                                    block_position[1]
-                                ][0]
-                                == game_data.air_tile_id
-                            ):
-                                if (
-                                    world.get_neighbor_count(
-                                        block_position[0], block_position[1]
-                                    )
-                                    > 0
-                                ):
-                                    world.world.tile_data[block_position[0]][
-                                        block_position[1]
-                                    ][0] = tile_to_place["id"]
+                            if world.world.tile_data[block_position[0]][block_position[1]][0] == game_data.air_tile_id:
+                                if world.get_neighbor_count(block_position[0], block_position[1]) > 0:
+                                    world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place["id"]
 
-                                    if world.tile_in_map(
-                                        block_position[0], block_position[1] + 1
-                                    ):
+                                    if world.tile_in_map(block_position[0], block_position[1] + 1):
                                         if (
                                             game_data.get_tile_by_id(
-                                                world.world.tile_data[
-                                                    block_position[0]
-                                                ][block_position[1]][0]
+                                                world.world.tile_data[block_position[0]][block_position[1]][0]
                                             )["id_str"]
                                             == "tile.grass"
                                         ):
-                                            world.world.tile_data[block_position[0]][
-                                                block_position[1]
-                                            ][0] = game_data.get_tile_id_by_id_str(
-                                                "tile.dirt"
+                                            world.world.tile_data[block_position[0]][block_position[1]][0] = (
+                                                game_data.get_tile_id_by_id_str("tile.dirt")
                                             )
 
-                                    world.update_terrain_surface(
-                                        block_position[0], block_position[1]
-                                    )
+                                    world.update_terrain_surface(block_position[0], block_position[1])
 
                                     game_data.play_tile_place_sfx(tile_to_place["id"])
                                     block_placed = True
                     else:
-                        if (
-                            world.world.tile_data[block_position[0]][block_position[1]][
-                                1
-                            ]
-                            == game_data.air_wall_id
-                        ):
-                            if (
-                                world.get_neighbor_count(
-                                    block_position[0], block_position[1], tile=1
-                                )
-                                > 0
-                            ):
-                                wall_to_place = game_data.get_wall_by_id_str(
-                                    block_item.get_wall_id_str()
-                                )
+                        if world.world.tile_data[block_position[0]][block_position[1]][1] == game_data.air_wall_id:
+                            if world.get_neighbor_count(block_position[0], block_position[1], tile=1) > 0:
+                                wall_to_place = game_data.get_wall_by_id_str(block_item.get_wall_id_str())
 
-                                world.world.tile_data[block_position[0]][
-                                    block_position[1]
-                                ][1] = int(wall_to_place["id"])
-                                world.update_terrain_surface(
-                                    block_position[0], block_position[1]
+                                world.world.tile_data[block_position[0]][block_position[1]][1] = int(
+                                    wall_to_place["id"]
                                 )
+                                world.update_terrain_surface(block_position[0], block_position[1])
 
                                 game_data.play_wall_place_sfx(wall_to_place["id"])
 
@@ -1190,21 +1144,12 @@ class Player:
                         self.can_use = False
                         if not commons.CREATIVE:
                             if not commons.is_holding_item:
-                                self.items[ItemLocation.HOTBAR][
-                                    self.hotbar_index
-                                ].amount -= 1
+                                self.items[ItemLocation.HOTBAR][self.hotbar_index].amount -= 1
                                 dat = [ItemLocation.HOTBAR, self.hotbar_index]
                                 if dat not in self.old_inventory_positions:
                                     self.old_inventory_positions.append(dat)
-                                if (
-                                    self.items[ItemLocation.HOTBAR][
-                                        self.hotbar_index
-                                    ].amount
-                                    <= 0
-                                ):
-                                    self.items[ItemLocation.HOTBAR][
-                                        self.hotbar_index
-                                    ] = None
+                                if self.items[ItemLocation.HOTBAR][self.hotbar_index].amount <= 0:
+                                    self.items[ItemLocation.HOTBAR][self.hotbar_index] = None
                             else:
                                 commons.WAIT_TO_USE = True
                                 assert item.item_holding is not None
@@ -1213,9 +1158,9 @@ class Player:
                                     item.item_holding = None
                                     commons.is_holding_item = False
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.use_pickaxe -> void
-        
+
         Uses a screen position and a pickaxe item to mine a    block in the world
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -1242,62 +1187,43 @@ class Player:
                 block_position = commons.HOVERED_TILE
                 if world.tile_in_map(block_position[0], block_position[1]):
                     if tool_item.has_tag(ItemTag.PICKAXE):
-                        tile_id = world.world.tile_data[block_position[0]][
-                            block_position[1]
-                        ][0]
+                        tile_id = world.world.tile_data[block_position[0]][block_position[1]][0]
                         tile_dat = game_data.get_tile_by_id(tile_id)
                         if commons.TileTag.MULTI_TILE in tile_dat["tags"]:
-                            multitile_origin = world.get_multitile_origin(
-                                block_position[0], block_position[1]
-                            )
+                            multitile_origin = world.get_multitile_origin(block_position[0], block_position[1])
                             world.remove_multitile(multitile_origin, True)
                             game_data.play_tile_hit_sfx(tile_id)
                         else:
                             if tile_id != game_data.air_tile_id:
-                                item_id = game_data.get_item_id_by_id_str(
-                                    tile_dat["item_id_str"]
-                                )
+                                item_id = game_data.get_item_id_by_id_str(tile_dat["item_id_str"])
                                 # Remove Grass from    dirt
                                 if tile_id == game_data.grass_tile_id:
-                                    world.world.tile_data[block_position[0]][
-                                        block_position[1]
-                                    ][0] = game_data.get_tile_id_by_id_str("tile.dirt")
+                                    world.world.tile_data[block_position[0]][block_position[1]][0] = (
+                                        game_data.get_tile_id_by_id_str("tile.dirt")
+                                    )
                                 else:
-                                    world.world.tile_data[block_position[0]][
-                                        block_position[1]
-                                    ][0] = game_data.air_tile_id
+                                    world.world.tile_data[block_position[0]][block_position[1]][
+                                        0
+                                    ] = game_data.air_tile_id
 
                                     entity_manager.spawn_physics_item(
                                         Item(item_id),
                                         (
-                                            (block_position[0] + 0.5)
-                                            * commons.BLOCK_SIZE,
-                                            (block_position[1] + 0.5)
-                                            * commons.BLOCK_SIZE,
+                                            (block_position[0] + 0.5) * commons.BLOCK_SIZE,
+                                            (block_position[1] + 0.5) * commons.BLOCK_SIZE,
                                         ),
                                         pickup_delay=10,
                                     )
-                                world.update_terrain_surface(
-                                    block_position[0], block_position[1]
-                                )
+                                world.update_terrain_surface(block_position[0], block_position[1])
                                 game_data.play_tile_hit_sfx(tile_id)
                                 if commons.PARTICLES:
-                                    for i in range(
-                                        int(
-                                            random.randint(2, 3)
-                                            * commons.PARTICLE_DENSITY
-                                        )
-                                    ):
+                                    for i in range(int(random.randint(2, 3) * commons.PARTICLE_DENSITY)):
                                         entity_manager.spawn_particle(
                                             (
-                                                block_position[0] * commons.BLOCK_SIZE
-                                                + commons.BLOCK_SIZE * 0.5,
-                                                block_position[1] * commons.BLOCK_SIZE
-                                                + commons.BLOCK_SIZE * 0.5,
+                                                block_position[0] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,
+                                                block_position[1] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,
                                             ),
-                                            pygame.transform.average_color(
-                                                tile_dat["image"]
-                                            ),
+                                            pygame.transform.average_color(tile_dat["image"]),
                                             size=13,
                                             life=1,
                                             angle=-math.pi * 0.5,
@@ -1306,9 +1232,7 @@ class Player:
                                         )
 
                     elif tool_item.has_tag(ItemTag.HAMMER):
-                        wall_id = world.world.tile_data[block_position[0]][
-                            block_position[1]
-                        ][1]
+                        wall_id = world.world.tile_data[block_position[0]][block_position[1]][1]
                         if wall_id != game_data.air_wall_id:
                             if (
                                 world.get_neighbor_count(
@@ -1322,9 +1246,7 @@ class Player:
                             ):
                                 wall_dat = game_data.get_wall_by_id(wall_id)
 
-                                item_id = game_data.get_item_id_by_id_str(
-                                    wall_dat["item_id_str"]
-                                )
+                                item_id = game_data.get_item_id_by_id_str(wall_dat["item_id_str"])
                                 entity_manager.spawn_physics_item(
                                     Item(item_id),
                                     (
@@ -1334,19 +1256,15 @@ class Player:
                                     pickup_delay=10,
                                 )
 
-                                world.world.tile_data[block_position[0]][
-                                    block_position[1]
-                                ][1] = game_data.air_wall_id
+                                world.world.tile_data[block_position[0]][block_position[1]][1] = game_data.air_wall_id
 
-                                world.update_terrain_surface(
-                                    block_position[0], block_position[1]
-                                )
+                                world.update_terrain_surface(block_position[0], block_position[1])
 
                                 game_data.play_wall_hit_sfx(wall_id)
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.use_longsword_weapon -> void
-        
+
         Swings the given longsword weapon item
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -1376,22 +1294,18 @@ class Player:
             self.should_hold_arm = True
             self.item_extend = True
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.use_ranged_weapon    -> void
-        
+
         Shoots the given ranged    weapon item
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def use_ranged_weapon(
-        self, screen_position_x, screen_position_y, ranged_weapon_item
-    ) -> None:
+    def use_ranged_weapon(self, screen_position_x, screen_position_y, ranged_weapon_item) -> None:
         if self.can_use:
             ammo_to_use_id = -1
             ammo_to_use_dat = None
             for item_id in ranged_weapon_item.json_item["ranged_ammo_type"]:
-                item_ammo_slots = self.find_existing_item_stacks(
-                    game_data.get_item_id_by_id_str(item_id)
-                )
+                item_ammo_slots = self.find_existing_item_stacks(game_data.get_item_id_by_id_str(item_id))
                 if len(item_ammo_slots) > 0:
                     ammo_to_use_dat = item_ammo_slots[0]
                     ammo_to_use_id = game_data.get_item_id_by_id_str(item_id)
@@ -1400,9 +1314,7 @@ class Player:
             if ammo_to_use_id != -1:
                 assert ammo_to_use_dat is not None
 
-                self.remove_item(
-                    (ammo_to_use_dat[0], ammo_to_use_dat[1]), remove_count=1
-                )
+                self.remove_item((ammo_to_use_dat[0], ammo_to_use_dat[1]), remove_count=1)
 
                 game_data.play_sound(ranged_weapon_item.json_item["use_sound"])
 
@@ -1429,15 +1341,13 @@ class Player:
 
                 source = self.name
 
-                entity_manager.spawn_projectile(
-                    self.position, angle, ranged_weapon_item, ammo_to_use_id, source
-                )
+                entity_manager.spawn_projectile(self.position, angle, ranged_weapon_item, ammo_to_use_id, source)
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.give_item    -> varying return info
-        
+
         Gives the player one or several    potentially    prefixed items.
-        
+
         Performs an optional search    on the player's    available item spaces to merge the item    with pre-existing stacks or
         just place it in an empty slot
     -----------------------------------------------------------------------------------------------------------------"""
@@ -1447,8 +1357,7 @@ class Player:
         if position is None:
             is_coin = current_item.has_tag(ItemTag.COIN)
             # Find all suitable    slots
-            existing_slots = self.find_existing_item_stacks(
-                current_item.item_id)
+            existing_slots = self.find_existing_item_stacks(current_item.item_id)
             # Slots that already have the item
             while len(existing_slots) > 0 and amount > 0:
                 # Work out how many to add to the stack
@@ -1458,26 +1367,18 @@ class Player:
                     fill_count += amount
 
                 # Increase the amount of the chosen slot
-                self.items[existing_slots[0][0]][
-                    existing_slots[0][1]
-                ].amount += fill_count
+                self.items[existing_slots[0][0]][existing_slots[0][1]].amount += fill_count
 
                 # Automatically craft new coins
                 if is_coin:
                     if (
                         self.items[existing_slots[0][0]][existing_slots[0][1]].amount
-                        == self.items[existing_slots[0][0]][
-                            existing_slots[0][1]
-                        ].get_max_stack()
+                        == self.items[existing_slots[0][0]][existing_slots[0][1]].get_max_stack()
                     ):
                         if amount > 0:
-                            self.items[existing_slots[0][0]][
-                                existing_slots[0][1]
-                            ].amount = amount
+                            self.items[existing_slots[0][0]][existing_slots[0][1]].amount = amount
                         else:
-                            self.items[existing_slots[0][0]][
-                                existing_slots[0][1]
-                            ] = None
+                            self.items[existing_slots[0][0]][existing_slots[0][1]] = None
                         self.give_item(Item(current_item.item_id + 1))
                         amount = 0
 
@@ -1491,9 +1392,7 @@ class Player:
             # Free slots
             free_slots = self.find_free_spaces(current_item.json_item["max_stack"])
 
-            while (
-                len(free_slots) > 0 and amount > 0
-            ):  # No stacks left to fill so fill empty slots
+            while len(free_slots) > 0 and amount > 0:  # No stacks left to fill so fill empty slots
                 # Work out how many to add to the stack
                 fill_count = free_slots[0][2]
                 amount -= fill_count
@@ -1501,9 +1400,7 @@ class Player:
                     fill_count += amount
 
                 # Add that number to the free slot
-                self.items[free_slots[0][0]][free_slots[0][1]] = current_item.copy(
-                    new_amount=fill_count
-                )
+                self.items[free_slots[0][0]][free_slots[0][1]] = current_item.copy(new_amount=fill_count)
 
                 # Flag the position for a surface update
                 dat = [free_slots[0][0], free_slots[0][1]]
@@ -1558,9 +1455,9 @@ class Player:
                 ]
             return None
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.remove_item -> item
-        
+
         Removes all the items from a slot in one of the player's available item slots
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -1583,15 +1480,13 @@ class Player:
                 return current_item.copy(new_amount=remove_count)
         return None
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.find_existing_item_stacks -> existing space list
-        
+
         Finds any occurrences of an item in the player's inventory or hotbar
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def find_existing_item_stacks(
-        self, item_id, search_hotbar=True, search_inventory=True
-    ):
+    def find_existing_item_stacks(self, item_id, search_hotbar=True, search_inventory=True):
         # [which array,    position in array, amount]
         existing_spaces = []
         item_data = game_data.get_item_by_id(item_id)
@@ -1599,41 +1494,29 @@ class Player:
         if search_hotbar:
             for hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
                 current_item = self.items[ItemLocation.HOTBAR][hotbar_index]
-                if current_item != None:
+                if current_item is not None:
                     if current_item.item_id == item_id:
-                        available = (
-                            item_data["max_stack"]
-                            - self.items[ItemLocation.HOTBAR][hotbar_index].amount
-                        )
-                        existing_spaces.append(
-                            [ItemLocation.HOTBAR, hotbar_index, available]
-                        )
+                        available = item_data["max_stack"] - self.items[ItemLocation.HOTBAR][hotbar_index].amount
+                        existing_spaces.append([ItemLocation.HOTBAR, hotbar_index, available])
 
         if search_inventory:
             for inventory_index in range(len(self.items[ItemLocation.INVENTORY])):
                 current_item = self.items[ItemLocation.INVENTORY][inventory_index]
                 if current_item is not None:
                     if current_item.item_id == item_id:
-                        available = (
-                            item_data["max_stack"]
-                            - self.items[ItemLocation.INVENTORY][inventory_index].amount
-                        )
+                        available = item_data["max_stack"] - self.items[ItemLocation.INVENTORY][inventory_index].amount
                         if available > 0:
-                            existing_spaces.append(
-                                [ItemLocation.INVENTORY, inventory_index, available]
-                            )
+                            existing_spaces.append([ItemLocation.INVENTORY, inventory_index, available])
 
         return existing_spaces
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.find_free_spaces -> free space list
 
         Finds any free spaces in the player's inventory    or hotbar
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def find_free_spaces(
-        self, max_stack=9999, search_hotbar=True, search_inventory=True
-    ):
+    def find_free_spaces(self, max_stack=9999, search_hotbar=True, search_inventory=True):
         free_spaces = []
 
         if search_hotbar:
@@ -1644,16 +1527,14 @@ class Player:
         if search_inventory:
             for inventory_index in range(len(self.items[ItemLocation.INVENTORY])):
                 if self.items[ItemLocation.INVENTORY][inventory_index] is None:
-                    free_spaces.append(
-                        [ItemLocation.INVENTORY, inventory_index, max_stack]
-                    )
+                    free_spaces.append([ItemLocation.INVENTORY, inventory_index, max_stack])
 
         return free_spaces
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.render_hotbar    -> void
-        
-        Fully renders the player's hotbar to the hotbar_image surface, including all the items in the hotbar    
+
+        Fully renders the player's hotbar to the hotbar_image surface, including all the items in the hotbar
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_hotbar(self):
@@ -1677,10 +1558,10 @@ class Player:
                         (24 + 48 * hotbar_index, 30),
                     )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.render_inventory -> void
-        
-        Fully renders the player's inventory to the    inventory_image    surface, including all the items in the    inventory 
+
+        Fully renders the player's inventory to the    inventory_image    surface, including all the items in the    inventory
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_inventory(self):
@@ -1689,9 +1570,7 @@ class Player:
         for inventory_index in range(len(self.items[ItemLocation.INVENTORY])):
             slot_x = inventory_index % 10
             slot_y = inventory_index // 10
-            self.inventory_image.blit(
-                tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y)
-            )
+            self.inventory_image.blit(tilesets.misc_gui[0], (48 * slot_x, 48 * slot_y))
             current_item = self.items[ItemLocation.INVENTORY][inventory_index]
             if current_item is not None:
                 self.inventory_image.blit(
@@ -1704,21 +1583,17 @@ class Player:
                 if self.items[ItemLocation.INVENTORY][inventory_index].amount > 1:
                     self.inventory_image.blit(
                         shared_methods.outline_text(
-                            str(
-                                self.items[ItemLocation.INVENTORY][
-                                    inventory_index
-                                ].amount
-                            ),
+                            str(self.items[ItemLocation.INVENTORY][inventory_index].amount),
                             pygame.Color(255, 255, 255),
                             commons.SMALL_FONT,
                         ),
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
                     )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.render_chest -> void
-        
-        Fully renders the chest the player has open to the chest_image surface, including all the items in the open chest 
+
+        Fully renders the chest the player has open to the chest_image surface, including all the items in the open chest
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_chest(self):
@@ -1747,9 +1622,9 @@ class Player:
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
                     )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.update_inventory_old_slots -> void
-        
+
         Uses a list of outdated positions in the hotbar, inventory or an open chest to update the respective area's surfaces
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -1777,9 +1652,7 @@ class Player:
                 current_item = self.items[ItemLocation.INVENTORY][data[1]]
                 slot_x = data[1] % 10
                 slot_y = data[1] // 10
-                self.inventory_image.blit(
-                    tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
-                )
+                self.inventory_image.blit(tilesets.misc_gui[0], (slot_x * 48, slot_y * 48))
                 if current_item is not None:
                     self.inventory_image.blit(
                         current_item.get_resized_image(),
@@ -1800,9 +1673,7 @@ class Player:
                 current_item = self.items[ItemLocation.CHEST][data[1]]
                 slot_x = data[1] % 5
                 slot_y = data[1] // 5
-                self.chest_image.blit(
-                    tilesets.misc_gui[0], (slot_x * 48, slot_y * 48)
-                )
+                self.chest_image.blit(tilesets.misc_gui[0], (slot_x * 48, slot_y * 48))
                 if current_item is not None:
                     self.chest_image.blit(
                         current_item.get_resized_image(),
@@ -1820,44 +1691,34 @@ class Player:
                         )
         self.old_inventory_positions = []
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.update_craftable_items -> void
-        
+
         Creates a list of items that can be crafted with the current materials List structure [item_id, amount]
     -----------------------------------------------------------------------------------------------------------------"""
 
     def update_craftable_items(self):
-        self.items[ItemLocation.CRAFTING_MENU] = [
-            [i + 1, 1] for i in range(len(game_data.json_item_data) - 1)
-        ]
+        self.items[ItemLocation.CRAFTING_MENU] = [[i + 1, 1] for i in range(len(game_data.json_item_data) - 1)]
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.render_craftable_items_surf -> void
-        
+
         Uses the craftable_items list to create a surface that displays all the items the player can craft
     -----------------------------------------------------------------------------------------------------------------"""
 
     def render_craftable_items_surf(self):
-        self.craftable_items_surf = pygame.Surface(
-            (48, len(self.items[ItemLocation.CRAFTING_MENU]) * 48)
-        )
+        self.craftable_items_surf = pygame.Surface((48, len(self.items[ItemLocation.CRAFTING_MENU]) * 48))
         self.craftable_items_surf.fill((255, 0, 255))
         for i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
             self.craftable_items_surf.blit(tilesets.misc_gui[0], (0, i * 48))
-            item_data = game_data.json_item_data[
-                self.items[ItemLocation.CRAFTING_MENU][i][0]
-            ]
+            item_data = game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
             image = item_data["image"]
             if max(image.get_width(), image.get_height()) > 32:
                 image = pygame.transform.scale(
                     image,
                     (
-                        image.get_width()
-                        * 32
-                        / max(image.get_width(), image.get_height()),
-                        image.get_height()
-                        * 32
-                        / max(image.get_width(), image.get_height()),
+                        image.get_width() * 32 / max(image.get_width(), image.get_height()),
+                        image.get_height() * 32 / max(image.get_width(), image.get_height()),
                     ),
                 )
             self.craftable_items_surf.blit(
@@ -1868,30 +1729,22 @@ class Player:
                 ),
             )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.draw -> void
-        
+
         Uses various player variables to draw the player in the world
     -----------------------------------------------------------------------------------------------------------------"""
 
-    def draw(self): # Draw player to screen
+    def draw(self):  # Draw player to screen
         if self.alive:
-            screen_position_x = (
-                self.position[0]
-                - entity_manager.camera_position[0]
-                + commons.WINDOW_WIDTH * 0.5
-            )
-            screen_position_y = (
-                self.position[1]
-                - entity_manager.camera_position[1]
-                + commons.WINDOW_HEIGHT * 0.5
-            )
+            screen_position_x = self.position[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
+            screen_position_y = self.position[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
             commons.screen.blit(
                 self.sprites.create_sprite(),
                 (
                     screen_position_x - self.sprites.SURFACE_WIDTH * 0.5,
-                    screen_position_y - self.sprites.SURFACE_HEIGHT * 0.5
-                )
+                    screen_position_y - self.sprites.SURFACE_HEIGHT * 0.5,
+                ),
             )
 
             if self.arm_out:
@@ -1913,15 +1766,11 @@ class Player:
                     offset_x = commons.PLAYER_WIDTH * 0.5
                 else:
                     offset_x = 0
-                    rotated_item_surf = pygame.transform.flip(
-                        rotated_item_surf, True, False
-                    )
+                    rotated_item_surf = pygame.transform.flip(rotated_item_surf, True, False)
                 commons.screen.blit(
                     rotated_item_surf,
                     (
-                        screen_position_x
-                        - rotated_item_surf.get_width() * 0.5
-                        + offset_x,
+                        screen_position_x - rotated_item_surf.get_width() * 0.5 + offset_x,
                         screen_position_y - rotated_item_surf.get_height() * 0.5,
                     ),
                 )
@@ -1937,32 +1786,21 @@ class Player:
                     if self.direction == 1:
                         hit_rect = Rect(
                             self.position[0],
-                            self.position[1]
-                            - self.current_item_swing_image.get_height() * 0.5,
+                            self.position[1] - self.current_item_swing_image.get_height() * 0.5,
                             self.current_item_swing_image.get_width(),
                             self.current_item_swing_image.get_height(),
                         )
                     else:
                         hit_rect = Rect(
-                            self.position[0]
-                            - self.current_item_swing_image.get_width(),
-                            self.position[1]
-                            - self.current_item_swing_image.get_height() * 0.5,
+                            self.position[0] - self.current_item_swing_image.get_width(),
+                            self.position[1] - self.current_item_swing_image.get_height() * 0.5,
                             self.current_item_swing_image.get_width(),
                             self.current_item_swing_image.get_height(),
                         )
 
                     if commons.HITBOXES:
-                        hit_rect_screen_x = (
-                            hit_rect.x
-                            - entity_manager.camera_position[0]
-                            + commons.WINDOW_WIDTH * 0.5
-                        )
-                        hit_rect_screen_y = (
-                            hit_rect.y
-                            - entity_manager.camera_position[1]
-                            + commons.WINDOW_HEIGHT * 0.5
-                        )
+                        hit_rect_screen_x = hit_rect.x - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
+                        hit_rect_screen_y = hit_rect.y - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
                         pygame.draw.rect(
                             commons.screen,
                             (255, 0, 0),
@@ -2007,69 +1845,47 @@ class Player:
                                 self.enemies_hit.append(int(enemy.game_id))
 
                 eased_use_delta = shared_methods.ease_out_zero_to_one(self.use_delta, 1)
-                less_eased_delta = shared_methods.lerp_float(
-                    self.use_delta, eased_use_delta, 0.7
-                )
+                less_eased_delta = shared_methods.lerp_float(self.use_delta, eased_use_delta, 0.7)
 
                 if self.direction == 1:
                     self.swing_angle = -less_eased_delta * 175 + 85
                 else:
                     self.swing_angle = less_eased_delta * 175 + 5
 
-                rotated_surface = shared_methods.rotate_surface(
-                    self.current_item_swing_image, self.swing_angle
-                )
+                rotated_surface = shared_methods.rotate_surface(self.current_item_swing_image, self.swing_angle)
 
                 if current_item is not None:
                     if current_item.has_tag(ItemTag.SHORTSWORD):
                         total_offset = (
-                            commons.PLAYER_ARM_LENGTH
-                            + self.current_item_extend_offset * current_item.get_hold_offset()
+                            commons.PLAYER_ARM_LENGTH + self.current_item_extend_offset * current_item.get_hold_offset()
                         )
                     else:
                         total_offset = (
-                            commons.PLAYER_ARM_LENGTH
-                            + self.current_item_swing_offset * current_item.get_hold_offset()
+                            commons.PLAYER_ARM_LENGTH + self.current_item_swing_offset * current_item.get_hold_offset()
                         )
                 else:
                     total_offset = commons.PLAYER_ARM_LENGTH
 
                 # Looking right
                 if self.direction == 1:
-                    hand_angle_global_degrees = shared_methods.lerp_float(
-                        -130, 45, less_eased_delta
-                    )
-                    hand_angle_global_radians = hand_angle_global_degrees * (
-                        math.pi / 180
-                    )
+                    hand_angle_global_degrees = shared_methods.lerp_float(-130, 45, less_eased_delta)
+                    hand_angle_global_radians = hand_angle_global_degrees * (math.pi / 180)
                     offset_x = (
-                        math.cos(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_width() * 0.5
-                        - 5
+                        math.cos(hand_angle_global_radians) * total_offset - rotated_surface.get_width() * 0.5 - 5
                     )
                     offset_y = (
-                        math.sin(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_height() * 0.5
-                        + 2
+                        math.sin(hand_angle_global_radians) * total_offset - rotated_surface.get_height() * 0.5 + 2
                     )
                     self.sprites.arm_radians = hand_angle_global_radians
                 # Looking left
                 else:
-                    hand_angle_global_degrees = shared_methods.lerp_float(
-                        130, -45, less_eased_delta
-                    )
-                    hand_angle_global_radians = hand_angle_global_degrees * (
-                        math.pi / 180
-                    )
+                    hand_angle_global_degrees = shared_methods.lerp_float(130, -45, less_eased_delta)
+                    hand_angle_global_radians = hand_angle_global_degrees * (math.pi / 180)
                     offset_x = (
-                        -math.cos(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_width() * 0.5
-                        + 5
+                        -math.cos(hand_angle_global_radians) * total_offset - rotated_surface.get_width() * 0.5 + 5
                     )
                     offset_y = (
-                        -math.sin(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_height() * 0.5
-                        + 2
+                        -math.sin(hand_angle_global_radians) * total_offset - rotated_surface.get_height() * 0.5 + 2
                     )
                     self.sprites.arm_radians = hand_angle_global_radians
 
@@ -2089,32 +1905,21 @@ class Player:
                     if self.direction == 1:
                         hit_rect = Rect(
                             self.position[0],
-                            self.position[1]
-                            - self.current_item_extend_image.get_height() * 0.5,
+                            self.position[1] - self.current_item_extend_image.get_height() * 0.5,
                             self.current_item_extend_image.get_width(),
                             self.current_item_extend_image.get_height(),
                         )
                     else:
                         hit_rect = Rect(
-                            self.position[0]
-                            - self.current_item_extend_image.get_width(),
-                            self.position[1]
-                            - self.current_item_extend_image.get_height() * 0.5,
+                            self.position[0] - self.current_item_extend_image.get_width(),
+                            self.position[1] - self.current_item_extend_image.get_height() * 0.5,
                             self.current_item_extend_image.get_width(),
                             self.current_item_extend_image.get_height(),
                         )
 
                     if commons.HITBOXES:
-                        hit_rect_screen_x = (
-                            hit_rect.x
-                            - entity_manager.camera_position[0]
-                            + commons.WINDOW_WIDTH * 0.5
-                        )
-                        hit_rect_screen_y = (
-                            hit_rect.y
-                            - entity_manager.camera_position[1]
-                            + commons.WINDOW_HEIGHT * 0.5
-                        )
+                        hit_rect_screen_x = hit_rect.x - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
+                        hit_rect_screen_y = hit_rect.y - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
                         pygame.draw.rect(
                             commons.screen,
                             (255, 0, 0),
@@ -2162,68 +1967,46 @@ class Player:
                                 self.enemies_hit.append(int(enemy.game_id))
 
                 eased_use_delta = shared_methods.ease_out_zero_to_one(self.use_delta, 1)
-                less_eased_delta = shared_methods.lerp_float(
-                    self.use_delta, eased_use_delta, 0.7
-                )
+                less_eased_delta = shared_methods.lerp_float(self.use_delta, eased_use_delta, 0.7)
 
                 if self.direction == 1:
                     self.swing_angle = -less_eased_delta * 175 + 85
                 else:
                     self.swing_angle = less_eased_delta * 175 + 5
 
-                rotated_surface = shared_methods.rotate_surface(
-                    self.current_item_swing_image, self.swing_angle
-                )
+                rotated_surface = shared_methods.rotate_surface(self.current_item_swing_image, self.swing_angle)
 
                 if current_item is not None:
                     if current_item.has_tag(ItemTag.SHORTSWORD):
                         total_offset = (
-                            commons.PLAYER_ARM_LENGTH
-                            + self.current_item_extend_offset * current_item.get_hold_offset()
+                            commons.PLAYER_ARM_LENGTH + self.current_item_extend_offset * current_item.get_hold_offset()
                         )
                     else:
                         total_offset = (
-                            commons.PLAYER_ARM_LENGTH
-                            + self.current_item_swing_offset * current_item.get_hold_offset()
+                            commons.PLAYER_ARM_LENGTH + self.current_item_swing_offset * current_item.get_hold_offset()
                         )
                 else:
                     total_offset = commons.PLAYER_ARM_LENGTH
 
                 # Looking right
                 if self.direction == 1:
-                    hand_angle_global_degrees = shared_methods.lerp_float(
-                        -130, 45, less_eased_delta
-                    )
-                    hand_angle_global_radians = hand_angle_global_degrees * (
-                        math.pi / 180
-                    )
+                    hand_angle_global_degrees = shared_methods.lerp_float(-130, 45, less_eased_delta)
+                    hand_angle_global_radians = hand_angle_global_degrees * (math.pi / 180)
                     offset_x = (
-                        math.cos(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_width() * 0.5
-                        - 5
+                        math.cos(hand_angle_global_radians) * total_offset - rotated_surface.get_width() * 0.5 - 5
                     )
                     offset_y = (
-                        math.sin(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_height() * 0.5
-                        + 2
+                        math.sin(hand_angle_global_radians) * total_offset - rotated_surface.get_height() * 0.5 + 2
                     )
                 # Looking left
                 else:
-                    hand_angle_global_degrees = shared_methods.lerp_float(
-                        130, -45, less_eased_delta
-                    )
-                    hand_angle_global_radians = hand_angle_global_degrees * (
-                        math.pi / 180
-                    )
+                    hand_angle_global_degrees = shared_methods.lerp_float(130, -45, less_eased_delta)
+                    hand_angle_global_radians = hand_angle_global_degrees * (math.pi / 180)
                     offset_x = (
-                        -math.cos(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_width() * 0.5
-                        + 5
+                        -math.cos(hand_angle_global_radians) * total_offset - rotated_surface.get_width() * 0.5 + 5
                     )
                     offset_y = (
-                        -math.sin(hand_angle_global_radians) * total_offset
-                        - rotated_surface.get_height() * 0.5
-                        + 2
+                        -math.sin(hand_angle_global_radians) * total_offset - rotated_surface.get_height() * 0.5 + 2
                     )
 
                 commons.screen.blit(
@@ -2244,9 +2027,9 @@ class Player:
                     1,
                 )
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.draw_hp -> void
-        
+
         Draws the player's health in the top right
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -2260,14 +2043,12 @@ class Player:
                 0,
             )
             pygame.draw.rect(commons.screen, col, rect, 0)
-            pygame.draw.rect(
-                commons.screen, (int(col[0] * 0.8), int(col[1] * 0.8), 0), rect, 3
-            )
+            pygame.draw.rect(commons.screen, (int(col[0] * 0.8), int(col[1] * 0.8), 0), rect, 3)
             commons.screen.blit(self.hp_text, (self.hp_x_position, 45))
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.open_chest -> void
-        
+
         Plays the chest opening sound, opens the inventory and updates the items that the player can craft
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -2282,9 +2063,9 @@ class Player:
         self.render_craftable_items_surf()
         self.render_chest()
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.save -> void
-        
+
         Packs the important player data    into an array and serialises it using the pickle module
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -2295,9 +2076,7 @@ class Player:
             current_item = self.items[ItemLocation.HOTBAR][item_index]
             if current_item is not None:
                 if current_item.prefix_data is None:
-                    formatted_hotbar.append(
-                        [item_index, current_item.get_id_str(), current_item.amount, None]
-                    )
+                    formatted_hotbar.append([item_index, current_item.get_id_str(), current_item.amount, None])
                 else:
                     formatted_hotbar.append(
                         [
@@ -2314,9 +2093,7 @@ class Player:
             current_item: None | Item = self.items[ItemLocation.INVENTORY][item_index]
             if current_item is not None:
                 if current_item.prefix_data is None:
-                    formatted_inventory.append(
-                        (item_index, current_item.get_id_str(), current_item.amount, "")
-                    )
+                    formatted_inventory.append((item_index, current_item.get_id_str(), current_item.amount, ""))
                 else:
                     formatted_inventory.append(
                         (
@@ -2337,14 +2114,12 @@ class Player:
         commons.PLAYER_DATA["playtime"] = self.playtime
         commons.PLAYER_DATA["creation_date"] = self.creation_date
         commons.PLAYER_DATA["last_played_date"] = self.last_played_date
-        pickle.dump(
-            commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb")
-        )  # Save player array
+        pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player array
         entity_manager.add_message("Saved Player: " + self.name + "!", pygame.Color(255, 255, 255))
 
-    """=================================================================================================================    
+    """=================================================================================================================
         player.Player.jump -> void
-        
+
         Plays a sound, spawns particles and sets the player's y velocity
     -----------------------------------------------------------------------------------------------------------------"""
 
@@ -2352,9 +2127,7 @@ class Player:
         if self.alive and self.grounded:
             game_data.play_sound("sound.jump")
             if commons.PARTICLES:
-                color = pygame.transform.average_color(
-                    game_data.get_tile_by_id(self.last_block_on)["image"]
-                )
+                color = pygame.transform.average_color(game_data.get_tile_by_id(self.last_block_on)["image"])
                 for _ in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
                     entity_manager.spawn_particle(
                         (self.position[0], self.position[1] + commons.BLOCK_SIZE * 1.5),

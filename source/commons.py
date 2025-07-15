@@ -1,7 +1,9 @@
-import pygame
-from typing import TextIO, TypedDict
 from datetime import datetime
 from enum import Enum
+from typing import TextIO, TypedDict
+
+import pygame
+
 
 class ItemTag(Enum):
     TILE = 0
@@ -54,6 +56,7 @@ class TileMaskType(Enum):
     NONE = 0
     NOISY = 1
 
+
 class PlayerAppearance(TypedDict):
     sex: int
     hair_id: int
@@ -64,6 +67,7 @@ class PlayerAppearance(TypedDict):
     undershirt_color: pygame.Color
     trouser_color: pygame.Color
     shoe_color: pygame.Color
+
 
 class PlayerData(TypedDict):
     name: str
@@ -150,7 +154,7 @@ PLAYER_DATA: PlayerData = {
         "shirt_color": pygame.Color(0, 0, 0),
         "undershirt_color": pygame.Color(0, 0, 0),
         "trouser_color": pygame.Color(0, 0, 0),
-        "shoe_color": pygame.Color(0, 0, 0)
+        "shoe_color": pygame.Color(0, 0, 0),
     },
     "hotbar": [],
     "inventory": [],

@@ -1,7 +1,6 @@
-import pygame
-
 import commons
 import entity_manager
+import pygame
 
 music_volume = commons.CONFIG_MUSIC_VOLUME
 sound_volume = commons.CONFIG_SOUND_VOLUME

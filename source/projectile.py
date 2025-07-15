@@ -1,17 +1,15 @@
-import pygame
 import math
 import random
-from pygame.locals import Rect
 
 import commons
-import game_data
-import world
-
 import entity_manager
+import game_data
+import pygame
 import shared_methods
+import world
+from pygame.locals import Rect
 
-
-"""================================================================================================================= 
+"""=================================================================================================================
     projectile.Projectile
 
     Stores information required to update and draw a single Projectile instance
@@ -57,7 +55,7 @@ class Projectile:
         self.drag = drag
         self.grounded = True
 
-    """================================================================================================================= 
+    """=================================================================================================================
         projectile.Projectile.update -> void
 
         Updates the life of the Projectile instance, performs physics (including optional bounces) and
@@ -74,15 +72,12 @@ class Projectile:
         drag_factor = 1 + self.drag * commons.DELTA_TIME
         self.velocity = (
             self.velocity[0] / drag_factor,
-            self.velocity[1] / drag_factor
-            + commons.GRAVITY * self.gravity * commons.DELTA_TIME,
+            self.velocity[1] / drag_factor + commons.GRAVITY * self.gravity * commons.DELTA_TIME,
         )
 
         self.position = (
-            self.position[0]
-            + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-            self.position[1]
-            + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+            self.position[0] + self.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
+            self.position[1] + self.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
         )
         self.rect.left = self.position[0] - self.size * 0.5
         self.rect.top = self.position[1] - self.size * 0.5
@@ -122,9 +117,7 @@ class Projectile:
         for j in range(-1, 2):
             for i in range(-1, 2):
                 if world.tile_in_map(block_position[1] + j, block_position[0] + i):
-                    tile_id = world.world.tile_data[block_position[1] + j][
-                        block_position[0] + i
-                    ][0]
+                    tile_id = world.world.tile_data[block_position[1] + j][block_position[0] + i][0]
                     tile_data = game_data.get_tile_by_id(tile_id)
                     if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
                         if commons.TileTag.PLATFORM not in tile_data["tags"]:
@@ -155,8 +148,7 @@ class Projectile:
                                         if self.velocity[1] < 0:
                                             self.position = (
                                                 self.position[0],
-                                                block_rect.bottom
-                                                + self.rect.height * 0.5,
+                                                block_rect.bottom + self.rect.height * 0.5,
                                             )  # Move proj down
                                     else:
                                         if self.velocity[1] > 0:
@@ -177,13 +169,9 @@ class Projectile:
             if self.bounce_num <= 0:
                 entity_manager.projectiles.remove(self)
                 if commons.PARTICLES:
-                    color = pygame.transform.average_color(
-                        game_data.get_tile_by_id(block_hit_tile_id)["image"]
-                    )
+                    color = pygame.transform.average_color(game_data.get_tile_by_id(block_hit_tile_id)["image"])
                     velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
-                    velocity_magnitude = math.sqrt(
-                        self.velocity[0] ** 2 + self.velocity[1] ** 2
-                    )
+                    velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
                     for i in range(int(4 * commons.PARTICLE_DENSITY)):
                         entity_manager.spawn_particle(
                             self.position,
@@ -215,7 +203,7 @@ class Projectile:
                 entity_manager.projectiles.remove(self)
                 return
 
-    """================================================================================================================= 
+    """=================================================================================================================
         projectile.Projectile.draw -> void
 
         Draws the Projectile instance, using the type to chose the image/shape
@@ -227,12 +215,8 @@ class Projectile:
         commons.screen.blit(
             surf,
             (
-                self.rect.left
-                - entity_manager.camera_position[0]
-                + commons.WINDOW_WIDTH * 0.5,
-                self.rect.top
-                - entity_manager.camera_position[1]
-                + commons.WINDOW_HEIGHT * 0.5,
+                self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
+                self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
             ),
         )
         shared_methods.draw_hitbox(
@@ -241,5 +225,5 @@ class Projectile:
             self.rect.left,
             self.rect.top,
             self.rect.width,
-            self.rect.height
+            self.rect.height,
         )

@@ -1,6 +1,8 @@
 from typing import TypedDict
-from commons import TileMaskType, BLOCK_SIZE
-from pygame import Surface, transform, image
+
+from commons import BLOCK_SIZE, TileMaskType
+from pygame import Surface, image, transform
+
 
 class WallData(TypedDict):
     id: int
@@ -12,6 +14,7 @@ class WallData(TypedDict):
     place_sound: str
     hit_sound: str
     image: Surface
+
 
 WALL_DATA: list[WallData] = [
     {
