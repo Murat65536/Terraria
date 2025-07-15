@@ -1221,10 +1221,10 @@ while True:
         if commons.BACKGROUND:
             BACKGROUND_DATA.update_biome(Biome.TREE)
             BACKGROUND_DATA.render(parallax_pos[0], parallax_pos[1], 0.1)
-            BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.01)
+            BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.001)
             BACKGROUND_DATA.update(commons.DELTA_TIME)
         else:
-            commons.screen.fill((153, 217, 234))
+            commons.screen.fill((0, 0, 0))
 
         terrain_position = (
             commons.WINDOW_WIDTH * 0.5 - entity_manager.camera_position[0],
