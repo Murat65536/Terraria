@@ -19,23 +19,6 @@ class ItemData:
     surface: Surface
     block_name: str
 
-
-class PlaceableTileItemData(TypedDict):
-    id: int
-    id_str: int
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
-    hold_offset: float
-    tile_id_str: str
-    pickup_sound: str
-    drop_sound: str
-    image: Surface
-
-
 class TileItemData(TypedDict):
     id: int
     id_str: str
