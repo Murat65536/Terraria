@@ -7,8 +7,8 @@ import commons
 import pygame
 from data.item import (ITEM_DATA, AmmunitionItemData, AxeItemData,
                        GrapplingHookItemData, HammerItemData,
-                       ImplacableTileItemData, MagicalWeaponItemData,
-                       MaterialItemData, PickaxeItemData, PlaceableTileItemData,
+                       TileItemData, MagicalWeaponItemData,
+                       MaterialItemData, PickaxeItemData,
                        RangedItemData, SwordItemData, WallItemData)
 from data.loot import LOOT_DATA, LootData
 from data.sound import SOUND_DATA, SoundData
@@ -108,8 +108,7 @@ biome_tile_vals: list[list[list[str]]] = [
 platform_blocks: list[int] = [257]
 
 json_item_data: list[
-    PlaceableTileItemData
-    | ImplacableTileItemData
+    TileItemData
     | MaterialItemData
     | WallItemData
     | PickaxeItemData

@@ -1,23 +1,23 @@
+from dataclasses import dataclass
+
 from typing import TypedDict
 
 from commons import ItemPrefixGroup, ItemTag
 from pygame import Surface, image
 
-
+@dataclass
 class ItemData:
-    def __init__(self, name: str, tags: list[ItemTag], tier: int, max_stack: int, buy_price: int, sell_price: int,
-                 hold_offset: float, pickup_sound: str, drop_sound: str, surface: Surface, block_name: str) -> None:
-        self.name = name
-        self.tags = tags
-        self.tier = tier
-        self.max_stack = max_stack
-        self.buy_price = buy_price
-        self.sell_price = sell_price
-        self.hold_offset = hold_offset
-        self.pickup_sound = pickup_sound
-        self.drop_sound = drop_sound
-        self.surface = surface
-        self.block_name = block_name
+    name: str
+    tags: list[ItemTag]
+    tier: int
+    max_stack: int
+    buy_price: int
+    sell_price: int
+    hold_offset: float
+    pickup_sound: str
+    drop_sound: str
+    surface: Surface
+    block_name: str
 
 
 class PlaceableTileItemData(TypedDict):
@@ -36,7 +36,7 @@ class PlaceableTileItemData(TypedDict):
     image: Surface
 
 
-class ImplacableTileItemData(TypedDict):
+class TileItemData(TypedDict):
     id: int
     id_str: str
     name: str
@@ -266,8 +266,7 @@ class MagicalWeaponItemData(TypedDict):
 
 
 ITEM_DATA: list[
-    PlaceableTileItemData
-    | ImplacableTileItemData
+    TileItemData
     | MaterialItemData
     | WallItemData
     | PickaxeItemData
