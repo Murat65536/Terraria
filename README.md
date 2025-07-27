@@ -1,5 +1,4 @@
 <h1 align="center">Terraria</h1>
-<h2 align="center">A bad recreation of Terraria in Python</h2>
 <br />
 <table>
     <tr>
