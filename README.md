@@ -1,5 +1,3 @@
-<h1 align="center">Terraria</h1>
-<br />
 <table>
     <tr>
         <td>
