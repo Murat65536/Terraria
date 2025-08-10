@@ -1,12 +1,13 @@
-from typing import TypedDict
+from dataclasses import dataclass
 
 
-class WorldGenerationData(TypedDict):
+@dataclass
+class WorldGenerationData:
     id: int
     id_str: str
 
 
 WORLD_GENERATION_DATA: list[WorldGenerationData] = [
-    {"id": 0, "id_str": "world_gen.INVALID"},
-    {"id": 1, "id_str": "world_gen.default"},
+    WorldGenerationData(id=0, id_str="world_gen.INVALID"),
+    WorldGenerationData(id=1, id_str="world_gen.default"),
 ]
