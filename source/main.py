@@ -1098,49 +1098,49 @@ while True:
         elif commons.game_sub_state == "PLAYER_SELECTION":
             if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
-                    for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
+                    for save_option_index in range(len(commons.PLAYER_SAVE_OPTIONS)):
                         if pygame.Rect(
                                 load_menu_box_left2,
-                                132 + i * 62 + save_select_y_offset,
+                                132 + save_option_index * 62 + game_state.save_select_y_offset,
                                 315,
                                 60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             commons.WAIT_TO_USE = True
-                            commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[i][0]["name"]
-                            commons.PLAYER_DATA["model_appearance"] = commons.PLAYER_SAVE_OPTIONS[i][0][
+                            commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["name"]
+                            commons.PLAYER_DATA["model_appearance"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0][
                                 "model_appearance"
                             ]
-                            commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hotbar"]
-                            commons.PLAYER_DATA["inventory"] = commons.PLAYER_SAVE_OPTIONS[i][0]["inventory"]
-                            commons.PLAYER_DATA["hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hp"]
-                            commons.PLAYER_DATA["max_hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["max_hp"]
-                            commons.PLAYER_DATA["playtime"] = commons.PLAYER_SAVE_OPTIONS[i][0]["playtime"]
-                            commons.PLAYER_DATA["creation_date"] = commons.PLAYER_SAVE_OPTIONS[i][0]["creation_date"]
-                            commons.PLAYER_DATA["last_played_date"] = commons.PLAYER_SAVE_OPTIONS[i][0][
+                            commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["hotbar"]
+                            commons.PLAYER_DATA["inventory"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["inventory"]
+                            commons.PLAYER_DATA["hp"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["hp"]
+                            commons.PLAYER_DATA["max_hp"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["max_hp"]
+                            commons.PLAYER_DATA["playtime"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["playtime"]
+                            commons.PLAYER_DATA["creation_date"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["creation_date"]
+                            commons.PLAYER_DATA["last_played_date"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0][
                                 "last_played_date"
                             ]
                             menu_manager.load_menu_world_data()
                             game_data.play_sound("sound.menu_open")
                             commons.game_sub_state = "WORLD_SELECTION"
                             menu_manager.update_active_menu_buttons()
-                            save_select_y_offset = 0
+                            game_state.save_select_y_offset = 0
 
-            save_select_y_velocity *= 0.9
-            if len(commons.PLAYER_SAVE_OPTIONS) > 5:
-                save_select_y_offset += save_select_y_velocity
-                if save_select_y_offset < -61 * len(commons.PLAYER_SAVE_OPTIONS) + 350:
-                    save_select_y_offset = -61 * len(commons.PLAYER_SAVE_OPTIONS) + 350
-                if save_select_y_offset > 0:
-                    save_select_y_offset = 0
+            game_state.save_select_y_velocity *= game_constants.MENU_SCROLL_DAMPENING
+            if len(commons.PLAYER_SAVE_OPTIONS) > game_constants.MENU_VISIBLE_ITEMS:
+                game_state.save_select_y_offset += game_state.save_select_y_velocity
+                if game_state.save_select_y_offset < -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.PLAYER_SAVE_OPTIONS) + 350:
+                    game_state.save_select_y_offset = -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.PLAYER_SAVE_OPTIONS) + 350
+                if game_state.save_select_y_offset > 0:
+                    game_state.save_select_y_offset = 0
 
             commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-            save_select_surf.fill((0, 0, 0, 0))
-            for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
-                save_select_surf.blit(
-                    commons.PLAYER_SAVE_OPTIONS[i][1],
-                    (0, i * 62 + save_select_y_offset),
+            game_state.save_select_surface.fill((0, 0, 0, 0))
+            for save_option_index in range(len(commons.PLAYER_SAVE_OPTIONS)):
+                game_state.save_select_surface.blit(
+                    commons.PLAYER_SAVE_OPTIONS[save_option_index][1],
+                    (0, save_option_index * game_constants.MENU_ITEM_HEIGHT + game_state.save_select_y_offset),
                 )
-            commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
+            commons.screen.blit(game_state.save_select_surface, (load_menu_box_left2, 132))
 
         elif commons.game_sub_state == "PLAYER_CREATION":
             commons.screen.blit(
@@ -1155,16 +1155,16 @@ while True:
             should_break = False
             if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
-                    for i in range(len(commons.WORLD_SAVE_OPTIONS)):
+                    for world_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
                         if pygame.Rect(
                                 load_menu_box_left2,
-                                132 + i * 60 + save_select_y_offset,
+                                132 + world_option_index * 60 + game_state.save_select_y_offset,
                                 315,
                                 60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             game_data.play_sound("sound.menu_open")
 
-                            world.load(commons.WORLD_SAVE_OPTIONS[i][0])
+                            world.load(commons.WORLD_SAVE_OPTIONS[world_option_index][0])
 
                             world.WORLD_SIZE_X, world.WORLD_SIZE_Y = len(world.world.tile_data), len(
                                 world.world.tile_data[0]
@@ -1260,22 +1260,22 @@ while True:
                             break
 
             if not should_break:
-                save_select_y_velocity *= 0.9
-                if len(commons.WORLD_SAVE_OPTIONS) > 5:
-                    save_select_y_offset += save_select_y_velocity
-                    if save_select_y_offset < -61 * len(commons.WORLD_SAVE_OPTIONS) + 350:
-                        save_select_y_offset = -61 * len(commons.WORLD_SAVE_OPTIONS) + 350
-                    if save_select_y_offset > 0:
-                        save_select_y_offset = 0
+                game_state.save_select_y_velocity *= game_constants.MENU_SCROLL_DAMPENING
+                if len(commons.WORLD_SAVE_OPTIONS) > game_constants.MENU_VISIBLE_ITEMS:
+                    game_state.save_select_y_offset += game_state.save_select_y_velocity
+                    if game_state.save_select_y_offset < -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.WORLD_SAVE_OPTIONS) + 350:
+                        game_state.save_select_y_offset = -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.WORLD_SAVE_OPTIONS) + 350
+                    if game_state.save_select_y_offset > 0:
+                        game_state.save_select_y_offset = 0
 
                 commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-                save_select_surf.fill((0, 0, 0, 0))
+                game_state.save_select_surface.fill((0, 0, 0, 0))
                 for save_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
-                    save_select_surf.blit(
+                    game_state.save_select_surface.blit(
                         commons.WORLD_SAVE_OPTIONS[save_option_index][1],
-                        (0, save_option_index * 62 + save_select_y_offset),
+                        (0, save_option_index * game_constants.MENU_ITEM_HEIGHT + game_state.save_select_y_offset),
                     )
-                commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
+                commons.screen.blit(game_state.save_select_surface, (load_menu_box_left2, 132))
 
         elif commons.game_sub_state == "CLOTHES":
             commons.screen.blit(
@@ -1507,12 +1507,12 @@ while True:
                         )
                     else:
                         if commons.PARTICLES:
-                            for i in range(int(20 * commons.PARTICLE_DENSITY)):
+                            for particle_index in range(int(game_constants.PARTICLE_COUNT_RESPAWN * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
                                     entity_manager.client_player.position,
                                     pygame.Color(230, 230, 255),
-                                    magnitude=1 + random.random() * 6,
-                                    size=15,
+                                    magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
+                                    size=game_constants.PARTICLE_SIZE,
                                     gravity=0,
                                 )
 
@@ -1526,12 +1526,12 @@ while True:
                         )
 
                         if commons.PARTICLES:
-                            for i in range(int(40 * commons.PARTICLE_DENSITY)):
+                            for particle_index in range(int(game_constants.PARTICLE_COUNT_RESPAWN_ARRIVE * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
                                     entity_manager.client_player.position,
                                     pygame.Color(230, 230, 255),
-                                    magnitude=1 + random.random() * 6,
-                                    size=15,
+                                    magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
+                                    size=game_constants.PARTICLE_SIZE,
                                     gravity=0,
                                 )
 
@@ -1838,16 +1838,16 @@ while True:
             if commons.game_sub_state == "PLAYER_SELECTION" or commons.game_sub_state == "WORLD_SELECTION":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:
-                        save_select_y_velocity += 3
+                        game_state.save_select_y_velocity += game_constants.MENU_SCROLL_VELOCITY_MULTIPLIER
                     if event.button == 5:
-                        save_select_y_velocity -= 3
+                        game_state.save_select_y_velocity -= game_constants.MENU_SCROLL_VELOCITY_MULTIPLIER
 
             elif commons.game_sub_state == "PLAYER_NAMING" or commons.game_sub_state == "WORLD_NAMING":
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         commons.TEXT_INPUT = commons.TEXT_INPUT[:-1]
-                    elif (len(commons.TEXT_INPUT) <= 15 and commons.game_sub_state == "PLAYER_NAMING") or (
-                            len(commons.TEXT_INPUT) <= 27 and commons.game_sub_state == "WORLD_NAMING"
+                    elif (len(commons.TEXT_INPUT) <= game_constants.PLAYER_NAME_MAX_LENGTH and commons.game_sub_state == "PLAYER_NAMING") or (
+                            len(commons.TEXT_INPUT) <= game_constants.WORLD_NAME_MAX_LENGTH and commons.game_sub_state == "WORLD_NAMING"
                     ):
                         commons.TEXT_INPUT += event.unicode
     pygame.display.flip()
