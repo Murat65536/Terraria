@@ -2,13 +2,11 @@
     <tr>
         <td>
             <picture>
-                <source srcset="./assets/images/readme/menu_screen.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
                 <img src="./assets/images/readme/menu_screen.png?raw=true" alt="Menu screen"/>
             </picture>
         </td>
         <td>
             <picture>
-                <source srcset="./assets/images/readme/gameplay.png?raw=true" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)" />
                 <img src="./assets/images/readme/gameplay.png?raw=true" alt="Gameplay"/>
             </picture>
         </td>
