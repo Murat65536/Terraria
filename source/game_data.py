@@ -3,8 +3,9 @@ import random
 from enum import Enum
 from typing import TypedDict
 
-import commons
 import pygame
+
+import commons
 from data.item import (ITEM_DATA, AmmunitionItemData, AxeItemData,
                        GrapplingHookItemData, HammerItemData,
                        TileItemData, MagicalWeaponItemData,
@@ -142,7 +143,6 @@ loot_id_str_hash_table: dict[str, int] = {}
 sound_volume_multiplier: float = commons.CONFIG_SOUND_VOLUME
 music_volume_multiplier: float = commons.CONFIG_MUSIC_VOLUME
 
-
 # Item Prefix Information
 prefix_data: dict[
     commons.ItemPrefixGroup,
@@ -153,7 +153,7 @@ prefix_data: dict[
         | ShortswordPrefixData
         | RangedPrefixData
         | MagicalPrefixData
-    ],
+        ],
 ] = {
     commons.ItemPrefixGroup.UNIVERSAL: [
         {
@@ -964,7 +964,6 @@ DEATH_LINES = {
     ],
 }
 
-
 # Messages displayed when a world is loading
 
 TIPS = [
@@ -1179,7 +1178,7 @@ def create_tile_light_emission_lookup():
 
 
 def get_tile_by_id(
-    tile_id: int,
+        tile_id: int,
 ) -> TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData:
     if tile_id < len(json_tile_data):
         return json_tile_data[tile_id]
@@ -1361,7 +1360,7 @@ def parse_structure_data():
                     y_pos = len(tile_data[-1]) - 1
                     end_index = find_next_char_in_string(column, "]", char_index)
                     if end_index != -1:
-                        tile_data_string = column[char_index + 1 : end_index]
+                        tile_data_string = column[char_index + 1: end_index]
                         char_index = end_index
                         data_strs = tile_data_string.split(";")
                         for data_str in data_strs:
@@ -1423,7 +1422,7 @@ def find_structures_for_connection(connection_type, connection_orientation):
 
 
 def get_opposite_structure_connection_orientation(
-    structure_connection_orientation: StructureConnectionOrientation,
+        structure_connection_orientation: StructureConnectionOrientation,
 ) -> StructureConnectionOrientation:
     match structure_connection_orientation:
         case StructureConnectionOrientation.UP:

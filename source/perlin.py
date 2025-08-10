@@ -403,19 +403,19 @@ class BaseNoise:
     randint_function = randint
 
     def __init__(
-        self,
-        period: int | None = None,
-        permutation_table: Any = None,
-        randint_function: Any = None,
+            self,
+            period: int | None = None,
+            permutation_table: Any = None,
+            randint_function: Any = None,
     ):
         """Initialize the noise generator. With no arguments, the default
         period and permutation table are used (256). The default permutation
         table generates the exact same noise pattern each time.
 
-        An integer period can be specified, to generate a random permutation
+        An integer period can be specified to generate a random permutation
         table with period elements. The period determines the (integer)
         interval that the noise repeats, which is useful for creating tiled
-        textures.  period should be a power-of-two, though this is not
+        textures. Period should be a power-of-two, though this is not
         enforced. Note that the speed of the noise algorithm is independent of
         the period size, though larger periods mean a larger table, which
         consume more memory.
@@ -427,7 +427,7 @@ class BaseNoise:
         prove useful, they will not be "pure" simplex noise. The largest
         element in the sequence must be no larger than period-1.
 
-        period and permutation_table may not be specified together.
+        Period and permutation_table may not be specified together.
 
         A substitute for the method random.randint(a, b) can be chosen. The
         method must take two integer parameters a and b and return an integer N
@@ -472,7 +472,7 @@ class SimplexNoise(BaseNoise):
 
     "In 2001, Ken Perlin presented 'simplex noise', a replacement for his classic
     noise algorithm.  Classic 'Perlin noise' won him an academy award and has
-    become an ubiquitous procedural primitive for computer graphics over the
+    become a ubiquitous procedural primitive for computer graphics over the
     years, but in hindsight it has quite a few limitations.  Ken Perlin himself
     designed simplex noise specifically to overcome those limitations, and he
     spent a lot of good thinking on it. Therefore, it is a better idea than his
@@ -494,7 +494,7 @@ class SimplexNoise(BaseNoise):
 
         Return a floating point value from -1 to 1 for the given x, y coordinate.
         The same value is always returned for a given x, y pair unless the
-        permutation table changes (see randomize above).
+        permutation table changes (see `randomize` above).
         """
         # Skew input space to determine which simplex (triangle) we are in
         s = (x + y) * _F2
@@ -525,22 +525,22 @@ class SimplexNoise(BaseNoise):
         gi2 = perm[ii + 1 + perm[jj + 1]] % 12
 
         # Calculate the contribution from the three corners
-        tt = 0.5 - x0**2 - y0**2
+        tt = 0.5 - x0 ** 2 - y0 ** 2
         if tt > 0:
             g = _GRAD3[gi0]
-            noise = tt**4 * (g[0] * x0 + g[1] * y0)
+            noise = tt ** 4 * (g[0] * x0 + g[1] * y0)
         else:
             noise = 0.0
 
-        tt = 0.5 - x1**2 - y1**2
+        tt = 0.5 - x1 ** 2 - y1 ** 2
         if tt > 0:
             g = _GRAD3[gi1]
-            noise += tt**4 * (g[0] * x1 + g[1] * y1)
+            noise += tt ** 4 * (g[0] * x1 + g[1] * y1)
 
-        tt = 0.5 - x2**2 - y2**2
+        tt = 0.5 - x2 ** 2 - y2 ** 2
         if tt > 0:
             g = _GRAD3[gi2]
-            noise += tt**4 * (g[0] * x2 + g[1] * y2)
+            noise += tt ** 4 * (g[0] * x2 + g[1] * y2)
 
         return noise * 70.0  # scale noise to [-1, 1]
 
@@ -549,7 +549,7 @@ class SimplexNoise(BaseNoise):
 
         Return a floating point value from -1 to 1 for the given x, y, z coordinate.
         The same value is always returned for a given x, y, z pair unless the
-        permutation table changes (see randomize above).
+        permutation table changes (see `randomize` above).
         """
         # Skew the input space to determine which simplex cell we're in
         s = (x + y + z) * _F3
@@ -631,27 +631,27 @@ class SimplexNoise(BaseNoise):
 
         # Calculate the contribution from the four corners
         noise = 0.0
-        tt = 0.6 - x0**2 - y0**2 - z0**2
+        tt = 0.6 - x0 ** 2 - y0 ** 2 - z0 ** 2
         if tt > 0:
             g = _GRAD3[gi0]
-            noise = tt**4 * (g[0] * x0 + g[1] * y0 + g[2] * z0)
+            noise = tt ** 4 * (g[0] * x0 + g[1] * y0 + g[2] * z0)
         else:
             noise = 0.0
 
-        tt = 0.6 - x1**2 - y1**2 - z1**2
+        tt = 0.6 - x1 ** 2 - y1 ** 2 - z1 ** 2
         if tt > 0:
             g = _GRAD3[gi1]
-            noise += tt**4 * (g[0] * x1 + g[1] * y1 + g[2] * z1)
+            noise += tt ** 4 * (g[0] * x1 + g[1] * y1 + g[2] * z1)
 
-        tt = 0.6 - x2**2 - y2**2 - z2**2
+        tt = 0.6 - x2 ** 2 - y2 ** 2 - z2 ** 2
         if tt > 0:
             g = _GRAD3[gi2]
-            noise += tt**4 * (g[0] * x2 + g[1] * y2 + g[2] * z2)
+            noise += tt ** 4 * (g[0] * x2 + g[1] * y2 + g[2] * z2)
 
-        tt = 0.6 - x3**2 - y3**2 - z3**2
+        tt = 0.6 - x3 ** 2 - y3 ** 2 - z3 ** 2
         if tt > 0:
             g = _GRAD3[gi3]
-            noise += tt**4 * (g[0] * x3 + g[1] * y3 + g[2] * z3)
+            noise += tt ** 4 * (g[0] * x3 + g[1] * y3 + g[2] * z3)
 
         return noise * 32.0
 
@@ -669,16 +669,16 @@ class TileableNoise(BaseNoise):
     """Tileable implementation of Perlin "improved" noise. This
     is based on the reference implementation published here:
 
-    http://mrl.nyu.edu/~perlin/noise/
+    https://mrl.nyu.edu/~perlin/noise/
     """
 
     def noise3(self, x: float, y: float, z: float, repeat: int, base: int = 0) -> float:
         """Tileable 3D noise.
 
-        repeat specifies the integer interval in each dimension
+        Repeat specifies the integer interval in each dimension
         when the noise pattern repeats.
 
-        base allows a different texture to be generated for
+        Base allows a different texture to be generated for
         the same repeat interval.
         """
         i = int(fmod(floor(x), repeat))
@@ -698,9 +698,9 @@ class TileableNoise(BaseNoise):
         x -= floor(x)
         y -= floor(y)
         z -= floor(z)
-        fx = x**3 * (x * (x * 6 - 15) + 10)
-        fy = y**3 * (y * (y * 6 - 15) + 10)
-        fz = z**3 * (z * (z * 6 - 15) + 10)
+        fx = x ** 3 * (x * (x * 6 - 15) + 10)
+        fy = y ** 3 * (y * (y * 6 - 15) + 10)
+        fz = z ** 3 * (z * (z * 6 - 15) + 10)
 
         perm: tuple[int, ...] = self.permutation
         A: int = perm[i]

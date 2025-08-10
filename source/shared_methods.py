@@ -1,8 +1,10 @@
 import math
 
-import commons
 import pygame
+
+import commons
 import tilesets
+
 
 def normalize_vec_2(vector):
     """
@@ -11,17 +13,20 @@ def normalize_vec_2(vector):
     magnitude = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
     return vector[0] / magnitude, vector[1] / magnitude
 
+
 def get_on_off(bool_var):
     """
     Given a bool, returns either "on" or "off"
     """
     return "on" if bool_var else "off"
 
+
 def darken_color(color: pygame.Color, factor: float = 0.6):
     """
     Multiplies all three parts of a color tuple by a given float
     """
     return int(color.r * factor), int(color.g * factor), int(color.b * factor)
+
 
 def get_tier_color(tier) -> pygame.Color:
     """
@@ -54,6 +59,7 @@ def get_tier_color(tier) -> pygame.Color:
     else:
         return pygame.Color(255, 255, 255)  # White
 
+
 def rotate_surface(image, angle):
     """
     Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
@@ -65,8 +71,9 @@ def rotate_surface(image, angle):
     # rotated_image = rotated_image.subsurface(rotated_rect).copy()
     return rotated_image
 
+
 def outline_text(
-    string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color = pygame.Color(0, 0, 0)
+        string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color = pygame.Color(0, 0, 0)
 ):
     """
     Used to draw most text in the game, renders some text and draws it several times at varying offsets to create an outline effect
@@ -90,6 +97,7 @@ def outline_text(
         return surf
     else:
         return text1
+
 
 def create_menu_surface(width, height, body):
     """
@@ -140,6 +148,7 @@ def create_menu_surface(width, height, body):
         )
     return surf
 
+
 def color_surface(gray_surf, col) -> pygame.Surface:
     """
     Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
@@ -157,6 +166,7 @@ def color_surface(gray_surf, col) -> pygame.Surface:
     surf.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
     return surf
 
+
 def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pygame.Surface:
     """
     Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
@@ -166,6 +176,7 @@ def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pyg
     color.fill(col)
     colored_surface.blit(color, (0, 0), None, pygame.BLEND_RGB_MULT)
     return colored_surface
+
 
 def lerp_float(a, b, t):
     """
@@ -192,8 +203,9 @@ def ease_in_zero_to_one(zero_to_one_float, iterations):
         zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
     return zero_to_one_float
 
+
 def draw_hitbox(
-    camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float
+        camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float
 ) -> None:
     """
     Draws a hitbox

@@ -3,9 +3,10 @@ from math import ceil
 from random import randint
 from typing import Generator
 
-from commons import WINDOW_HEIGHT, WINDOW_WIDTH, screen
 from pygame import Surface
 from pygame.image import load
+
+from commons import WINDOW_HEIGHT, WINDOW_WIDTH, screen
 
 
 class Biome(Enum):

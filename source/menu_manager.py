@@ -6,16 +6,17 @@ import sys
 import webbrowser
 from enum import Enum
 
+import pygame
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
 import player
 import prompt
-import pygame
 import shared_methods
 import tilesets
 import world
-from pygame.locals import Rect
 
 
 class Type(Enum):
@@ -225,6 +226,7 @@ player_model = player.Model(
     }
 )
 
+
 def update_active_menu_buttons():
     """
     Sets the active state of all buttons to false and then re-adds buttons based on the current game substate and data in the 'active_menu_buttons' table
@@ -238,6 +240,7 @@ def update_active_menu_buttons():
             for text in active_menu_buttons[menu]:
                 text.active = True
             break
+
 
 def update_menu_buttons():
     """
@@ -567,6 +570,7 @@ def update_menu_buttons():
 
                     update_active_menu_buttons()
 
+
 def draw_menu_buttons():
     """
     Calls draw on all active button instances
@@ -575,6 +579,7 @@ def draw_menu_buttons():
         for text in active_menu_buttons[menu]:
             if text.active:
                 text.draw()
+
 
 def load_menu_player_data():
     """

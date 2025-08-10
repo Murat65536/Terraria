@@ -5,6 +5,9 @@ import random
 import sys
 from typing import Any, List
 
+import pygame
+import pygame.locals
+
 import commons
 import entity_manager
 import game_data
@@ -12,8 +15,6 @@ import item
 import menu_manager
 import player
 import prompt
-import pygame
-import pygame.locals
 import shared_methods
 import sound_manager
 import world
@@ -22,6 +23,7 @@ from background import BACKGROUND_DATA, Biome
 pygame.mixer.pre_init(48000, -16, 2, 1024)
 pygame.init()
 pygame.mixer.init()
+
 
 def move_parallax(val: tuple[float, float]) -> None:
     """
@@ -34,6 +36,7 @@ def move_parallax(val: tuple[float, float]) -> None:
     elif parallax_pos[0] < -2047:
         parallax_pos = (parallax_pos[0] + 2048, parallax_pos[1])
 
+
 def fade_background(new_background_id: int) -> None:
     """
     Fade the background to a different background type
@@ -42,6 +45,7 @@ def fade_background(new_background_id: int) -> None:
     fade_background_id = new_background_id
     fade_back = True
     fade_float = 0.0
+
 
 def draw_death_message() -> None:
     """
@@ -68,6 +72,7 @@ def draw_death_message() -> None:
         ),
     )
 
+
 def render_hand_text() -> None:
     """
     Renders the full name of the item that the player has equipped in their hotbar to a surface
@@ -80,6 +85,7 @@ def render_hand_text() -> None:
         hand_text = shared_methods.outline_text(equipped.get_name(), color, commons.DEFAULT_FONT)
     else:
         hand_text = shared_methods.outline_text("", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
+
 
 def run_splash_screen() -> None:
     """
@@ -127,6 +133,7 @@ def run_splash_screen() -> None:
         pygame.display.flip()
 
         clock.tick(commons.TARGET_FPS)
+
 
 def render_stats_text(pos: List[Any]) -> bool:
     """
@@ -359,10 +366,10 @@ def render_stats_text(pos: List[Any]) -> bool:
                             )
                         )
                 if (
-                    equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD
-                    or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD
-                    or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED
-                    or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL
+                        equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD
+                        or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD
+                        or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED
+                        or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL
                 ):
                     if equipped.prefix_data[1]["knockback"] != 0:
                         if equipped.prefix_data[1]["knockback"] > 0:
@@ -381,6 +388,7 @@ def render_stats_text(pos: List[Any]) -> bool:
                 stats_text.blit(stats[stat_index], (0, stat_index * 15))
         return True
     return False
+
 
 def update_light() -> None:
     """
@@ -437,8 +445,8 @@ def update_light() -> None:
         for y_index in range(light_min_y, light_max_y):
             if y_index < 110:
                 if (
-                    world.world.tile_data[x_index][y_index][1] == game_data.air_wall_id
-                    and world.world.tile_data[x_index][y_index][0] == game_data.air_tile_id
+                        world.world.tile_data[x_index][y_index][1] == game_data.air_wall_id
+                        and world.world.tile_data[x_index][y_index][0] == game_data.air_tile_id
                 ):
                     fill_light(x_index, y_index, commons.CURRENT_SKY_LIGHTING)
             tile_emission = game_data.tile_id_light_emission_lookup[world.world.tile_data[x_index][y_index][0]]
@@ -478,6 +486,7 @@ def update_light() -> None:
 
     # print("Scale Copy MS: ", pygame.time.get_ticks() - timeBefore)
 
+
 def fill_light(x_pos: int, y_pos: int, light_value: int) -> None:
     """Recursively calls itself to populate data in the map_light array"""
     global map_light
@@ -494,6 +503,7 @@ def fill_light(x_pos: int, y_pos: int, light_value: int) -> None:
             return
     else:
         return
+
 
 def get_speed_text(speed: float) -> str:
     """
@@ -515,6 +525,7 @@ def get_speed_text(speed: float) -> str:
         return "Extremely slow speed"
     else:
         return "Snail speed"
+
 
 def get_knockback_text(knockback: float) -> str:
     """
@@ -539,6 +550,7 @@ def get_knockback_text(knockback: float) -> str:
     else:
         return "Insane knockback"
 
+
 def get_bounces_text(bounces: int) -> str:
     """Cleans up ammunition's bounce text"""
     if bounces == 0:
@@ -548,6 +560,7 @@ def get_bounces_text(bounces: int) -> str:
     else:
         return f"{bounces} bounces"
 
+
 def add_plus(string: str) -> str:
     """
     Adds a plus to a string if it doesn't start with a minus
@@ -555,6 +568,7 @@ def add_plus(string: str) -> str:
     if string[0] != "-":
         string = f"+{string}"
     return string
+
 
 def draw_inventory_hover_text() -> None:
     """
@@ -580,7 +594,7 @@ def draw_inventory_hover_text() -> None:
 
     # Chest
     elif entity_manager.client_player.chest_open and pygame.Rect(245, 265, 384, 192).collidepoint(
-        commons.MOUSE_POSITION
+            commons.MOUSE_POSITION
     ):
         for chest_index in range(20):
             slot_x = chest_index % 10
@@ -606,8 +620,8 @@ def draw_inventory_hover_text() -> None:
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
                 elif can_drop_holding and item.item_holding is not None:
                     if (
-                        item.item_holding.item_id
-                        == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]
+                            item.item_holding.item_id
+                            == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]
                     ):
                         if item.item_holding.amount < item.item_holding.get_max_stack():
                             item.item_holding.amount += entity_manager.client_player.items[
@@ -705,6 +719,7 @@ def draw_inventory_hover_text() -> None:
         can_drop_holding = False
         item.item_holding = None
 
+
 def draw_item_holding() -> None:
     """Draws the exit button in the bottom left, also spawns the exit confirmation prompt"""
     if commons.is_holding_item and item.item_holding is not None:
@@ -721,6 +736,7 @@ def draw_item_holding() -> None:
                 ),
                 (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40),
             )
+
 
 def draw_exit_button() -> None:
     """
@@ -750,6 +766,7 @@ def draw_exit_button() -> None:
     exit_text = shared_methods.outline_text("Save and Quit", color, commons.DEFAULT_FONT)
     commons.screen.blit(exit_text, (left, top))
 
+
 def draw_interactive_block_hover() -> None:
     """
     Draws the item image of an interactive block being hovered by the mouse
@@ -762,6 +779,7 @@ def draw_interactive_block_hover() -> None:
                 item_data = game_data.get_item_by_id_str(tile_data.item_id_str)
                 if item_data is not None:
                     commons.screen.blit(item_data.surface, commons.MOUSE_POSITION)
+
 
 def draw_menu_background() -> None:
     """
@@ -823,7 +841,6 @@ light_min_y = 0
 light_max_y = 0
 global_lighting = 255
 
-
 LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
 LIGHT_RENDER_DISTANCE_Y = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCK_SIZE) + 9
 
@@ -871,14 +888,14 @@ while True:
         assert isinstance(entity_manager.client_player, entity_manager.Player)
         # TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
         base_zero_to_one_float = (
-            math.sin(
-                datetime.timedelta(seconds=entity_manager.client_player.playtime)
-                / datetime.timedelta(hours=1)
-                / 0.4
-                * 6
-            )
-            * 0.5
-            + 0.5
+                math.sin(
+                    datetime.timedelta(seconds=entity_manager.client_player.playtime)
+                    / datetime.timedelta(hours=1)
+                    / 0.4
+                    * 6
+                )
+                * 0.5
+                + 0.5
         )
         smoothed_zero_to_one_float = shared_methods.smooth_zero_to_one(base_zero_to_one_float, 0)
         smoothed_zero_to_one_float = smoothed_zero_to_one_float * 0.75 + 0.25
@@ -928,7 +945,7 @@ while True:
             need_to_move_x = (entity_manager.client_player.position[0] - temp_cam_pos_x) * commons.DELTA_TIME * 4
             need_to_move_y = (entity_manager.client_player.position[1] - temp_cam_pos_y) * commons.DELTA_TIME * 4
 
-            need_to_move_magnitude = math.sqrt(need_to_move_x**2 + need_to_move_y**2)
+            need_to_move_magnitude = math.sqrt(need_to_move_x ** 2 + need_to_move_y ** 2)
             need_to_move_angle = math.atan2(need_to_move_y, need_to_move_x)
 
             cam_diff_magnitude = math.sqrt(
@@ -1086,10 +1103,10 @@ while True:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
                     for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
                         if pygame.Rect(
-                            load_menu_box_left2,
-                            132 + i * 62 + save_select_y_offset,
-                            315,
-                            60,
+                                load_menu_box_left2,
+                                132 + i * 62 + save_select_y_offset,
+                                315,
+                                60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             commons.WAIT_TO_USE = True
                             commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[i][0]["name"]
@@ -1143,10 +1160,10 @@ while True:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
                     for i in range(len(commons.WORLD_SAVE_OPTIONS)):
                         if pygame.Rect(
-                            load_menu_box_left2,
-                            132 + i * 60 + save_select_y_offset,
-                            315,
-                            60,
+                                load_menu_box_left2,
+                                132 + i * 60 + save_select_y_offset,
+                                315,
+                                60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             game_data.play_sound("sound.menu_open")
 
@@ -1232,9 +1249,9 @@ while True:
                             for map_index_x in range(world.WORLD_SIZE_X - 1):
                                 for map_index_y in range(world.WORLD_SIZE_Y - 1):
                                     if (
-                                        world.world.tile_data[map_index_x][map_index_y][0] == -1
-                                        and world.world.tile_data[map_index_x][map_index_y][1] == -1
-                                        and map_index_y < 110
+                                            world.world.tile_data[map_index_x][map_index_y][0] == -1
+                                            and world.world.tile_data[map_index_x][map_index_y][1] == -1
+                                            and map_index_y < 110
                                     ):
                                         map_light[map_index_x][map_index_y] = global_lighting
                                     else:
@@ -1296,8 +1313,8 @@ while True:
             entity_manager.client_color_picker.update()
 
             if (
-                entity_manager.client_color_picker.selected_x is not None
-                and entity_manager.client_color_picker.selected_y is not None
+                    entity_manager.client_color_picker.selected_x is not None
+                    and entity_manager.client_color_picker.selected_y is not None
             ):
                 commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][
                     0
@@ -1614,10 +1631,10 @@ while True:
                 if event.key == pygame.K_c:
                     if commons.SHIFT_ACTIVE:
                         if (
-                            entity_manager.client_player.items[item.ItemLocation.HOTBAR][
-                                entity_manager.client_player.hotbar_index
-                            ]
-                            is not None
+                                entity_manager.client_player.items[item.ItemLocation.HOTBAR][
+                                    entity_manager.client_player.hotbar_index
+                                ]
+                                is not None
                         ):
                             entity_manager.client_player.items[item.ItemLocation.HOTBAR][
                                 entity_manager.client_player.hotbar_index
@@ -1728,16 +1745,16 @@ while True:
                     entity_manager.client_player.hotbar_index = 9
 
                 if (
-                    event.key == pygame.K_1
-                    or event.key == pygame.K_2
-                    or event.key == pygame.K_3
-                    or event.key == pygame.K_4
-                    or event.key == pygame.K_5
-                    or event.key == pygame.K_6
-                    or event.key == pygame.K_7
-                    or event.key == pygame.K_8
-                    or event.key == pygame.K_9
-                    or event.key == pygame.K_0
+                        event.key == pygame.K_1
+                        or event.key == pygame.K_2
+                        or event.key == pygame.K_3
+                        or event.key == pygame.K_4
+                        or event.key == pygame.K_5
+                        or event.key == pygame.K_6
+                        or event.key == pygame.K_7
+                        or event.key == pygame.K_8
+                        or event.key == pygame.K_9
+                        or event.key == pygame.K_0
                 ):
                     entity_manager.client_player.render_current_item_image()
                     entity_manager.client_player.item_swing = False
@@ -1833,7 +1850,7 @@ while True:
                     if event.key == pygame.K_BACKSPACE:
                         commons.TEXT_INPUT = commons.TEXT_INPUT[:-1]
                     elif (len(commons.TEXT_INPUT) <= 15 and commons.game_sub_state == "PLAYER_NAMING") or (
-                        len(commons.TEXT_INPUT) <= 27 and commons.game_sub_state == "WORLD_NAMING"
+                            len(commons.TEXT_INPUT) <= 27 and commons.game_sub_state == "WORLD_NAMING"
                     ):
                         commons.TEXT_INPUT += event.unicode
     pygame.display.flip()

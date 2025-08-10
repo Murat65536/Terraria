@@ -1,27 +1,29 @@
 import math
 import random
 
+import pygame
+
 import commons
 import entity_manager
-import pygame
 
 
 class Particle:
     """
     Holds all the information required to update and draw a single particle
     """
+
     def __init__(
-        self,
-        position,
-        color,
-        life,
-        magnitude,
-        size,
-        angle,
-        spread,
-        gravity,
-        velocity: float = 0,
-        outline=True,
+            self,
+            position,
+            color,
+            life,
+            magnitude,
+            size,
+            angle,
+            spread,
+            gravity,
+            velocity: float = 0,
+            outline=True,
     ):
         self.position = position
         self.life = life + (random.random() * life * 0.1 - life * 0.05)  # How long it lasts for (randomized slightly)

@@ -1,33 +1,35 @@
 import math
 import random
 
+import pygame
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
-import pygame
 import shared_methods
 import world
-from pygame.locals import Rect
 
 
 class Projectile:
     """
     Stores information required to update and draw a single Projectile instance
     """
+
     def __init__(
-        self,
-        position,
-        velocity,
-        source,
-        damage,
-        knockback,
-        crit,
-        bounce_num,
-        trail,
-        image,
-        max_life=5,
-        gravity=commons.GRAVITY,
-        drag=0.99,
+            self,
+            position,
+            velocity,
+            source,
+            damage,
+            knockback,
+            crit,
+            bounce_num,
+            trail,
+            image,
+            max_life=5,
+            gravity=commons.GRAVITY,
+            drag=0.99,
     ):
         self.position = position
         self.velocity = velocity
@@ -198,7 +200,7 @@ class Projectile:
 
     def draw(self):
         """
-        Draws the Projectile instance, using the type to chose the image/shape
+        Draws the Projectile instance, using the type to choose the image/shape
         """
         angle = math.atan2(self.velocity[1], -self.velocity[0]) * 180 / math.pi + 90
         surf = shared_methods.rotate_surface(self.image, angle)

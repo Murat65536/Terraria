@@ -1,23 +1,24 @@
-import commons
 import pygame
+
+import commons
 
 
 class Tileset:
     def __init__(
-        self,
-        folder_path: str,
-        width: int,
-        height: int,
-        rows: int = 1,
-        columns: int = 1,
-        x_spacing: int = 0,
-        y_spacing: int = 0,
-        x_offset: int = 0,
-        y_offset: int = 0,
-        scale_width: int | None = None,
-        scale_height: int | None = None,
-        colorkey: pygame.Color | None = None,
-        alpha: int = 255,
+            self,
+            folder_path: str,
+            width: int,
+            height: int,
+            rows: int = 1,
+            columns: int = 1,
+            x_spacing: int = 0,
+            y_spacing: int = 0,
+            x_offset: int = 0,
+            y_offset: int = 0,
+            scale_width: int | None = None,
+            scale_height: int | None = None,
+            colorkey: pygame.Color | None = None,
+            alpha: int = 255,
     ) -> None:
         self.tileset: list[pygame.Surface] = []
         image: pygame.Surface = pygame.image.load(folder_path).convert_alpha()

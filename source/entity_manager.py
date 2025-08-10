@@ -2,9 +2,11 @@ import math
 import random
 from typing import TypedDict
 
+import pygame
+from pygame.locals import Rect
+
 import commons
 import game_data
-import pygame
 import shared_methods
 import world
 from color_picker import ColorPicker
@@ -15,7 +17,6 @@ from physics_item import PhysicsItem
 from player import Player
 from projectile import Projectile
 from prompt import Prompt
-from pygame.locals import Rect
 
 
 class Message(TypedDict):
@@ -55,6 +56,7 @@ camera_position: tuple[float, float] = (0, 0)
 old_camera_position: tuple[float, float] = (0, 0)
 camera_position_difference: tuple[float, float] = (0, 0)
 
+
 def create_player():
     """
     Sets the client player to a new player instance created with the data in PLAYER_DATA
@@ -89,6 +91,7 @@ def create_player():
         last_played_date=commons.PLAYER_DATA["last_played_date"],
     )
 
+
 def check_enemy_spawn():
     """
     Checks if an enemy needs to spawn around the player
@@ -99,11 +102,12 @@ def check_enemy_spawn():
             assert client_player is not None
             val = min(int(14 - ((client_player.position[1] // commons.BLOCK_SIZE) // 30)), 1)
             if (
-                len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1
+                    len(enemies) < commons.MAX_ENEMY_SPAWNS + (7 - val * 0.5) and random.randint(1, val) == 1
             ):  # Reduce enemy spawns
                 spawn_enemy(random.randint(1, 5))
         else:
             commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
+
 
 def draw_enemy_hover_text():
     """
@@ -164,6 +168,7 @@ def draw_enemy_hover_text():
             )
             break
 
+
 def kill_all_entities():
     """
     Kills all entities, used before quitting a world
@@ -175,6 +180,7 @@ def kill_all_entities():
     messages.clear()
     damage_numbers.clear()
     recent_pickups.clear()
+
 
 def update_enemies():
     """
@@ -235,10 +241,10 @@ def update_recent_pickups():
             if i != j:
                 # Check if it is colliding with previous messages, if so, move up
                 if Rect(
-                    recent_pickups[i]["position"][0],
-                    recent_pickups[i]["position"][1],
-                    recent_pickups[i]["surface"].get_width(),
-                    recent_pickups[i]["surface"].get_height(),
+                        recent_pickups[i]["position"][0],
+                        recent_pickups[i]["position"][1],
+                        recent_pickups[i]["surface"].get_width(),
+                        recent_pickups[i]["surface"].get_height(),
                 ).colliderect(
                     Rect(
                         recent_pickups[j]["position"][0],
@@ -268,6 +274,7 @@ def update_recent_pickups():
         )
     for item in to_remove:
         recent_pickups.remove(item)
+
 
 def draw_enemies():
     """
@@ -327,6 +334,7 @@ def draw_recent_pickups():
             ),
         )
 
+
 def spawn_enemy(enemy_id: int, position=None):
     """
     Construct an instance of an entity and append it to their respective list
@@ -381,11 +389,11 @@ def spawn_enemy(enemy_id: int, position=None):
                     )
             if world.tile_in_map(x, y, width=2):
                 if (
-                    world.world.tile_data[x][y][0] == game_data.air_tile_id
-                    and world.world.tile_data[x - 1][y][0] == game_data.air_tile_id
-                    and world.world.tile_data[x][y - 1][0] == game_data.air_tile_id
-                    and world.world.tile_data[x + 1][y][0] == game_data.air_tile_id
-                    and world.world.tile_data[x][y + 1][0] == game_data.air_tile_id
+                        world.world.tile_data[x][y][0] == game_data.air_tile_id
+                        and world.world.tile_data[x - 1][y][0] == game_data.air_tile_id
+                        and world.world.tile_data[x][y - 1][0] == game_data.air_tile_id
+                        and world.world.tile_data[x + 1][y][0] == game_data.air_tile_id
+                        and world.world.tile_data[x][y + 1][0] == game_data.air_tile_id
                 ):
                     enemies.append(
                         Enemy(
@@ -402,16 +410,16 @@ def spawn_enemy(enemy_id: int, position=None):
 
 
 def spawn_particle(
-    position: tuple[float, float],
-    color: pygame.Color,
-    life: float = 2.0,
-    magnitude: float = 1.0,
-    size: int = 5,
-    angle: float = 0,
-    spread: float = math.pi / 4,
-    gravity: float = 0.25,
-    velocity: float = 0,
-    outline: bool = True,
+        position: tuple[float, float],
+        color: pygame.Color,
+        life: float = 2.0,
+        magnitude: float = 1.0,
+        size: int = 5,
+        angle: float = 0,
+        spread: float = math.pi / 4,
+        gravity: float = 0.25,
+        velocity: float = 0,
+        outline: bool = True,
 ):
     particles.append(
         Particle(
@@ -430,10 +438,10 @@ def spawn_particle(
 
 
 def spawn_physics_item(
-    item: Item,
-    position: tuple[float, float],
-    velocity: tuple[float, float] = (0, 0),
-    pickup_delay: int = 100,
+        item: Item,
+        position: tuple[float, float],
+        velocity: tuple[float, float] = (0, 0),
+        pickup_delay: int = 100,
 ):
     physics_items.append(PhysicsItem(item, position, velocity, pickup_delay))
 
@@ -478,10 +486,10 @@ def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
 
 
 def add_message(
-    text: str,
-    color: pygame.Color,
-    life: float = 5.0,
-    outline_color: pygame.Color = (0, 0, 0),
+        text: str,
+        color: pygame.Color,
+        life: float = 5.0,
+        outline_color: pygame.Color = (0, 0, 0),
 ):
     global messages
     text1 = commons.DEFAULT_FONT.render(text, False, color)
@@ -498,10 +506,10 @@ def add_message(
 
 
 def add_damage_number(
-    pos: tuple[float, float],
-    val: float,
-    crit: bool = False,
-    color: tuple[int, int, int] = (0, 0, 0),
+        pos: tuple[float, float],
+        val: float,
+        crit: bool = False,
+        color: tuple[int, int, int] = (0, 0, 0),
 ):
     global damage_numbers
 

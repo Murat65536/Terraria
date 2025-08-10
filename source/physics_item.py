@@ -1,6 +1,8 @@
 import math
 import random
 
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
@@ -8,19 +10,19 @@ import item
 import shared_methods
 import world
 from item import Item
-from pygame.locals import Rect
 
 
 class PhysicsItem:
     """
     Holds all the information required to update and draw a single PhysicsItem (An item that can collide with tiles)
     """
+
     def __init__(
-        self,
-        physics_item: Item,
-        position: tuple[float, float],
-        velocity: tuple[float, float] = (0, 0),
-        pickup_delay: int = 100,
+            self,
+            physics_item: Item,
+            position: tuple[float, float],
+            velocity: tuple[float, float] = (0, 0),
+            pickup_delay: int = 100,
     ):
 
         self.item: Item = physics_item
@@ -125,8 +127,8 @@ class PhysicsItem:
         if self.item.item_id not in entity_manager.client_player.un_pickupable_items:
             if self.pickup_delay <= 0:
                 if (
-                    abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCK_SIZE * 3.5
-                    and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCK_SIZE * 3.5
+                        abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCK_SIZE * 3.5
+                        and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCK_SIZE * 3.5
                 ):
                     collide = False
                     self.stationary = False

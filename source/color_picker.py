@@ -1,18 +1,21 @@
-import commons
 import pygame
 from pygame.locals import Rect
+
+import commons
+
 
 class ColorPicker:
     """
     Stores information about a color picker
     """
+
     def __init__(
-        self,
-        position: tuple[int, int],
-        width: int,
-        height: int,
-        border_size: int = 5,
-        surface_resolution: float = 0.5,
+            self,
+            position: tuple[int, int],
+            width: int,
+            height: int,
+            border_size: int = 5,
+            surface_resolution: float = 0.5,
     ):
         self.position: tuple[int, int] = position
         self.width: int = width

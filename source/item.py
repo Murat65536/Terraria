@@ -3,8 +3,9 @@
 import random
 from enum import Enum
 
-import game_data
 import pygame
+
+import game_data
 from commons import ItemPrefixGroup, ItemTag
 
 

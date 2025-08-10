@@ -4,19 +4,20 @@ import random
 from datetime import datetime
 from enum import Enum
 
+import pygame
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
 import item
 import perlin
-import pygame
 import shared_methods
 import tilesets
 from background import BACKGROUND_DATA
 from commons import TileMaskType, TileTag
 from game_data import find_structures_for_connection, get_item_id_by_id_str
 from item import Item
-from pygame.locals import Rect
 
 
 class WorldSize(Enum):
@@ -59,8 +60,9 @@ class MaskType(Enum):
 
 class World:
     """
-    Stores data about a world
+    Stores data about the world
     """
+
     def __init__(self):
         self.name = ""
         self.creation_date: datetime | None = None
@@ -124,7 +126,7 @@ class World:
         pickle.dump(self.tile_data, open(f"assets/worlds/{self.name}.wrld", "wb"))  # save wrld
 
     def load(self, world_name, load_all=True):
-        save_map = pickle.load(open(f"assets/worlds/{world_name}.dat", "rb"))  # open selected save dat file
+        save_map = pickle.load(open(f"assets/worlds/{world_name}.dat", "rb"))  # opens the selected save dat file
         self.name = save_map["name"]
         self.creation_date = save_map["creation_date"]
         self.last_played_date = save_map["last_played_date"]
@@ -200,6 +202,7 @@ leaf_tile: int = 0
 
 world: World | None = None
 
+
 def save():
     """
     Using pickle serialization, they save/load all necessary info
@@ -214,6 +217,7 @@ def load(world_name, load_all=True):
     world = World()
     world.load(world_name, load_all)
 
+
 def tile_in_map(i: int, j: int, width: int = 1) -> bool:
     """
     Checks if the given position falls within the map
@@ -221,6 +225,7 @@ def tile_in_map(i: int, j: int, width: int = 1) -> bool:
     if i < -1 + width or i > WORLD_SIZE_X - width or j < -1 + width or j > WORLD_SIZE_Y - width:
         return False
     return True
+
 
 def get_neighbor_count(i, j, tile=0, check_adjacent=True, check_center_tile=True, check_center_wall=True):
     """
@@ -266,6 +271,7 @@ def get_neighbor_count(i, j, tile=0, check_adjacent=True, check_center_tile=True
 
     return neighbor_count
 
+
 def check_tile_merge(tile_id_1, tile_id_2):
     """
     Checks if the two tile ids should merge with each other
@@ -277,6 +283,7 @@ def check_tile_merge(tile_id_1, tile_id_2):
         return True
     return False
 
+
 def check_wall_merge(wall_id_1, wall_id_2):
     """
     Checks if the two wall ids should merge with each other
@@ -287,6 +294,7 @@ def check_wall_merge(wall_id_1, wall_id_2):
     if wall_1.id_str in wall_2.mask_merge_ids or wall_1.id_str == wall_2.id_str:
         return True
     return False
+
 
 def get_mask_type_from_adjacent_blocks(adjacent_blocks):
     """
@@ -331,6 +339,7 @@ def get_mask_type_from_adjacent_blocks(adjacent_blocks):
             return MaskType.TOP_MID
     raise ValueError(f"Unknown mask type: {adjacent_blocks}")
 
+
 def get_mask_index_from_type(mask_type):
     """
     Returns a random mask index for the given type
@@ -370,6 +379,7 @@ def get_mask_index_from_type(mask_type):
             return 14
     raise ValueError(f"Unknown mask type: {mask_type}")
 
+
 def get_mask_type_from_index(index):
     """
     Returns the type of a given mask index
@@ -407,6 +417,7 @@ def get_mask_type_from_index(index):
     else:
         return None
 
+
 def get_wall_mask_index_from_pos(i, j, wall_id):
     """
     Returns the index of the mask for the wall at a given position
@@ -426,6 +437,7 @@ def get_wall_mask_index_from_pos(i, j, wall_id):
             merge_blocks[1] = 0
     return get_mask_index_from_type(get_mask_type_from_adjacent_blocks(merge_blocks))
 
+
 def get_mask_index_from_pos(i, j, tile_id) -> int:
     """
     Returns the index of the mask for the block at a given position
@@ -444,6 +456,7 @@ def get_mask_index_from_pos(i, j, tile_id) -> int:
         if not check_tile_merge(world.tile_data[i][j + 1][0], tile_id):
             merge_blocks[1] = 0
     return get_mask_index_from_type(get_mask_type_from_adjacent_blocks(merge_blocks))
+
 
 def blit_generation_stage(string) -> None:
     """
@@ -467,6 +480,7 @@ def blit_generation_stage(string) -> None:
     commons.screen.blit(text1, (commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5, 120))
     commons.screen.blit(text2, (commons.WINDOW_WIDTH * 0.5 - text2.get_width() * 0.5, 300))
     pygame.display.flip()
+
 
 def generate_terrain(gen_type, blit_progress=False) -> None:
     """
@@ -498,7 +512,7 @@ def generate_terrain(gen_type, blit_progress=False) -> None:
     world.last_played_date = date
     world.gen_type = gen_type
 
-    noise_gen = perlin.SimplexNoise()  # Create NOISE object
+    noise_gen = perlin.SimplexNoise()  # Create a NOISE object
     noise_offsets = [
         random.random() * 1000,
         random.random() * 1000,
@@ -612,15 +626,15 @@ def generate_terrain(gen_type, blit_progress=False) -> None:
 
                 elif map_index_y > 95:  # Tier 1 small caves
                     val = (
-                        noise_gen.noise2(
-                            map_index_x / 100 + noise_offsets[1],
-                            map_index_y / 75 + noise_offsets[1],
-                        )
-                        + noise_gen.noise2(
-                            map_index_x / 20 + noise_offsets[1],
-                            map_index_y / 8 + noise_offsets[1],
-                        )
-                        * 0.2
+                            noise_gen.noise2(
+                                map_index_x / 100 + noise_offsets[1],
+                                map_index_y / 75 + noise_offsets[1],
+                            )
+                            + noise_gen.noise2(
+                        map_index_x / 20 + noise_offsets[1],
+                        map_index_y / 8 + noise_offsets[1],
+                    )
+                            * 0.2
                     )
                     val2 = noise_gen.noise2(
                         map_index_x / 15 + noise_offsets[0],
@@ -645,15 +659,15 @@ def generate_terrain(gen_type, blit_progress=False) -> None:
                         map_index_y / 15 + noise_offsets[0],
                     )
                     val4 = (
-                        noise_gen.noise2(
-                            map_index_x / 100 + noise_offsets[1],
-                            map_index_y / 75 + noise_offsets[1],
-                        )
-                        + noise_gen.noise2(
-                            map_index_x / 20 + noise_offsets[1],
-                            map_index_y / 8 + noise_offsets[1],
-                        )
-                        * 0.2
+                            noise_gen.noise2(
+                                map_index_x / 100 + noise_offsets[1],
+                                map_index_y / 75 + noise_offsets[1],
+                            )
+                            + noise_gen.noise2(
+                        map_index_x / 20 + noise_offsets[1],
+                        map_index_y / 8 + noise_offsets[1],
+                    )
+                            * 0.2
                     )
                     if map_index_y >= val * 5 + 60 + val2 * 30:
                         if -0.15 < val4 < 0.15:
@@ -666,8 +680,8 @@ def generate_terrain(gen_type, blit_progress=False) -> None:
                             tile_value = game_data.biome_tile_vals[biome][0][2]
                             wall_value = game_data.biome_tile_vals[biome][1][1]
                         if (
-                            world.tile_data[map_index_x][map_index_y - 1][0] == game_data.air_tile_id
-                            and tile_value == game_data.biome_tile_vals[biome][0][1]
+                                world.tile_data[map_index_x][map_index_y - 1][0] == game_data.air_tile_id
+                                and tile_value == game_data.biome_tile_vals[biome][0][1]
                         ):
                             tile_value = game_data.biome_tile_vals[biome][0][0]
                             wall_value = game_data.biome_tile_vals[biome][1][0]
@@ -767,6 +781,7 @@ def generate_terrain(gen_type, blit_progress=False) -> None:
 
     print("Generation complete!")
 
+
 def create_terrain_surface() -> None:
     """
     Renders all tiles in the map to a huge surface
@@ -782,6 +797,7 @@ def create_terrain_surface() -> None:
         for j in range(WORLD_SIZE_Y):
             update_terrain_surface(i, j, affect_others=False)
 
+
 def place_multitile(top_left_x, top_left_y, dimensions, tile_id, update_surface) -> None:
     """
     Place a multitile of the given id and dimensions at the given pos
@@ -794,12 +810,14 @@ def place_multitile(top_left_x, top_left_y, dimensions, tile_id, update_surface)
             if update_surface:
                 update_terrain_surface(top_left_x + x, top_left_y + y)
 
+
 def get_multitile_origin(x, y) -> tuple[int, int]:
     """
     Get the origin of a multitile
     """
     tile_data = world.tile_data[x][y]
-    return (x - tile_data[2][0], y - tile_data[2][1])
+    return x - tile_data[2][0], y - tile_data[2][1]
+
 
 def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, update_surface=True) -> None:
     """
@@ -847,6 +865,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 
         if remove_chest_data and chest_data_to_remove != -1:
             del world.chest_data[chest_data_to_remove]
+
 
 def use_special_tile(i, j) -> None:
     """
@@ -907,8 +926,9 @@ def use_special_tile(i, j) -> None:
                         testing_current_tile = True
 
                 if (
-                    not testing_current_tile
-                    and world.tile_data[tile_cycle_origin[0] + x][tile_cycle_origin[1] + y][0] != game_data.air_tile_id
+                        not testing_current_tile
+                        and world.tile_data[tile_cycle_origin[0] + x][tile_cycle_origin[1] + y][
+                    0] != game_data.air_tile_id
                 ):
                     can_cycle = False
                     break
@@ -937,6 +957,7 @@ def use_special_tile(i, j) -> None:
                     update_terrain_surface(tile_cycle_origin[0] + x, tile_cycle_origin[1] + y)
 
     commons.WAIT_TO_USE = True
+
 
 def update_terrain_surface(i, j, affect_others=True) -> None:
     """
@@ -1000,16 +1021,16 @@ def update_terrain_surface(i, j, affect_others=True) -> None:
                 )  # Blit the block mask to the block texture using a multiply blend flag
 
             if (
-                tile_mask_data[tile[0]][tile[1]] != 14 or TileTag.TRANSPARENT not in json_tile_dat.tags
+                    tile_mask_data[tile[0]][tile[1]] != 14 or TileTag.TRANSPARENT not in json_tile_dat.tags
             ) and tile_dat[
                 1
-            ] != game_data.air_wall_id:  # If the block is not a center block (and so there is some transparency in it) and there is a wall tile behind it,  blit the wall tile
+            ] != game_data.air_wall_id:  # If the block is not a center block (and so there is some transparency in it) and there is a wall tile behind it, blit the wall tile
                 back_img = json_wall_dat.surface.copy()  # Get the wall texture
                 wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(
                     tile[0], tile[1], tile_dat[1]
                 )  # Get the wall mask
                 if get_mask_type_from_index(wall_tile_mask_data[tile[0]][tile[1]]) == get_mask_type_from_index(
-                    tile_mask_data[tile[0]][tile[1]]
+                        tile_mask_data[tile[0]][tile[1]]
                 ):  # If the mask of the wall and the mask of the tile are from the same type
                     wall_tile_mask_data[tile[0]][tile[1]] = tile_mask_data[tile[0]][
                         tile[1]
@@ -1046,6 +1067,7 @@ def update_terrain_surface(i, j, affect_others=True) -> None:
                 back_img, (tile[0] * commons.BLOCK_SIZE, tile[1] * commons.BLOCK_SIZE)
             )  # Blit the masked wall surf to the main surf
 
+
 def create_vein(i, j, tile_id, size) -> None:
     """
     Recursively creates ore at a location
@@ -1061,6 +1083,7 @@ def create_vein(i, j, tile_id, size) -> None:
             create_vein(i + 1, j, tile_id, size - 1)
             create_vein(i, j - 1, tile_id, size - 1)
             create_vein(i, j + 1, tile_id, size - 1)
+
 
 def create_tree(i, j, height) -> None:
     """
@@ -1123,14 +1146,15 @@ def create_tree(i, j, height) -> None:
     world.tile_data[i - 1][j + 1][0] = leaf_tile
     world.tile_data[i + 1][j + 1][0] = leaf_tile
 
+
 def spawn_structure(
-    pos_x,
-    pos_y,
-    structure_id_str,
-    structure_connection_position=None,
-    allow_connection_connecting_from=False,
-    remaining_parts=20,
-    check_placement_validity=False,
+        pos_x,
+        pos_y,
+        structure_id_str,
+        structure_connection_position=None,
+        allow_connection_connecting_from=False,
+        remaining_parts=20,
+        check_placement_validity=False,
 ) -> None:
     """
     Creates a structure at the given position using the data stored in the structure_tiles table and the given structure id
@@ -1262,15 +1286,16 @@ def spawn_structure(
                         else:
                             random_pick -= possible_structure_data.spawn_weight
 
+
 def is_structure_rect_valid(structure_rect, rect_index_to_ignore=-1) -> bool:
     """
     Checks if a given rect is within the map rect and does not overlap with any other structure rectangles
     """
     if (
-        structure_rect.x >= 0
-        and structure_rect.x + structure_rect.w < WORLD_SIZE_X
-        and structure_rect.y >= 0
-        and structure_rect.y + structure_rect.h < WORLD_SIZE_Y
+            structure_rect.x >= 0
+            and structure_rect.x + structure_rect.w < WORLD_SIZE_X
+            and structure_rect.y >= 0
+            and structure_rect.y + structure_rect.h < WORLD_SIZE_Y
     ):
         is_valid = True
 
@@ -1283,9 +1308,10 @@ def is_structure_rect_valid(structure_rect, rect_index_to_ignore=-1) -> bool:
         return is_valid
     return False
 
+
 def create_grounded_spawn_position() -> None:
     """
-    Creates a random spawn point on the x axis, then places it on the ground
+    Creates a random spawn point on the x-axis, then places it on the ground
     """
     global world
     assert world is not None
@@ -1310,6 +1336,7 @@ def create_grounded_spawn_position() -> None:
             )
             break
 
+
 def check_grow_grass() -> None:
     """
     Waits 'grass_grow_delay' seconds to grow grass
@@ -1321,6 +1348,7 @@ def check_grow_grass() -> None:
 
     else:
         grass_grow_tick -= commons.DELTA_TIME
+
 
 def grow_grass() -> None:
     """
@@ -1336,6 +1364,7 @@ def grow_grass() -> None:
                     world.tile_data[random_x][j][0] = 5
                     update_terrain_surface(random_x, j)
                 break
+
 
 def spawn_pot(pos_x, pos_y) -> None:
     """
@@ -1368,8 +1397,8 @@ def spawn_pot(pos_x, pos_y) -> None:
                 return
 
             if (
-                world.tile_data[pos_x][pos_y][0] == game_data.air_tile_id
-                and world.tile_data[pos_x][pos_y][1] != game_data.air_wall_id
+                    world.tile_data[pos_x][pos_y][0] == game_data.air_tile_id
+                    and world.tile_data[pos_x][pos_y][1] != game_data.air_wall_id
             ):
                 viable_blocks += 1
 

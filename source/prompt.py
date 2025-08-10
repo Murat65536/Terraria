@@ -1,28 +1,30 @@
+import pygame
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
 import menu_manager
-import pygame
 import shared_methods
 import sound_manager
 import world
-from pygame.locals import Rect
 
 
 class Prompt:
     """
     Stores information necessary to update and draw a Prompt instance
     """
+
     def __init__(
-        self,
-        name,
-        body,
-        button_1_name=None,
-        shop=False,
-        shop_items=None,
-        size=(10, 3),
-        npc=True,
-        pos=None,
+            self,
+            name,
+            body,
+            button_1_name=None,
+            shop=False,
+            shop_items=None,
+            size=(10, 3),
+            npc=True,
+            pos=None,
     ):
         self.name = name
         self.body = body

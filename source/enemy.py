@@ -1,18 +1,18 @@
 import math
 from random import randint, random
 
+import pygame
+from pygame.locals import Rect
+
 import commons
 import entity_manager
 import game_data
 import item
-import pygame
 import shared_methods
 import tilesets
 import world
 from data.tile import (DamagingTileData, DoorTileData, LootMultitileData,
                        LootTileData, MultitileData, TileData)
-from pygame.locals import Rect
-
 from source.data.entity import ENTITY_DATA
 
 
