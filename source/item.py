@@ -1,5 +1,3 @@
-# item.py
-
 import random
 from enum import Enum
 

@@ -10,6 +10,7 @@ import pygame.locals
 
 import commons
 import entity_manager
+import game_constants
 import game_data
 import item
 import menu_manager
@@ -25,26 +26,37 @@ pygame.init()
 pygame.mixer.init()
 
 
-def move_parallax(val: tuple[float, float]) -> None:
+def move_parallax(offset: tuple[float, float]) -> None:
     """
     Moves the background by a set amount, looping back when necessary
     """
-    global parallax_pos
-    parallax_pos = (parallax_pos[0] + val[0], parallax_pos[1] + val[1])
-    if parallax_pos[0] > 0:
-        parallax_pos = (-2048 + parallax_pos[0], parallax_pos[1])
-    elif parallax_pos[0] < -2047:
-        parallax_pos = (parallax_pos[0] + 2048, parallax_pos[1])
+    from game_state import game_state
+    import game_constants
+    
+    game_state.parallax_position = (
+        game_state.parallax_position[0] + offset[0], 
+        game_state.parallax_position[1] + offset[1]
+    )
+    if game_state.parallax_position[0] > 0:
+        game_state.parallax_position = (
+            -game_constants.PARALLAX_BACKGROUND_WIDTH + game_state.parallax_position[0], 
+            game_state.parallax_position[1]
+        )
+    elif game_state.parallax_position[0] < -game_constants.PARALLAX_BACKGROUND_RESET_THRESHOLD:
+        game_state.parallax_position = (
+            game_state.parallax_position[0] + game_constants.PARALLAX_BACKGROUND_WIDTH, 
+            game_state.parallax_position[1]
+        )
 
 
 def fade_background(new_background_id: int) -> None:
     """
     Fade the background to a different background type
     """
-    global fade_background_id, fade_back, fade_float
-    fade_background_id = new_background_id
-    fade_back = True
-    fade_float = 0.0
+    from game_state import game_state
+    game_state.fade_background_id = new_background_id
+    game_state.fade_back = True
+    game_state.fade_float = 0.0
 
 
 def draw_death_message() -> None:
@@ -77,14 +89,14 @@ def render_hand_text() -> None:
     """
     Renders the full name of the item that the player has equipped in their hotbar to a surface
     """
-    global hand_text
+    from game_state import game_state
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     equipped = entity_manager.client_player.items[item.ItemLocation.HOTBAR][entity_manager.client_player.hotbar_index]
     if equipped is not None:
         color = shared_methods.get_tier_color(equipped.get_tier())
-        hand_text = shared_methods.outline_text(equipped.get_name(), color, commons.DEFAULT_FONT)
+        game_state.hand_text = shared_methods.outline_text(equipped.get_name(), color, commons.DEFAULT_FONT)
     else:
-        hand_text = shared_methods.outline_text("", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
+        game_state.hand_text = shared_methods.outline_text("", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
 
 
 def run_splash_screen() -> None:
@@ -135,11 +147,241 @@ def run_splash_screen() -> None:
         clock.tick(commons.TARGET_FPS)
 
 
+def _render_weapon_stats(equipped, stats):
+    """Helper function to render weapon-specific stats"""
+    if equipped.has_tag(item.ItemTag.WEAPON):
+        stats.append(
+            shared_methods.outline_text(
+                f"{str(round(equipped.get_attack_damage(), 1)).rstrip('0').rstrip('.')} true melee damage",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                f"{str(round(equipped.get_crit_chance() * 100, 1)).rstrip('0').rstrip('.')} % critical strike chance",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                get_speed_text(equipped.get_attack_speed()),
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                get_knockback_text(equipped.get_knockback()),
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+
+
+def _render_ammo_stats(equipped, stats):
+    """Helper function to render ammunition-specific stats"""
+    if equipped.has_tag(item.ItemTag.AMMO):
+        stats.append(
+            shared_methods.outline_text("Ammunition", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
+        )
+        stats.append(
+            shared_methods.outline_text(
+                f"{equipped.get_ammo_damage()} damage",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                f"{round(equipped.get_ammo_knockback_modifier() * 100, 1)} % knockback",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                f"{round(equipped.get_ammo_gravity_modifier() * 100, 1)} % gravity",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+        stats.append(
+            shared_methods.outline_text(
+                f"{round(equipped.get_ammo_drag() * 100, 1)} % drag",
+                pygame.Color(255, 255, 255),
+                commons.DEFAULT_FONT,
+            )
+        )
+
+
+def _render_tile_stats(equipped, stats):
+    """Helper function to render tile-specific stats"""
+    if equipped.has_tag(item.ItemTag.TILE):
+        stats.append(
+            shared_methods.outline_text("Can be placed", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
+        )
+
+
+def _render_material_stats(equipped, stats):
+    """Helper function to render material-specific stats"""
+    if equipped.has_tag(item.ItemTag.MATERIAL):
+        stats.append(shared_methods.outline_text("Material", pygame.Color(255, 255, 255), commons.DEFAULT_FONT))
+
+
+def _render_prefix_stats(equipped, stats):
+    """Helper function to render item prefix stats"""
+    from game_state import game_state
+    
+    if not equipped.has_prefix or equipped.prefix_data is None:
+        return
+        
+    # Damage modifier
+    if equipped.prefix_data[1]["damage"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["damage"] > 0 else game_state.bad_color
+        stats.append(
+            shared_methods.outline_text(
+                f"{add_plus(str(int(equipped.prefix_data[1]['damage'] * 100)))} % damage",
+                color,
+                commons.DEFAULT_FONT,
+                outline_color=shared_methods.darken_color(color),
+            )
+        )
+    
+    # Speed/crit chance modifiers based on prefix group
+    if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
+        if equipped.prefix_data[1]["speed"] != 0:
+            color = game_state.good_color if equipped.prefix_data[1]["speed"] > 0 else game_state.bad_color
+            stats.append(
+                shared_methods.outline_text(
+                    f"{add_plus(str(int(equipped.prefix_data[1]['speed'] * 100)))} % speed",
+                    color,
+                    commons.DEFAULT_FONT,
+                    outline_color=shared_methods.darken_color(color),
+                )
+            )
+    else:
+        # Universal prefix group has different stat handling
+        if equipped.prefix_data[1]["speed"] != 0:
+            color = game_state.good_color if equipped.prefix_data[1]["speed"] > 0 else game_state.bad_color
+            stats.append(
+                shared_methods.outline_text(
+                    f"{add_plus(str(int(equipped.prefix_data[1]['speed'] * 100)))} % critical strike chance",
+                    color,
+                    commons.DEFAULT_FONT,
+                    outline_color=shared_methods.darken_color(color),
+                )
+            )
+    
+    # Continue with other prefix-specific stats...
+    _render_remaining_prefix_stats(equipped, stats)
+
+
+def _render_remaining_prefix_stats(equipped, stats):
+    """Helper function to render remaining prefix stats to avoid code duplication"""
+    from game_state import game_state
+    
+    # Critical chance and knockback stats for different prefix groups
+    if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
+        if equipped.prefix_data[1]["crit_chance"] != 0:
+            color = game_state.good_color if equipped.prefix_data[1]["crit_chance"] > 0 else game_state.bad_color
+            stats.append(
+                shared_methods.outline_text(
+                    f"{add_plus(str(int(equipped.prefix_data[1]['crit_chance'] * 100)))} % critical strike chance",
+                    color,
+                    commons.DEFAULT_FONT,
+                    outline_color=shared_methods.darken_color(color),
+                )
+            )
+    
+    # Handle specific prefix group modifiers
+    prefix_group_handlers = {
+        item.ItemPrefixGroup.COMMON: _handle_common_prefix,
+        item.ItemPrefixGroup.LONGSWORD: _handle_longsword_prefix,
+        item.ItemPrefixGroup.SHORTSWORD: _handle_shortsword_prefix,
+        item.ItemPrefixGroup.RANGED: _handle_ranged_prefix,
+        item.ItemPrefixGroup.MAGICAL: _handle_magical_prefix,
+    }
+    
+    handler = prefix_group_handlers.get(equipped.prefix_data[0])
+    if handler:
+        handler(equipped, stats)
+
+
+def _handle_common_prefix(equipped, stats):
+    """Handle common prefix group stats"""
+    from game_state import game_state
+    if equipped.prefix_data[1]["knockback"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["knockback"] > 0 else game_state.bad_color
+        stats.append(
+            shared_methods.outline_text(
+                f"{add_plus(str(int(equipped.prefix_data[1]['knockback'] * 100)))} % knockback",
+                color,
+                commons.DEFAULT_FONT,
+                outline_color=shared_methods.darken_color(color),
+            )
+        )
+
+
+def _handle_longsword_prefix(equipped, stats):
+    """Handle longsword prefix group stats"""
+    from game_state import game_state
+    if equipped.prefix_data[1]["size"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["size"] > 0 else game_state.bad_color
+        # Note: The original code didn't append this stat, keeping that behavior
+
+
+def _handle_shortsword_prefix(equipped, stats):
+    """Handle shortsword prefix group stats"""
+    from game_state import game_state
+    if equipped.prefix_data[1]["size"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["size"] > 0 else game_state.bad_color
+        stats.append(
+            shared_methods.outline_text(
+                f"{add_plus(str(int(equipped.prefix_data[1]['size'] * 100)))} % size",
+                color,
+                commons.DEFAULT_FONT,
+                outline_color=shared_methods.darken_color(color),
+            )
+        )
+
+
+def _handle_ranged_prefix(equipped, stats):
+    """Handle ranged prefix group stats"""
+    from game_state import game_state
+    if equipped.prefix_data[1]["velocity"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["velocity"] > 0 else game_state.bad_color
+        stats.append(
+            shared_methods.outline_text(
+                f"{add_plus(str(int(equipped.prefix_data[1]['velocity'] * 100)))} % projectile velocity",
+                color,
+                commons.DEFAULT_FONT,
+                outline_color=shared_methods.darken_color(color),
+            )
+        )
+
+
+def _handle_magical_prefix(equipped, stats):
+    """Handle magical prefix group stats"""
+    from game_state import game_state
+    if equipped.prefix_data[1]["mana_cost"] != 0:
+        color = game_state.good_color if equipped.prefix_data[1]["mana_cost"] < 0 else game_state.bad_color
+        stats.append(
+            shared_methods.outline_text(
+                f"{add_plus(str(int(equipped.prefix_data[1]['mana_cost'] * 100)))} % mana cost",
+                color,
+                commons.DEFAULT_FONT,
+                outline_color=shared_methods.darken_color(color),
+            )
+        )
+
+
 def render_stats_text(pos: List[Any]) -> bool:
     """
     Gets an item using the parsed position and renders it's information to a surface
     """
-    global stats_text, last_hovered_item
+    from game_state import game_state
     assert isinstance(entity_manager.client_player, entity_manager.Player)
 
     if pos[0] == item.ItemLocation.CRAFTING_MENU:
@@ -151,9 +393,12 @@ def render_stats_text(pos: List[Any]) -> bool:
         equipped = entity_manager.client_player.items[pos[0]][pos[1]]
 
     if equipped is not None:
-        if equipped != last_hovered_item:
-            last_hovered_item = equipped
-            stats_text = pygame.Surface((340, 200), pygame.SRCALPHA)
+        if equipped != game_state.last_hovered_item:
+            game_state.last_hovered_item = equipped
+            game_state.stats_text = pygame.Surface((
+                game_constants.UI_STATS_SURFACE_WIDTH, 
+                game_constants.UI_STATS_SURFACE_HEIGHT
+            ), pygame.SRCALPHA)
 
             stats = [
                 shared_methods.outline_text(
@@ -163,229 +408,14 @@ def render_stats_text(pos: List[Any]) -> bool:
                 )
             ]
 
-            if equipped.has_tag(item.ItemTag.WEAPON):
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{str(round(equipped.get_attack_damage(), 1)).rstrip('0').rstrip('.')} true melee damage",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{str(round(equipped.get_crit_chance() * 100, 1)).rstrip('0').rstrip('.')} % critical strike chance",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        get_speed_text(equipped.get_attack_speed()),
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        get_knockback_text(equipped.get_knockback()),
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-
-            if equipped.has_tag(item.ItemTag.AMMO):
-                stats.append(
-                    shared_methods.outline_text("Ammunition", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{equipped.get_ammo_damage()} damage",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{round(equipped.get_ammo_knockback_modifier() * 100, 1)} % knockback",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{round(equipped.get_ammo_gravity_modifier() * 100, 1)} % gravity",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-                stats.append(
-                    shared_methods.outline_text(
-                        f"{round(equipped.get_ammo_drag() * 100, 1)} % drag",
-                        pygame.Color(255, 255, 255),
-                        commons.DEFAULT_FONT,
-                    )
-                )
-
-            if equipped.has_tag(item.ItemTag.TILE):
-                stats.append(
-                    shared_methods.outline_text("Can be placed", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
-                )
-
-            if equipped.has_tag(item.ItemTag.MATERIAL):
-                stats.append(shared_methods.outline_text("Material", pygame.Color(255, 255, 255), commons.DEFAULT_FONT))
-
-            if equipped.has_prefix and equipped.prefix_data is not None:
-                if equipped.prefix_data[1]["damage"] != 0:
-                    if equipped.prefix_data[1]["damage"] > 0:
-                        color = good_color
-                    else:
-                        color = bad_color
-                    stats.append(
-                        shared_methods.outline_text(
-                            f"{add_plus(str(int(equipped.prefix_data[1]["damage"] * 100)))} % damage",
-                            color,
-                            commons.DEFAULT_FONT,
-                            outline_color=shared_methods.darken_color(color),
-                        )
-                    )
-                if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
-                    if equipped.prefix_data[1]["speed"] != 0:
-                        if equipped.prefix_data[1]["speed"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % speed",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                else:
-                    if equipped.prefix_data[1]["speed"] != 0:
-                        if equipped.prefix_data[1]["speed"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["speed"] * 100)))} % critical strike chance",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                    if equipped.prefix_data[1]["crit_chance"] != 0:
-                        if equipped.prefix_data[1]["crit_chance"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % knockback",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                if equipped.prefix_data[0] != item.ItemPrefixGroup.UNIVERSAL:
-                    if equipped.prefix_data[1]["crit_chance"] != 0:
-                        if equipped.prefix_data[1]["crit_chance"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["crit_chance"] * 100)))} % critical strike chance",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                if equipped.prefix_data[0] == item.ItemPrefixGroup.COMMON:
-                    if equipped.prefix_data[1]["knockback"] != 0:
-                        if equipped.prefix_data[1]["knockback"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                if equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD:
-                    if equipped.prefix_data[1]["size"] != 0:
-                        if equipped.prefix_data[1]["size"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                if equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD:
-                    if equipped.prefix_data[1]["size"] != 0:
-                        if equipped.prefix_data[1]["size"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["size"] * 100)))} % size",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                elif equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED:
-                    if equipped.prefix_data[1]["velocity"] != 0:
-                        if equipped.prefix_data[1]["velocity"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["velocity"] * 100)))} % projectile velocity",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                elif equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL:
-                    if equipped.prefix_data[1]["mana_cost"] != 0:
-                        if equipped.prefix_data[1]["mana_cost"] < 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["mana_cost"] * 100)))} % size",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
-                if (
-                        equipped.prefix_data[0] == item.ItemPrefixGroup.LONGSWORD
-                        or equipped.prefix_data[0] == item.ItemPrefixGroup.SHORTSWORD
-                        or equipped.prefix_data[0] == item.ItemPrefixGroup.RANGED
-                        or equipped.prefix_data[0] == item.ItemPrefixGroup.MAGICAL
-                ):
-                    if equipped.prefix_data[1]["knockback"] != 0:
-                        if equipped.prefix_data[1]["knockback"] > 0:
-                            color = good_color
-                        else:
-                            color = bad_color
-                        stats.append(
-                            shared_methods.outline_text(
-                                f"{add_plus(str(int(equipped.prefix_data[1]["knockback"] * 100)))} % knockback",
-                                color,
-                                commons.DEFAULT_FONT,
-                                outline_color=shared_methods.darken_color(color),
-                            )
-                        )
+            _render_weapon_stats(equipped, stats)
+            _render_ammo_stats(equipped, stats)
+            _render_tile_stats(equipped, stats)
+            _render_material_stats(equipped, stats)
+            _render_prefix_stats(equipped, stats)
+            
             for stat_index in range(len(stats)):
-                stats_text.blit(stats[stat_index], (0, stat_index * 15))
+                game_state.stats_text.blit(stats[stat_index], (0, stat_index * game_constants.UI_STAT_LINE_HEIGHT))
         return True
     return False
 
@@ -394,55 +424,55 @@ def update_light() -> None:
     """
     Run by the lighting thread to update the light surface and it's position in the world
     """
-    global light_surf, map_light, light_min_x, light_max_x, light_min_y, light_max_y, thread_active, newest_light_surf, newest_light_surf_pos, last_thread_time
-    thread_active = True
+    from game_state import game_state
+    game_state.thread_active = True
 
     target_position = (
         entity_manager.camera_position[0]
-        + (entity_manager.camera_position_difference[0] / commons.DELTA_TIME) * last_thread_time,
+        + (entity_manager.camera_position_difference[0] / commons.DELTA_TIME) * game_state.last_thread_time,
         entity_manager.camera_position[1]
-        + (entity_manager.camera_position_difference[1] / commons.DELTA_TIME) * last_thread_time,
+        + (entity_manager.camera_position_difference[1] / commons.DELTA_TIME) * game_state.last_thread_time,
     )
 
-    light_min_x = int(target_position[0] // commons.BLOCK_SIZE - LIGHT_RENDER_DISTANCE_X)
-    light_max_x = int(target_position[0] // commons.BLOCK_SIZE + LIGHT_RENDER_DISTANCE_X)
-    light_min_y = int(target_position[1] // commons.BLOCK_SIZE - LIGHT_RENDER_DISTANCE_Y)
-    light_max_y = int(target_position[1] // commons.BLOCK_SIZE + LIGHT_RENDER_DISTANCE_Y)
+    game_state.light_min_x = int(target_position[0] // commons.BLOCK_SIZE - game_state.LIGHT_RENDER_DISTANCE_X)
+    game_state.light_max_x = int(target_position[0] // commons.BLOCK_SIZE + game_state.LIGHT_RENDER_DISTANCE_X)
+    game_state.light_min_y = int(target_position[1] // commons.BLOCK_SIZE - game_state.LIGHT_RENDER_DISTANCE_Y)
+    game_state.light_max_y = int(target_position[1] // commons.BLOCK_SIZE + game_state.LIGHT_RENDER_DISTANCE_Y)
 
     min_change_x = 0
     min_change_y = 0
 
-    if light_min_x < 0:
-        min_change_x = -light_min_x
-        light_min_x = 0
-    if light_min_y < 0:
-        min_change_y = -light_min_y
-        light_min_y = 0
+    if game_state.light_min_x < 0:
+        min_change_x = -game_state.light_min_x
+        game_state.light_min_x = 0
+    if game_state.light_min_y < 0:
+        min_change_y = -game_state.light_min_y
+        game_state.light_min_y = 0
 
-    if light_min_x >= world.WORLD_SIZE_X or light_min_y >= world.WORLD_SIZE_Y or light_max_x < 0 or light_max_y < 0:
-        thread_active = False
+    if game_state.light_min_x >= world.WORLD_SIZE_X or game_state.light_min_y >= world.WORLD_SIZE_Y or game_state.light_max_x < 0 or game_state.light_max_y < 0:
+        game_state.thread_active = False
         return
 
     temp_pos = (
-        (target_position[0] // commons.BLOCK_SIZE - LIGHT_RENDER_DISTANCE_X + min_change_x) * commons.BLOCK_SIZE,
-        (target_position[1] // commons.BLOCK_SIZE - LIGHT_RENDER_DISTANCE_Y + min_change_y) * commons.BLOCK_SIZE,
+        (target_position[0] // commons.BLOCK_SIZE - game_state.LIGHT_RENDER_DISTANCE_X + min_change_x) * commons.BLOCK_SIZE,
+        (target_position[1] // commons.BLOCK_SIZE - game_state.LIGHT_RENDER_DISTANCE_Y + min_change_y) * commons.BLOCK_SIZE,
     )
 
-    if light_max_x > world.WORLD_SIZE_X:
-        light_max_x = world.WORLD_SIZE_X
-    if light_max_y > world.WORLD_SIZE_Y:
-        light_max_y = world.WORLD_SIZE_Y
+    if game_state.light_max_x > world.WORLD_SIZE_X:
+        game_state.light_max_x = world.WORLD_SIZE_X
+    if game_state.light_max_y > world.WORLD_SIZE_Y:
+        game_state.light_max_y = world.WORLD_SIZE_Y
 
     # timeBefore = pygame.time.get_ticks()
 
-    for x_index in range(light_min_x, light_max_x):
-        for y_index in range(light_min_y, light_max_y):
-            map_light[x_index][y_index] = max(0, map_light[x_index][y_index] - 16)
+    for x_index in range(game_state.light_min_x, game_state.light_max_x):
+        for y_index in range(game_state.light_min_y, game_state.light_max_y):
+            game_state.map_light[x_index][y_index] = max(0, game_state.map_light[x_index][y_index] - 16)
 
     # mapLight = [[0 for i in range(world.WORLD_SIZE_Y)] for j in range(world.WORLD_SIZE_X)]
 
-    for x_index in range(light_min_x, light_max_x):
-        for y_index in range(light_min_y, light_max_y):
+    for x_index in range(game_state.light_min_x, game_state.light_max_x):
+        for y_index in range(game_state.light_min_y, game_state.light_max_y):
             if y_index < 110:
                 if (
                         world.world.tile_data[x_index][y_index][1] == game_data.air_wall_id
@@ -455,46 +485,46 @@ def update_light() -> None:
 
     # print("Fill Light MS: ", pygame.time.get_ticks() - timeBefore)
 
-    range_x = light_max_x - light_min_x
-    range_y = light_max_y - light_min_y
+    range_x = game_state.light_max_x - game_state.light_min_x
+    range_y = game_state.light_max_y - game_state.light_min_y
 
     # timeBefore = pygame.time.get_ticks()
 
-    light_surf = pygame.Surface((range_x, range_y), pygame.SRCALPHA)
+    game_state.light_surface = pygame.Surface((range_x, range_y), pygame.SRCALPHA)
 
     for x_index in range(range_x):
         for y_index in range(range_y):
-            tile_dat = world.world.tile_data[light_min_x + x_index][light_min_y + y_index]
+            tile_dat = world.world.tile_data[game_state.light_min_x + x_index][game_state.light_min_y + y_index]
             if tile_dat[0] == game_data.air_tile_id and tile_dat[1] == game_data.air_wall_id:
-                light_surf.set_at((x_index, y_index), (0, 0, 0, 255 - commons.CURRENT_SKY_LIGHTING))
+                game_state.light_surface.set_at((x_index, y_index), (0, 0, 0, 255 - commons.CURRENT_SKY_LIGHTING))
             else:
-                light_surf.set_at(
+                game_state.light_surface.set_at(
                     (x_index, y_index),
                     (
                         0,
                         0,
                         0,
-                        255 - map_light[x_index + light_min_x][y_index + light_min_y],
+                        255 - game_state.map_light[x_index + game_state.light_min_x][y_index + game_state.light_min_y],
                     ),
                 )
 
-    light_surf = pygame.transform.scale(light_surf, (range_x * commons.BLOCK_SIZE, range_y * commons.BLOCK_SIZE))
+    game_state.light_surface = pygame.transform.scale(game_state.light_surface, (range_x * commons.BLOCK_SIZE, range_y * commons.BLOCK_SIZE))
 
-    newest_light_surf_pos = temp_pos
-    newest_light_surf = light_surf
-    thread_active = False
+    game_state.newest_light_surface_position = temp_pos
+    game_state.newest_light_surface = game_state.light_surface
+    game_state.thread_active = False
 
     # print("Scale Copy MS: ", pygame.time.get_ticks() - timeBefore)
 
 
 def fill_light(x_pos: int, y_pos: int, light_value: int) -> None:
     """Recursively calls itself to populate data in the map_light array"""
-    global map_light
-    if light_min_x <= x_pos < light_max_x and light_min_y <= y_pos < light_max_y:
+    from game_state import game_state
+    if game_state.light_min_x <= x_pos < game_state.light_max_x and game_state.light_min_y <= y_pos < game_state.light_max_y:
         light_reduction = game_data.tile_id_light_reduction_lookup[world.world.tile_data[x_pos][y_pos][0]]
         new_light_value = max(0, light_value - light_reduction)
-        if new_light_value > map_light[x_pos][y_pos]:
-            map_light[x_pos][y_pos] = int(new_light_value)
+        if new_light_value > game_state.map_light[x_pos][y_pos]:
+            game_state.map_light[x_pos][y_pos] = int(new_light_value)
             fill_light(x_pos - 1, y_pos, new_light_value)
             fill_light(x_pos + 1, y_pos, new_light_value)
             fill_light(x_pos, y_pos - 1, new_light_value)
@@ -574,7 +604,8 @@ def draw_inventory_hover_text() -> None:
     """
     Checks if the player is hovering over an item in the UI and displays the item's info if they are
     """
-    global can_drop_holding, can_pickup_item, item_drop_tick, item_drop_rate
+    from game_state import game_state
+    import game_constants
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     pos = None
 
@@ -615,10 +646,10 @@ def draw_inventory_hover_text() -> None:
                         auto_assign_prefix=True,
                     )
                     commons.is_holding_item = True
-                    can_pickup_item = False
-                    can_drop_holding = False
+                    game_state.can_pickup_item = False
+                    game_state.can_drop_holding = False
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
-                elif can_drop_holding and item.item_holding is not None:
+                elif game_state.can_drop_holding and item.item_holding is not None:
                     if (
                             item.item_holding.item_id
                             == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]
@@ -640,7 +671,7 @@ def draw_inventory_hover_text() -> None:
 
         if mouse_buttons[0] or mouse_buttons[2]:
             # Dropping holding item
-            if can_drop_holding and item.item_holding is not None:
+            if game_state.can_drop_holding and item.item_holding is not None:
                 if mouse_buttons[0]:
                     amount = item.item_holding.amount
                 else:
@@ -648,11 +679,11 @@ def draw_inventory_hover_text() -> None:
 
                 item_add_data = None
 
-                if mouse_buttons[0] or item_drop_tick <= 0:
+                if mouse_buttons[0] or game_state.item_drop_tick <= 0:
                     item_add_data = entity_manager.client_player.give_item(item.item_holding, amount, position=pos)
 
                 if item_add_data is not None:
-                    can_drop_holding = False
+                    game_state.can_drop_holding = False
 
                     # Items are being dropped
                     if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
@@ -677,20 +708,20 @@ def draw_inventory_hover_text() -> None:
                     if pos not in entity_manager.client_player.old_inventory_positions:
                         entity_manager.client_player.old_inventory_positions.append(pos)
 
-                if item_drop_tick <= 0:
-                    item_drop_rate -= 1
-                    if item_drop_rate <= 0:
-                        item_drop_rate = 0
-                    item_drop_tick = int(item_drop_rate)
+                if game_state.item_drop_tick <= 0:
+                    game_state.item_drop_rate -= 1
+                    if game_state.item_drop_rate <= 0:
+                        game_state.item_drop_rate = 0
+                    game_state.item_drop_tick = int(game_state.item_drop_rate)
                     if item.item_holding is not None and item.item_holding.amount <= 0:
                         item.item_holding = None
                         commons.is_holding_item = False
                 else:
-                    item_drop_tick -= commons.DELTA_TIME
+                    game_state.item_drop_tick -= commons.DELTA_TIME
 
             # Picking up item
-            elif can_pickup_item and not mouse_buttons[2]:
-                can_pickup_item = False
+            elif game_state.can_pickup_item and not mouse_buttons[2]:
+                game_state.can_pickup_item = False
                 item.item_holding = entity_manager.client_player.remove_item(pos)
                 if item.item_holding is not None:
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
@@ -716,7 +747,7 @@ def draw_inventory_hover_text() -> None:
         )
 
         commons.is_holding_item = False
-        can_drop_holding = False
+        game_state.can_drop_holding = False
         item.item_holding = None
 
 
@@ -791,8 +822,12 @@ def draw_menu_background() -> None:
     BACKGROUND_DATA.update(commons.DELTA_TIME)
 
 
-good_color: pygame.Color = pygame.Color(10, 230, 10)
-bad_color: pygame.Color = pygame.Color(230, 10, 10)
+# Import game state
+from game_state import game_state
+
+# Initialize game state
+game_state.LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
+game_state.LIGHT_RENDER_DISTANCE_Y = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCK_SIZE) + 9
 
 # MAX SURF WIDTH IS 16383
 
@@ -810,46 +845,9 @@ if commons.SPLASHSCREEN:
     run_splash_screen()
 
 fps_text = shared_methods.outline_text(str(0), pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
-hand_text = pygame.Surface((0, 0))
-stats_text = pygame.Surface((0, 0))
 
-fade_back = False
-fade_float = 0.0
-fade_background_id = -1
 fade_surf = pygame.Surface((0, 0))
-background_id = 5
-background_tick = 0
-background_scroll_vel = 0
-
-auto_save_tick = 0
-fps_tick = 0
-last_hovered_item = None
-parallax_pos = (0, 0)
-can_drop_holding = False
-can_pickup_item = False
-exit_button_hover = False
-thread_active = False
-item_drop_tick = 0
-item_drop_rate = 0
-
-light_surf = pygame.Surface((0, 0))
-newest_light_surf = pygame.Surface((0, 0))
-newest_light_surf_pos = (0, 0)
-light_min_x = 0
-light_max_x = 0
-light_min_y = 0
-light_max_y = 0
 global_lighting = 255
-
-LIGHT_RENDER_DISTANCE_X = int((commons.WINDOW_WIDTH * 0.5) / commons.BLOCK_SIZE) + 9
-LIGHT_RENDER_DISTANCE_Y = int((commons.WINDOW_HEIGHT * 0.5) / commons.BLOCK_SIZE) + 9
-
-last_thread_time = 0.2
-last_thread_start = pygame.time.get_ticks()
-
-save_select_surf = pygame.Surface((315, 360), pygame.SRCALPHA)
-save_select_y_offset = 0
-save_select_y_velocity = 0
 
 load_menu_surf = shared_methods.create_menu_surface(7, 8, "")
 load_menu_box_left1 = commons.WINDOW_WIDTH * 0.5 - 336 * 0.5
@@ -916,7 +914,7 @@ while True:
         world.world.playtime += commons.DELTA_TIME
         entity_manager.client_player.playtime += int(commons.DELTA_TIME)
 
-        evenOlderCamPos = entity_manager.old_camera_position
+        previous_camera_position = entity_manager.old_camera_position
 
         entity_manager.old_camera_position = (
             entity_manager.camera_position[0],
@@ -1002,7 +1000,7 @@ while True:
 
         if commons.BACKGROUND:
             BACKGROUND_DATA.update_biome(Biome.TREE)
-            BACKGROUND_DATA.render(parallax_pos[0], parallax_pos[1], 0.1)
+            BACKGROUND_DATA.render(game_state.parallax_position[0], game_state.parallax_position[1], 0.1)
             BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.001)
             BACKGROUND_DATA.update(commons.DELTA_TIME)
         else:
@@ -1020,17 +1018,17 @@ while True:
         entity_manager.draw_physics_items()
 
         if commons.EXPERIMENTAL_LIGHTING:
-            if not thread_active:
-                last_thread_time = (pygame.time.get_ticks() - last_thread_start) * 0.001
+            if not game_state.thread_active:
+                game_state.last_thread_time = (pygame.time.get_ticks() - game_state.last_thread_start) * 0.001
                 _thread.start_new_thread(update_light, ())
-                last_thread_start = pygame.time.get_ticks()
+                game_state.last_thread_start = pygame.time.get_ticks()
 
-            newest_light_surf.unlock()
+            game_state.newest_light_surface.unlock()
             commons.screen.blit(
-                newest_light_surf,
+                game_state.newest_light_surface,
                 (
-                    newest_light_surf_pos[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
-                    newest_light_surf_pos[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
+                    game_state.newest_light_surface_position[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
+                    game_state.newest_light_surface_position[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
                 ),
             )
 
@@ -1074,19 +1072,19 @@ while True:
                 draw_inventory_hover_text()
                 draw_exit_button()
 
-            if hand_text is not None:
-                commons.screen.blit(hand_text, (242 - hand_text.get_width() * 0.5, 0))
+            if game_state.hand_text is not None:
+                commons.screen.blit(game_state.hand_text, (242 - game_state.hand_text.get_width() * 0.5, 0))
             draw_item_holding()
 
         if commons.BACKGROUND:
-            move_parallax((background_scroll_vel, 0))
+            move_parallax((game_state.background_scroll_velocity, 0))
 
-        if auto_save_tick <= 0:
-            auto_save_tick += commons.AUTO_SAVE_FREQUENCY
+        if game_state.auto_save_tick <= 0:
+            game_state.auto_save_tick += commons.AUTO_SAVE_FREQUENCY
             entity_manager.client_player.save()
             world.save()
         else:
-            auto_save_tick -= commons.DELTA_TIME
+            game_state.auto_save_tick -= commons.DELTA_TIME
 
     elif commons.game_state == "MAIN_MENU":
         draw_menu_background()
@@ -1101,49 +1099,49 @@ while True:
         elif commons.game_sub_state == "PLAYER_SELECTION":
             if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
-                    for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
+                    for save_option_index in range(len(commons.PLAYER_SAVE_OPTIONS)):
                         if pygame.Rect(
                                 load_menu_box_left2,
-                                132 + i * 62 + save_select_y_offset,
+                                132 + save_option_index * 62 + game_state.save_select_y_offset,
                                 315,
                                 60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             commons.WAIT_TO_USE = True
-                            commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[i][0]["name"]
-                            commons.PLAYER_DATA["model_appearance"] = commons.PLAYER_SAVE_OPTIONS[i][0][
+                            commons.PLAYER_DATA["name"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["name"]
+                            commons.PLAYER_DATA["model_appearance"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0][
                                 "model_appearance"
                             ]
-                            commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hotbar"]
-                            commons.PLAYER_DATA["inventory"] = commons.PLAYER_SAVE_OPTIONS[i][0]["inventory"]
-                            commons.PLAYER_DATA["hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["hp"]
-                            commons.PLAYER_DATA["max_hp"] = commons.PLAYER_SAVE_OPTIONS[i][0]["max_hp"]
-                            commons.PLAYER_DATA["playtime"] = commons.PLAYER_SAVE_OPTIONS[i][0]["playtime"]
-                            commons.PLAYER_DATA["creation_date"] = commons.PLAYER_SAVE_OPTIONS[i][0]["creation_date"]
-                            commons.PLAYER_DATA["last_played_date"] = commons.PLAYER_SAVE_OPTIONS[i][0][
+                            commons.PLAYER_DATA["hotbar"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["hotbar"]
+                            commons.PLAYER_DATA["inventory"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["inventory"]
+                            commons.PLAYER_DATA["hp"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["hp"]
+                            commons.PLAYER_DATA["max_hp"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["max_hp"]
+                            commons.PLAYER_DATA["playtime"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["playtime"]
+                            commons.PLAYER_DATA["creation_date"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0]["creation_date"]
+                            commons.PLAYER_DATA["last_played_date"] = commons.PLAYER_SAVE_OPTIONS[save_option_index][0][
                                 "last_played_date"
                             ]
                             menu_manager.load_menu_world_data()
                             game_data.play_sound("sound.menu_open")
                             commons.game_sub_state = "WORLD_SELECTION"
                             menu_manager.update_active_menu_buttons()
-                            save_select_y_offset = 0
+                            game_state.save_select_y_offset = 0
 
-            save_select_y_velocity *= 0.9
-            if len(commons.PLAYER_SAVE_OPTIONS) > 5:
-                save_select_y_offset += save_select_y_velocity
-                if save_select_y_offset < -61 * len(commons.PLAYER_SAVE_OPTIONS) + 350:
-                    save_select_y_offset = -61 * len(commons.PLAYER_SAVE_OPTIONS) + 350
-                if save_select_y_offset > 0:
-                    save_select_y_offset = 0
+            game_state.save_select_y_velocity *= game_constants.MENU_SCROLL_DAMPENING
+            if len(commons.PLAYER_SAVE_OPTIONS) > game_constants.MENU_VISIBLE_ITEMS:
+                game_state.save_select_y_offset += game_state.save_select_y_velocity
+                if game_state.save_select_y_offset < -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.PLAYER_SAVE_OPTIONS) + 350:
+                    game_state.save_select_y_offset = -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.PLAYER_SAVE_OPTIONS) + 350
+                if game_state.save_select_y_offset > 0:
+                    game_state.save_select_y_offset = 0
 
             commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-            save_select_surf.fill((0, 0, 0, 0))
-            for i in range(len(commons.PLAYER_SAVE_OPTIONS)):
-                save_select_surf.blit(
-                    commons.PLAYER_SAVE_OPTIONS[i][1],
-                    (0, i * 62 + save_select_y_offset),
+            game_state.save_select_surface.fill((0, 0, 0, 0))
+            for save_option_index in range(len(commons.PLAYER_SAVE_OPTIONS)):
+                game_state.save_select_surface.blit(
+                    commons.PLAYER_SAVE_OPTIONS[save_option_index][1],
+                    (0, save_option_index * game_constants.MENU_ITEM_HEIGHT + game_state.save_select_y_offset),
                 )
-            commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
+            commons.screen.blit(game_state.save_select_surface, (load_menu_box_left2, 132))
 
         elif commons.game_sub_state == "PLAYER_CREATION":
             commons.screen.blit(
@@ -1158,16 +1156,16 @@ while True:
             should_break = False
             if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE:
                 if pygame.Rect(load_menu_box_left1, 120, 336, 384).collidepoint(commons.MOUSE_POSITION):
-                    for i in range(len(commons.WORLD_SAVE_OPTIONS)):
+                    for world_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
                         if pygame.Rect(
                                 load_menu_box_left2,
-                                132 + i * 60 + save_select_y_offset,
+                                132 + world_option_index * 60 + game_state.save_select_y_offset,
                                 315,
                                 60,
                         ).collidepoint(commons.MOUSE_POSITION):
                             game_data.play_sound("sound.menu_open")
 
-                            world.load(commons.WORLD_SAVE_OPTIONS[i][0])
+                            world.load(commons.WORLD_SAVE_OPTIONS[world_option_index][0])
 
                             world.WORLD_SIZE_X, world.WORLD_SIZE_Y = len(world.world.tile_data), len(
                                 world.world.tile_data[0]
@@ -1193,40 +1191,40 @@ while True:
 
                             commons.screen.fill((0, 0, 0))
 
-                            text0 = shared_methods.outline_text(
+                            loading_greeting_text = shared_methods.outline_text(
                                 f"Greetings {entity_manager.client_player.name}, bear with us while",
                                 pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
-                            text1 = shared_methods.outline_text(
+                            loading_world_text = shared_methods.outline_text(
                                 f"we load up '{world.world.name}'",
                                 pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
-                            text2 = shared_methods.outline_text(
+                            loading_tip_text = shared_methods.outline_text(
                                 game_data.TIPS[random.randint(0, len(game_data.TIPS) - 1)],
                                 pygame.Color(255, 255, 255),
                                 commons.DEFAULT_FONT,
                             )
 
                             commons.screen.blit(
-                                text0,
+                                loading_greeting_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text0.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_greeting_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.5 - 30,
                                 ),
                             )
                             commons.screen.blit(
-                                text1,
+                                loading_world_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_world_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.5,
                                 ),
                             )
                             commons.screen.blit(
-                                text2,
+                                loading_tip_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text2.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_tip_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.75,
                                 ),
                             )
@@ -1245,17 +1243,17 @@ while True:
 
                             render_hand_text()
 
-                            map_light = [[0 for _ in range(world.WORLD_SIZE_Y)] for _ in range(world.WORLD_SIZE_X)]
-                            for map_index_x in range(world.WORLD_SIZE_X - 1):
-                                for map_index_y in range(world.WORLD_SIZE_Y - 1):
+                            game_state.map_light = [[0 for _ in range(world.WORLD_SIZE_Y)] for _ in range(world.WORLD_SIZE_X)]
+                            for world_x in range(world.WORLD_SIZE_X - 1):
+                                for world_y in range(world.WORLD_SIZE_Y - 1):
                                     if (
-                                            world.world.tile_data[map_index_x][map_index_y][0] == -1
-                                            and world.world.tile_data[map_index_x][map_index_y][1] == -1
-                                            and map_index_y < 110
+                                            world.world.tile_data[world_x][world_y][0] == -1
+                                            and world.world.tile_data[world_x][world_y][1] == -1
+                                            and world_y < game_constants.SURFACE_LIGHT_LEVEL_Y
                                     ):
-                                        map_light[map_index_x][map_index_y] = global_lighting
+                                        game_state.map_light[world_x][world_y] = global_lighting
                                     else:
-                                        map_light[map_index_x][map_index_y] = 0
+                                        game_state.map_light[world_x][world_y] = 0
 
                             commons.game_state = "PLAYING"
                             should_break = True
@@ -1263,22 +1261,22 @@ while True:
                             break
 
             if not should_break:
-                save_select_y_velocity *= 0.9
-                if len(commons.WORLD_SAVE_OPTIONS) > 5:
-                    save_select_y_offset += save_select_y_velocity
-                    if save_select_y_offset < -61 * len(commons.WORLD_SAVE_OPTIONS) + 350:
-                        save_select_y_offset = -61 * len(commons.WORLD_SAVE_OPTIONS) + 350
-                    if save_select_y_offset > 0:
-                        save_select_y_offset = 0
+                game_state.save_select_y_velocity *= game_constants.MENU_SCROLL_DAMPENING
+                if len(commons.WORLD_SAVE_OPTIONS) > game_constants.MENU_VISIBLE_ITEMS:
+                    game_state.save_select_y_offset += game_state.save_select_y_velocity
+                    if game_state.save_select_y_offset < -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.WORLD_SAVE_OPTIONS) + 350:
+                        game_state.save_select_y_offset = -game_constants.MENU_ITEM_TOTAL_HEIGHT * len(commons.WORLD_SAVE_OPTIONS) + 350
+                    if game_state.save_select_y_offset > 0:
+                        game_state.save_select_y_offset = 0
 
                 commons.screen.blit(load_menu_surf, (load_menu_box_left1, 120))
-                save_select_surf.fill((0, 0, 0, 0))
+                game_state.save_select_surface.fill((0, 0, 0, 0))
                 for save_option_index in range(len(commons.WORLD_SAVE_OPTIONS)):
-                    save_select_surf.blit(
+                    game_state.save_select_surface.blit(
                         commons.WORLD_SAVE_OPTIONS[save_option_index][1],
-                        (0, save_option_index * 62 + save_select_y_offset),
+                        (0, save_option_index * game_constants.MENU_ITEM_HEIGHT + game_state.save_select_y_offset),
                     )
-                commons.screen.blit(save_select_surf, (load_menu_box_left2, 132))
+                commons.screen.blit(game_state.save_select_surface, (load_menu_box_left2, 132))
 
         elif commons.game_sub_state == "CLOTHES":
             commons.screen.blit(
@@ -1391,8 +1389,8 @@ while True:
 
     # Update fps text
     if commons.DRAW_UI:
-        if fps_tick <= 0:
-            fps_tick += 0.5
+        if game_state.fps_tick <= 0:
+            game_state.fps_tick += game_constants.FPS_UPDATE_FREQUENCY
             if commons.DELTA_TIME > 0:
                 fps_text = shared_methods.outline_text(
                     str(int(1.0 / commons.DELTA_TIME)),
@@ -1400,7 +1398,7 @@ while True:
                     commons.DEFAULT_FONT,
                 )
         else:
-            fps_tick -= commons.DELTA_TIME
+            game_state.fps_tick -= commons.DELTA_TIME
         commons.screen.blit(fps_text, (commons.WINDOW_WIDTH - fps_text.get_width(), 0))
 
     # Reset some variables when the mouse button is lifted
@@ -1408,13 +1406,13 @@ while True:
         if commons.WAIT_TO_USE and not pygame.mouse.get_pressed()[2]:
             commons.WAIT_TO_USE = False
         if commons.is_holding_item:
-            can_drop_holding = True
+            game_state.can_drop_holding = True
         elif not commons.is_holding_item:
-            can_pickup_item = True
+            game_state.can_pickup_item = True
 
     if not pygame.mouse.get_pressed()[2]:
-        item_drop_rate = 25
-        item_drop_tick = 0
+        game_state.item_drop_rate = game_constants.DEFAULT_ITEM_DROP_RATE
+        game_state.item_drop_tick = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -1510,12 +1508,12 @@ while True:
                         )
                     else:
                         if commons.PARTICLES:
-                            for i in range(int(20 * commons.PARTICLE_DENSITY)):
+                            for particle_index in range(int(game_constants.PARTICLE_COUNT_RESPAWN * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
                                     entity_manager.client_player.position,
                                     pygame.Color(230, 230, 255),
-                                    magnitude=1 + random.random() * 6,
-                                    size=15,
+                                    magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
+                                    size=game_constants.PARTICLE_SIZE,
                                     gravity=0,
                                 )
 
@@ -1529,12 +1527,12 @@ while True:
                         )
 
                         if commons.PARTICLES:
-                            for i in range(int(40 * commons.PARTICLE_DENSITY)):
+                            for particle_index in range(int(game_constants.PARTICLE_COUNT_RESPAWN_ARRIVE * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
                                     entity_manager.client_player.position,
                                     pygame.Color(230, 230, 255),
-                                    magnitude=1 + random.random() * 6,
-                                    size=15,
+                                    magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
+                                    size=game_constants.PARTICLE_SIZE,
                                     gravity=0,
                                 )
 
@@ -1841,16 +1839,16 @@ while True:
             if commons.game_sub_state == "PLAYER_SELECTION" or commons.game_sub_state == "WORLD_SELECTION":
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 4:
-                        save_select_y_velocity += 3
+                        game_state.save_select_y_velocity += game_constants.MENU_SCROLL_VELOCITY_MULTIPLIER
                     if event.button == 5:
-                        save_select_y_velocity -= 3
+                        game_state.save_select_y_velocity -= game_constants.MENU_SCROLL_VELOCITY_MULTIPLIER
 
             elif commons.game_sub_state == "PLAYER_NAMING" or commons.game_sub_state == "WORLD_NAMING":
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_BACKSPACE:
                         commons.TEXT_INPUT = commons.TEXT_INPUT[:-1]
-                    elif (len(commons.TEXT_INPUT) <= 15 and commons.game_sub_state == "PLAYER_NAMING") or (
-                            len(commons.TEXT_INPUT) <= 27 and commons.game_sub_state == "WORLD_NAMING"
+                    elif (len(commons.TEXT_INPUT) <= game_constants.PLAYER_NAME_MAX_LENGTH and commons.game_sub_state == "PLAYER_NAMING") or (
+                            len(commons.TEXT_INPUT) <= game_constants.WORLD_NAME_MAX_LENGTH and commons.game_sub_state == "WORLD_NAMING"
                     ):
                         commons.TEXT_INPUT += event.unicode
     pygame.display.flip()

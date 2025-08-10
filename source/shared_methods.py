@@ -103,33 +103,33 @@ def create_menu_surface(width, height, body):
     """
     Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some optional text (measurements in multiples of 48 px)
     """
-    surf = pygame.Surface((width * 48, height * 48))
-    surf.fill((255, 0, 255))
-    surf.set_colorkey((255, 0, 255))
-    for i in range(width):
-        for j in range(height):
-            if i == 0:
-                if j == 0:
-                    index = 5
-                elif j == height - 1:
-                    index = 6
+    surface = pygame.Surface((width * 48, height * 48))
+    surface.fill((255, 0, 255))
+    surface.set_colorkey((255, 0, 255))
+    for x_coord in range(width):
+        for y_coord in range(height):
+            if x_coord == 0:
+                if y_coord == 0:
+                    tile_index = 5
+                elif y_coord == height - 1:
+                    tile_index = 6
                 else:
-                    index = 2
-            elif i == width - 1:
-                if j == 0:
-                    index = 8
-                elif j == height - 1:
-                    index = 7
+                    tile_index = 2
+            elif x_coord == width - 1:
+                if y_coord == 0:
+                    tile_index = 8
+                elif y_coord == height - 1:
+                    tile_index = 7
                 else:
-                    index = 4
-            elif j == 0:
-                index = 1
-            elif j == height - 1:
-                index = 3
+                    tile_index = 4
+            elif y_coord == 0:
+                tile_index = 1
+            elif y_coord == height - 1:
+                tile_index = 3
             else:
-                index = 9
+                tile_index = 9
 
-            surf.blit(tilesets.misc_gui[index], (i * 48, j * 48))
+            surface.blit(tilesets.misc_gui[tile_index], (x_coord * 48, y_coord * 48))
     usable_width = width * 48 - 60
     lines = [""]
     words = body.split(" ")
@@ -141,30 +141,30 @@ def create_menu_surface(width, height, body):
             lines.append(word)
         else:
             lines[-1] += " " + word
-    for i in range(len(lines)):
-        surf.blit(
-            outline_text(lines[i], pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
-            (15, 15 + i * 20),
+    for line_index in range(len(lines)):
+        surface.blit(
+            outline_text(lines[line_index], pygame.Color(255, 255, 255), commons.DEFAULT_FONT),
+            (15, 15 + line_index * 20),
         )
-    return surf
+    return surface
 
 
-def color_surface(gray_surf, col) -> pygame.Surface:
+def color_surface(gray_surface, color_tuple) -> pygame.Surface:
     """
     Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
     """
-    if col == ():
-        col = (0, 0, 0)
-    x = gray_surf.get_width()
-    y = gray_surf.get_height()
-    surf = pygame.Surface((x, y))
-    surf.fill((255, 255, 255))
-    surf.set_colorkey((255, 255, 255))  # set the colorkey to white
-    surf.blit(gray_surf, (0, 0))  # create a surf with the given hair and white background
-    color = pygame.Surface((x, y))
-    color.fill(col)  # create a blank surf with the color of the hair
-    surf.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
-    return surf
+    if color_tuple == ():
+        color_tuple = (0, 0, 0)
+    width = gray_surface.get_width()
+    height = gray_surface.get_height()
+    surface = pygame.Surface((width, height))
+    surface.fill((255, 255, 255))
+    surface.set_colorkey((255, 255, 255))  # set the colorkey to white
+    surface.blit(gray_surface, (0, 0))  # create a surf with the given hair and white background
+    color = pygame.Surface((width, height))
+    color.fill(color_tuple)  # create a blank surf with the color of the hair
+    surface.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
+    return surface
 
 
 def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pygame.Surface:
@@ -178,30 +178,39 @@ def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pyg
     return colored_surface
 
 
-def lerp_float(a, b, t):
+def lerp_float(start_value, end_value, interpolation_factor):
     """
     Simple linear interpolation
     """
-    return a + (b - a) * t
+    return start_value + (end_value - start_value) * interpolation_factor
 
 
-def smooth_zero_to_one(zero_to_one_float, iterations):
+def smooth_zero_to_one(value, iterations):
+    """
+    Applies a smooth transformation to a 0-1 value
+    """
     for _ in range(iterations):
-        zero_to_one_float = math.sin(zero_to_one_float * math.pi - math.pi * 0.5)
-        zero_to_one_float = zero_to_one_float * 0.5 + 0.5
-    return zero_to_one_float
+        value = math.sin(value * math.pi - math.pi * 0.5)
+        value = value * 0.5 + 0.5
+    return value
 
 
-def ease_out_zero_to_one(zero_to_one_float, iterations):
+def ease_out_zero_to_one(value, iterations):
+    """
+    Applies an ease-out transformation to a 0-1 value
+    """
     for _ in range(iterations):
-        zero_to_one_float = math.sin(zero_to_one_float * math.pi * 0.5)
-    return zero_to_one_float
+        value = math.sin(value * math.pi * 0.5)
+    return value
 
 
-def ease_in_zero_to_one(zero_to_one_float, iterations):
+def ease_in_zero_to_one(value, iterations):
+    """
+    Applies an ease-in transformation to a 0-1 value
+    """
     for _ in range(iterations):
-        zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
-    return zero_to_one_float
+        value = 1.0 + math.sin(value * math.pi * 0.5 - math.pi * 0.5)
+    return value
 
 
 def draw_hitbox(
