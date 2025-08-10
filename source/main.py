@@ -10,6 +10,7 @@ import pygame.locals
 
 import commons
 import entity_manager
+import game_constants
 import game_data
 import item
 import menu_manager
