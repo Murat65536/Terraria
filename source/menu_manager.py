@@ -96,24 +96,20 @@ class SettingsButtons(Enum):
     BACK = 1
 
 
-"""=================================================================================================================
-    menu_manager.MenuObject
-
-    Stores information about a single button, the visibility of a given button is set by the active_menu_buttons
-    table
------------------------------------------------------------------------------------------------------------------"""
-
-
 class MenuObject:
+    """
+    Stores information about a single button, the visibility of a given button is set by the active_menu_buttons table
+    """
+
     def __init__(
-        self,
-        text: str,
-        position: tuple[float, float],
-        font: pygame.font.Font,
-        type: Type,
-        color: pygame.Color = pygame.Color(153, 153, 153),
-        outline_color: pygame.Color = pygame.Color(0, 0, 0),
-        function=None,
+            self,
+            text: str,
+            position: tuple[float, float],
+            font: pygame.font.Font,
+            type: Type,
+            color: pygame.Color = pygame.Color(153, 153, 153),
+            outline_color: pygame.Color = pygame.Color(0, 0, 0),
+            function=None,
     ):
         self.text = text
         self.position = position
@@ -139,13 +135,10 @@ class MenuObject:
         self.clicked = False
         self.active = False
 
-    """=================================================================================================================
-        menu_manager.MenuObject.update -> void
-
-        Checks to see if the mouse is interacting with the button instance, performing all the related logic
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Checks to see if the mouse is interacting with the button instance, performing all the related logic
+        """
         if self.type == Type.BUTTON:
             if self.rect.collidepoint(commons.MOUSE_POSITION):
                 if not self.hovered:
@@ -162,13 +155,10 @@ class MenuObject:
                 self.hovered = False
                 self.clicked = False
 
-    """=================================================================================================================
-        menu_manager.MenuObject.draw -> void
-
-        Draws the button's text surface or alt_text_surface depending on the hover state of the button
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the button's text surface or alt_text_surface depending on the hover state of the button
+        """
         if not self.hovered:
             commons.screen.blit(self.text_surface, (self.rect.left, self.rect.top))
         else:
@@ -235,16 +225,10 @@ player_model = player.Model(
     }
 )
 
-
-"""=================================================================================================================
-    menu_manager.update_active_menu_buttons -> void
-
-    Sets the active state of all buttons to false and then re-adds buttons based on the current game sub state
-    and data in the 'active_menu_buttons' table
------------------------------------------------------------------------------------------------------------------"""
-
-
 def update_active_menu_buttons():
+    """
+    Sets the active state of all buttons to false and then re-adds buttons based on the current game substate and data in the 'active_menu_buttons' table
+    """
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
             text.active = False
@@ -255,15 +239,10 @@ def update_active_menu_buttons():
                 text.active = True
             break
 
-
-"""=================================================================================================================
-    menu_manager.update_menu_buttons -> void
-
-    Calls update on all active button instances, handles unique button press logic
------------------------------------------------------------------------------------------------------------------"""
-
-
 def update_menu_buttons():
+    """
+    Calls update on all active button instances, handles unique button press logic
+    """
     global player_model
     player_model.walk()
     commons.PLAYER_FRAMES = player_model.create_sprite()
@@ -566,9 +545,9 @@ def update_menu_buttons():
 
                     if commons.game_sub_state == "COLOR_PICKER":
                         if (
-                            commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] is not None
-                            or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None
-                            or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] is not None
+                                commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][0] is not None
+                                or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][1] is not None
+                                or commons.PLAYER_MODEL_DATA[commons.PLAYER_MODEL_COLOR_INDEX][2] is not None
                         ):
                             entity_manager.client_color_picker.selected_red = commons.PLAYER_MODEL_DATA[
                                 commons.PLAYER_MODEL_COLOR_INDEX
@@ -588,29 +567,19 @@ def update_menu_buttons():
 
                     update_active_menu_buttons()
 
-
-"""=================================================================================================================
-    menu_manager.draw_menu_buttons -> void
-
-    Calls draw on all active button instances
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_menu_buttons():
+    """
+    Calls draw on all active button instances
+    """
     for menu in active_menu_buttons:
         for text in active_menu_buttons[menu]:
             if text.active:
                 text.draw()
 
-
-"""=================================================================================================================
-    menu_manager.load_menu_player_data -> void
-
-    Loads all player save metadata and creates a surface for each one
------------------------------------------------------------------------------------------------------------------"""
-
-
 def load_menu_player_data():
+    """
+    Loads all player save metadata and creates a surface for each one
+    """
     path = "assets/players"
     if not os.path.exists(path):
         os.makedirs(path)
@@ -676,14 +645,10 @@ def load_menu_player_data():
         commons.PLAYER_SAVE_OPTIONS.append([dat, player_data_surf])
 
 
-"""=================================================================================================================
-    menu_manager.load_menu_world_data -> void
-
-    Loads all world save metadata and creates a surface for each one
------------------------------------------------------------------------------------------------------------------"""
-
-
 def load_menu_world_data():
+    """
+    Loads all world save metadata and creates a surface for each one
+    """
     path = "assets/worlds"
     if not os.path.exists(path):
         os.makedirs(path)

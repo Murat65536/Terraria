@@ -5,14 +5,11 @@ import commons
 import entity_manager
 import pygame
 
-"""=================================================================================================================
-    particle.Particle
-
-    Holds all the information required to update and draw a single particle
------------------------------------------------------------------------------------------------------------------"""
-
 
 class Particle:
+    """
+    Holds all the information required to update and draw a single particle
+    """
     def __init__(
         self,
         position,
@@ -46,13 +43,10 @@ class Particle:
             self.velocity = (velocity, velocity)
         self.gravity = gravity
 
-    """=================================================================================================================
-        particle.Particle.update -> void
-
-        Moves the particle, updates it's time remaining and uses this time remaining to calculate it's size
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Moves the particle, updates it's time remaining and uses this time remaining to calculate it's size
+        """
         drag_factor = 1.0 - commons.DELTA_TIME * 2
 
         self.velocity = (
@@ -71,13 +65,10 @@ class Particle:
         if self.life <= 0:  # Remove the particle
             entity_manager.particles.remove(self)
 
-    """=================================================================================================================
-        particle.Particle.draw -> void
-
-        Draws the particle instance
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the particle instance
+        """
         if self.outline:
             border = pygame.Surface((self.size + 2, self.size + 2), pygame.SRCALPHA)
             border.fill((0, 0, 0))

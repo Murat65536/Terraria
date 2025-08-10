@@ -10,14 +10,11 @@ import world
 from item import Item
 from pygame.locals import Rect
 
-"""=================================================================================================================
-    physics_item.PhysicsItem
-
-    Holds all the information required to update and draw a single PhysicsItem (An item that can collide with tiles)
------------------------------------------------------------------------------------------------------------------"""
-
 
 class PhysicsItem:
+    """
+    Holds all the information required to update and draw a single PhysicsItem (An item that can collide with tiles)
+    """
     def __init__(
         self,
         physics_item: Item,
@@ -60,24 +57,18 @@ class PhysicsItem:
         self.stationary = False
         self.time_stationary = 0
 
-    """=================================================================================================================
-        physics_item.PhysicsItem.render_image -> void
-
-        Gives the image an invisible border so that it can be rotated without clipping
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_image(self):
+        """
+        Gives the image an invisible border so that it can be rotated without clipping
+        """
         # self.image = pygame.transform.scale(self.item.get_image(), (int(commons.BLOCK_SIZE * 1.414 * self.item_scale), int(commons.BLOCK_SIZE * 1.414 * self.item_scale)))
         self.image = self.item.get_image()
         self.half_image_size = self.image.get_width() * 0.5
 
-    """=================================================================================================================
-        physics_item.PhysicsItem.check_despawn -> void
-
-        Checks to see if the PhysicsItem is off screen, if it is then remove it from the physics items list
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def check_despawn(self):
+        """
+        Checks to see if the PhysicsItem is off screen, if it is then remove it from the physics items list
+        """
         if self.position[0] < entity_manager.client_player.position[0] - commons.WINDOW_WIDTH * 0.5:
             entity_manager.physics_items.remove(self)
         elif self.position[0] > entity_manager.client_player.position[0] + commons.WINDOW_WIDTH * 0.5:
@@ -87,13 +78,10 @@ class PhysicsItem:
         elif self.position[1] > entity_manager.client_player.position[1] + commons.WINDOW_HEIGHT * 0.5:
             entity_manager.physics_items.remove(self)
 
-    """=================================================================================================================
-        physics_item.PhysicsItem.update -> void
-
-        Runs the despawn logic and physics for the PhysicsItem instance
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Runs the despawn logic and physics for the PhysicsItem instance
+        """
         if self.despawn_check_tick <= 0:
             self.despawn_check_tick += 10
             self.check_despawn()
@@ -234,13 +222,10 @@ class PhysicsItem:
                                             )  # Stop item vertically
                                             self.grounded = True
 
-    """=================================================================================================================
-        physics_item.PhysicsItem.draw -> void
-
-        Draws the PhysicsItem instance, rotating using the x velocity
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the PhysicsItem instance, rotating using the x velocity
+        """
         if self.velocity[0] < 0:
             velocity_angle = int(max(self.velocity[0], -10) * 50)
         else:

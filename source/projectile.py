@@ -9,14 +9,11 @@ import shared_methods
 import world
 from pygame.locals import Rect
 
-"""=================================================================================================================
-    projectile.Projectile
-
-    Stores information required to update and draw a single Projectile instance
------------------------------------------------------------------------------------------------------------------"""
-
 
 class Projectile:
+    """
+    Stores information required to update and draw a single Projectile instance
+    """
     def __init__(
         self,
         position,
@@ -55,14 +52,10 @@ class Projectile:
         self.drag = drag
         self.grounded = True
 
-    """=================================================================================================================
-        projectile.Projectile.update -> void
-
-        Updates the life of the Projectile instance, performs physics (including optional bounces) and
-        spawns trail particles if necessary
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Updates the life of the Projectile instance, performs physics (including optional bounces) and spawns trail particles if necessary
+        """
         if self.life <= 0:
             entity_manager.projectiles.remove(self)
             return
@@ -203,13 +196,10 @@ class Projectile:
                 entity_manager.projectiles.remove(self)
                 return
 
-    """=================================================================================================================
-        projectile.Projectile.draw -> void
-
-        Draws the Projectile instance, using the type to chose the image/shape
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the Projectile instance, using the type to chose the image/shape
+        """
         angle = math.atan2(self.velocity[1], -self.velocity[0]) * 180 / math.pi + 90
         surf = shared_methods.rotate_surface(self.image, angle)
         commons.screen.blit(

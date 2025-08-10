@@ -21,31 +21,22 @@ class ItemSlotClickResult(Enum):
     SWAPPED = 2
 
 
-"""=================================================================================================================
-    item.get_random_item_prefix -> [prefix category, prefix]
-
-    Gets a random prefix from the prefix category
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_random_item_prefix(prefix_category):
+    """
+    Gets a random prefix from the prefix category
+    """
     return [
         prefix_category,
         game_data.prefix_data[prefix_category][random.randint(0, len(game_data.prefix_data[prefix_category]) - 1)],
     ]
 
 
-"""=================================================================================================================
-    item.Item
-
-    Stores information about an item
-
-    Weapons, pickaxes etc will be automatically given a random prefix from the appropriate category when
-    constructed
------------------------------------------------------------------------------------------------------------------"""
-
-
 class Item:
+    """
+    Stores information about an item
+    Weapons, pickaxes, etc. will be automatically given a random prefix from the appropriate category when constructed
+    """
+
     def __init__(self, item_id, amount=1, auto_assign_prefix=False, prefix_name=None):
         self.json_item = game_data.get_item_by_id(item_id)
 
@@ -228,11 +219,11 @@ class Item:
     def get_resized_offset_x(self):
         if type(self.json_item.surface) is pygame.Surface:
             if (
-                max(
-                    self.json_item.surface.get_width(),
-                    self.json_item.surface.get_height(),
-                )
-                > 32
+                    max(
+                        self.json_item.surface.get_width(),
+                        self.json_item.surface.get_height(),
+                    )
+                    > 32
             ):
                 return int(
                     24
@@ -250,11 +241,11 @@ class Item:
     def get_resized_offset_y(self):
         if type(self.json_item.surface) is pygame.Surface:
             if (
-                max(
-                    self.json_item.surface.get_width(),
-                    self.json_item.surface.get_height(),
-                )
-                > 32
+                    max(
+                        self.json_item.surface.get_width(),
+                        self.json_item.surface.get_height(),
+                    )
+                    > 32
             ):
                 return int(
                     24
@@ -414,8 +405,8 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
             if possible_item_index not in void_indices:
                 possible_item = possible_items[possible_item_index]
                 if (
-                    possible_item[2][0] == possible_item[2][1]
-                    or possible_item[2][0] < tile_pos[1] < possible_item[2][1]
+                        possible_item[2][0] == possible_item[2][1]
+                        or possible_item[2][0] < tile_pos[1] < possible_item[2][1]
                 ):
                     total_weight += possible_item[1]
                     possible_item_indices.append(possible_item_index)

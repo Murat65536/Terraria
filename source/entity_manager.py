@@ -55,15 +55,10 @@ camera_position: tuple[float, float] = (0, 0)
 old_camera_position: tuple[float, float] = (0, 0)
 camera_position_difference: tuple[float, float] = (0, 0)
 
-
-"""=================================================================================================================
-    entity_manager.create_player -> void
-
-    Sets the client player to a new player instance created with the data in PLAYER_DATA
------------------------------------------------------------------------------------------------------------------"""
-
-
 def create_player():
+    """
+    Sets the client player to a new player instance created with the data in PLAYER_DATA
+    """
     global client_player
     # Load hotbar
     hotbar: list[Item | None] = [None for _ in range(10)]
@@ -94,15 +89,10 @@ def create_player():
         last_played_date=commons.PLAYER_DATA["last_played_date"],
     )
 
-
-"""=================================================================================================================
-    entity_manager.check_enemy_spawn -> void
-
-    Checks if an enemy needs to spawn around the player
------------------------------------------------------------------------------------------------------------------"""
-
-
 def check_enemy_spawn():
+    """
+    Checks if an enemy needs to spawn around the player
+    """
     if not commons.PASSIVE:
         if commons.ENEMY_SPAWN_TICK <= 0:
             commons.ENEMY_SPAWN_TICK += 1.0
@@ -115,15 +105,10 @@ def check_enemy_spawn():
         else:
             commons.ENEMY_SPAWN_TICK -= commons.DELTA_TIME
 
-
-"""=================================================================================================================
-    entity_manager.draw_enemy_hover_text -> void
-
-    Checks if an enemy is being hovered over by the mouse, if it is, draw it's name and it's health
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_enemy_hover_text():
+    """
+    Checks if an enemy is being hovered over by the mouse, if it is, draw it's name and it's health
+    """
     transformed_mouse_position = (
         commons.MOUSE_POSITION[0] + camera_position[0] - commons.WINDOW_WIDTH * 0.5,
         commons.MOUSE_POSITION[1] + camera_position[1] - commons.WINDOW_HEIGHT * 0.5,
@@ -179,15 +164,10 @@ def draw_enemy_hover_text():
             )
             break
 
-
-"""=================================================================================================================
-    entity_manager.kill_all_entities -> void
-
-    Kills all entities, used before quitting a world
------------------------------------------------------------------------------------------------------------------"""
-
-
 def kill_all_entities():
+    """
+    Kills all entities, used before quitting a world
+    """
     enemies.clear()
     particles.clear()
     projectiles.clear()
@@ -196,15 +176,10 @@ def kill_all_entities():
     damage_numbers.clear()
     recent_pickups.clear()
 
-
-"""=================================================================================================================
-    Entity Update Functions
-
-    Calls update on every entity in their respective list
------------------------------------------------------------------------------------------------------------------"""
-
-
 def update_enemies():
+    """
+    Calls update on every entity in their respective list
+    """
     for enemy in enemies:
         enemy.update()
 
@@ -294,15 +269,10 @@ def update_recent_pickups():
     for item in to_remove:
         recent_pickups.remove(item)
 
-
-"""=================================================================================================================
-    Entity Draw Functions
-
-    Calls draw on every entity in their respective list
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_enemies():
+    """
+    Calls draw on every entity in their respective list
+    """
     for enemy in enemies:
         enemy.draw()
 
@@ -357,15 +327,10 @@ def draw_recent_pickups():
             ),
         )
 
-
-"""=================================================================================================================
-    Entity Spawn Functions
-
-    Construct an instance of an entity and append it to their respective list
------------------------------------------------------------------------------------------------------------------"""
-
-
 def spawn_enemy(enemy_id: int, position=None):
+    """
+    Construct an instance of an entity and append it to their respective list
+    """
     if client_player is None:
         return
     if position is None:

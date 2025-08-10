@@ -2,14 +2,10 @@ import commons
 import pygame
 from pygame.locals import Rect
 
-"""=================================================================================================================
-    color_picker.ColorPicker
-
-    Stores information about a color picker
------------------------------------------------------------------------------------------------------------------"""
-
-
 class ColorPicker:
+    """
+    Stores information about a color picker
+    """
     def __init__(
         self,
         position: tuple[int, int],
@@ -47,13 +43,10 @@ class ColorPicker:
         )
         self.render_surface()
 
-    """=================================================================================================================
-        color_picker.ColorPicker.render_surface -> void
-
-        Uses canvas and border size info to render the color picker surface
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_surface(self):
+        """
+        Uses canvas and border size info to render the color picker surface
+        """
         self.surface = pygame.Surface((self.width + self.border_size * 2, self.height + self.border_size * 2))
         # Draw border
         pygame.draw.rect(
@@ -107,13 +100,10 @@ class ColorPicker:
         surf = pygame.transform.scale(surf, (self.width, self.height))
         self.surface.blit(surf, (self.border_size, self.border_size))
 
-    """=================================================================================================================
-        color_picker.ColorPicker.get_color -> tuple
-
-        Generates the color of the surface at a given location
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def get_color(self, x: int, y: int) -> tuple[int, int, int]:
+        """
+        Generates the color of the surface at a given location
+        """
         base_color_index: int = int(x / self.section_width)  # Color to the left of the point
         next_color_index = base_color_index + 1  # Color to the right of the point
         blend = (x % self.section_width) / self.section_width
@@ -135,13 +125,10 @@ class ColorPicker:
             col[index] = channel
         return col[0], col[1], col[2]
 
-    """=================================================================================================================
-        color_picker.ColorPicker.update -> void
-
-        If the mouse is clicked over the color picker, update the selected color and location
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self) -> None:
+        """
+        If the mouse is clicked over the color picker, update the selected color and location
+        """
         if pygame.mouse.get_pressed()[0] and not commons.WAIT_TO_USE and self.rect.collidepoint(commons.MOUSE_POSITION):
             self.selected_x = commons.MOUSE_POSITION[0] - self.position[0] - self.border_size
             self.selected_y = commons.MOUSE_POSITION[1] - self.position[1] - self.border_size
@@ -152,13 +139,10 @@ class ColorPicker:
             self.selected_green = int(self.selected_green * 0.5)
             self.selected_blue = int(self.selected_blue * 0.5)
 
-    """=================================================================================================================
-        color_picker.ColorPicker.draw -> void
-
-        Draws the color picker's surface and draws the location of the selected color
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the color picker's surface and draws the location of the selected color
+        """
         commons.screen.blit(self.surface, self.position)
         pygame.draw.circle(
             commons.screen,

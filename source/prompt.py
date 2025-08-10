@@ -8,14 +8,11 @@ import sound_manager
 import world
 from pygame.locals import Rect
 
-"""=================================================================================================================
-    prompt.Prompt
-
-    Stores information necessary to update and draw a Prompt instance
------------------------------------------------------------------------------------------------------------------"""
-
 
 class Prompt:
+    """
+    Stores information necessary to update and draw a Prompt instance
+    """
     def __init__(
         self,
         name,
@@ -60,13 +57,10 @@ class Prompt:
         else:
             game_data.play_sound("sound.menu_open")
 
-    """=================================================================================================================
-        prompt.Prompt.update -> void
-
-        Handles interactions with all possible prompt buttons
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Handles interactions with all possible prompt buttons
+        """
         offset_x = 10
 
         if self.shop:
@@ -115,13 +109,10 @@ class Prompt:
                 menu_manager.update_active_menu_buttons()
                 self.close = True
 
-    """=================================================================================================================
-        prompt.Prompt.draw -> void
-
-        Draws all the active prompt buttons and the prompt text
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws all the active prompt buttons and the prompt text
+        """
         commons.screen.blit(self.body_surf, (self.left, self.top))
         offset_x = 20
 

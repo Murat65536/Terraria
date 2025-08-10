@@ -23,14 +23,10 @@ pygame.mixer.pre_init(48000, -16, 2, 1024)
 pygame.init()
 pygame.mixer.init()
 
-"""=================================================================================================================
-    move_parallax -> void
-
-    Moves the background by a set amount, looping back when necessary
------------------------------------------------------------------------------------------------------------------"""
-
-
 def move_parallax(val: tuple[float, float]) -> None:
+    """
+    Moves the background by a set amount, looping back when necessary
+    """
     global parallax_pos
     parallax_pos = (parallax_pos[0] + val[0], parallax_pos[1] + val[1])
     if parallax_pos[0] > 0:
@@ -38,29 +34,19 @@ def move_parallax(val: tuple[float, float]) -> None:
     elif parallax_pos[0] < -2047:
         parallax_pos = (parallax_pos[0] + 2048, parallax_pos[1])
 
-
-"""=================================================================================================================
-    fade_background -> void
-
-    Fade the background to a different background type
------------------------------------------------------------------------------------------------------------------"""
-
-
 def fade_background(new_background_id: int) -> None:
+    """
+    Fade the background to a different background type
+    """
     global fade_background_id, fade_back, fade_float
     fade_background_id = new_background_id
     fade_back = True
     fade_float = 0.0
 
-
-"""=================================================================================================================
-    draw_death_message -> void
-
-    Renders and draws a large death message to the screen
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_death_message() -> None:
+    """
+    Renders and draws a large death message to the screen
+    """
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     death_text = shared_methods.outline_text("You were slain...", pygame.Color(255, 127, 127), commons.LARGE_FONT)
     respawn_text = shared_methods.outline_text(
@@ -82,15 +68,10 @@ def draw_death_message() -> None:
         ),
     )
 
-
-"""=================================================================================================================
-    render_hand_text -> void
-
-    Renders the full name of the item that the player has equipped in their hotbar to a surface
------------------------------------------------------------------------------------------------------------------"""
-
-
 def render_hand_text() -> None:
+    """
+    Renders the full name of the item that the player has equipped in their hotbar to a surface
+    """
     global hand_text
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     equipped = entity_manager.client_player.items[item.ItemLocation.HOTBAR][entity_manager.client_player.hotbar_index]
@@ -100,15 +81,10 @@ def render_hand_text() -> None:
     else:
         hand_text = shared_methods.outline_text("", pygame.Color(255, 255, 255), commons.DEFAULT_FONT)
 
-
-"""=================================================================================================================
-    run_splash_screen -> void
-
-    Run when booting the game to display some text and the default character running across the screen
------------------------------------------------------------------------------------------------------------------"""
-
-
 def run_splash_screen() -> None:
+    """
+    Run when booting the game to display some text and the default character running across the screen
+    """
     age = 0
     black_surf = pygame.Surface((commons.WINDOW_WIDTH, commons.WINDOW_HEIGHT))
 
@@ -152,15 +128,10 @@ def run_splash_screen() -> None:
 
         clock.tick(commons.TARGET_FPS)
 
-
-"""=================================================================================================================
-    render_stats_text -> bool
-
-    Gets an item using the parsed position and renders it's information to a surface
------------------------------------------------------------------------------------------------------------------"""
-
-
 def render_stats_text(pos: List[Any]) -> bool:
+    """
+    Gets an item using the parsed position and renders it's information to a surface
+    """
     global stats_text, last_hovered_item
     assert isinstance(entity_manager.client_player, entity_manager.Player)
 
@@ -411,15 +382,10 @@ def render_stats_text(pos: List[Any]) -> bool:
         return True
     return False
 
-
-"""=================================================================================================================
-    update_light -> void
-
-    Run by the lighting thread to update the light surface and it's position in the world
------------------------------------------------------------------------------------------------------------------"""
-
-
 def update_light() -> None:
+    """
+    Run by the lighting thread to update the light surface and it's position in the world
+    """
     global light_surf, map_light, light_min_x, light_max_x, light_min_y, light_max_y, thread_active, newest_light_surf, newest_light_surf_pos, last_thread_time
     thread_active = True
 
@@ -512,15 +478,8 @@ def update_light() -> None:
 
     # print("Scale Copy MS: ", pygame.time.get_ticks() - timeBefore)
 
-
-"""=================================================================================================================
-    fill_light -> void
-
-    Recursively calls itself to populate data in the map_light array
------------------------------------------------------------------------------------------------------------------"""
-
-
 def fill_light(x_pos: int, y_pos: int, light_value: int) -> None:
+    """Recursively calls itself to populate data in the map_light array"""
     global map_light
     if light_min_x <= x_pos < light_max_x and light_min_y <= y_pos < light_max_y:
         light_reduction = game_data.tile_id_light_reduction_lookup[world.world.tile_data[x_pos][y_pos][0]]
@@ -536,15 +495,10 @@ def fill_light(x_pos: int, y_pos: int, light_value: int) -> None:
     else:
         return
 
-
-"""=================================================================================================================
-    get_speed_text -> string
-
-    Gets a string relating to the speed value given
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_speed_text(speed: float) -> str:
+    """
+    Gets a string relating to the speed value given
+    """
     if speed <= 8:
         return "Insanely fast speed"
     elif speed <= 20:
@@ -562,15 +516,10 @@ def get_speed_text(speed: float) -> str:
     else:
         return "Snail speed"
 
-
-"""=================================================================================================================
-    get_knockback_text -> string
-
-    Gets a string relating to the knockback value given
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_knockback_text(knockback: float) -> str:
+    """
+    Gets a string relating to the knockback value given
+    """
     if knockback == 0:
         return "No knockback"
     elif knockback < 1.5:
@@ -590,15 +539,8 @@ def get_knockback_text(knockback: float) -> str:
     else:
         return "Insane knockback"
 
-
-"""=================================================================================================================
-    get_bounces_text -> string
-
-    Cleans up ammunition's bounce text
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_bounces_text(bounces: int) -> str:
+    """Cleans up ammunition's bounce text"""
     if bounces == 0:
         return "No bounces"
     elif bounces == 1:
@@ -606,28 +548,18 @@ def get_bounces_text(bounces: int) -> str:
     else:
         return f"{bounces} bounces"
 
-
-"""=================================================================================================================
-    add_plus -> string
-
-    Adds a plus to a string if it doesn't start with a minus
------------------------------------------------------------------------------------------------------------------"""
-
-
 def add_plus(string: str) -> str:
+    """
+    Adds a plus to a string if it doesn't start with a minus
+    """
     if string[0] != "-":
         string = f"+{string}"
     return string
 
-
-"""=================================================================================================================
-    draw_inventory_hover_text -> void
-
-    Checks if the player is hovering over an item in the UI and displays the item's info if they are
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_inventory_hover_text() -> None:
+    """
+    Checks if the player is hovering over an item in the UI and displays the item's info if they are
+    """
     global can_drop_holding, can_pickup_item, item_drop_tick, item_drop_rate
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     pos = None
@@ -773,15 +705,8 @@ def draw_inventory_hover_text() -> None:
         can_drop_holding = False
         item.item_holding = None
 
-
-"""=================================================================================================================
-    draw_item_holding -> void
-
-    Draws the exit button in the bottom left, also spawns the exit confirmation prompt
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_item_holding() -> None:
+    """Draws the exit button in the bottom left, also spawns the exit confirmation prompt"""
     if commons.is_holding_item and item.item_holding is not None:
         commons.screen.blit(
             item.item_holding.get_image(),
@@ -797,15 +722,10 @@ def draw_item_holding() -> None:
                 (commons.MOUSE_POSITION[0] + 34, commons.MOUSE_POSITION[1] + 40),
             )
 
-
-"""=================================================================================================================
-    draw_exit_button -> void
-
-    Draws the exit button in the bottom left, also spawns the exit confirmation prompt
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_exit_button() -> None:
+    """
+    Draws the exit button in the bottom left, also spawns the exit confirmation prompt
+    """
     global exit_button_hover
     top = commons.WINDOW_HEIGHT - 20
     left = commons.WINDOW_WIDTH - 100
@@ -830,15 +750,10 @@ def draw_exit_button() -> None:
     exit_text = shared_methods.outline_text("Save and Quit", color, commons.DEFAULT_FONT)
     commons.screen.blit(exit_text, (left, top))
 
-
-"""=================================================================================================================
-    draw_interactive_block_hover -> void
-
-    Draws the item image of an interactive block being hovered by the mouse
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_interactive_block_hover() -> None:
+    """
+    Draws the item image of an interactive block being hovered by the mouse
+    """
     if world.tile_in_map(commons.HOVERED_TILE[0], commons.HOVERED_TILE[1]):
         tile_id = world.world.tile_data[commons.HOVERED_TILE[0]][commons.HOVERED_TILE[1]][0]
         tile_data = game_data.get_tile_by_id(tile_id)
@@ -848,15 +763,10 @@ def draw_interactive_block_hover() -> None:
                 if item_data is not None:
                     commons.screen.blit(item_data.surface, commons.MOUSE_POSITION)
 
-
-"""=================================================================================================================
-    draw_menu_background -> void
-
-    Draws the menu background
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_menu_background() -> None:
+    """
+    Draws the menu background
+    """
     BACKGROUND_DATA.update_biome(Biome.TREE)
     BACKGROUND_DATA.render()
     BACKGROUND_DATA.shift(commons.DELTA_TIME * 10, 0.2)

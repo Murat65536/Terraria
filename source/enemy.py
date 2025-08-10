@@ -15,14 +15,12 @@ from pygame.locals import Rect
 
 from source.data.entity import ENTITY_DATA
 
-"""=================================================================================================================
-    enemy.Enemy
-
-    Stores all information about an enemy instance
------------------------------------------------------------------------------------------------------------------"""
-
 
 class Enemy:
+    """
+    Stores all information about an enemy instance
+    """
+
     def __init__(self, position, enemy_id) -> None:
         self.position: tuple[float, float] = position
         self.block_pos: tuple[int, int] = (0, 0)
@@ -56,13 +54,10 @@ class Enemy:
         self.world_invincible: bool = False
         self.alive: bool = True
 
-    """=================================================================================================================
-        enemy.Enemy.update -> void
-
-        Updates the enemy instance, performing physics, AI and animation
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self) -> None:
+        """
+        Updates the enemy instance, performing physics, AI and animation
+        """
         assert isinstance(entity_manager.client_player, entity_manager.Player)
         if self.alive:
             if self.world_invincible:
@@ -144,12 +139,12 @@ class Enemy:
                     if world.tile_in_map(self.block_pos[1] + j, self.block_pos[0] + i):
                         tile_id: int = world.world.tile_data[self.block_pos[1] + j][self.block_pos[0] + i][0]
                         tile_data: (
-                            TileData
-                            | DamagingTileData
-                            | MultitileData
-                            | DoorTileData
-                            | LootTileData
-                            | LootMultitileData
+                                TileData
+                                | DamagingTileData
+                                | MultitileData
+                                | DoorTileData
+                                | LootTileData
+                                | LootMultitileData
                         ) = game_data.get_tile_by_id(tile_id)
                         if commons.TileTag.NO_COLLIDE not in tile_data.tags:
                             block_rect = Rect(
@@ -163,17 +158,17 @@ class Enemy:
                             else:
                                 platform = False
                             if block_rect.colliderect(
-                                int(self.rect.left - 1),
-                                int(self.rect.top + 2),
-                                1,
-                                int(self.rect.height - 4),
+                                    int(self.rect.left - 1),
+                                    int(self.rect.top + 2),
+                                    1,
+                                    int(self.rect.height - 4),
                             ):
                                 self.stop_left = True  # Is there a solid block left
                             if block_rect.colliderect(
-                                int(self.rect.right + 1),
-                                int(self.rect.top + 2),
-                                1,
-                                int(self.rect.height - 4),
+                                    int(self.rect.right + 1),
+                                    int(self.rect.top + 2),
+                                    1,
+                                    int(self.rect.height - 4),
                             ):
                                 self.stop_right = True  # Is there a solid block right
                             if block_rect.colliderect(self.rect):
@@ -208,10 +203,10 @@ class Enemy:
                                         if self.velocity[1] < 0:
                                             if not platform:
                                                 if Rect(
-                                                    self.rect.left + 3,
-                                                    self.rect.top,
-                                                    self.rect.width - 6,
-                                                    self.rect.height,
+                                                        self.rect.left + 3,
+                                                        self.rect.top,
+                                                        self.rect.width - 6,
+                                                        self.rect.height,
                                                 ).colliderect(block_rect):
                                                     self.position = (
                                                         self.position[0],
@@ -224,10 +219,10 @@ class Enemy:
                                     else:
                                         if self.velocity[1] > 0:
                                             if Rect(
-                                                self.rect.left + 3,
-                                                self.rect.top,
-                                                self.rect.width - 6,
-                                                self.rect.height,
+                                                    self.rect.left + 3,
+                                                    self.rect.top,
+                                                    self.rect.width - 6,
+                                                    self.rect.height,
                                             ).colliderect(block_rect):
                                                 self.position = (
                                                     self.position[0],
@@ -242,23 +237,19 @@ class Enemy:
                                                 self.moving_left = False
             self.animate()
 
-    """=================================================================================================================
-        enemy.Enemy.damage -> void
-
-        Damages the enemy instance spawning particles and playing a sound
-
-        Will call 'kill' on the enemy if it's health drops below 0
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def damage(
-        self,
-        value: float,
-        source: list[str],
-        knockback: float = 0,
-        direction: int = 0,
-        crit: bool = False,
-        source_velocity: tuple[float, float] = (0, 0),
+            self,
+            value: float,
+            source: list[str],
+            knockback: float = 0,
+            direction: int = 0,
+            crit: bool = False,
+            source_velocity: tuple[float, float] = (0, 0),
     ):
+        """
+        Damages the enemy instance spawning particles and playing a sound
+        Will call 'kill' on the enemy if it's health drops below 0
+        """
         if self.alive:
             if source[1] == "World" and self.world_invincible:
                 return
@@ -319,15 +310,11 @@ class Enemy:
                     remaining_knockback * -5.0,
                 )
 
-    """=================================================================================================================
-        enemy.Enemy.kill -> void
-
-        Sets the enemies alive variable to false, will be removed from the entity list by the manager
-
-        Plays a sound and spawns particles and loot
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def kill(self, source_velocity: tuple[float, float] | None):
+        """
+        Sets the enemies alive variable to false, will be removed from the entity list by the manager
+        Plays a sound and spawns particles and loot
+        """
         if self.alive:
             self.alive = False
 
@@ -377,13 +364,10 @@ class Enemy:
 
             entity_manager.enemies.remove(self)
 
-    """=================================================================================================================
-        enemy.Enemy.animate -> void
-
-        Updates the animation frame of the enemy instance
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def animate(self):
+        """
+        Updates the animation frame of the enemy instance
+        """
         if not self.grounded:
             if self.velocity[1] > 2:
                 self.animation_frame = 2
@@ -394,47 +378,41 @@ class Enemy:
         else:
             self.animation_frame = 0
 
-    """=================================================================================================================
-        enemy.Enemy.despawn_radius -> bool
-
-        Checks if the enemy has gone too far beyond the player's view, if so, return true
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def despawn_radius(self):
+        """
+        Checks if the enemy has gone too far beyond the player's view, if so, return true
+        """
         assert isinstance(entity_manager.client_player, entity_manager.Player)
         if (
-            self.position[0]
-            < entity_manager.client_player.position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
+                self.position[0]
+                < entity_manager.client_player.position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
-            self.position[0]
-            > entity_manager.client_player.position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
+                self.position[0]
+                > entity_manager.client_player.position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
-            self.position[1]
-            < entity_manager.client_player.position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
+                self.position[1]
+                < entity_manager.client_player.position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
-            self.position[1]
-            > entity_manager.client_player.position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
+                self.position[1]
+                > entity_manager.client_player.position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         return False
 
-    """=================================================================================================================
-        enemy.Enemy.draw -> void
-
-        Draws the enemy instance at the current animation frame
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw(self):
+        """
+        Draws the enemy instance at the current animation frame
+        """
         left = self.rect.left - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
         top = self.rect.top - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
         commons.screen.blit(
@@ -469,13 +447,10 @@ class Enemy:
             self.rect.height,
         )
 
-    """=================================================================================================================
-        enemy.Enemy.run_ai -> void
-
-        Runs AI specific to this type of enemy
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def run_ai(self):
+        """
+        Runs AI specific to this type of enemy
+        """
         assert isinstance(entity_manager.client_player, entity_manager.Player)
         if self.type == "Slime":
             if self.grounded:

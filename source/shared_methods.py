@@ -4,48 +4,29 @@ import commons
 import pygame
 import tilesets
 
-"""=================================================================================================================
-    shared_methods.normalize_vec_2 -> tuple
-
-    Performs vector normalization on the given vector (scalar tuple)
------------------------------------------------------------------------------------------------------------------"""
-
-
 def normalize_vec_2(vector):
+    """
+    Performs vector normalization on the given vector (scalar tuple)
+    """
     magnitude = math.sqrt(vector[0] ** 2 + vector[1] ** 2)
     return vector[0] / magnitude, vector[1] / magnitude
 
-
-"""=================================================================================================================
-    shared_methods.get_on_off -> string
-
-    Given a bool, returns either "on" or "off"
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_on_off(bool_var):
+    """
+    Given a bool, returns either "on" or "off"
+    """
     return "on" if bool_var else "off"
 
-
-"""=================================================================================================================
-    shared_methods.darken_color -> tuple
-
-    Multiplies all three components of a color tuple by a given float
------------------------------------------------------------------------------------------------------------------"""
-
-
 def darken_color(color: pygame.Color, factor: float = 0.6):
+    """
+    Multiplies all three parts of a color tuple by a given float
+    """
     return int(color.r * factor), int(color.g * factor), int(color.b * factor)
 
-
-"""=================================================================================================================
-    shared_methods.get_tier_color -> tuple
-
-    Given an item tier, a color representing that tier is returned
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_tier_color(tier) -> pygame.Color:
+    """
+    Given an item tier, a color representing that tier is returned
+    """
     if tier < 0:
         return pygame.Color(150, 150, 150)  # Gray
     elif tier == 1:
@@ -73,15 +54,10 @@ def get_tier_color(tier) -> pygame.Color:
     else:
         return pygame.Color(255, 255, 255)  # White
 
-
-"""=================================================================================================================
-    shared_methods.rotate_surface -> pygame.Surface
-
-    Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
------------------------------------------------------------------------------------------------------------------"""
-
-
 def rotate_surface(image, angle):
+    """
+    Given a surface and an angle, a rotation preserving edges is performed on the surface and returned
+    """
     original_rect = image.get_rect()
     rotated_image = pygame.transform.rotate(image, angle)
     rotated_rect = original_rect.copy()
@@ -89,18 +65,12 @@ def rotate_surface(image, angle):
     # rotated_image = rotated_image.subsurface(rotated_rect).copy()
     return rotated_image
 
-
-"""=================================================================================================================
-    shared_methods.outline_text -> pygame.Surface
-
-    Used to draw most text in the game, renders some text and draws it several times at varying offsets to create
-    an outline effect
------------------------------------------------------------------------------------------------------------------"""
-
-
 def outline_text(
     string, color: pygame.Color, font: pygame.font.Font, outline_color: pygame.Color = pygame.Color(0, 0, 0)
 ):
+    """
+    Used to draw most text in the game, renders some text and draws it several times at varying offsets to create an outline effect
+    """
     text1 = font.render(string, False, color)
     if commons.FANCY_TEXT:
         text2 = font.render(string, False, outline_color)
@@ -121,16 +91,10 @@ def outline_text(
     else:
         return text1
 
-
-"""=================================================================================================================
-    shared_methods.create_menu_surface -> pygame.Surface
-
-    Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some
-    optional text (measurements in multiples of 48px)
------------------------------------------------------------------------------------------------------------------"""
-
-
 def create_menu_surface(width, height, body):
+    """
+    Using a few measurements, and the images in the UI image list, a bordered surface image is created, with some optional text (measurements in multiples of 48 px)
+    """
     surf = pygame.Surface((width * 48, height * 48))
     surf.fill((255, 0, 255))
     surf.set_colorkey((255, 0, 255))
@@ -176,15 +140,10 @@ def create_menu_surface(width, height, body):
         )
     return surf
 
-
-"""=================================================================================================================
-    shared_methods.color_surface -> pygame.Surface
-
-    Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
------------------------------------------------------------------------------------------------------------------"""
-
-
 def color_surface(gray_surf, col) -> pygame.Surface:
+    """
+    Uses the pygame.BLEND_RGB_ADD blend flag to color a grayscale image with the given color
+    """
     if col == ():
         col = (0, 0, 0)
     x = gray_surf.get_width()
@@ -198,30 +157,20 @@ def color_surface(gray_surf, col) -> pygame.Surface:
     surf.blit(color, (0, 0), None, pygame.BLEND_RGB_ADD)  # blit the new surf to the hair with an add blend flag
     return surf
 
-
-"""=================================================================================================================
-    shared_methods.transparent_color_surface -> pygame.Surface
-
-    Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
------------------------------------------------------------------------------------------------------------------"""
-
-
 def transparent_color_surface(surface: pygame.Surface, col: pygame.Color) -> pygame.Surface:
+    """
+    Uses the pygame.BLEND_RGB_ADD blend flag to color a transparent grayscale image with the given color
+    """
     colored_surface = surface.copy()
     color = pygame.Surface(surface.get_size(), pygame.SRCALPHA)
     color.fill(col)
     colored_surface.blit(color, (0, 0), None, pygame.BLEND_RGB_MULT)
     return colored_surface
 
-
-"""=================================================================================================================
-    shared_methods.lerp_float -> float
-
-    Simple linear interpolation
------------------------------------------------------------------------------------------------------------------"""
-
-
 def lerp_float(a, b, t):
+    """
+    Simple linear interpolation
+    """
     return a + (b - a) * t
 
 
@@ -243,17 +192,12 @@ def ease_in_zero_to_one(zero_to_one_float, iterations):
         zero_to_one_float = 1.0 + math.sin(zero_to_one_float * math.pi * 0.5 - math.pi * 0.5)
     return zero_to_one_float
 
-
-"""=================================================================================================================
-    draw_hitbox -> void
-
-    Draws a hitbox
------------------------------------------------------------------------------------------------------------------"""
-
-
 def draw_hitbox(
     camera_position_x: float, camera_position_y: float, x: float, y: float, width: float, height: float
 ) -> None:
+    """
+    Draws a hitbox
+    """
     if commons.HITBOXES:
         pygame.draw.rect(
             commons.screen,

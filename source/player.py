@@ -15,14 +15,10 @@ import world
 from item import Item, ItemLocation, ItemSlotClickResult, ItemTag
 from pygame.locals import Rect
 
-"""=================================================================================================================
-    player.get_death_message -> string
-
-    Uses the player's name, the thing that killed them, and the worlds name to generate a random death message
------------------------------------------------------------------------------------------------------------------"""
-
-
 def get_death_message(name, source):
+    """
+    Uses the player's name, the thing that killed them, and the worlds name to generate a random death message
+    """
     string = game_data.DEATH_LINES[source[0]][random.randint(0, len(game_data.DEATH_LINES[source[0]]) - 1)]
     string = string.replace("<p>", name)
     string = string.replace("<w>", world.world.name)
@@ -108,14 +104,10 @@ class MovementFrames:
                 self.animation_tick -= commons.DELTA_TIME
 
 
-"""=================================================================================================================
-    player.Model
-
-    Stores information about the appearance of a player
------------------------------------------------------------------------------------------------------------------"""
-
-
 class Model:
+    """
+    Stores information about the appearance of a player
+    """
     def __init__(self, model_appearance: commons.PlayerAppearance) -> None:
         self.swinging: bool = False
         self.flip: bool = False
@@ -327,14 +319,10 @@ class ItemStorage:
         self.crafting_menu: list[None] | list[Item] = []
 
 
-"""=================================================================================================================
-    player.Player
-
-    Performs physics and renders a player within the current world
------------------------------------------------------------------------------------------------------------------"""
-
-
 class Player:
+    """
+    Performs physics and renders a player within the current world
+    """
     def __init__(
         self,
         position: tuple[float, float],
@@ -474,13 +462,10 @@ class Player:
 
         self.old_inventory_positions = []
 
-    """=================================================================================================================
-        player.Player.update -> void
-
-        Updates many variables within the player object
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update(self):
+        """
+        Updates many variables within the player object
+        """
         if self.alive:
             if self.invincible:
                 if self.invincible_timer <= 0.0:
@@ -736,12 +721,6 @@ class Player:
 
         self.update_inventory_old_slots()
 
-    """=================================================================================================================
-        player.Player.damage -> void
-
-        Kills the player, adds a death message, spawns particles, plays a sound
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def damage(
         self,
         value: int,
@@ -750,6 +729,9 @@ class Player:
         direction: int = 0,
         source_velocity: tuple[float, float] = (0, 0),
     ) -> None:
+        """
+        Kills the player, adds a death message, spawns particles, plays a sound
+        """
         if not commons.CREATIVE and self.alive and not self.invincible:
             self.invincible = True
             self.invincible_timer = 0.35
@@ -816,13 +798,10 @@ class Player:
         )
         self.hp_x_position = commons.WINDOW_WIDTH - 10 - hp_float * 100 - self.hp_text.get_width() * 0.5
 
-    """=================================================================================================================
-        player.Player.kill -> void
-
-        Kills the player, adds a death message, spawns particles, and plays a sound
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def kill(self, source, source_velocity=None):
+        """
+        Kills the player, adds a death message, spawns particles, and plays a sound
+        """
         if self.alive:
             self.alive = False
             self.respawn_time_remaining = self.respawn_time
@@ -858,13 +837,10 @@ class Player:
                     )
             game_data.play_sound("sound.player_death")  # death sound
 
-    """=================================================================================================================
-        player.Player.respawn -> void
-
-        Sets the player's position to the world's spawn point and resets some variables
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def respawn(self):
+        """
+        Sets the player's position to the world's spawn point and resets some variables
+        """
         self.position = world.world.spawn_position  # set position to world.world.spawn_point
         self.velocity = (0, 0)
         self.alive = True
@@ -876,13 +852,10 @@ class Player:
         self.invincible = True  # When you spawn, you are invincible for 3 seconds.
         self.invincible_timer = 3.0
 
-    """=================================================================================================================
-        player.Player.render_current_item_image    -> void
-
-        Renders the item that the player is currently holding to the current_item_image surface
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_current_item_image(self):
+        """
+        Renders the item that the player is currently holding to the current_item_image surface
+        """
         if not commons.is_holding_item:
             current_item = self.items[ItemLocation.HOTBAR][self.hotbar_index]
         else:
@@ -924,13 +897,10 @@ class Player:
                 math.sqrt((inner_dimensions[0] * 0.5) ** 2 + (inner_dimensions[1] * 0.5) ** 2) * 0.8
             )
 
-    """=================================================================================================================
-        player.Player.animate -> void
-
-        Updates the player
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def animate(self):
+        """
+        Updates the player
+        """
         self.sprites.swinging = self.swinging_arm
         if self.holding_arm:
             self.sprites.hold()
@@ -942,13 +912,10 @@ class Player:
         else:
             self.sprites.jump()
 
-    """=================================================================================================================
-        player.Player.use_item -> void
-
-        Gets the item that the player is holding and calls the correct use function
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def use_item(self, right_click=False):
+        """
+        Gets the item that the player is holding and calls the correct use function
+        """
         current_item: Item | None = None
 
         if commons.is_holding_item:
@@ -1033,13 +1000,10 @@ class Player:
                         origin = block_position
                     world.use_special_tile(origin[0], origin[1])
 
-    """=================================================================================================================
-        player.Player.place_block -> void
-
-        Uses a screen position and a block item    to place a block in the    world
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def place_block(self, screen_position_x, screen_position_y, block_item, is_tile):
+        """
+        Uses a screen position and a block item to place a block in the world
+        """
         if (
             math.sqrt(
                 (screen_position_x - commons.MOUSE_POSITION[0]) ** 2
@@ -1158,13 +1122,10 @@ class Player:
                                     item.item_holding = None
                                     commons.is_holding_item = False
 
-    """=================================================================================================================
-        player.Player.use_pickaxe -> void
-
-        Uses a screen position and a pickaxe item to mine a    block in the world
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def use_tool(self, screen_position_x, screen_position_y, tool_item):
+        """
+        Uses a screen position and a pickaxe item to mine a block in the world
+        """
         if self.can_use or commons.CREATIVE:
             self.enemies_hit = []
             self.can_use = False
@@ -1239,8 +1200,8 @@ class Player:
                                     block_position[0],
                                     block_position[1],
                                     tile=1,
-                                    check_centre_tile=False,
-                                    check_centre_wall=False,
+                                    check_center_tile=False,
+                                    check_center_wall=False,
                                 )
                                 < 4
                             ):
@@ -1262,13 +1223,10 @@ class Player:
 
                                 game_data.play_wall_hit_sfx(wall_id)
 
-    """=================================================================================================================
-        player.Player.use_longsword_weapon -> void
-
-        Swings the given longsword weapon item
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def use_longsword_weapon(self, longsword_weapon_item) -> None:
+        """
+        Swings the given longsword weapon item
+        """
         if self.can_use:
             self.enemies_hit = []
             self.can_use = False
@@ -1294,13 +1252,10 @@ class Player:
             self.should_hold_arm = True
             self.item_extend = True
 
-    """=================================================================================================================
-        player.Player.use_ranged_weapon    -> void
-
-        Shoots the given ranged    weapon item
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def use_ranged_weapon(self, screen_position_x, screen_position_y, ranged_weapon_item) -> None:
+        """
+        Shoots the given ranged weapon item
+        """
         if self.can_use:
             ammo_to_use_id = -1
             ammo_to_use_dat = None
@@ -1343,16 +1298,11 @@ class Player:
 
                 entity_manager.spawn_projectile(self.position, angle, ranged_weapon_item, ammo_to_use_id, source)
 
-    """=================================================================================================================
-        player.Player.give_item    -> varying return info
-
-        Gives the player one or several    potentially    prefixed items.
-
-        Performs an optional search    on the player's    available item spaces to merge the item    with pre-existing stacks or
-        just place it in an empty slot
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def give_item(self, current_item, amount=1, position=None):
+        """
+        Gives the player one or several potentially prefixed items.
+        Performs an optional search on the player's available item spaces to merge the item with pre-existing stacks or just place it in an empty slot
+        """
         # No position specified
         if position is None:
             is_coin = current_item.has_tag(ItemTag.COIN)
@@ -1455,13 +1405,10 @@ class Player:
                 ]
             return None
 
-    """=================================================================================================================
-        player.Player.remove_item -> item
-
-        Removes all the items from a slot in one of the player's available item slots
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def remove_item(self, position, remove_count=None):
+        """
+        Removes all the items from a slot in one of the player's available item slots
+        """
         current_item = self.items[position[0]][position[1]]
         if current_item is not None:
             if remove_count is None:
@@ -1480,13 +1427,10 @@ class Player:
                 return current_item.copy(new_amount=remove_count)
         return None
 
-    """=================================================================================================================
-        player.Player.find_existing_item_stacks -> existing space list
-
-        Finds any occurrences of an item in the player's inventory or hotbar
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def find_existing_item_stacks(self, item_id, search_hotbar=True, search_inventory=True):
+        """
+        Finds any occurrences of an item in the player's inventory or hotbar
+        """
         # [which array,    position in array, amount]
         existing_spaces = []
         item_data = game_data.get_item_by_id(item_id)
@@ -1510,13 +1454,10 @@ class Player:
 
         return existing_spaces
 
-    """=================================================================================================================
-        player.Player.find_free_spaces -> free space list
-
-        Finds any free spaces in the player's inventory    or hotbar
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def find_free_spaces(self, max_stack=9999, search_hotbar=True, search_inventory=True):
+        """
+        Finds any free spaces in the player's inventory or hotbar
+        """
         free_spaces = []
 
         if search_hotbar:
@@ -1531,13 +1472,10 @@ class Player:
 
         return free_spaces
 
-    """=================================================================================================================
-        player.Player.render_hotbar    -> void
-
-        Fully renders the player's hotbar to the hotbar_image surface, including all the items in the hotbar
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_hotbar(self):
+        """
+        Fully renders the player's hotbar to the hotbar_image surface, including all the items in the hotbar
+        """
         self.hotbar_image.fill((255, 0, 255))
         for hotbar_index in range(len(self.items[ItemLocation.HOTBAR])):
             self.hotbar_image.blit(tilesets.misc_gui[0], (48 * hotbar_index, 0))
@@ -1558,13 +1496,10 @@ class Player:
                         (24 + 48 * hotbar_index, 30),
                     )
 
-    """=================================================================================================================
-        player.Player.render_inventory -> void
-
-        Fully renders the player's inventory to the    inventory_image    surface, including all the items in the    inventory
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_inventory(self):
+        """
+        Fully renders the player's inventory to the inventory_image surface, including all the items in the inventory
+        """
         self.inventory_image.fill((255, 0, 255))
         pygame.draw.rect(self.inventory_image, (150, 150, 150), Rect(5, 5, 472, 184), 0)
         for inventory_index in range(len(self.items[ItemLocation.INVENTORY])):
@@ -1590,13 +1525,10 @@ class Player:
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
                     )
 
-    """=================================================================================================================
-        player.Player.render_chest -> void
-
-        Fully renders the chest the player has open to the chest_image surface, including all the items in the open chest
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_chest(self):
+        """
+        Fully renders the chest the player has open to the chest_image surface, including all the items in the open chest
+        """
         self.chest_image.fill((255, 0, 255))
         pygame.draw.rect(self.chest_image, (150, 150, 150), Rect(5, 5, 232, 184), 0)
         for chest_index in range(len(self.items[ItemLocation.CHEST])):
@@ -1622,13 +1554,10 @@ class Player:
                         (24 + 48 * slot_x, 30 + 48 * slot_y),
                     )
 
-    """=================================================================================================================
-        player.Player.update_inventory_old_slots -> void
-
-        Uses a list of outdated positions in the hotbar, inventory or an open chest to update the respective area's surfaces
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update_inventory_old_slots(self):
+        """
+        Uses a list of outdated positions in the hotbar, inventory, or an open chest to update the respective area's surfaces
+        """
         for data in self.old_inventory_positions:
             if data[0] == ItemLocation.HOTBAR:
                 current_item = self.items[ItemLocation.HOTBAR][data[1]]
@@ -1691,22 +1620,16 @@ class Player:
                         )
         self.old_inventory_positions = []
 
-    """=================================================================================================================
-        player.Player.update_craftable_items -> void
-
-        Creates a list of items that can be crafted with the current materials List structure [item_id, amount]
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def update_craftable_items(self):
+        """
+        Creates a list of items that can be crafted with the current materials List structure [item_id, amount]
+        """
         self.items[ItemLocation.CRAFTING_MENU] = [[i + 1, 1] for i in range(len(game_data.json_item_data) - 1)]
 
-    """=================================================================================================================
-        player.Player.render_craftable_items_surf -> void
-
-        Uses the craftable_items list to create a surface that displays all the items the player can craft
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def render_craftable_items_surf(self):
+        """
+        Uses the craftable_items list to create a surface that displays all the items the player can craft
+        """
         self.craftable_items_surf = pygame.Surface((48, len(self.items[ItemLocation.CRAFTING_MENU]) * 48))
         self.craftable_items_surf.fill((255, 0, 255))
         for i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
@@ -1729,13 +1652,10 @@ class Player:
                 ),
             )
 
-    """=================================================================================================================
-        player.Player.draw -> void
-
+    def draw(self):
+        """
         Uses various player variables to draw the player in the world
-    -----------------------------------------------------------------------------------------------------------------"""
-
-    def draw(self):  # Draw player to screen
+        """
         if self.alive:
             screen_position_x = self.position[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5
             screen_position_y = self.position[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5
@@ -2027,13 +1947,10 @@ class Player:
                     1,
                 )
 
-    """=================================================================================================================
-        player.Player.draw_hp -> void
-
-        Draws the player's health in the top right
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def draw_hp(self):
+        """
+        Draws the player's health in the top right
+        """
         if self.hp > 0:
             rect = Rect(commons.WINDOW_WIDTH - 10 - self.hp * 2, 25, self.hp * 2, 20)
             hp_float = self.hp / self.max_hp
@@ -2046,13 +1963,10 @@ class Player:
             pygame.draw.rect(commons.screen, (int(col[0] * 0.8), int(col[1] * 0.8), 0), rect, 3)
             commons.screen.blit(self.hp_text, (self.hp_x_position, 45))
 
-    """=================================================================================================================
-        player.Player.open_chest -> void
-
-        Plays the chest opening sound, opens the inventory and updates the items that the player can craft
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def open_chest(self, items):
+        """
+        Plays the chest opening sound, opens the inventory, and updates the items that the player can craft
+        """
         if not self.chest_open:
             game_data.play_sound("sound.menu_open")
             self.chest_open = True
@@ -2063,13 +1977,10 @@ class Player:
         self.render_craftable_items_surf()
         self.render_chest()
 
-    """=================================================================================================================
-        player.Player.save -> void
-
-        Packs the important player data    into an array and serialises it using the pickle module
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def save(self):
+        """
+        Packs the important player data into an array and serializes it using the pickle module
+        """
         # Convert the items    in the hotbar to a less    data heavy format
         formatted_hotbar = []
         for item_index in range(len(self.items[ItemLocation.HOTBAR])):
@@ -2117,13 +2028,10 @@ class Player:
         pickle.dump(commons.PLAYER_DATA, open(f"assets/players/{self.name}.player", "wb"))  # Save player array
         entity_manager.add_message("Saved Player: " + self.name + "!", pygame.Color(255, 255, 255))
 
-    """=================================================================================================================
-        player.Player.jump -> void
-
-        Plays a sound, spawns particles and sets the player's y velocity
-    -----------------------------------------------------------------------------------------------------------------"""
-
     def jump(self):
+        """
+        Plays a sound, spawns particles, and sets the player's y velocity
+        """
         if self.alive and self.grounded:
             game_data.play_sound("sound.jump")
             if commons.PARTICLES:
