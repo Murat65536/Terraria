@@ -1250,7 +1250,7 @@ def parse_sound_data():
                 sound = pygame.mixer.Sound(sound_variation)
                 sound.set_volume(sound_data.volume)
                 sound_data.variations.append(sound)
-            except FileNotFoundError:
+            except (FileNotFoundError, pygame.error):
                 pass
 
 
