@@ -24,61 +24,19 @@ class TileData:
 
 
 @dataclass
-class DamagingTileData:
-    id: int
-    id_str: str
-    name: str
-    strength: float
-    strength_type: TileStrengthType
-    mask_type: TileMaskType
-    mask_merge_ids: list[str]
-    light_reduction: int
-    light_emission: int
-    tags: list[TileTag]
-    item_id_str: str
-    item_count_range: tuple[int, int]
-    place_sound: str
-    hit_sound: str
+class DamagingTileData(TileData):
     tile_damage: int
     tile_damage_name: str
-    image: Surface
 
 
 @dataclass
-class MultitileData:
-    id: int
-    id_str: str
-    name: str
-    strength: float
-    strength_type: TileStrengthType
-    mask_type: TileMaskType
-    mask_merge_ids: list[str]
-    light_reduction: int
-    light_emission: int
-    tags: list[TileTag]
-    item_id_str: str
-    item_count_range: tuple[int, int]
+class MultitileData(TileData):
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
-    place_sound: str
-    hit_sound: str
-    image: Surface
 
 
 @dataclass
-class DoorTileData:
-    id: int
-    id_str: str
-    name: str
-    strength: float
-    strength_type: TileStrengthType
-    mask_type: TileMaskType
-    mask_merge_ids: list[str]
-    light_reduction: int
-    light_emission: int
-    tags: list[TileTag]
-    item_id_str: str
-    item_count_range: tuple[int, int]
+class DoorTileData(TileData):
     cycle_facing_left_tile_id_str: str
     cycle_facing_left_tile_offset: list[int]
     cycle_facing_left_sound: str
@@ -87,54 +45,21 @@ class DoorTileData:
     cycle_facing_right_sound: str
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
-    place_sound: str
-    hit_sound: str
-    image: Surface
 
 
 @dataclass
-class LootMultitileData:
-    id: int
-    id_str: str
-    name: str
-    strength: float
-    strength_type: TileStrengthType
-    mask_type: TileMaskType
-    mask_merge_ids: list[str]
-    light_reduction: int
-    light_emission: int
-    tags: list[TileTag]
-    item_id_str: str
-    item_count_range: tuple[int, int]
+class LootMultitileData(TileData):
     loot_group_id_str: str
     multitile_dimensions: tuple[int, int]
     multitile_required_solids: list[tuple[int, int]]
-    place_sound: str
-    hit_sound: str
-    image: Surface
 
 
 @dataclass
-class LootTileData:
-    id: int
-    id_str: str
-    name: str
-    strength: float
-    strength_type: TileStrengthType
-    mask_type: TileMaskType
-    mask_merge_ids: list[str]
-    light_reduction: int
-    light_emission: int
-    tags: list[TileTag]
-    item_id_str: str
-    item_count_range: tuple[int, int]
+class LootTileData(TileData):
     loot_group_id_str: str
-    place_sound: str
-    hit_sound: str
-    image: Surface
 
 
-TILE_DATA: tuple[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData, ...] = (
+TILE_DATA: tuple[TileData, ...] = (
     TileData(
         id=0,
         id_str="tile.UNNAMED",

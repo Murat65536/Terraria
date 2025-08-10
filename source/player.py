@@ -1223,7 +1223,7 @@ class Player:
                                                 block_position[0] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,
                                                 block_position[1] * commons.BLOCK_SIZE + commons.BLOCK_SIZE * 0.5,
                                             ),
-                                            pygame.transform.average_color(tile_dat["image"]),
+                                            pygame.transform.average_color(tile_dat.image),
                                             size=13,
                                             life=1,
                                             angle=-math.pi * 0.5,
