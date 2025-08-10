@@ -1,13 +1,13 @@
-<table>
+<table align="center">
     <tr>
         <td>
             <picture>
-                <img src="./assets/images/readme/menu_screen.png?raw=true" alt="Menu screen"/>
+                <img src="./assets/images/readme/menu_screen.png?raw=true" alt="Menu screen" width="400" />
             </picture>
         </td>
         <td>
             <picture>
-                <img src="./assets/images/readme/gameplay.png?raw=true" alt="Gameplay"/>
+                <img src="./assets/images/readme/gameplay.png?raw=true" alt="Gameplay" width="400" />
             </picture>
         </td>
     </tr>
