@@ -78,19 +78,21 @@ class MagicalPrefixData(TypedDict):
     tier: int
 
 
-def make_item_tag_list(item_tags_str: list[str]):
-    enum_list: list[commons.ItemTag] = []
-    for string in item_tags_str:
-        for tag in commons.ItemTag:
-            if tag.name == string:
-                enum_list.append(tag)
+def make_item_tag_list(item_tag_strings: list[str]):
+    """Convert list of string tag names to ItemTag enum list"""
+    tag_list: list[commons.ItemTag] = []
+    for tag_string in item_tag_strings:
+        for tag_enum in commons.ItemTag:
+            if tag_enum.name == tag_string:
+                tag_list.append(tag_enum)
                 break
-    return enum_list
+    return tag_list
 
 
-def find_next_char_in_string(string: str, char: str, start_index: int):
-    for char_index in range(start_index, len(string)):
-        if string[char_index] == char:
+def find_next_char_in_string(text: str, target_char: str, start_index: int):
+    """Find the next occurrence of a character in a string starting from given index"""
+    for char_index in range(start_index, len(text)):
+        if text[char_index] == target_char:
             return char_index
     return -1
 

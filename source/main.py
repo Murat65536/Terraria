@@ -30,14 +30,22 @@ def move_parallax(offset: tuple[float, float]) -> None:
     Moves the background by a set amount, looping back when necessary
     """
     from game_state import game_state
+    import game_constants
+    
     game_state.parallax_position = (
         game_state.parallax_position[0] + offset[0], 
         game_state.parallax_position[1] + offset[1]
     )
     if game_state.parallax_position[0] > 0:
-        game_state.parallax_position = (-2048 + game_state.parallax_position[0], game_state.parallax_position[1])
-    elif game_state.parallax_position[0] < -2047:
-        game_state.parallax_position = (game_state.parallax_position[0] + 2048, game_state.parallax_position[1])
+        game_state.parallax_position = (
+            -game_constants.PARALLAX_BACKGROUND_WIDTH + game_state.parallax_position[0], 
+            game_state.parallax_position[1]
+        )
+    elif game_state.parallax_position[0] < -game_constants.PARALLAX_BACKGROUND_RESET_THRESHOLD:
+        game_state.parallax_position = (
+            game_state.parallax_position[0] + game_constants.PARALLAX_BACKGROUND_WIDTH, 
+            game_state.parallax_position[1]
+        )
 
 
 def fade_background(new_background_id: int) -> None:
@@ -386,7 +394,10 @@ def render_stats_text(pos: List[Any]) -> bool:
     if equipped is not None:
         if equipped != game_state.last_hovered_item:
             game_state.last_hovered_item = equipped
-            game_state.stats_text = pygame.Surface((340, 200), pygame.SRCALPHA)
+            game_state.stats_text = pygame.Surface((
+                game_constants.UI_STATS_SURFACE_WIDTH, 
+                game_constants.UI_STATS_SURFACE_HEIGHT
+            ), pygame.SRCALPHA)
 
             stats = [
                 shared_methods.outline_text(
@@ -403,7 +414,7 @@ def render_stats_text(pos: List[Any]) -> bool:
             _render_prefix_stats(equipped, stats)
             
             for stat_index in range(len(stats)):
-                game_state.stats_text.blit(stats[stat_index], (0, stat_index * 15))
+                game_state.stats_text.blit(stats[stat_index], (0, stat_index * game_constants.UI_STAT_LINE_HEIGHT))
         return True
     return False
 
@@ -592,7 +603,8 @@ def draw_inventory_hover_text() -> None:
     """
     Checks if the player is hovering over an item in the UI and displays the item's info if they are
     """
-    global can_drop_holding, can_pickup_item, item_drop_tick, item_drop_rate
+    from game_state import game_state
+    import game_constants
     assert isinstance(entity_manager.client_player, entity_manager.Player)
     pos = None
 
@@ -633,10 +645,10 @@ def draw_inventory_hover_text() -> None:
                         auto_assign_prefix=True,
                     )
                     commons.is_holding_item = True
-                    can_pickup_item = False
-                    can_drop_holding = False
+                    game_state.can_pickup_item = False
+                    game_state.can_drop_holding = False
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
-                elif can_drop_holding and item.item_holding is not None:
+                elif game_state.can_drop_holding and item.item_holding is not None:
                     if (
                             item.item_holding.item_id
                             == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]
@@ -658,7 +670,7 @@ def draw_inventory_hover_text() -> None:
 
         if mouse_buttons[0] or mouse_buttons[2]:
             # Dropping holding item
-            if can_drop_holding and item.item_holding is not None:
+            if game_state.can_drop_holding and item.item_holding is not None:
                 if mouse_buttons[0]:
                     amount = item.item_holding.amount
                 else:
@@ -666,11 +678,11 @@ def draw_inventory_hover_text() -> None:
 
                 item_add_data = None
 
-                if mouse_buttons[0] or item_drop_tick <= 0:
+                if mouse_buttons[0] or game_state.item_drop_tick <= 0:
                     item_add_data = entity_manager.client_player.give_item(item.item_holding, amount, position=pos)
 
                 if item_add_data is not None:
-                    can_drop_holding = False
+                    game_state.can_drop_holding = False
 
                     # Items are being dropped
                     if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
@@ -695,20 +707,20 @@ def draw_inventory_hover_text() -> None:
                     if pos not in entity_manager.client_player.old_inventory_positions:
                         entity_manager.client_player.old_inventory_positions.append(pos)
 
-                if item_drop_tick <= 0:
-                    item_drop_rate -= 1
-                    if item_drop_rate <= 0:
-                        item_drop_rate = 0
-                    item_drop_tick = int(item_drop_rate)
+                if game_state.item_drop_tick <= 0:
+                    game_state.item_drop_rate -= 1
+                    if game_state.item_drop_rate <= 0:
+                        game_state.item_drop_rate = 0
+                    game_state.item_drop_tick = int(game_state.item_drop_rate)
                     if item.item_holding is not None and item.item_holding.amount <= 0:
                         item.item_holding = None
                         commons.is_holding_item = False
                 else:
-                    item_drop_tick -= commons.DELTA_TIME
+                    game_state.item_drop_tick -= commons.DELTA_TIME
 
             # Picking up item
-            elif can_pickup_item and not mouse_buttons[2]:
-                can_pickup_item = False
+            elif game_state.can_pickup_item and not mouse_buttons[2]:
+                game_state.can_pickup_item = False
                 item.item_holding = entity_manager.client_player.remove_item(pos)
                 if item.item_holding is not None:
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
@@ -734,7 +746,7 @@ def draw_inventory_hover_text() -> None:
         )
 
         commons.is_holding_item = False
-        can_drop_holding = False
+        game_state.can_drop_holding = False
         item.item_holding = None
 
 
@@ -1005,17 +1017,17 @@ while True:
         entity_manager.draw_physics_items()
 
         if commons.EXPERIMENTAL_LIGHTING:
-            if not thread_active:
-                last_thread_time = (pygame.time.get_ticks() - last_thread_start) * 0.001
+            if not game_state.thread_active:
+                game_state.last_thread_time = (pygame.time.get_ticks() - game_state.last_thread_start) * 0.001
                 _thread.start_new_thread(update_light, ())
-                last_thread_start = pygame.time.get_ticks()
+                game_state.last_thread_start = pygame.time.get_ticks()
 
-            newest_light_surf.unlock()
+            game_state.newest_light_surface.unlock()
             commons.screen.blit(
-                newest_light_surf,
+                game_state.newest_light_surface,
                 (
-                    newest_light_surf_pos[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
-                    newest_light_surf_pos[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
+                    game_state.newest_light_surface_position[0] - entity_manager.camera_position[0] + commons.WINDOW_WIDTH * 0.5,
+                    game_state.newest_light_surface_position[1] - entity_manager.camera_position[1] + commons.WINDOW_HEIGHT * 0.5,
                 ),
             )
 
@@ -1059,19 +1071,19 @@ while True:
                 draw_inventory_hover_text()
                 draw_exit_button()
 
-            if hand_text is not None:
-                commons.screen.blit(hand_text, (242 - hand_text.get_width() * 0.5, 0))
+            if game_state.hand_text is not None:
+                commons.screen.blit(game_state.hand_text, (242 - game_state.hand_text.get_width() * 0.5, 0))
             draw_item_holding()
 
         if commons.BACKGROUND:
-            move_parallax((background_scroll_vel, 0))
+            move_parallax((game_state.background_scroll_velocity, 0))
 
-        if auto_save_tick <= 0:
-            auto_save_tick += commons.AUTO_SAVE_FREQUENCY
+        if game_state.auto_save_tick <= 0:
+            game_state.auto_save_tick += commons.AUTO_SAVE_FREQUENCY
             entity_manager.client_player.save()
             world.save()
         else:
-            auto_save_tick -= commons.DELTA_TIME
+            game_state.auto_save_tick -= commons.DELTA_TIME
 
     elif commons.game_state == "MAIN_MENU":
         draw_menu_background()
@@ -1178,40 +1190,40 @@ while True:
 
                             commons.screen.fill((0, 0, 0))
 
-                            text0 = shared_methods.outline_text(
+                            loading_greeting_text = shared_methods.outline_text(
                                 f"Greetings {entity_manager.client_player.name}, bear with us while",
                                 pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
-                            text1 = shared_methods.outline_text(
+                            loading_world_text = shared_methods.outline_text(
                                 f"we load up '{world.world.name}'",
                                 pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
-                            text2 = shared_methods.outline_text(
+                            loading_tip_text = shared_methods.outline_text(
                                 game_data.TIPS[random.randint(0, len(game_data.TIPS) - 1)],
                                 pygame.Color(255, 255, 255),
                                 commons.DEFAULT_FONT,
                             )
 
                             commons.screen.blit(
-                                text0,
+                                loading_greeting_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text0.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_greeting_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.5 - 30,
                                 ),
                             )
                             commons.screen.blit(
-                                text1,
+                                loading_world_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text1.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_world_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.5,
                                 ),
                             )
                             commons.screen.blit(
-                                text2,
+                                loading_tip_text,
                                 (
-                                    commons.WINDOW_WIDTH * 0.5 - text2.get_width() * 0.5,
+                                    commons.WINDOW_WIDTH * 0.5 - loading_tip_text.get_width() * 0.5,
                                     commons.WINDOW_HEIGHT * 0.75,
                                 ),
                             )
@@ -1230,17 +1242,17 @@ while True:
 
                             render_hand_text()
 
-                            map_light = [[0 for _ in range(world.WORLD_SIZE_Y)] for _ in range(world.WORLD_SIZE_X)]
-                            for map_index_x in range(world.WORLD_SIZE_X - 1):
-                                for map_index_y in range(world.WORLD_SIZE_Y - 1):
+                            game_state.map_light = [[0 for _ in range(world.WORLD_SIZE_Y)] for _ in range(world.WORLD_SIZE_X)]
+                            for world_x in range(world.WORLD_SIZE_X - 1):
+                                for world_y in range(world.WORLD_SIZE_Y - 1):
                                     if (
-                                            world.world.tile_data[map_index_x][map_index_y][0] == -1
-                                            and world.world.tile_data[map_index_x][map_index_y][1] == -1
-                                            and map_index_y < 110
+                                            world.world.tile_data[world_x][world_y][0] == -1
+                                            and world.world.tile_data[world_x][world_y][1] == -1
+                                            and world_y < game_constants.SURFACE_LIGHT_LEVEL_Y
                                     ):
-                                        map_light[map_index_x][map_index_y] = global_lighting
+                                        game_state.map_light[world_x][world_y] = global_lighting
                                     else:
-                                        map_light[map_index_x][map_index_y] = 0
+                                        game_state.map_light[world_x][world_y] = 0
 
                             commons.game_state = "PLAYING"
                             should_break = True
@@ -1376,8 +1388,8 @@ while True:
 
     # Update fps text
     if commons.DRAW_UI:
-        if fps_tick <= 0:
-            fps_tick += 0.5
+        if game_state.fps_tick <= 0:
+            game_state.fps_tick += game_constants.FPS_UPDATE_FREQUENCY
             if commons.DELTA_TIME > 0:
                 fps_text = shared_methods.outline_text(
                     str(int(1.0 / commons.DELTA_TIME)),
@@ -1385,7 +1397,7 @@ while True:
                     commons.DEFAULT_FONT,
                 )
         else:
-            fps_tick -= commons.DELTA_TIME
+            game_state.fps_tick -= commons.DELTA_TIME
         commons.screen.blit(fps_text, (commons.WINDOW_WIDTH - fps_text.get_width(), 0))
 
     # Reset some variables when the mouse button is lifted
@@ -1393,13 +1405,13 @@ while True:
         if commons.WAIT_TO_USE and not pygame.mouse.get_pressed()[2]:
             commons.WAIT_TO_USE = False
         if commons.is_holding_item:
-            can_drop_holding = True
+            game_state.can_drop_holding = True
         elif not commons.is_holding_item:
-            can_pickup_item = True
+            game_state.can_pickup_item = True
 
     if not pygame.mouse.get_pressed()[2]:
-        item_drop_rate = 25
-        item_drop_tick = 0
+        game_state.item_drop_rate = game_constants.DEFAULT_ITEM_DROP_RATE
+        game_state.item_drop_tick = 0
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
