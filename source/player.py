@@ -1109,7 +1109,7 @@ class Player:
                                         if (
                                             game_data.get_tile_by_id(
                                                 world.world.tile_data[block_position[0]][block_position[1]][0]
-                                            )["id_str"]
+                                            ).id_str
                                             == "tile.grass"
                                         ):
                                             world.world.tile_data[block_position[0]][block_position[1]][0] = (
@@ -1126,11 +1126,11 @@ class Player:
                                 wall_to_place = game_data.get_wall_by_id_str(block_item.get_wall_id_str())
 
                                 world.world.tile_data[block_position[0]][block_position[1]][1] = int(
-                                    wall_to_place["id"]
+                                    wall_to_place.id
                                 )
                                 world.update_terrain_surface(block_position[0], block_position[1])
 
-                                game_data.play_wall_place_sfx(wall_to_place["id"])
+                                game_data.play_wall_place_sfx(wall_to_place.id)
 
                                 block_placed = True
 
@@ -1390,7 +1390,7 @@ class Player:
                 existing_slots.pop(0)
 
             # Free slots
-            free_slots = self.find_free_spaces(current_item.json_item["max_stack"])
+            free_slots = self.find_free_spaces(current_item.json_item.max_stack)
 
             while len(free_slots) > 0 and amount > 0:  # No stacks left to fill so fill empty slots
                 # Work out how many to add to the stack

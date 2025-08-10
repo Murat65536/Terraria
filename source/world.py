@@ -312,7 +312,7 @@ def check_wall_merge(wall_id_1, wall_id_2):
     wall_1 = game_data.get_wall_by_id(wall_id_1)
     wall_2 = game_data.get_wall_by_id(wall_id_2)
 
-    if wall_1["id_str"] in wall_2["mask_merge_ids"] or wall_1["id_str"] == wall_2["id_str"]:
+    if wall_1.id_str in wall_2.mask_merge_ids or wall_1.id_str == wall_2.id_str:
         return True
     return False
 
@@ -1097,7 +1097,7 @@ def update_terrain_surface(i, j, affect_others=True):
             ) and tile_dat[
                 1
             ] != game_data.air_wall_id:  # If the block is not a centre block (and so there is some transparency in it) and there is a wall tile behind it,  blit the wall tile
-                back_img = json_wall_dat["image"].copy()  # Get the wall texture
+                back_img = json_wall_dat.image.copy()  # Get the wall texture
                 wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(
                     tile[0], tile[1], tile_dat[1]
                 )  # Get the wall mask
@@ -1125,7 +1125,7 @@ def update_terrain_surface(i, j, affect_others=True):
                 )  # Blit the masked wall surf to the main surf
 
         elif tile_dat[1] != game_data.air_wall_id:  # If there is no block but there is a wall
-            back_img = json_wall_dat["image"].copy()  # Get the wall texture
+            back_img = json_wall_dat.image.copy()  # Get the wall texture
             wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(
                 tile[0], tile[1], tile_dat[1]
             )  # Get the wall mask

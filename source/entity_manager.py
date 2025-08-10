@@ -595,12 +595,12 @@ def add_recent_pickup(item_id: int, amount: int, tier, pos, unique=False, item=N
                 amount += recent_pickup["amount"]
                 recent_pickups.remove(recent_pickup)
     if amount > 1:
-        string = game_data.json_item_data[item_id]["name"] + f"({amount})"
+        string = game_data.json_item_data[item_id].name + f"({amount})"
     else:
         if item is not None:
             string = item.get_name()
         else:
-            string = game_data.json_item_data[item_id]["name"]
+            string = game_data.json_item_data[item_id].name
     size = commons.DEFAULT_FONT.size(string)
     size = (size[0] + 2, size[1] + 2)
     surf = pygame.Surface(size, pygame.SRCALPHA)
