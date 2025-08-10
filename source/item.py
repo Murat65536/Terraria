@@ -57,11 +57,11 @@ class Item:
         # Auto assign prefix
         if prefix_name is None or prefix_name == "":
             if self.json_item is not None:
-                if auto_assign_prefix and ItemTag.WEAPON in self.json_item["tags"]:
+                if auto_assign_prefix and ItemTag.WEAPON in self.json_item.tags:
                     # 15% chance to be given a prefix if it has a prefix category
-                    if len(self.json_item["prefixes"]) > 0 and random.random() < 0.85:
+                    if len(self.json_item.prefixes) > 0 and random.random() < 0.85:
                         self.prefix_data = get_random_item_prefix(
-                            self.json_item["prefixes"][random.randint(0, len(self.json_item["prefixes"]) - 1)]
+                            self.json_item.prefixes[random.randint(0, len(self.json_item.prefixes) - 1)]
                         )
                         self.has_prefix = True
 
@@ -75,7 +75,7 @@ class Item:
 
     def has_tag(self, tag):
         if self.json_item is not None:
-            if tag in self.json_item["tags"]:
+            if tag in self.json_item.tags:
                 return True
         return False
 
@@ -87,9 +87,9 @@ class Item:
 
     def get_attack_damage(self):
         if self.prefix_data is not None:
-            return self.json_item["attack_damage"] * (1 + self.prefix_data[1]["damage"])
+            return self.json_item.attack_damage * (1 + self.prefix_data[1]["damage"])
         else:
-            return self.json_item["attack_damage"]
+            return self.json_item.attack_damage
 
     def get_crit_chance(self):
         if self.prefix_data is not None:
@@ -97,7 +97,7 @@ class Item:
                 return max(
                     min(
                         1.0,
-                        self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"],
+                        self.json_item.crit_chance + self.prefix_data[1]["crit_chance"],
                     ),
                     0.0,
                 )
@@ -105,44 +105,44 @@ class Item:
                 return max(
                     min(
                         1.0,
-                        self.json_item["crit_chance"] + self.prefix_data[1]["crit_chance"],
+                        self.json_item.crit_chance + self.prefix_data[1]["crit_chance"],
                     ),
                     0.0,
                 )
         else:
-            return self.json_item["crit_chance"]
+            return self.json_item.crit_chance
 
     def get_knockback(self):
         if self.prefix_data is not None:
             if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
+                return self.json_item.knockback * (1 + self.prefix_data[1]["knockback"])
             elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
+                return self.json_item.knockback * (1 + self.prefix_data[1]["knockback"])
             else:
-                return self.json_item["knockback"] * (1 + self.prefix_data[1]["knockback"])
+                return self.json_item.knockback * (1 + self.prefix_data[1]["knockback"])
         else:
-            return self.json_item["knockback"]
+            return self.json_item.knockback
 
     def get_tier(self):
         if self.json_item is not None:
             if self.prefix_data is not None:
                 if self.prefix_data[0] == ItemPrefixGroup.UNIVERSAL:
-                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
+                    return min(max(self.json_item.tier + self.prefix_data[1]["tier"], 0), 10)
                 elif self.prefix_data[0] == ItemPrefixGroup.COMMON:
-                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
+                    return min(max(self.json_item.tier + self.prefix_data[1]["tier"], 0), 10)
                 else:
-                    return min(max(self.json_item["tier"] + self.prefix_data[1]["tier"], 0), 10)
+                    return min(max(self.json_item.tier + self.prefix_data[1]["tier"], 0), 10)
             else:
-                return self.json_item["tier"]
+                return self.json_item.tier
         raise NameError("json_item is None.")
 
     def get_attack_speed(self):
         if self.prefix_data is not None:
             return round(
-                self.json_item["attack_speed"] * (1 - self.prefix_data[1]["speed"])
+                self.json_item.attack_speed * (1 - self.prefix_data[1]["speed"])
             )  # The zero is the total attack speed modifiers. Change when attack speed modifiers are added.
         else:
-            return round(self.json_item["attack_speed"])
+            return round(self.json_item.attack_speed)
 
     def get_scale(self):
         if self.prefix_data is not None:
@@ -153,56 +153,56 @@ class Item:
     def get_ranged_projectile_speed(self):
         if self.json_item is not None:
             if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.RANGED:
-                return self.json_item["ranged_projectile_speed"] * (1 + self.prefix_data[1]["velocity"])
-            return self.json_item["ranged_projectile_speed"]
+                return self.json_item.ranged_projectile_speed * (1 + self.prefix_data[1]["velocity"])
+            return self.json_item.ranged_projectile_speed
         raise NameError("json_item is None.")
 
     def get_mana_cost(self):
         if self.json_item is not None:
             if self.prefix_data is not None and self.prefix_data[0] == ItemPrefixGroup.MAGICAL:
-                return self.json_item["mana_cost"] * (1 + self.prefix_data[1]["mana_cost"])
-            return self.json_item["mana_cost"]
+                return self.json_item.mana_cost * (1 + self.prefix_data[1]["mana_cost"])
+            return self.json_item.mana_cost
         raise NameError("json_item is None.")
 
     def get_name(self):
         if self.json_item is not None:
             if self.has_prefix:
-                return self.get_prefix_name() + " " + self.json_item["name"]
+                return self.get_prefix_name() + " " + self.json_item.name
             else:
-                return self.json_item["name"]
+                return self.json_item.name
         raise NameError("json_item is None.")
 
     def get_id_str(self):
         if self.json_item is not None:
-            return self.json_item["id_str"]
+            return self.json_item.id_str
         raise NameError("json_item is None.")
 
     def get_ammo_damage(self):
         if self.json_item is not None:
-            return self.json_item["ammo_damage"]
+            return self.json_item.ammo_damage
         raise NameError("json_item is None.")
 
     def get_ammo_drag(self):
-        return self.json_item["ammo_drag"]
+        return self.json_item.ammo_drag
 
     def get_ammo_gravity_modifier(self):
-        return self.json_item["ammo_gravity_modifier"]
+        return self.json_item.ammo_gravity_modifier
 
     def get_ammo_knockback_modifier(self):
-        return self.json_item["ammo_knockback_modifier"]
+        return self.json_item.ammo_knockback_modifier
 
     def assign_prefix(self, prefix_name):
         self.prefix_data = game_data.find_prefix_data_by_name(prefix_name)
         self.has_prefix = self.prefix_data is not None
 
     def get_image(self) -> pygame.Surface:
-        if type(self.json_item["image"]) is pygame.Surface:
-            return self.json_item["image"]
+        if type(self.json_item.image) is pygame.Surface:
+            return self.json_item.image
         raise ValueError("Item image is not set.")
 
     def get_resized_image(self):
-        if type(self.json_item["image"]) is pygame.Surface:
-            image = self.json_item["image"]
+        if type(self.json_item.image) is pygame.Surface:
+            image = self.json_item.image
             if max(image.get_width(), image.get_height()) > 32:
                 image = pygame.transform.scale(
                     image,
@@ -216,165 +216,165 @@ class Item:
             raise ValueError("Item image is not set.")
 
     def get_offset_x(self):
-        if type(self.json_item["image"]) is pygame.Surface:
-            return int(24 - self.json_item["image"].get_width() * 0.5)
+        if type(self.json_item.image) is pygame.Surface:
+            return int(24 - self.json_item.image.get_width() * 0.5)
         return 8
 
     def get_offset_y(self):
-        if type(self.json_item["image"]) is pygame.Surface:
-            return int(24 - self.json_item["image"].get_height() * 0.5)
+        if type(self.json_item.image) is pygame.Surface:
+            return int(24 - self.json_item.image.get_height() * 0.5)
         return 8
 
     def get_resized_offset_x(self):
-        if type(self.json_item["image"]) is pygame.Surface:
+        if type(self.json_item.image) is pygame.Surface:
             if (
                 max(
-                    self.json_item["image"].get_width(),
-                    self.json_item["image"].get_height(),
+                    self.json_item.image.get_width(),
+                    self.json_item.image.get_height(),
                 )
                 > 32
             ):
                 return int(
                     24
-                    - self.json_item["image"].get_width()
+                    - self.json_item.image.get_width()
                     * 32
                     / max(
-                        self.json_item["image"].get_width(),
-                        self.json_item["image"].get_height(),
+                        self.json_item.image.get_width(),
+                        self.json_item.image.get_height(),
                     )
                     * 0.5
                 )
-            return int(24 - self.json_item["image"].get_width() * 0.5)
+            return int(24 - self.json_item.image.get_width() * 0.5)
         raise NameError("json_item is None.")
 
     def get_resized_offset_y(self):
-        if type(self.json_item["image"]) is pygame.Surface:
+        if type(self.json_item.image) is pygame.Surface:
             if (
                 max(
-                    self.json_item["image"].get_width(),
-                    self.json_item["image"].get_height(),
+                    self.json_item.image.get_width(),
+                    self.json_item.image.get_height(),
                 )
                 > 32
             ):
                 return int(
                     24
-                    - self.json_item["image"].get_height()
+                    - self.json_item.image.get_height()
                     * 32
                     / max(
-                        self.json_item["image"].get_width(),
-                        self.json_item["image"].get_height(),
+                        self.json_item.image.get_width(),
+                        self.json_item.image.get_height(),
                     )
                     * 0.5
                 )
-            return int(24 - self.json_item["image"].get_height() * 0.5)
+            return int(24 - self.json_item.image.get_height() * 0.5)
         raise NameError("json_item is None.")
 
     def get_world_override_image(self):
         if self.json_item is not None:
             try:
-                return self.json_item["world_override_image"]
+                return self.json_item.world_override_image
             except KeyError:
                 return None
         raise NameError("json_item is None.")
 
     def get_tile_id_str(self):
         if self.json_item is not None:
-            return self.json_item["tile_id_str"]
+            return self.json_item.tile_id_str
         raise NameError("json_item is None.")
 
     def get_wall_id_str(self):
         if self.json_item is not None:
-            return self.json_item["wall_id_str"]
+            return self.json_item.wall_id_str
         raise NameError("json_item is None.")
 
     def get_hold_offset(self):
         if self.json_item is not None:
-            return self.json_item["hold_offset"]
+            return self.json_item.hold_offset
         raise NameError("json_item is None.")
 
     def get_ranged_projectile_id_str(self):
         if self.json_item is not None:
-            return self.json_item["ranged_projectile_id_str"]
+            return self.json_item.ranged_projectile_id_str
         raise NameError("json_item is None.")
 
     def get_ranged_ammo_type(self):
         if self.json_item is not None:
-            return self.json_item["ranged_ammo_type"]
+            return self.json_item.ranged_ammo_type
         raise NameError("json_item is None.")
 
     def get_ranged_accuracy(self):
         if self.json_item is not None:
-            return self.json_item["ranged_accuracy"]
+            return self.json_item.ranged_accuracy
         raise NameError("json_item is None.")
 
     def get_ranged_num_projectiles(self):
         if self.json_item is not None:
-            return self.json_item["ranged_num_projectiles"]
+            return self.json_item.ranged_num_projectiles
         raise NameError("json_item is None.")
 
     def get_pickaxe_power(self):
         if self.json_item is not None:
-            return self.json_item["pickaxe_power"]
+            return self.json_item.pickaxe_power
         raise NameError("json_item is None.")
 
     def get_axe_power(self):
         if self.json_item is not None:
-            return self.json_item["axe_power"]
+            return self.json_item.axe_power
         raise NameError("json_item is None.")
 
     def get_hammer_power(self):
         if self.json_item is not None:
-            return self.json_item["hammer_power"]
+            return self.json_item.hammer_power
         raise NameError("json_item is None.")
 
     def get_grapple_speed(self):
         if self.json_item is not None:
-            return self.json_item["grapple_speed"]
+            return self.json_item.grapple_speed
         raise NameError("json_item is None.")
 
     def get_grapple_chain_length(self):
         if self.json_item is not None:
-            return self.json_item["grapple_chain_length"]
+            return self.json_item.grapple_chain_length
         raise NameError("json_item is None.")
 
     def get_grapple_max_chains(self):
         if self.json_item is not None:
-            return self.json_item["grapple_max_chains"]
+            return self.json_item.grapple_max_chains
         raise NameError("json_item is None.")
 
     def get_grapple_chain_image(self):
         if self.json_item is not None:
-            return self.json_item["grapple_chain_image"]
+            return self.json_item.grapple_chain_image
         raise NameError("json_item is None.")
 
     def get_grapple_claw_image(self):
         if self.json_item is not None:
-            return self.json_item["grapple_claw_image"]
+            return self.json_item.grapple_claw_image
         raise NameError("json_item is None.")
 
     def get_max_stack(self) -> int:
         if self.json_item is not None:
-            return self.json_item["max_stack"]
+            return self.json_item.max_stack
         raise NameError("json_item is None.")
 
     def get_buy_price(self) -> int:
         if self.json_item is not None:
-            return self.json_item["buy_price"]
+            return self.json_item.buy_price
         raise NameError("json_item is None.")
 
     def get_sell_price(self) -> int:
         if self.json_item is not None:
-            return self.json_item["sell_price"]
+            return self.json_item.sell_price
         raise NameError("json_item is None.")
 
     def get_pickup_sound_id_str(self) -> str:
         if self.json_item is not None:
-            return self.json_item["pickup_sound"]
+            return self.json_item.pickup_sound
         raise NameError("json_item is None.")
 
     def get_drop_sound_id_str(self) -> str:
         if self.json_item is not None:
-            return self.json_item["drop_sound"]
+            return self.json_item.drop_sound
         raise NameError("json_item is None.")
 
 
@@ -399,9 +399,9 @@ def get_coins_from_int(coin_int: int) -> list[Item]:
 
 def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
     loot_data = game_data.get_loot_by_id_str(loot_id_str)
-    item_count_range = loot_data["item_spawn_count_range"]
+    item_count_range = loot_data.item_spawn_count_range
     item_count = random.randint(item_count_range[0], item_count_range[1])
-    possible_items = loot_data["item_list_data"]
+    possible_items = loot_data.item_list_data
 
     spawn_list = []
     void_indices = []
@@ -434,7 +434,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
                         if spawn_list[item_index][0] == new_item_id:
                             spawn_list[item_index][1] += random_count
                             if spawn_list[item_index][0] is not None:
-                                max_stack = game_data.get_item_by_id(spawn_list[item_index][0])["max_stack"]
+                                max_stack = game_data.get_item_by_id(spawn_list[item_index][0]).max_stack
                                 if spawn_list[item_index][1] > max_stack:
                                     random_count = spawn_list[item_index][1] - max_stack
                                     spawn_list[item_index][1] = max_stack
@@ -459,7 +459,7 @@ def generate_loot_items(loot_id_str, tile_pos, fill_with_none):
     # Coins
     assert loot_data is not None
 
-    random_coin_range = loot_data["coin_spawn_range"]
+    random_coin_range = loot_data.coin_spawn_range
     random_coin_count = random.randint(random_coin_range[0], random_coin_range[1])
     coin_items = get_coins_from_int(random_coin_count)
     for coin_item in coin_items:

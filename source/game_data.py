@@ -1127,7 +1127,7 @@ def find_prefix_data_by_name(prefix_name):
 def parse_item_data():
     global json_item_data
     json_item_data = ITEM_DATA
-    json_item_data = sorted(json_item_data, key=lambda x: x["id"])
+    json_item_data = sorted(json_item_data, key=lambda x: x.id)
 
 
 def get_item_by_id(item_id):
@@ -1148,34 +1148,34 @@ def get_item_by_id_str(item_id_str):
 def create_item_id_str_hash_table():
     global item_id_str_hash_table
     for item_index in range(len(json_item_data)):
-        item_id_str_hash_table[json_item_data[item_index]["id_str"]] = item_index
+        item_id_str_hash_table[json_item_data[item_index].id_str] = item_index
 
 
 def parse_tile_data():
     global json_tile_data
 
     json_tile_data = TILE_DATA
-    json_tile_data = sorted(json_tile_data, key=lambda x: x["id"])
+    json_tile_data = sorted(json_tile_data, key=lambda x: x.id)
 
 
 def create_tile_id_str_hash_table():
     global tile_id_str_hash_table
     for tile_index in range(len(json_tile_data)):
-        tile_id_str_hash_table[json_tile_data[tile_index]["id_str"]] = tile_index
+        tile_id_str_hash_table[json_tile_data[tile_index].id_str] = tile_index
 
 
 def create_tile_light_reduction_lookup():
     global tile_id_light_reduction_lookup
     tile_id_light_reduction_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_reduction_lookup.append(json_tile_data[tile_index]["light_reduction"])
+        tile_id_light_reduction_lookup.append(json_tile_data[tile_index].light_reduction)
 
 
 def create_tile_light_emission_lookup():
     global tile_id_light_emission_lookup
     tile_id_light_emission_lookup.clear()
     for tile_index in range(len(json_tile_data)):
-        tile_id_light_emission_lookup.append(json_tile_data[tile_index]["light_emission"])
+        tile_id_light_emission_lookup.append(json_tile_data[tile_index].light_emission)
 
 
 def get_tile_by_id(
@@ -1198,7 +1198,7 @@ def get_tile_by_id_str(tile_id_str):
 def get_current_tile_id_str_lookup():
     tile_id_str_lookup = []
     for tile in json_tile_data:
-        tile_id_str_lookup.append(tile["id_str"])
+        tile_id_str_lookup.append(tile.id_str)
     return tile_id_str_lookup
 
 
@@ -1206,13 +1206,13 @@ def parse_wall_data():
     global json_wall_data
 
     json_wall_data = WALL_DATA
-    json_wall_data = sorted(json_wall_data, key=lambda x: x["id"])
+    json_wall_data = sorted(json_wall_data, key=lambda x: x.id)
 
 
 def create_wall_id_str_hash_table():
     global wall_id_str_hash_table
     for wall_index in range(len(json_wall_data)):
-        wall_id_str_hash_table[json_wall_data[wall_index]["id_str"]] = wall_index
+        wall_id_str_hash_table[json_wall_data[wall_index].id_str] = wall_index
 
 
 def get_wall_by_id(wall_id):
@@ -1233,7 +1233,7 @@ def get_wall_by_id_str(wall_id_str):
 def get_current_wall_id_str_lookup():
     wall_id_str_lookup = []
     for wall in json_wall_data:
-        wall_id_str_lookup.append(wall["id_str"])
+        wall_id_str_lookup.append(wall.id_str)
     return wall_id_str_lookup
 
 
@@ -1241,15 +1241,15 @@ def parse_sound_data():
     global json_sound_data
 
     json_sound_data = SOUND_DATA
-    json_sound_data = sorted(json_sound_data, key=lambda x: x["id"])
+    json_sound_data = sorted(json_sound_data, key=lambda x: x.id)
 
     for sound_data in json_sound_data:
-        sound_data["variations"] = []
-        for sound_variation in sound_data["variation_paths"]:
+        sound_data.variations = []
+        for sound_variation in sound_data.variation_paths:
             try:
                 sound = pygame.mixer.Sound(sound_variation)
-                sound.set_volume(sound_data["volume"])
-                sound_data["variations"].append(sound)
+                sound.set_volume(sound_data.volume)
+                sound_data.variations.append(sound)
             except FileNotFoundError:
                 pass
 
@@ -1257,7 +1257,7 @@ def parse_sound_data():
 def create_sound_id_str_hash_table():
     global sound_id_str_hash_table
     for sound_index in range(len(json_sound_data)):
-        sound_id_str_hash_table[json_sound_data[sound_index]["id_str"]] = sound_index
+        sound_id_str_hash_table[json_sound_data[sound_index].id_str] = sound_index
 
 
 def get_sound_by_id(sound_id):
@@ -1298,9 +1298,9 @@ def play_sound(sound_id_str: str) -> None:
     if commons.SOUND:
         sound_data = get_sound_by_id_str(sound_id_str)
         if sound_data is not None:
-            sound_index = random.randint(0, len(sound_data["variations"]) - 1)
-            sound = sound_data["variations"][sound_index]
-            sound.set_volume(sound_data["volume"] * sound_volume_multiplier)
+            sound_index = random.randint(0, len(sound_data.variations) - 1)
+            sound = sound_data.variations[sound_index]
+            sound.set_volume(sound_data.volume * sound_volume_multiplier)
             sound.play()
 
 
@@ -1308,28 +1308,28 @@ def play_tile_hit_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
         if tile_data is not None:
-            play_sound(tile_data["hit_sound"])
+            play_sound(tile_data.hit_sound)
 
 
 def play_tile_place_sfx(tile_id):
     if commons.SOUND:
         tile_data = get_tile_by_id(tile_id)
         if tile_data is not None:
-            play_sound(tile_data["place_sound"])
+            play_sound(tile_data.place_sound)
 
 
 def play_wall_hit_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
         if wall_data is not None:
-            play_sound(wall_data["hit_sound"])
+            play_sound(wall_data.hit_sound)
 
 
 def play_wall_place_sfx(wall_id):
     if commons.SOUND:
         wall_data = get_wall_by_id(wall_id)
         if wall_data is not None:
-            play_sound(wall_data["place_sound"])
+            play_sound(wall_data.place_sound)
 
 
 class StructureConnectionOrientation(Enum):
@@ -1343,15 +1343,15 @@ def parse_structure_data():
     global json_structure_data
 
     json_structure_data = STRUCTURE_DATA
-    json_structure_data = sorted(json_structure_data, key=lambda x: x["id"])
+    json_structure_data = sorted(json_structure_data, key=lambda x: x.id)
 
     for structure_data in json_structure_data:
 
-        structure_data["connections"] = []
-        structure_data["chest_loot"] = []
+        structure_data.connections = []
+        structure_data.chest_loot = []
 
         tile_data = []
-        for column in structure_data["tile_data"]:
+        for column in structure_data.tile_data:
             tile_data.append([])
             char_index = 0
             x_pos = len(tile_data) - 1
@@ -1370,7 +1370,7 @@ def parse_structure_data():
                             if data_str_id == 0:
                                 tile_data[-1][-1][0] = data_str_split[1]
                             elif data_str_id == 2:
-                                structure_data["chest_loot"].append([(x_pos, y_pos), data_str_split[1]])
+                                structure_data.chest_loot.append([(x_pos, y_pos), data_str_split[1]])
                             elif data_str_id == 3:
                                 tile_data[-1][-1][1] = data_str_split[1]
                             elif data_str_id == 1:
@@ -1378,7 +1378,7 @@ def parse_structure_data():
                                 tile_data[-1][-1][2] = int(split_str[0]), int(split_str[1])
                             elif data_str_id == 4:
                                 connection_data = data_str_split[1].split(",")
-                                structure_data["connections"].append(
+                                structure_data.connections.append(
                                     [
                                         (x_pos, y_pos),
                                         connection_data[0],
@@ -1387,13 +1387,13 @@ def parse_structure_data():
                                 )
                 char_index += 1
 
-        structure_data["tile_data"] = tile_data
+        structure_data.tile_data = tile_data
 
 
 def create_structure_id_str_hash_table():
     global structure_id_str_hash_table
     for structure_index in range(len(json_structure_data)):
-        structure_id_str_hash_table[json_structure_data[structure_index]["id_str"]] = structure_index
+        structure_id_str_hash_table[json_structure_data[structure_index].id_str] = structure_index
 
 
 def get_structure_by_id(structure_id):
@@ -1415,9 +1415,9 @@ def find_structures_for_connection(connection_type, connection_orientation):
     out_connections = []
     opposite_connection_orientation = get_opposite_structure_connection_orientation(connection_orientation)
     for structure in json_structure_data:
-        for connection in structure["connections"]:
+        for connection in structure.connections:
             if connection[1] == connection_type and connection[2] == opposite_connection_orientation:
-                out_connections.append([structure["id_str"], connection[0]])
+                out_connections.append([structure.id_str, connection[0]])
 
     return out_connections
 
@@ -1454,29 +1454,29 @@ def parse_loot_data():
     global json_loot_data
 
     json_loot_data = LOOT_DATA
-    json_loot_data = sorted(json_loot_data, key=lambda x: x["id"])
+    json_loot_data = sorted(json_loot_data, key=lambda x: x.id)
 
     for loot_data in json_loot_data:
-        possible_item_strs = loot_data["item_list_data"]
+        possible_item_strs = loot_data.item_list_data
         item_list_data = []
         for possible_item_properties_str in possible_item_strs:
             item_list_data.append(
                 [
-                    possible_item_properties_str["item_id_str"],
-                    possible_item_properties_str["item_spawn_weight"],
-                    possible_item_properties_str["item_spawn_depth_range"],
-                    possible_item_properties_str["item_stack_count_range"],
-                    possible_item_properties_str["item_slot_priority"],
-                    possible_item_properties_str["once_per_instance"],
+                    possible_item_properties_str.item_id_str,
+                    possible_item_properties_str.item_spawn_weight,
+                    possible_item_properties_str.item_spawn_depth_range,
+                    possible_item_properties_str.item_stack_count_range,
+                    possible_item_properties_str.item_slot_priority,
+                    possible_item_properties_str.once_per_instance,
                 ]
             )
-        loot_data["item_list_data"] = item_list_data
+        loot_data.item_list_data = item_list_data
 
 
 def create_loot_id_str_hash_table():
     global loot_id_str_hash_table
     for loot_index in range(len(json_loot_data)):
-        loot_id_str_hash_table[json_loot_data[loot_index]["id_str"]] = loot_index
+        loot_id_str_hash_table[json_loot_data[loot_index].id_str] = loot_index
 
 
 def get_loot_by_id(loot_id):

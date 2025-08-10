@@ -1,4 +1,5 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from pygame import mixer
 
 
 @dataclass
@@ -7,6 +8,7 @@ class SoundData:
     id_str: str
     variation_paths: list[str]
     volume: float
+    variations: list[mixer.Sound] = field(default_factory=list)
 
 
 SOUND_DATA: list[SoundData] = [

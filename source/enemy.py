@@ -151,14 +151,14 @@ class Enemy:
                             | LootTileData
                             | LootMultitileData
                         ) = game_data.get_tile_by_id(tile_id)
-                        if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
+                        if commons.TileTag.NO_COLLIDE not in tile_data.tags:
                             block_rect = Rect(
                                 commons.BLOCK_SIZE * (self.block_pos[1] + j),
                                 commons.BLOCK_SIZE * (self.block_pos[0] + i),
                                 commons.BLOCK_SIZE,
                                 commons.BLOCK_SIZE,
                             )
-                            if commons.TileTag.PLATFORM in tile_data["tags"]:
+                            if commons.TileTag.PLATFORM in tile_data.tags:
                                 platform = True
                             else:
                                 platform = False
@@ -177,8 +177,8 @@ class Enemy:
                             ):
                                 self.stop_right = True  # Is there a solid block right
                             if block_rect.colliderect(self.rect):
-                                if not self.world_invincible and commons.TileTag.DAMAGING in tile_data["tags"]:
-                                    # self.damage(tile_data["tile_damage"], [tile_data["tile_damage_name"], "World"])
+                                if not self.world_invincible and commons.TileTag.DAMAGING in tile_data.tags:
+                                    # self.damage(tile_data.tile_damage, [tile_data.tile_damage_name, "World"])
                                     pass
 
                                 delta_x = self.position[0] - block_rect.centerx

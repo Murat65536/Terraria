@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -10,6 +10,8 @@ class StructureData:
     height: int
     spawn_weight: int
     tile_data: list[str]
+    connections: list = field(default_factory=list)
+    chest_loot: list = field(default_factory=list)
 
 
 STRUCTURE_DATA: list[StructureData] = [

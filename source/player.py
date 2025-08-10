@@ -590,7 +590,7 @@ class Player:
                         if self.block_position[1] + j >= 0:
                             tile_id = world.world.tile_data[self.block_position[1] + j][self.block_position[0] + i][0]
                             tile_data = game_data.get_tile_by_id(tile_id)
-                            if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
+                            if commons.TileTag.NO_COLLIDE not in tile_data.tags:
                                 block_rect = Rect(
                                     commons.BLOCK_SIZE * (self.block_position[1] + j),
                                     commons.BLOCK_SIZE * (self.block_position[0] + i),
@@ -598,7 +598,7 @@ class Player:
                                     commons.BLOCK_SIZE,
                                 )
                                 is_platform = False
-                                if commons.TileTag.PLATFORM in tile_data["tags"]:
+                                if commons.TileTag.PLATFORM in tile_data.tags:
                                     is_platform = True
                                     if block_rect.colliderect(
                                         int(self.rect.left - 1),
@@ -615,10 +615,10 @@ class Player:
                                     ):
                                         self.stop_right = True  # is there a solid block right
                                 if block_rect.colliderect(self.rect):
-                                    if not self.invincible and commons.TileTag.DAMAGING in tile_data["tags"]:
+                                    if not self.invincible and commons.TileTag.DAMAGING in tile_data.tags:
                                         self.damage(
-                                            tile_data["tile_damage"],
-                                            (tile_data["tile_damage_name"], "World"),
+                                            tile_data.tile_damage,
+                                            (tile_data.tile_damage_name, "World"),
                                         )
 
                                     delta_x = self.position[0] - block_rect.centerx
@@ -1011,10 +1011,10 @@ class Player:
                 tile_dat = world.world.tile_data[block_position[0]][block_position[1]]
                 json_tile_data = game_data.get_tile_by_id(tile_dat[0])
                 if (
-                    commons.TileTag.CHEST in json_tile_data["tags"]
-                    or commons.TileTag.CYCLABLE in json_tile_data["tags"]
+                    commons.TileTag.CHEST in json_tile_data.tags
+                    or commons.TileTag.CYCLABLE in json_tile_data.tags
                 ):
-                    if commons.TileTag.MULTI_TILE in json_tile_data["tags"]:
+                    if commons.TileTag.MULTI_TILE in json_tile_data.tags:
                         origin = (
                             block_position[0] - tile_dat[2][0],
                             block_position[1] - tile_dat[2][1],
@@ -1023,8 +1023,8 @@ class Player:
                         origin = block_position
                     world.use_special_tile(origin[0], origin[1])
 
-                if commons.TileTag.WORKBENCH in json_tile_data["tags"]:
-                    if commons.TileTag.MULTI_TILE in json_tile_data["tags"]:
+                if commons.TileTag.WORKBENCH in json_tile_data.tags:
+                    if commons.TileTag.MULTI_TILE in json_tile_data.tags:
                         origin = (
                             block_position[0] - tile_dat[2][0],
                             block_position[1] - tile_dat[2][1],
@@ -1061,10 +1061,10 @@ class Player:
                     if is_tile:
                         tile_to_place = game_data.get_tile_by_id_str(block_item.get_tile_id_str())
 
-                        if commons.TileTag.MULTI_TILE in tile_to_place["tags"]:
+                        if commons.TileTag.MULTI_TILE in tile_to_place.tags:
                             can_place = True
 
-                            tile_dimensions = tile_to_place["multitile_dimensions"]
+                            tile_dimensions = tile_to_place.multitile_dimensions
 
                             for x in range(tile_dimensions[0]):
                                 for y in range(tile_dimensions[1]):
@@ -1074,14 +1074,14 @@ class Player:
                                     ):
                                         can_place = False
 
-                            required_solids = tile_to_place["multitile_required_solids"]
+                            required_solids = tile_to_place.multitile_required_solids
 
                             for i in range(len(required_solids)):
                                 tile_id = world.world.tile_data[block_position[0] + required_solids[i][0]][
                                     block_position[1] + required_solids[i][1]
                                 ][0]
                                 tile_data = game_data.get_tile_by_id(tile_id)
-                                if commons.TileTag.NO_COLLIDE in tile_data["tags"]:
+                                if commons.TileTag.NO_COLLIDE in tile_data.tags:
                                     can_place = False
 
                             if can_place:
@@ -1089,21 +1089,21 @@ class Player:
                                     block_position[0],
                                     block_position[1],
                                     tile_dimensions,
-                                    tile_to_place["id"],
+                                    tile_to_place.id,
                                     True,
                                 )
 
-                                if commons.TileTag.CHEST in tile_to_place["tags"]:
+                                if commons.TileTag.CHEST in tile_to_place.tags:
                                     world.world.chest_data.append([block_position, [None for _ in range(20)]])
 
                                 block_placed = True
 
-                                game_data.play_tile_place_sfx(tile_to_place["id"])
+                                game_data.play_tile_place_sfx(tile_to_place.id)
 
                         else:
                             if world.world.tile_data[block_position[0]][block_position[1]][0] == game_data.air_tile_id:
                                 if world.get_neighbor_count(block_position[0], block_position[1]) > 0:
-                                    world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place["id"]
+                                    world.world.tile_data[block_position[0]][block_position[1]][0] = tile_to_place.id
 
                                     if world.tile_in_map(block_position[0], block_position[1] + 1):
                                         if (
@@ -1118,7 +1118,7 @@ class Player:
 
                                     world.update_terrain_surface(block_position[0], block_position[1])
 
-                                    game_data.play_tile_place_sfx(tile_to_place["id"])
+                                    game_data.play_tile_place_sfx(tile_to_place.id)
                                     block_placed = True
                     else:
                         if world.world.tile_data[block_position[0]][block_position[1]][1] == game_data.air_wall_id:
@@ -1189,13 +1189,13 @@ class Player:
                     if tool_item.has_tag(ItemTag.PICKAXE):
                         tile_id = world.world.tile_data[block_position[0]][block_position[1]][0]
                         tile_dat = game_data.get_tile_by_id(tile_id)
-                        if commons.TileTag.MULTI_TILE in tile_dat["tags"]:
+                        if commons.TileTag.MULTI_TILE in tile_dat.tags:
                             multitile_origin = world.get_multitile_origin(block_position[0], block_position[1])
                             world.remove_multitile(multitile_origin, True)
                             game_data.play_tile_hit_sfx(tile_id)
                         else:
                             if tile_id != game_data.air_tile_id:
-                                item_id = game_data.get_item_id_by_id_str(tile_dat["item_id_str"])
+                                item_id = game_data.get_item_id_by_id_str(tile_dat.item_id_str)
                                 # Remove Grass from    dirt
                                 if tile_id == game_data.grass_tile_id:
                                     world.world.tile_data[block_position[0]][block_position[1]][0] = (
@@ -1246,7 +1246,7 @@ class Player:
                             ):
                                 wall_dat = game_data.get_wall_by_id(wall_id)
 
-                                item_id = game_data.get_item_id_by_id_str(wall_dat["item_id_str"])
+                                item_id = game_data.get_item_id_by_id_str(wall_dat.item_id_str)
                                 entity_manager.spawn_physics_item(
                                     Item(item_id),
                                     (
@@ -1496,7 +1496,7 @@ class Player:
                 current_item = self.items[ItemLocation.HOTBAR][hotbar_index]
                 if current_item is not None:
                     if current_item.item_id == item_id:
-                        available = item_data["max_stack"] - self.items[ItemLocation.HOTBAR][hotbar_index].amount
+                        available = item_data.max_stack - self.items[ItemLocation.HOTBAR][hotbar_index].amount
                         existing_spaces.append([ItemLocation.HOTBAR, hotbar_index, available])
 
         if search_inventory:
@@ -1504,7 +1504,7 @@ class Player:
                 current_item = self.items[ItemLocation.INVENTORY][inventory_index]
                 if current_item is not None:
                     if current_item.item_id == item_id:
-                        available = item_data["max_stack"] - self.items[ItemLocation.INVENTORY][inventory_index].amount
+                        available = item_data.max_stack - self.items[ItemLocation.INVENTORY][inventory_index].amount
                         if available > 0:
                             existing_spaces.append([ItemLocation.INVENTORY, inventory_index, available])
 
@@ -1712,7 +1712,7 @@ class Player:
         for i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
             self.craftable_items_surf.blit(tilesets.misc_gui[0], (0, i * 48))
             item_data = game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
-            image = item_data["image"]
+            image = item_data.image
             if max(image.get_width(), image.get_height()) > 32:
                 image = pygame.transform.scale(
                     image,
@@ -2127,7 +2127,7 @@ class Player:
         if self.alive and self.grounded:
             game_data.play_sound("sound.jump")
             if commons.PARTICLES:
-                color = pygame.transform.average_color(game_data.get_tile_by_id(self.last_block_on)["image"])
+                color = pygame.transform.average_color(game_data.get_tile_by_id(self.last_block_on).image)
                 for _ in range(int(random.randint(5, 8) * commons.PARTICLE_DENSITY)):
                     entity_manager.spawn_particle(
                         (self.position[0], self.position[1] + commons.BLOCK_SIZE * 1.5),
