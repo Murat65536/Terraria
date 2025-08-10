@@ -17,7 +17,7 @@ class WallData:
     surface: Surface
 
 
-WALL_DATA: list[WallData] = [
+WALL_DATA: tuple[WallData, ...] = (
     WallData(
         id=0,
         id_str="wall.INVALID",
@@ -164,4 +164,4 @@ WALL_DATA: list[WallData] = [
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
     ),
-]
+)

@@ -127,7 +127,7 @@ class MagicalWeaponItemData(ItemData):
     world_override_image: Surface | None
 
 
-ITEM_DATA: list[ItemData] = [
+ITEM_DATA: tuple[ItemData, ...] = (
     TileItemData(
         id= 0,
         id_str= "item.INVALID",
@@ -1018,4 +1018,4 @@ ITEM_DATA: list[ItemData] = [
         surface= image.load("assets/images/items/iron_shortsword.png").convert_alpha(),
         world_override_image= None,
     ),
-]
+)

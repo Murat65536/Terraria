@@ -14,7 +14,7 @@ class StructureData:
     chest_loot: list = field(default_factory=list)
 
 
-STRUCTURE_DATA: list[StructureData] = [
+STRUCTURE_DATA: tuple[StructureData, ...] = (
     StructureData(
         id=0,
         id_str="structure.INVALID",
@@ -565,4 +565,4 @@ STRUCTURE_DATA: list[StructureData] = [
         "[0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.wood;3:wall.wood][0:tile.door_wood_closed;1:0,0;3:wall.wood][1:0,-1;3:wall.wood][1:0,-2;3:wall.wood][0:tile.wood;3:wall.wood]",
         ],
     ),
-]
+)

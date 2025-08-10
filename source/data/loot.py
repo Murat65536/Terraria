@@ -21,7 +21,7 @@ class LootData:
     coin_spawn_range: tuple[int, int]
 
 
-LOOT_DATA: list[LootData] = [
+LOOT_DATA: tuple[LootData, ...] = (
     LootData(
         id=0,
         id_str="loot.INVALID",
@@ -162,4 +162,4 @@ LOOT_DATA: list[LootData] = [
         ],
         coin_spawn_range=(5000, 15000),
     ),
-]
+)

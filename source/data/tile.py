@@ -134,7 +134,7 @@ class LootTileData:
     image: Surface
 
 
-TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData] = [
+TILE_DATA: tuple[TileData | DamagingTileData | MultitileData | DoorTileData | LootTileData | LootMultitileData, ...] = (
     TileData(
         id=0,
         id_str="tile.UNNAMED",
@@ -894,4 +894,4 @@ TILE_DATA: list[TileData | DamagingTileData | MultitileData | DoorTileData | Loo
         (BLOCK_SIZE, BLOCK_SIZE),
         ),
     ),
-]
+)

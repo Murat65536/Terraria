@@ -11,7 +11,7 @@ class SoundData:
     variations: list[mixer.Sound] = field(default_factory=list)
 
 
-SOUND_DATA: list[SoundData] = [
+SOUND_DATA: tuple[SoundData, ...] = (
     SoundData(id=0, id_str="sound.INVALID", variation_paths=[], volume=1),
     SoundData(
         id=1,
@@ -161,4 +161,4 @@ SOUND_DATA: list[SoundData] = [
         variation_paths=["assets/sounds/door_closed.wav"],
         volume=1,
     ),
-]
+)
