@@ -476,12 +476,12 @@ def spawn_physics_item(
 def spawn_projectile(position, angle, weapon_item, ammo_item_id, source):
     ammo_item_data = game_data.get_item_by_id(ammo_item_id)
 
-    total_damage = weapon_item.get_attack_damage() + ammo_item_data["ammo_damage"]
-    knockback = weapon_item.get_knockback() * ammo_item_data["ammo_knockback_modifier"]
-    ammo_gravity_modifier = ammo_item_data["ammo_gravity_modifier"]
-    ammo_drag = ammo_item_data["ammo_drag"]
-    ricochet_amount = ammo_item_data["ricochet_amount"]
-    image = ammo_item_data["ammo_image"]
+    total_damage = weapon_item.get_attack_damage() + ammo_item_data.ammo_damage
+    knockback = weapon_item.get_knockback() * ammo_item_data.ammo_knockback_modifier
+    ammo_gravity_modifier = ammo_item_data.ammo_gravity_modifier
+    ammo_drag = ammo_item_data.ammo_drag
+    ricochet_amount = ammo_item_data.ricochet_amount
+    image = ammo_item_data.ammo_image
 
     speed = weapon_item.get_ranged_projectile_speed()
 
@@ -595,12 +595,12 @@ def add_recent_pickup(item_id: int, amount: int, tier, pos, unique=False, item=N
                 amount += recent_pickup["amount"]
                 recent_pickups.remove(recent_pickup)
     if amount > 1:
-        string = game_data.json_item_data[item_id]["name"] + f"({amount})"
+        string = game_data.json_item_data[item_id].name + f"({amount})"
     else:
         if item is not None:
             string = item.get_name()
         else:
-            string = game_data.json_item_data[item_id]["name"]
+            string = game_data.json_item_data[item_id].name
     size = commons.DEFAULT_FONT.size(string)
     size = (size[0] + 2, size[1] + 2)
     surf = pygame.Surface(size, pygame.SRCALPHA)

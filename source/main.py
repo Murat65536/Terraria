@@ -843,10 +843,10 @@ def draw_interactive_block_hover() -> None:
         tile_id = world.world.tile_data[commons.HOVERED_TILE[0]][commons.HOVERED_TILE[1]][0]
         tile_data = game_data.get_tile_by_id(tile_id)
         if tile_data is not None:
-            if commons.TileTag.CHEST in tile_data["tags"] or commons.TileTag.CYCLABLE in tile_data["tags"]:
-                item_data = game_data.get_item_by_id_str(tile_data["item_id_str"])
+            if commons.TileTag.CHEST in tile_data.tags or commons.TileTag.CYCLABLE in tile_data.tags:
+                item_data = game_data.get_item_by_id_str(tile_data.item_id_str)
                 if item_data is not None:
-                    commons.screen.blit(item_data["image"], commons.MOUSE_POSITION)
+                    commons.screen.blit(item_data.surface, commons.MOUSE_POSITION)
 
 
 """=================================================================================================================
@@ -1633,11 +1633,11 @@ while True:
 
                                 if tile_id != game_data.air_tile_id:
                                     tile_data = game_data.get_tile_by_id(tile_id)
-                                    if type(tile_data["image"]) is pygame.Surface:
+                                    if type(tile_data.image) is pygame.Surface:
                                         try:
                                             pygame.draw.rect(
                                                 world_surf,
-                                                pygame.transform.average_color(tile_data["image"]),
+                                                pygame.transform.average_color(tile_data.image),
                                                 pygame.Rect(
                                                     tile_x * tile_scale,
                                                     tile_y * tile_scale,
@@ -1652,11 +1652,11 @@ while True:
 
                                 if wall_id != game_data.air_wall_id:
                                     wall_data = game_data.get_wall_by_id(wall_id)
-                                    if type(wall_data["image"]) is pygame.Surface:
+                                    if type(wall_data.surface) is pygame.Surface:
                                         try:
                                             pygame.draw.rect(
                                                 world_surf,
-                                                pygame.transform.average_color(wall_data["image"]),
+                                                pygame.transform.average_color(wall_data.surface),
                                                 pygame.Rect(
                                                     tile_x * tile_scale,
                                                     tile_y * tile_scale,

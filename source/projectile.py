@@ -119,8 +119,8 @@ class Projectile:
                 if world.tile_in_map(block_position[1] + j, block_position[0] + i):
                     tile_id = world.world.tile_data[block_position[1] + j][block_position[0] + i][0]
                     tile_data = game_data.get_tile_by_id(tile_id)
-                    if commons.TileTag.NO_COLLIDE not in tile_data["tags"]:
-                        if commons.TileTag.PLATFORM not in tile_data["tags"]:
+                    if commons.TileTag.NO_COLLIDE not in tile_data.tags:
+                        if commons.TileTag.PLATFORM not in tile_data.tags:
                             block_rect = Rect(
                                 commons.BLOCK_SIZE * (block_position[1] + j),
                                 commons.BLOCK_SIZE * (block_position[0] + i),
@@ -169,7 +169,7 @@ class Projectile:
             if self.bounce_num <= 0:
                 entity_manager.projectiles.remove(self)
                 if commons.PARTICLES:
-                    color = pygame.transform.average_color(game_data.get_tile_by_id(block_hit_tile_id)["image"])
+                    color = pygame.transform.average_color(game_data.get_tile_by_id(block_hit_tile_id).image)
                     velocity_angle = math.atan2(self.velocity[1], self.velocity[0])
                     velocity_magnitude = math.sqrt(self.velocity[0] ** 2 + self.velocity[1] ** 2)
                     for i in range(int(4 * commons.PARTICLE_DENSITY)):

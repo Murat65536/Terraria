@@ -21,7 +21,7 @@ class EntityData:
     coin_drop_range: tuple[int, int]
 
 
-ENTITY_DATA: list[EntityData] = [
+ENTITY_DATA: tuple[EntityData, ...] = (
     EntityData(
         "INVALID",
         "Slime",
@@ -118,4 +118,4 @@ ENTITY_DATA: list[EntityData] = [
         ],
         (45, 130),
     ),
-]
+)

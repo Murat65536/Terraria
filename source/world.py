@@ -296,7 +296,7 @@ def check_tile_merge(tile_id_1, tile_id_2):
     tile_1 = game_data.get_tile_by_id(tile_id_1)
     tile_2 = game_data.get_tile_by_id(tile_id_2)
 
-    if tile_1["id_str"] in tile_2["mask_merge_ids"] or tile_1["id_str"] == tile_2["id_str"]:
+    if tile_1.id_str in tile_2.mask_merge_ids or tile_1.id_str == tile_2.id_str:
         return True
     return False
 
@@ -312,7 +312,7 @@ def check_wall_merge(wall_id_1, wall_id_2):
     wall_1 = game_data.get_wall_by_id(wall_id_1)
     wall_2 = game_data.get_wall_by_id(wall_id_2)
 
-    if wall_1["id_str"] in wall_2["mask_merge_ids"] or wall_1["id_str"] == wall_2["id_str"]:
+    if wall_1.id_str in wall_2.mask_merge_ids or wall_1.id_str == wall_2.id_str:
         return True
     return False
 
@@ -894,7 +894,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
     destroy = True
     chest_data_to_remove = -1
 
-    if TileTag.CHEST in json_tile_data["tags"]:
+    if TileTag.CHEST in json_tile_data.tags:
         for chest_data_index in range(len(world.chest_data)):
             if world.chest_data[chest_data_index][0] == top_left_pos:
                 for chest_items_index in range(len(world.chest_data[chest_data_index][1])):
@@ -908,7 +908,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
                 #        entity_manager.SpawnPhysicsItem((i * commons.BLOCK_SIZE, j * commons.BLOCK_SIZE), clientWorld.chestData[k][1][f][m])
 
     if destroy:
-        dimensions = json_tile_data["multitile_dimensions"]
+        dimensions = json_tile_data.multitile_dimensions
         remove_x = 0
         remove_y = 0
 
@@ -923,7 +923,7 @@ def remove_multitile(top_left_pos, drop_items=True, remove_chest_data=True, upda
 
         if drop_items:
             entity_manager.spawn_physics_item(
-                Item(get_item_id_by_id_str(json_tile_data["item_id_str"]), 1),
+                Item(get_item_id_by_id_str(json_tile_data.item_id_str), 1),
                 (remove_x * commons.BLOCK_SIZE, remove_y * commons.BLOCK_SIZE),
                 pickup_delay=10,
             )
@@ -945,33 +945,33 @@ def use_special_tile(i, j):
     tile_id = world.tile_data[i][j][0]
     tile_data = game_data.get_tile_by_id(tile_id)
 
-    if TileTag.CHEST in tile_data["tags"]:
+    if TileTag.CHEST in tile_data.tags:
         for chest_data_index in range(len(world.chest_data)):
             if world.chest_data[chest_data_index][0] == (i, j):
                 entity_manager.client_player.open_chest(world.chest_data[chest_data_index][1])
 
-    if TileTag.WORKBENCH in tile_data["tags"]:
+    if TileTag.WORKBENCH in tile_data.tags:
         entity_manager.client_player.crafting_menu_offset_y = 120
         entity_manager.client_player.update_craftable_items()
         entity_manager.client_player.render_craftable_items_surf()
         entity_manager.client_player.inventory_open = True
         entity_manager.client_prompt = None
 
-    if TileTag.CYCLABLE in tile_data["tags"]:
+    if TileTag.CYCLABLE in tile_data.tags:
         player_direction = entity_manager.client_player.direction
         if player_direction == 0:
-            tile_cycle_id_str = tile_data["cycle_facing_left_tile_id_str"]
+            tile_cycle_id_str = tile_data.cycle_facing_left_tile_id_str
             tile_cycle_data = game_data.get_tile_by_id_str(tile_cycle_id_str)
-            tile_cycle_offset = tile_data["cycle_facing_left_tile_offset"]
-            tile_cycle_sound = tile_data["cycle_facing_left_sound"]
+            tile_cycle_offset = tile_data.cycle_facing_left_tile_offset
+            tile_cycle_sound = tile_data.cycle_facing_left_sound
         else:
-            tile_cycle_id_str = tile_data["cycle_facing_right_tile_id_str"]
+            tile_cycle_id_str = tile_data.cycle_facing_right_tile_id_str
             tile_cycle_data = game_data.get_tile_by_id_str(tile_cycle_id_str)
-            tile_cycle_offset = tile_data["cycle_facing_right_tile_offset"]
-            tile_cycle_sound = tile_data["cycle_facing_right_sound"]
+            tile_cycle_offset = tile_data.cycle_facing_right_tile_offset
+            tile_cycle_sound = tile_data.cycle_facing_right_sound
 
-        if TileTag.MULTI_TILE in tile_cycle_data["tags"]:
-            tile_cycle_dimensions = tile_cycle_data["multitile_dimensions"]
+        if TileTag.MULTI_TILE in tile_cycle_data.tags:
+            tile_cycle_dimensions = tile_cycle_data.multitile_dimensions
         else:
             tile_cycle_dimensions = 1, 1
 
@@ -979,8 +979,8 @@ def use_special_tile(i, j):
 
         can_cycle = True
 
-        if TileTag.MULTI_TILE in tile_data["tags"]:
-            current_tile_dimensions = tile_data["multitile_dimensions"]
+        if TileTag.MULTI_TILE in tile_data.tags:
+            current_tile_dimensions = tile_data.multitile_dimensions
         else:
             current_tile_dimensions = 1, 1
 
@@ -1008,7 +1008,7 @@ def use_special_tile(i, j):
             game_data.play_sound(tile_cycle_sound)
 
             # Remove existing cyclable
-            if TileTag.MULTI_TILE in tile_data["tags"]:
+            if TileTag.MULTI_TILE in tile_data.tags:
                 for x in range(current_tile_dimensions[0]):
                     for y in range(current_tile_dimensions[1]):
                         world.tile_data[i + x][j + y][0] = game_data.air_tile_id
@@ -1020,7 +1020,7 @@ def use_special_tile(i, j):
             # Place the new one
             for x in range(tile_cycle_dimensions[0]):
                 for y in range(tile_cycle_dimensions[1]):
-                    world.tile_data[tile_cycle_origin[0] + x][tile_cycle_origin[1] + y][0] = tile_cycle_data["id"]
+                    world.tile_data[tile_cycle_origin[0] + x][tile_cycle_origin[1] + y][0] = tile_cycle_data.id
                     world.tile_data[tile_cycle_origin[0] + x][tile_cycle_origin[1] + y].append((x, y))
                     update_terrain_surface(tile_cycle_origin[0] + x, tile_cycle_origin[1] + y)
 
@@ -1065,26 +1065,26 @@ def update_terrain_surface(i, j, affect_others=True):
         json_tile_dat = game_data.get_tile_by_id(tile_dat[0])
         json_wall_dat = game_data.get_wall_by_id(tile_dat[1])
 
-        if TileTag.NO_DRAW not in json_tile_dat["tags"]:
+        if TileTag.NO_DRAW not in json_tile_dat.tags:
             tile_mask_data[tile[0]][tile[1]] = get_mask_index_from_pos(
                 tile[0], tile[1], tile_dat[0]
             )  # Get the mask at i, j and store it in the tile_mask_data array
 
-            if TileTag.MULTI_TILE in json_tile_dat["tags"]:
+            if TileTag.MULTI_TILE in json_tile_dat.tags:
                 tile_img = pygame.Surface((commons.BLOCK_SIZE, commons.BLOCK_SIZE)).convert()
                 tile_img.blit(
-                    json_tile_dat["image"],
+                    json_tile_dat.image,
                     (
                         -tile_dat[2][0] * commons.BLOCK_SIZE,
                         -tile_dat[2][1] * commons.BLOCK_SIZE,
                     ),
                 )
             else:
-                tile_img = json_tile_dat["image"].copy()
+                tile_img = json_tile_dat.image.copy()
 
             tile_img.set_colorkey((255, 0, 255))
 
-            if json_tile_dat["mask_type"] != TileMaskType.NONE:
+            if json_tile_dat.mask_type != TileMaskType.NONE:
                 tile_img.blit(
                     tilesets.tile_masks[tile_mask_data[tile[0]][tile[1]]],
                     (0, 0),
@@ -1093,11 +1093,11 @@ def update_terrain_surface(i, j, affect_others=True):
                 )  # Blit the block mask to the block texture using a multiply blend flag
 
             if (
-                tile_mask_data[tile[0]][tile[1]] != 14 or TileTag.TRANSPARENT not in json_tile_dat["tags"]
+                tile_mask_data[tile[0]][tile[1]] != 14 or TileTag.TRANSPARENT not in json_tile_dat.tags
             ) and tile_dat[
                 1
             ] != game_data.air_wall_id:  # If the block is not a centre block (and so there is some transparency in it) and there is a wall tile behind it,  blit the wall tile
-                back_img = json_wall_dat["image"].copy()  # Get the wall texture
+                back_img = json_wall_dat.surface.copy()  # Get the wall texture
                 wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(
                     tile[0], tile[1], tile_dat[1]
                 )  # Get the wall mask
@@ -1125,7 +1125,7 @@ def update_terrain_surface(i, j, affect_others=True):
                 )  # Blit the masked wall surf to the main surf
 
         elif tile_dat[1] != game_data.air_wall_id:  # If there is no block but there is a wall
-            back_img = json_wall_dat["image"].copy()  # Get the wall texture
+            back_img = json_wall_dat.surface.copy()  # Get the wall texture
             wall_tile_mask_data[tile[0]][tile[1]] = get_wall_mask_index_from_pos(
                 tile[0], tile[1], tile_dat[1]
             )  # Get the wall mask
@@ -1252,7 +1252,7 @@ def spawn_structure(
 
     # Connection being spawned at
     if structure_connection_position is not None:
-        for connection in structure_data["connections"]:
+        for connection in structure_data.connections:
             if connection[0] == structure_connection_position:
                 structure_world_top_left = (
                     pos_x - structure_connection_position[0],
@@ -1262,8 +1262,8 @@ def spawn_structure(
     structure_rect = Rect(
         structure_world_top_left[0],
         structure_world_top_left[1],
-        structure_data["width"],
-        structure_data["height"],
+        structure_data.width,
+        structure_data.height,
     )
 
     if check_placement_validity:
@@ -1275,49 +1275,49 @@ def spawn_structure(
     current_structure_index = len(structure_rectangles) - 1
 
     # Remove multitile and chest data
-    for x in range(structure_data["width"]):
+    for x in range(structure_data.width):
         world_x = structure_world_top_left[0] + x
-        for y in range(structure_data["height"]):
+        for y in range(structure_data.height):
             world_y = structure_world_top_left[1] + y
-            tile_data = structure_data["tile_data"][x][y]
+            tile_data = structure_data.tile_data[x][y]
             if tile_data[0] is not None:
                 existing_tile_data = game_data.get_tile_by_id(world.tile_data[world_x][world_y][0])
 
-                if TileTag.MULTI_TILE in existing_tile_data["tags"]:
+                if TileTag.MULTI_TILE in existing_tile_data.tags:
                     tile_origin = get_multitile_origin(world_x, world_y)
                     remove_multitile(tile_origin, False, False, False)
                 else:
                     tile_origin = (world_x, world_y)
 
-                if TileTag.CHEST in existing_tile_data["tags"]:
+                if TileTag.CHEST in existing_tile_data.tags:
                     for chest_data_index in range(len(world.chest_data) - 1, -1, -1):
                         if world.chest_data[chest_data_index][0] == tile_origin:
                             del world.chest_data[chest_data_index]
 
     # Add new multitile data
-    for x in range(structure_data["width"]):
+    for x in range(structure_data.width):
         world_x = structure_world_top_left[0] + x
-        for y in range(structure_data["height"]):
+        for y in range(structure_data.height):
             world_y = structure_world_top_left[1] + y
-            tile_data = structure_data["tile_data"][x][y]
+            tile_data = structure_data.tile_data[x][y]
             if tile_data[0] is not None:
                 new_tile = game_data.get_tile_by_id_str(tile_data[0])
-                if TileTag.MULTI_TILE in new_tile["tags"]:
+                if TileTag.MULTI_TILE in new_tile.tags:
                     place_multitile(
                         world_x,
                         world_y,
-                        new_tile["multitile_dimensions"],
-                        new_tile["id"],
+                        new_tile.multitile_dimensions,
+                        new_tile.id,
                         False,
                     )
                 else:
-                    world.tile_data[world_x][world_y][0] = new_tile["id"]
+                    world.tile_data[world_x][world_y][0] = new_tile.id
 
             if tile_data[1] is not None:
                 world.tile_data[world_x][world_y][1] = game_data.get_wall_id_by_id_str(tile_data[1])
 
     # Create chest loot
-    for chest in structure_data["chest_loot"]:
+    for chest in structure_data.chest_loot:
         tile_origin = (
             structure_world_top_left[0] + chest[0][0],
             structure_world_top_left[1] + chest[0][1],
@@ -1329,7 +1329,7 @@ def spawn_structure(
         return
 
     # Fill out other connections
-    for connection in structure_data["connections"]:
+    for connection in structure_data.connections:
         if connection[0] != structure_connection_position or allow_connection_connecting_from:
             possible_connections = find_structures_for_connection(connection[1], connection[2])
             if len(possible_connections) > 0:
@@ -1345,11 +1345,11 @@ def spawn_structure(
                     possible_structure_rect = Rect(
                         possible_top_left[0],
                         possible_top_left[1],
-                        possible_structure_data["width"],
-                        possible_structure_data["height"],
+                        possible_structure_data.width,
+                        possible_structure_data.height,
                     )
                     if is_structure_rect_valid(possible_structure_rect, current_structure_index):
-                        total_weight += possible_structure_data["spawn_weight"]
+                        total_weight += possible_structure_data.spawn_weight
                     else:
                         possible_connections.pop(possible_connection_index)
 
@@ -1358,7 +1358,7 @@ def spawn_structure(
 
                     for possible_connection in possible_connections:
                         possible_structure_data = game_data.get_structure_by_id_str(possible_connection[0])
-                        if random_pick < possible_structure_data["spawn_weight"]:
+                        if random_pick < possible_structure_data.spawn_weight:
                             spawn_structure(
                                 structure_world_top_left[0] + connection[0][0],
                                 structure_world_top_left[1] + connection[0][1],
@@ -1369,7 +1369,7 @@ def spawn_structure(
                             )
                             break
                         else:
-                            random_pick -= possible_structure_data["spawn_weight"]
+                            random_pick -= possible_structure_data.spawn_weight
 
 
 """=================================================================================================================
@@ -1422,7 +1422,7 @@ def create_grounded_spawn_position():
         left_tile_dat = game_data.get_tile_by_id(world.tile_data[x1][y][0])
         right_tile_dat = game_data.get_tile_by_id(world.tile_data[x2][y][0])
 
-        if TileTag.NO_COLLIDE not in left_tile_dat["tags"] and TileTag.NO_COLLIDE not in right_tile_dat["tags"]:
+        if TileTag.NO_COLLIDE not in left_tile_dat.tags and TileTag.NO_COLLIDE not in right_tile_dat.tags:
             world.spawn_position = (
                 world.spawn_position[0],
                 world.spawn_position[1] - commons.BLOCK_SIZE * 1.5,
@@ -1488,17 +1488,17 @@ def spawn_pot(pos_x, pos_y):
                 random_choice = pot_options[random.randint(0, len(pot_options) - 1)]
                 random_choice_tile_data = game_data.get_tile_by_id_str(random_choice)
 
-                if TileTag.MULTI_TILE in random_choice_tile_data["tags"]:
-                    tile_dimensions = random_choice_tile_data["multitile_dimensions"]
+                if TileTag.MULTI_TILE in random_choice_tile_data.tags:
+                    tile_dimensions = random_choice_tile_data.multitile_dimensions
                     place_multitile(
                         pos_x,
                         pos_y - tile_dimensions[1],
                         tile_dimensions,
-                        random_choice_tile_data["id"],
+                        random_choice_tile_data.id,
                         False,
                     )
                 else:
-                    world.tile_data[pos_x][pos_y - 1][0] = random_choice_tile_data["id"]
+                    world.tile_data[pos_x][pos_y - 1][0] = random_choice_tile_data.id
                 return
 
             if (
