@@ -1,14 +1,13 @@
-from dataclasses import dataclass
+from typing import TypedDict
 
 
-@dataclass
-class ProjectileData:
+class ProjectileData(TypedDict):
     id: int
     id_str: str
 
 
 PROJECTILE_DATA: list[ProjectileData] = [
-    ProjectileData(id=0, id_str="projectile.INVALID"),
-    ProjectileData(id=1, id_str="projectile.arrow"),
-    ProjectileData(id=2, id_str="projectile.bullet"),
+    {"id": 0, "id_str": "projectile.INVALID"},
+    {"id": 1, "id_str": "projectile.arrow"},
+    {"id": 2, "id_str": "projectile.bullet"},
 ]
