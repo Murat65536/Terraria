@@ -14,7 +14,7 @@ class WallData:
     item_id_str: str
     place_sound: str
     hit_sound: str
-    image: Surface
+    surface: Surface
 
 
 WALL_DATA: list[WallData] = [
@@ -27,7 +27,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.INVALID",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=Surface((0, 0)),
+        surface=Surface((0, 0)),
     ),
     WallData(
         id=1,
@@ -38,7 +38,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.INVALID",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=Surface((0, 0)),
+        surface=Surface((0, 0)),
     ),
     WallData(
         id=2,
@@ -57,7 +57,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.dirt_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/dirt.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -71,7 +71,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.stone_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/stone.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -85,7 +85,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.ice_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/ice.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -106,7 +106,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.snow_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/snow.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -120,7 +120,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.sandstone_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/sandstone.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -140,7 +140,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.hardened_sand_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/hardened_sand.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),
@@ -159,7 +159,7 @@ WALL_DATA: list[WallData] = [
         item_id_str="item.wood_wall",
         place_sound="sound.dig",
         hit_sound="sound.dig",
-        image=transform.scale(
+        surface=transform.scale(
             image.load("assets/images/walls/wood.png").convert_alpha(),
             (BLOCK_SIZE, BLOCK_SIZE),
         ),

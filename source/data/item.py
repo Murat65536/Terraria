@@ -5,6 +5,8 @@ from pygame import Surface, image
 
 @dataclass
 class ItemData:
+    id: int
+    id_str: str
     name: str
     tags: list[ItemTag]
     tier: int
@@ -15,163 +17,71 @@ class ItemData:
     pickup_sound: str
     drop_sound: str
     surface: Surface
-    block_name: str
 
 @dataclass
-class TileItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class TileItemData(ItemData):
     tile_id_str: str
-    pickup_sound: str
-    drop_sound: str
-    hold_offset: float
-    image: Surface
 
 
 @dataclass
-class MaterialItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
-    pickup_sound: str
-    drop_sound: str
-    hold_offset: float
-    image: Surface
+class MaterialItemData(ItemData):
+    pass
 
 
 @dataclass
-class WallItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
-    hold_offset: float
-    pickup_sound: str
-    drop_sound: str
+class WallItemData(ItemData):
     wall_id_str: str
-    image: Surface
 
 
 @dataclass
-class PickaxeItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class PickaxeItemData(ItemData):
     attack_speed: int
     attack_damage: int
     knockback: int
     crit_chance: float
     prefixes: list[ItemPrefixGroup]
     pickaxe_power: float
-    pickup_sound: str
-    drop_sound: str
     use_sound: str
-    hold_offset: float
-    image: Surface
     world_override_image: Surface | None
 
 
 @dataclass
-class HammerItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class HammerItemData(ItemData):
     attack_speed: int
     attack_damage: int
     knockback: float
     crit_chance: float
     prefixes: list[ItemPrefixGroup]
-    pickup_sound: str
-    drop_sound: str
     use_sound: str
     hammer_power: float
-    hold_offset: float
-    image: Surface
     world_override_image: Surface | None
 
 
 @dataclass
-class AxeItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class AxeItemData(ItemData):
     attack_speed: int
     attack_damage: int
     knockback: float
     crit_chance: float
     prefixes: list[ItemPrefixGroup]
     axe_power: float
-    pickup_sound: str
-    drop_sound: str
     use_sound: str
-    hold_offset: float
-    image: Surface
     world_override_image: Surface | None
 
 
 @dataclass
-class SwordItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class SwordItemData(ItemData):
     attack_speed: int
     attack_damage: int
     knockback: float
     crit_chance: float
     prefixes: list[ItemPrefixGroup]
-    pickup_sound: str
-    drop_sound: str
     use_sound: str
-    hold_offset: float
-    image: Surface
     world_override_image: Surface | None
 
 
 @dataclass
-class RangedItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class RangedItemData(ItemData):
     attack_speed: int
     attack_damage: int
     knockback: float
@@ -182,94 +92,42 @@ class RangedItemData:
     ranged_projectile_speed: float
     ranged_accuracy: float
     ranged_num_projectiles: int
-    pickup_sound: str
-    drop_sound: str
     use_sound: str
-    hold_offset: float
-    image: Surface
     world_override_image: Surface | None
 
 
 @dataclass
-class AmmunitionItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class AmmunitionItemData(ItemData):
     ammo_damage: float
     ammo_drag: float
     ammo_gravity_modifier: float
     ammo_knockback_modifier: float
-    pickup_sound: str
-    drop_sound: str
-    hold_offset: float
     ricochet_amount: int
-    image: Surface
     ammo_image: Surface
 
 
 @dataclass
-class GrapplingHookItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
+class GrapplingHookItemData(ItemData):
     grapple_speed: float
     grapple_chain_length: float
     grapple_max_chains: int
-    pickup_sound: str
-    drop_sound: str
-    hold_offset: float
-    image: Surface
     grapple_chain_image: Surface
     grapple_claw_image: Surface
 
 
 @dataclass
-class MagicalWeaponItemData:
-    id: int
-    id_str: str
-    name: str
-    tags: list[ItemTag]
-    tier: int
-    max_stack: int
-    buy_price: int
-    sell_price: int
-    pickup_sound: str
-    drop_sound: str
+class MagicalWeaponItemData(ItemData):
     prefixes: list[ItemPrefixGroup]
     attack_speed: int
     attack_damage: int
     knockback: float
     crit_chance: float
-    hold_offset: float
     use_sound: str
     mana_cost: int
-    image: Surface
     world_override_image: Surface | None
 
 
-ITEM_DATA: list[
-    TileItemData
-    | MaterialItemData
-    | WallItemData
-    | PickaxeItemData
-    | HammerItemData
-    | AxeItemData
-    | SwordItemData
-    | RangedItemData
-    | AmmunitionItemData
-    | GrapplingHookItemData
-    | MagicalWeaponItemData
-    ] = [
+ITEM_DATA: list[ItemData] = [
     TileItemData(
         id= 0,
         id_str= "item.INVALID",
@@ -283,7 +141,7 @@ ITEM_DATA: list[
         tile_id_str= "tile.UNNAMED",
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
-        image= Surface((0, 0)),
+        surface= Surface((0, 0)),
     ),
     PickaxeItemData(
         id= 1,
@@ -304,7 +162,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/iron_pickaxe.png").convert_alpha(),
+        surface= image.load("assets/images/items/iron_pickaxe.png").convert_alpha(),
         world_override_image= None,
     ),
     TileItemData(
@@ -320,7 +178,7 @@ ITEM_DATA: list[
         tile_id_str= "tile.dirt",
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
-        image= image.load("assets/images/items/dirt_block.png").convert_alpha(),
+        surface= image.load("assets/images/items/dirt_block.png").convert_alpha(),
     ),
     TileItemData(
         id= 3,
@@ -335,7 +193,7 @@ ITEM_DATA: list[
         tile_id_str= "tile.stone",
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
-        image= image.load("assets/images/items/stone_block.png").convert_alpha(),
+        surface= image.load("assets/images/items/stone_block.png").convert_alpha(),
     ),
     SwordItemData(
         id= 4,
@@ -359,7 +217,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/iron_broadsword.png").convert_alpha(),
+        surface= image.load("assets/images/items/iron_broadsword.png").convert_alpha(),
         world_override_image= None,
     ),
     TileItemData(
@@ -375,7 +233,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/mushroom.png").convert_alpha(),
+        surface= image.load("assets/images/items/mushroom.png").convert_alpha(),
     ),
     TileItemData(
         id= 6,
@@ -390,7 +248,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/iron_ore.png").convert_alpha(),
+        surface= image.load("assets/images/items/iron_ore.png").convert_alpha(),
     ),
     WallItemData(
         id= 7,
@@ -405,7 +263,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         wall_id_str= "wall.dirt",
-        image= image.load("assets/images/items/dirt_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/dirt_wall.png").convert_alpha(),
     ),
     WallItemData(
         id= 8,
@@ -420,7 +278,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         wall_id_str= "wall.stone",
-        image= image.load("assets/images/items/stone_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/stone_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 9,
@@ -435,7 +293,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/snow.png").convert_alpha(),
+        surface= image.load("assets/images/items/snow.png").convert_alpha(),
     ),
     WallItemData(
         id= 10,
@@ -450,7 +308,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         wall_id_str= "wall.snow",
-        image= image.load("assets/images/items/snow_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/snow_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 11,
@@ -465,7 +323,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/ice.png").convert_alpha(),
+        surface= image.load("assets/images/items/ice.png").convert_alpha(),
     ),
     WallItemData(
         id= 12,
@@ -480,7 +338,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         wall_id_str= "wall.ice",
-        image= image.load("assets/images/items/ice_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/ice_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 13,
@@ -495,7 +353,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/wood.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood.png").convert_alpha(),
     ),
     WallItemData(
         id= 14,
@@ -510,7 +368,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         wall_id_str= "wall.wood",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/wood_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 15,
@@ -525,7 +383,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/copper_ore.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_ore.png").convert_alpha(),
     ),
     TileItemData(
         id= 16,
@@ -540,7 +398,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/silver_ore.png").convert_alpha(),
+        surface= image.load("assets/images/items/silver_ore.png").convert_alpha(),
     ),
     TileItemData(
         id= 17,
@@ -555,7 +413,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         tile_id_str= "tile.sand",
-        image= image.load("assets/images/items/sand.png").convert_alpha(),
+        surface= image.load("assets/images/items/sand.png").convert_alpha(),
     ),
     WallItemData(
         id= 18,
@@ -570,7 +428,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         wall_id_str= "wall.hardened_sand",
-        image= image.load("assets/images/items/hardened_sand_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/hardened_sand_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 19,
@@ -585,7 +443,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/sandstone.png").convert_alpha(),
+        surface= image.load("assets/images/items/sandstone.png").convert_alpha(),
     ),
     WallItemData(
         id= 20,
@@ -600,7 +458,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         wall_id_str= "wall.sandstone",
-        image= image.load("assets/images/items/sandstone_wall.png").convert_alpha(),
+        surface= image.load("assets/images/items/sandstone_wall.png").convert_alpha(),
     ),
     TileItemData(
         id= 21,
@@ -615,7 +473,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/wood_platform.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_platform.png").convert_alpha(),
     ),
     SwordItemData(
         id= 22,
@@ -639,7 +497,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/copper_broadsword.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_broadsword.png").convert_alpha(),
         world_override_image= None,
     ),
     SwordItemData(
@@ -664,7 +522,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.9,
-        image= image.load("assets/images/items/excalibur.png").convert_alpha(),
+        surface= image.load("assets/images/items/excalibur.png").convert_alpha(),
         world_override_image= None,
     ),
     SwordItemData(
@@ -689,7 +547,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/wood_broadsword.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_broadsword.png").convert_alpha(),
         world_override_image= None,
     ),
     RangedItemData(
@@ -719,7 +577,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.bow",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/wood_bow.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_bow.png").convert_alpha(),
         world_override_image= None,
     ),
     AmmunitionItemData(
@@ -739,7 +597,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/wooden_arrow.png").convert_alpha(),
+        surface= image.load("assets/images/items/wooden_arrow.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/wooden_arrow.png").convert_alpha(),
     ),
     RangedItemData(
@@ -769,7 +627,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.gun_shot",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/musket.png").convert_alpha(),
+        surface= image.load("assets/images/items/musket.png").convert_alpha(),
         world_override_image= None,
     ),
     AmmunitionItemData(
@@ -789,7 +647,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/musket_ball.png").convert_alpha(),
+        surface= image.load("assets/images/items/musket_ball.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     ),
     AmmunitionItemData(
@@ -809,7 +667,7 @@ ITEM_DATA: list[
         drop_sound= "sound.coins",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/copper_coin.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_coin.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     ),
     AmmunitionItemData(
@@ -829,7 +687,7 @@ ITEM_DATA: list[
         drop_sound= "sound.coins",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/silver_coin.png").convert_alpha(),
+        surface= image.load("assets/images/items/silver_coin.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     ),
     AmmunitionItemData(
@@ -849,7 +707,7 @@ ITEM_DATA: list[
         drop_sound= "sound.coins",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/gold_coin.png").convert_alpha(),
+        surface= image.load("assets/images/items/gold_coin.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     ),
     AmmunitionItemData(
@@ -869,7 +727,7 @@ ITEM_DATA: list[
         drop_sound= "sound.coins",
         hold_offset= 0.0,
         ricochet_amount= 1,
-        image= image.load("assets/images/items/platinum_coin.png").convert_alpha(),
+        surface= image.load("assets/images/items/platinum_coin.png").convert_alpha(),
         ammo_image= image.load("assets/images/projectiles/musket_ball.png").convert_alpha(),
     ),
     PickaxeItemData(
@@ -891,7 +749,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/copper_pickaxe.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_pickaxe.png").convert_alpha(),
         world_override_image= None,
     ),
     HammerItemData(
@@ -913,7 +771,7 @@ ITEM_DATA: list[
         use_sound= "sound.swing",
         hammer_power= 0,
         hold_offset= 0.8,
-        image= image.load("assets/images/items/copper_hammer.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_hammer.png").convert_alpha(),
         world_override_image= None,
     ),
     HammerItemData(
@@ -935,7 +793,7 @@ ITEM_DATA: list[
         use_sound= "sound.swing",
         hammer_power= 0,
         hold_offset= 0.8,
-        image= image.load("assets/images/items/wood_hammer.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_hammer.png").convert_alpha(),
         world_override_image= None,
     ),
     MaterialItemData(
@@ -950,7 +808,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/gel.png").convert_alpha(),
+        surface= image.load("assets/images/items/gel.png").convert_alpha(),
     ),
     TileItemData(
         id= 37,
@@ -965,7 +823,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/wood_chest.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_chest.png").convert_alpha(),
     ),
     TileItemData(
         id= 38,
@@ -980,7 +838,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/workbench.png").convert_alpha(),
+        surface= image.load("assets/images/items/workbench.png").convert_alpha(),
     ),
     TileItemData(
         id= 39,
@@ -995,7 +853,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/wood_door.png").convert_alpha(),
+        surface= image.load("assets/images/items/wood_door.png").convert_alpha(),
     ),
     TileItemData(
         id= 40,
@@ -1010,7 +868,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/torch.png").convert_alpha(),
+        surface= image.load("assets/images/items/torch.png").convert_alpha(),
     ),
     TileItemData(
         id= 41,
@@ -1025,7 +883,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/spike.png").convert_alpha(),
+        surface= image.load("assets/images/items/spike.png").convert_alpha(),
     ),
     GrapplingHookItemData(
         id= 42,
@@ -1042,7 +900,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         hold_offset= 0.0,
-        image= image.load("assets/images/items/grappling_hook.png").convert_alpha(),
+        surface= image.load("assets/images/items/grappling_hook.png").convert_alpha(),
         grapple_chain_image= image.load("assets/images/chains/grappling_hook_chain.png").convert_alpha(),
         grapple_claw_image= image.load("assets/images/projectiles/grappling_hook_claw.png").convert_alpha(),
     ),
@@ -1065,7 +923,7 @@ ITEM_DATA: list[
         hold_offset= 0.0,
         use_sound= "sound.swing",
         mana_cost= 20,
-        image= image.load("assets/images/items/water_bolt.png").convert_alpha(),
+        surface= image.load("assets/images/items/water_bolt.png").convert_alpha(),
         world_override_image= None,
     ),
     TileItemData(
@@ -1081,7 +939,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         tile_id_str= "tile.painting_a",
-        image= image.load("assets/images/items/painting_a.png").convert_alpha(),
+        surface= image.load("assets/images/items/painting_a.png").convert_alpha(),
     ),
     TileItemData(
         id= 45,
@@ -1096,7 +954,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         tile_id_str= "tile.painting_b",
-        image= image.load("assets/images/items/painting_b.png").convert_alpha(),
+        surface= image.load("assets/images/items/painting_b.png").convert_alpha(),
     ),
     TileItemData(
         id= 46,
@@ -1111,7 +969,7 @@ ITEM_DATA: list[
         pickup_sound= "sound.grab",
         drop_sound= "sound.grab",
         tile_id_str= "tile.painting_c",
-        image= image.load("assets/images/items/painting_c.png").convert_alpha(),
+        surface= image.load("assets/images/items/painting_c.png").convert_alpha(),
     ),
     AxeItemData(
         id= 47,
@@ -1132,7 +990,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/copper_axe.png").convert_alpha(),
+        surface= image.load("assets/images/items/copper_axe.png").convert_alpha(),
         world_override_image= None,
     ),
     SwordItemData(
@@ -1157,7 +1015,7 @@ ITEM_DATA: list[
         drop_sound= "sound.grab",
         use_sound= "sound.swing",
         hold_offset= 0.8,
-        image= image.load("assets/images/items/iron_shortsword.png").convert_alpha(),
+        surface= image.load("assets/images/items/iron_shortsword.png").convert_alpha(),
         world_override_image= None,
     ),
 ]

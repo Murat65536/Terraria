@@ -196,13 +196,13 @@ class Item:
         self.has_prefix = self.prefix_data is not None
 
     def get_image(self) -> pygame.Surface:
-        if type(self.json_item.image) is pygame.Surface:
-            return self.json_item.image
+        if type(self.json_item.surface) is pygame.Surface:
+            return self.json_item.surface
         raise ValueError("Item image is not set.")
 
     def get_resized_image(self):
-        if type(self.json_item.image) is pygame.Surface:
-            image = self.json_item.image
+        if type(self.json_item.surface) is pygame.Surface:
+            image = self.json_item.surface
             if max(image.get_width(), image.get_height()) > 32:
                 image = pygame.transform.scale(
                     image,
@@ -216,57 +216,57 @@ class Item:
             raise ValueError("Item image is not set.")
 
     def get_offset_x(self):
-        if type(self.json_item.image) is pygame.Surface:
-            return int(24 - self.json_item.image.get_width() * 0.5)
+        if type(self.json_item.surface) is pygame.Surface:
+            return int(24 - self.json_item.surface.get_width() * 0.5)
         return 8
 
     def get_offset_y(self):
-        if type(self.json_item.image) is pygame.Surface:
-            return int(24 - self.json_item.image.get_height() * 0.5)
+        if type(self.json_item.surface) is pygame.Surface:
+            return int(24 - self.json_item.surface.get_height() * 0.5)
         return 8
 
     def get_resized_offset_x(self):
-        if type(self.json_item.image) is pygame.Surface:
+        if type(self.json_item.surface) is pygame.Surface:
             if (
                 max(
-                    self.json_item.image.get_width(),
-                    self.json_item.image.get_height(),
+                    self.json_item.surface.get_width(),
+                    self.json_item.surface.get_height(),
                 )
                 > 32
             ):
                 return int(
                     24
-                    - self.json_item.image.get_width()
+                    - self.json_item.surface.get_width()
                     * 32
                     / max(
-                        self.json_item.image.get_width(),
-                        self.json_item.image.get_height(),
+                        self.json_item.surface.get_width(),
+                        self.json_item.surface.get_height(),
                     )
                     * 0.5
                 )
-            return int(24 - self.json_item.image.get_width() * 0.5)
+            return int(24 - self.json_item.surface.get_width() * 0.5)
         raise NameError("json_item is None.")
 
     def get_resized_offset_y(self):
-        if type(self.json_item.image) is pygame.Surface:
+        if type(self.json_item.surface) is pygame.Surface:
             if (
                 max(
-                    self.json_item.image.get_width(),
-                    self.json_item.image.get_height(),
+                    self.json_item.surface.get_width(),
+                    self.json_item.surface.get_height(),
                 )
                 > 32
             ):
                 return int(
                     24
-                    - self.json_item.image.get_height()
+                    - self.json_item.surface.get_height()
                     * 32
                     / max(
-                        self.json_item.image.get_width(),
-                        self.json_item.image.get_height(),
+                        self.json_item.surface.get_width(),
+                        self.json_item.surface.get_height(),
                     )
                     * 0.5
                 )
-            return int(24 - self.json_item.image.get_height() * 0.5)
+            return int(24 - self.json_item.surface.get_height() * 0.5)
         raise NameError("json_item is None.")
 
     def get_world_override_image(self):

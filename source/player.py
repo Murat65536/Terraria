@@ -1712,7 +1712,7 @@ class Player:
         for i in range(len(self.items[ItemLocation.CRAFTING_MENU])):
             self.craftable_items_surf.blit(tilesets.misc_gui[0], (0, i * 48))
             item_data = game_data.json_item_data[self.items[ItemLocation.CRAFTING_MENU][i][0]]
-            image = item_data.image
+            image = item_data.surface
             if max(image.get_width(), image.get_height()) > 32:
                 image = pygame.transform.scale(
                     image,
