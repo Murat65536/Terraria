@@ -13,7 +13,7 @@ import tilesets
 import world
 from data.tile import (DamagingTileData, DoorTileData, LootMultitileData,
                        LootTileData, MultitileData, TileData)
-from source.data.entity import ENTITY_DATA
+from data.entity import ENTITY_DATA
 
 
 class Enemy:
