@@ -43,25 +43,13 @@ class PlayerPhysics:
                 player.velocity[0] * drag_factor,
                 player.velocity[1] * drag_factor + commons.GRAVITY * commons.DELTA_TIME,
             )
-            player.position: tuple[float, float] = (
-                player.position[0] + player.velocity[0] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-                player.position[1] + player.velocity[1] * commons.DELTA_TIME * commons.BLOCK_SIZE,
-            )
-
-            player.rect.left = player.position[0] - commons.PLAYER_WIDTH * 0.5
-            player.rect.top = player.position[1] - commons.PLAYER_HEIGHT * 0.5
-
-            player.block_position = (
-                int(player.position[1] // commons.BLOCK_SIZE),
-                int(player.position[0] // commons.BLOCK_SIZE),
-            )
-
-            player.grounded = False
-
-            player.stop_left = False
-            player.stop_right = False
-
-            fall_damaged = False
+            def sync_hitbox_and_block_position() -> None:
+                player.rect.left = int(player.position[0] - commons.PLAYER_WIDTH * 0.5)
+                player.rect.top = int(player.position[1] - commons.PLAYER_HEIGHT * 0.5)
+                player.block_position = (
+                    int(player.position[1] // commons.BLOCK_SIZE),
+                    int(player.position[0] // commons.BLOCK_SIZE),
+                )
 
             if not player.can_use:
                 if player.use_tick > player.use_delay:
@@ -75,22 +63,6 @@ class PlayerPhysics:
                     player.use_tick += commons.DELTA_TIME
                     if player.use_delay > 0.0001:
                         player.use_delta = player.use_tick / player.use_delay
-
-            if player.velocity[0] < 0:
-                if player.position[0] < world.border_left:
-                    player.position = (int(world.border_left), player.position[1])
-            elif player.velocity[0] > 0:
-                if player.position[0] > world.border_right:
-                    player.position = (int(world.border_right), player.position[1])
-            if player.velocity[1] < 0:
-                if player.position[1] < world.border_up:
-                    player.position = (player.position[0], int(world.border_up))
-                    player.velocity = (player.velocity[0], 0)
-            elif player.velocity[1] > 0:
-                if player.position[1] > world.border_down:
-                    player.position = (player.position[0], int(world.border_down))
-                    player.velocity = (player.velocity[0], 0)
-                    player.grounded = True
 
             if pygame.mouse.get_pressed()[0] or pygame.mouse.get_pressed()[2]:
                 use = False
@@ -118,24 +90,66 @@ class PlayerPhysics:
                     elif pygame.mouse.get_pressed()[2]:
                         player.use_item(right_click=True)
 
-            collide = False
+            player.grounded = False
+            fall_damaged = False
 
-            for j in range(-2, 3):
-                for i in range(-2, 3):
-                    if world.tile_in_map(player.block_position[1] + j, player.block_position[0] + i):
-                        if player.block_position[1] + j >= 0:
-                            tile_id = world.world.tile_data[player.block_position[1] + j][player.block_position[0] + i][0]
-                            tile_data = game_data.get_tile_by_id(tile_id)
-                            if commons.TileTag.NO_COLLIDE not in tile_data.tags:
-                                block_rect = Rect(
-                                    commons.BLOCK_SIZE * (player.block_position[1] + j),
-                                    commons.BLOCK_SIZE * (player.block_position[0] + i),
-                                    commons.BLOCK_SIZE,
-                                    commons.BLOCK_SIZE,
-                                )
-                                is_platform = False
-                                if commons.TileTag.PLATFORM in tile_data.tags:
-                                    is_platform = True
+            max_step_distance = commons.BLOCK_SIZE * 0.5
+            collision_steps = max(
+                1,
+                math.ceil(
+                    max(abs(player.velocity[0]), abs(player.velocity[1]))
+                    * commons.DELTA_TIME
+                    * commons.BLOCK_SIZE
+                    / max_step_distance
+                ),
+            )
+            step_delta_time = commons.DELTA_TIME / collision_steps
+
+            for _ in range(collision_steps):
+                player.position = (
+                    player.position[0] + player.velocity[0] * step_delta_time * commons.BLOCK_SIZE,
+                    player.position[1] + player.velocity[1] * step_delta_time * commons.BLOCK_SIZE,
+                )
+                sync_hitbox_and_block_position()
+
+                player.stop_left = False
+                player.stop_right = False
+
+                if player.velocity[0] < 0:
+                    if player.position[0] < world.border_left:
+                        player.position = (int(world.border_left), player.position[1])
+                        sync_hitbox_and_block_position()
+                elif player.velocity[0] > 0:
+                    if player.position[0] > world.border_right:
+                        player.position = (int(world.border_right), player.position[1])
+                        sync_hitbox_and_block_position()
+
+                if player.velocity[1] < 0:
+                    if player.position[1] < world.border_up:
+                        player.position = (player.position[0], int(world.border_up))
+                        player.velocity = (player.velocity[0], 0)
+                        sync_hitbox_and_block_position()
+                elif player.velocity[1] > 0:
+                    if player.position[1] > world.border_down:
+                        player.position = (player.position[0], int(world.border_down))
+                        player.velocity = (player.velocity[0], 0)
+                        player.grounded = True
+                        sync_hitbox_and_block_position()
+
+                for j in range(-2, 3):
+                    for i in range(-2, 3):
+                        if world.tile_in_map(player.block_position[1] + j, player.block_position[0] + i):
+                            if player.block_position[1] + j >= 0:
+                                tile_id = world.world.tile_data[player.block_position[1] + j][player.block_position[0] + i][0]
+                                tile_data = game_data.get_tile_by_id(tile_id)
+                                if commons.TileTag.NO_COLLIDE not in tile_data.tags:
+                                    block_rect = Rect(
+                                        commons.BLOCK_SIZE * (player.block_position[1] + j),
+                                        commons.BLOCK_SIZE * (player.block_position[0] + i),
+                                        commons.BLOCK_SIZE,
+                                        commons.BLOCK_SIZE,
+                                    )
+
                                     if block_rect.colliderect(
                                             int(player.rect.left - 1),
                                             int(player.rect.top + 2),
@@ -150,101 +164,104 @@ class PlayerPhysics:
                                             int(player.rect.height - 4),
                                     ):
                                         player.stop_right = True  # is there a solid block right
-                                if block_rect.colliderect(player.rect):
-                                    if not player.invincible and commons.TileTag.DAMAGING in tile_data.tags:
-                                        player.damage(
-                                            tile_data.tile_damage,
-                                            (tile_data.tile_damage_name, "World"),
-                                        )
 
-                                    delta_x = player.position[0] - block_rect.centerx
-                                    delta_y = player.position[1] - block_rect.centery
-                                    if abs(delta_x) > abs(delta_y):
-                                        if delta_x > 0:
-                                            if not is_platform:
-                                                player.position = (
-                                                    block_rect.right + commons.PLAYER_WIDTH * 0.5,
-                                                    player.position[1],
-                                                )  # Move player right
-                                                player.velocity = (
-                                                    0,
-                                                    player.velocity[1],
-                                                )  # Stop player horizontally
-                                        else:
-                                            if not is_platform:
-                                                player.position = (
-                                                    block_rect.left - commons.PLAYER_WIDTH * 0.5,
-                                                    player.position[1],
-                                                )  # Move player left
-                                                player.velocity = (
-                                                    0,
-                                                    player.velocity[1],
-                                                )  # Stop player horizontally
-                                    else:
-                                        if delta_y > 0:
-                                            if player.velocity[1] < 0:
+                                    is_platform = commons.TileTag.PLATFORM in tile_data.tags
+                                    if block_rect.colliderect(player.rect):
+                                        if not player.invincible and commons.TileTag.DAMAGING in tile_data.tags:
+                                            player.damage(
+                                                tile_data.tile_damage,
+                                                (tile_data.tile_damage_name, "World"),
+                                            )
+
+                                        delta_x = player.position[0] - block_rect.centerx
+                                        delta_y = player.position[1] - block_rect.centery
+                                        if abs(delta_x) > abs(delta_y):
+                                            if delta_x > 0:
                                                 if not is_platform:
+                                                    player.position = (
+                                                        block_rect.right + commons.PLAYER_WIDTH * 0.5,
+                                                        player.position[1],
+                                                    )  # Move player right
+                                                    player.velocity = (
+                                                        0,
+                                                        player.velocity[1],
+                                                    )  # Stop player horizontally
+                                                    sync_hitbox_and_block_position()
+                                            else:
+                                                if not is_platform:
+                                                    player.position = (
+                                                        block_rect.left - commons.PLAYER_WIDTH * 0.5,
+                                                        player.position[1],
+                                                    )  # Move player left
+                                                    player.velocity = (
+                                                        0,
+                                                        player.velocity[1],
+                                                    )  # Stop player horizontally
+                                                    sync_hitbox_and_block_position()
+                                        else:
+                                            if delta_y > 0:
+                                                if player.velocity[1] < 0:
+                                                    if not is_platform:
+                                                        if Rect(
+                                                                player.rect.left + 3,
+                                                                player.rect.top,
+                                                                player.rect.width - 6,
+                                                                player.rect.height,
+                                                        ).colliderect(block_rect):
+                                                            player.position = (
+                                                                player.position[0],
+                                                                block_rect.bottom + commons.PLAYER_HEIGHT * 0.5,
+                                                            )  # Move player down
+                                                            player.velocity = (
+                                                                player.velocity[0],
+                                                                0,
+                                                            )  # Stop player vertically
+                                                            sync_hitbox_and_block_position()
+                                            else:
+                                                if player.velocity[1] > 0:
                                                     if Rect(
                                                             player.rect.left + 3,
                                                             player.rect.top,
                                                             player.rect.width - 6,
                                                             player.rect.height,
                                                     ).colliderect(block_rect):
-                                                        player.position = (
-                                                            player.position[0],
-                                                            block_rect.bottom + commons.PLAYER_HEIGHT * 0.5,
-                                                        )  # Move player down
-                                                        player.velocity = (
-                                                            player.velocity[0],
-                                                            0,
-                                                        )  # Stop player vertically
-                                        else:
-                                            if player.velocity[1] > 0:
-                                                if Rect(
-                                                        player.rect.left + 3,
-                                                        player.rect.top,
-                                                        player.rect.width - 6,
-                                                        player.rect.height,
-                                                ).colliderect(block_rect):
-                                                    if is_platform:
-                                                        if player.sprites.moving_down:
-                                                            collide = False
-                                                        else:
-                                                            if player.velocity[1] < 5:
-                                                                if (
+                                                        should_collide = not is_platform
+                                                        if is_platform:
+                                                            if not player.sprites.moving_down:
+                                                                if player.velocity[1] < 5:
+                                                                    should_collide = (
                                                                         player.position[1] + commons.BLOCK_SIZE
                                                                         < block_rect.top
-                                                                ):
-                                                                    collide = True
-                                                            else:
-                                                                collide = True
-                                                    else:
-                                                        collide = True
-                                                    if collide:
-                                                        if not fall_damaged:
-                                                            if player.velocity[1] > 58:
-                                                                damage = int(
-                                                                    (player.velocity[1] - 57) ** 2
-                                                                )  # Work out fall damage
-                                                                player.damage(
-                                                                    damage,
-                                                                    (
-                                                                        "falling",
-                                                                        "World",
-                                                                    ),
-                                                                )  # Apply fall damage once
-                                                                fall_damaged = True
-                                                        player.last_block_on = int(tile_id)
-                                                        player.moving_down_tick = -1
-                                                        player.position = (
-                                                            player.position[0],
-                                                            block_rect.top - commons.PLAYER_HEIGHT * 0.5 + 1,
-                                                        )  # Move player up
-                                                        player.velocity = (
-                                                            player.velocity[0] * 0.5,
-                                                            0,
-                                                        )  # Slow down player horizontally and stop player vertically
-                                                        player.grounded = True
+                                                                    )
+                                                                else:
+                                                                    should_collide = True
+
+                                                        if should_collide:
+                                                            if not fall_damaged:
+                                                                if player.velocity[1] > 58:
+                                                                    damage = int(
+                                                                        (player.velocity[1] - 57) ** 2
+                                                                    )  # Work out fall damage
+                                                                    player.damage(
+                                                                        damage,
+                                                                        (
+                                                                            "falling",
+                                                                            "World",
+                                                                        ),
+                                                                    )  # Apply fall damage once
+                                                                    fall_damaged = True
+                                                            player.last_block_on = int(tile_id)
+                                                            player.moving_down_tick = -1
+                                                            player.position = (
+                                                                player.position[0],
+                                                                block_rect.top - commons.PLAYER_HEIGHT * 0.5 + 1,
+                                                            )  # Move player up
+                                                            player.velocity = (
+                                                                player.velocity[0] * 0.5,
+                                                                0,
+                                                            )  # Slow down player horizontally and stop player vertically
+                                                            player.grounded = True
+                                                            sync_hitbox_and_block_position()
 
             if player.stop_moving_down:
                 if player.moving_down_tick < 0:
