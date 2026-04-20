@@ -461,86 +461,86 @@ class Player:
 
         self.old_inventory_positions = []
         from player_components import PlayerPhysics, PlayerInventory, PlayerCombat, PlayerInteraction, PlayerRenderer
-        self.physics = PlayerPhysics(self)
-        self.inventory = PlayerInventory(self)
-        self.combat = PlayerCombat(self)
-        self.interaction = PlayerInteraction(self)
-        self.renderer = PlayerRenderer(self)
+        self.physics = PlayerPhysics()
+        self.inventory = PlayerInventory()
+        self.combat = PlayerCombat()
+        self.interaction = PlayerInteraction()
+        self.renderer = PlayerRenderer()
 
     def update(self):
-            return self.physics.update()
+            return self.physics.update(self)
 
     def damage(self, value: int, source_name: tuple[str, str], knockback: int = 0, direction: int = 0, source_velocity: tuple[float, float] = (0, 0)) -> None:
-            return self.combat.damage(value, source_name, knockback, direction, source_velocity)
+            return self.combat.damage(self, value, source_name, knockback, direction, source_velocity)
 
     def kill(self, source, source_velocity=None):
-            return self.combat.kill(source, source_velocity)
+            return self.combat.kill(self, source, source_velocity)
 
     def respawn(self):
-            return self.combat.respawn()
+            return self.combat.respawn(self)
 
     def render_current_item_image(self):
-            return self.renderer.render_current_item_image()
+            return self.renderer.render_current_item_image(self)
 
     def animate(self):
-            return self.renderer.animate()
+            return self.renderer.animate(self)
 
     def use_item(self, right_click=False):
-            return self.interaction.use_item(right_click)
+            return self.interaction.use_item(self, right_click)
 
     def place_block(self, screen_position_x, screen_position_y, block_item, is_tile):
-            return self.interaction.place_block(screen_position_x, screen_position_y, block_item, is_tile)
+            return self.interaction.place_block(self, screen_position_x, screen_position_y, block_item, is_tile)
 
     def use_tool(self, screen_position_x, screen_position_y, tool_item):
-            return self.interaction.use_tool(screen_position_x, screen_position_y, tool_item)
+            return self.interaction.use_tool(self, screen_position_x, screen_position_y, tool_item)
 
     def use_longsword_weapon(self, longsword_weapon_item) -> None:
-            return self.interaction.use_longsword_weapon(longsword_weapon_item)
+            return self.interaction.use_longsword_weapon(self, longsword_weapon_item)
 
     def use_shortsword_weapon(self, shortsword_weapon_item) -> None:
-            return self.interaction.use_shortsword_weapon(shortsword_weapon_item)
+            return self.interaction.use_shortsword_weapon(self, shortsword_weapon_item)
 
     def use_ranged_weapon(self, screen_position_x, screen_position_y, ranged_weapon_item) -> None:
-            return self.interaction.use_ranged_weapon(screen_position_x, screen_position_y, ranged_weapon_item)
+            return self.interaction.use_ranged_weapon(self, screen_position_x, screen_position_y, ranged_weapon_item)
 
     def give_item(self, current_item, amount=1, position=None):
-            return self.inventory.give_item(current_item, amount, position)
+            return self.inventory.give_item(self, current_item, amount, position)
 
     def remove_item(self, position, remove_count=None):
-            return self.inventory.remove_item(position, remove_count)
+            return self.inventory.remove_item(self, position, remove_count)
 
     def find_existing_item_stacks(self, item_id, search_hotbar=True, search_inventory=True):
-            return self.inventory.find_existing_item_stacks(item_id, search_hotbar, search_inventory)
+            return self.inventory.find_existing_item_stacks(self, item_id, search_hotbar, search_inventory)
 
     def find_free_spaces(self, max_stack=9999, search_hotbar=True, search_inventory=True):
-            return self.inventory.find_free_spaces(max_stack, search_hotbar, search_inventory)
+            return self.inventory.find_free_spaces(self, max_stack, search_hotbar, search_inventory)
 
     def render_hotbar(self):
-            return self.renderer.render_hotbar()
+            return self.renderer.render_hotbar(self)
 
     def render_inventory(self):
-            return self.renderer.render_inventory()
+            return self.renderer.render_inventory(self)
 
     def render_chest(self):
-            return self.renderer.render_chest()
+            return self.renderer.render_chest(self)
 
     def update_inventory_old_slots(self):
-            return self.inventory.update_inventory_old_slots()
+            return self.inventory.update_inventory_old_slots(self)
 
     def update_craftable_items(self):
-            return self.inventory.update_craftable_items()
+            return self.inventory.update_craftable_items(self)
 
     def render_craftable_items_surf(self):
-            return self.renderer.render_craftable_items_surf()
+            return self.renderer.render_craftable_items_surf(self)
 
     def draw(self):
-            return self.renderer.draw()
+            return self.renderer.draw(self)
 
     def draw_hp(self):
-            return self.renderer.draw_hp()
+            return self.renderer.draw_hp(self)
 
     def open_chest(self, items):
-            return self.inventory.open_chest(items)
+            return self.inventory.open_chest(self, items)
 
     def save(self):
         """
