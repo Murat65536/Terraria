@@ -58,7 +58,7 @@ class Enemy:
         """
         Updates the enemy instance, performing physics, AI and animation
         """
-        assert isinstance(entity_manager.client_player, entity_manager.Player)
+        assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
         if self.alive:
             if self.world_invincible:
                 if self.world_invincible_timer <= 0:
@@ -117,13 +117,13 @@ class Enemy:
                     self.grounded = True
 
             if self.damage_tick <= 0:
-                if entity_manager.client_player.rect.colliderect(self.rect):
-                    if entity_manager.client_player.position[0] < self.position[0]:
+                if entity_manager.get_client_player().rect.colliderect(self.rect):
+                    if entity_manager.get_client_player().position[0] < self.position[0]:
                         direction = -1
                     else:
                         direction = 1
 
-                    entity_manager.client_player.damage(
+                    entity_manager.get_client_player().damage(
                         self.attack_damage,
                         ("enemy", self.name),
                         knockback=10,
@@ -382,28 +382,28 @@ class Enemy:
         """
         Checks if the enemy has gone too far beyond the player's view, if so, return true
         """
-        assert isinstance(entity_manager.client_player, entity_manager.Player)
+        assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
         if (
                 self.position[0]
-                < entity_manager.client_player.position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
+                < entity_manager.get_client_player().position[0] - commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
                 self.position[0]
-                > entity_manager.client_player.position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
+                > entity_manager.get_client_player().position[0] + commons.MAX_ENEMY_SPAWN_TILES_X * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
                 self.position[1]
-                < entity_manager.client_player.position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
+                < entity_manager.get_client_player().position[1] - commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
         elif (
                 self.position[1]
-                > entity_manager.client_player.position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
+                > entity_manager.get_client_player().position[1] + commons.MAX_ENEMY_SPAWN_TILES_Y * 1.5 * commons.BLOCK_SIZE
         ):
             entity_manager.enemies.remove(self)
             return True
@@ -451,20 +451,20 @@ class Enemy:
         """
         Runs AI specific to this type of enemy
         """
-        assert isinstance(entity_manager.client_player, entity_manager.Player)
+        assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
         if self.type == "Slime":
             if self.grounded:
                 if self.jump_tick <= 0:
                     self.jump_tick += 0.5 + random()
-                    if entity_manager.client_player.position[0] < self.position[0]:
-                        if entity_manager.client_player.alive:
+                    if entity_manager.get_client_player().position[0] < self.position[0]:
+                        if entity_manager.get_client_player().alive:
                             self.velocity = (-10, -45 + random())
                             self.moving_left = True
                         else:
                             self.velocity = (10, -45 + random())
                             self.moving_right = True
                     else:
-                        if entity_manager.client_player.alive:
+                        if entity_manager.get_client_player().alive:
                             self.velocity = (10, -45 + random())
                             self.moving_right = True
                         else:

@@ -104,8 +104,8 @@ while True:
     for event in events:
         if event.type == pygame.QUIT:
             if commons.game_state == "PLAYING":
-                entity_manager.client_player.inventory_open = False
-                entity_manager.client_player.chest_open = False
+                entity_manager.get_client_player().inventory_open = False
+                entity_manager.get_client_player().chest_open = False
                 entity_manager.client_prompt = prompt.Prompt(
                     "Exit",
                     game_data.EXIT_MESSAGES[random.randint(0, len(game_data.EXIT_MESSAGES) - 1)],

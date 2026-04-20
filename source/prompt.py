@@ -102,7 +102,7 @@ class Prompt:
 
         if self.name == "Exit":
             if self.button_1_pressed:
-                entity_manager.client_player.save()
+                entity_manager.get_client_player().save()
                 world.save()
                 sound_manager.stop_music()
                 commons.game_state = "MAIN_MENU"

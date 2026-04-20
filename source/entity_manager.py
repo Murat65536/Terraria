@@ -49,6 +49,10 @@ damage_numbers: list[DamageNumber] = []
 recent_pickups: list[RecentPickup] = []
 
 client_player: Player | None = None
+
+def get_client_player() -> Player:
+    assert client_player is not None
+    return client_player
 client_prompt: Prompt | None = None
 client_color_picker: ColorPicker = ColorPicker((int(commons.WINDOW_WIDTH * 0.5 - 155), 190), 300, 300)
 

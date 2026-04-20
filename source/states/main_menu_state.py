@@ -134,7 +134,7 @@ class MainMenuState(State):
                             commons.screen.fill((0, 0, 0))
         
                             loading_greeting_text = shared_methods.outline_text(
-                                f"Greetings {entity_manager.client_player.name}, bear with us while",
+                                f"Greetings {entity_manager.get_client_player().name}, bear with us while",
                                 pygame.Color(255, 255, 255),
                                 commons.LARGE_FONT,
                             )
@@ -177,10 +177,10 @@ class MainMenuState(State):
                                 world.world.spawn_position[0],
                                 0,
                             )
-                            entity_manager.client_player.position = tuple(world.world.spawn_position)
-                            entity_manager.client_player.render_current_item_image()
-                            entity_manager.client_player.render_hotbar()
-                            entity_manager.client_player.render_inventory()
+                            entity_manager.get_client_player().position = tuple(world.world.spawn_position)
+                            entity_manager.get_client_player().render_current_item_image()
+                            entity_manager.get_client_player().render_hotbar()
+                            entity_manager.get_client_player().render_inventory()
                             world.create_terrain_surface()
         
                             render_hand_text()

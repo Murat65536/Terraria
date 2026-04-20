@@ -183,7 +183,7 @@ class Projectile:
 
         for enemy in entity_manager.enemies:
             if enemy.rect.colliderect(self.rect):
-                if enemy.position[0] > entity_manager.client_player.position[0]:
+                if enemy.position[0] > entity_manager.get_client_player().position[0]:
                     direction = 1
                 else:
                     direction = -1

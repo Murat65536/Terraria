@@ -687,7 +687,7 @@ class PlayerInteraction:
             player.should_swing_arm = False
             player.should_hold_arm = False
 
-            assert item is not None
+            assert current_item is not None
 
             if current_item.has_tag(ItemTag.TILE):
                 player.place_block(screen_position_x, screen_position_y, current_item, True)

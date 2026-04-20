@@ -24,11 +24,11 @@ from main_utils import *
 
 class PlayingState(State):
     def update(self, dt: float) -> None:
-        assert isinstance(entity_manager.client_player, entity_manager.Player)
+        assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
         # TODO Check if the new day and night cycle is 24 minutes and in the future, make the days 15 and the nights 9 minutes.
         base_zero_to_one_float = (
                 math.sin(
-                    datetime.timedelta(seconds=entity_manager.client_player.playtime)
+                    datetime.timedelta(seconds=entity_manager.get_client_player().playtime)
                     / datetime.timedelta(hours=1)
                     / 0.4
                     * 6
@@ -53,7 +53,7 @@ class PlayingState(State):
             world_time_seconds = f"0{world_time_seconds}"
         # print(f"{world_time_hours} : {world_time_minutes} : {world_time_seconds}")
         world.world.playtime += commons.DELTA_TIME
-        entity_manager.client_player.playtime += int(commons.DELTA_TIME)
+        entity_manager.get_client_player().playtime += int(commons.DELTA_TIME)
         
         previous_camera_position = entity_manager.old_camera_position
         
@@ -69,8 +69,8 @@ class PlayingState(State):
         entity_manager.update_physics_items()
         entity_manager.check_enemy_spawn()
         
-        entity_manager.client_player.update()
-        entity_manager.client_player.animate()
+        entity_manager.get_client_player().update()
+        entity_manager.get_client_player().animate()
         
         entity_manager.update_damage_numbers()
         entity_manager.update_recent_pickups()
@@ -81,8 +81,8 @@ class PlayingState(State):
         temp_cam_pos_y = entity_manager.camera_position[1]
         
         if commons.SMOOTH_CAM:
-            need_to_move_x = (entity_manager.client_player.position[0] - temp_cam_pos_x) * commons.DELTA_TIME * 4
-            need_to_move_y = (entity_manager.client_player.position[1] - temp_cam_pos_y) * commons.DELTA_TIME * 4
+            need_to_move_x = (entity_manager.get_client_player().position[0] - temp_cam_pos_x) * commons.DELTA_TIME * 4
+            need_to_move_y = (entity_manager.get_client_player().position[1] - temp_cam_pos_y) * commons.DELTA_TIME * 4
         
             need_to_move_magnitude = math.sqrt(need_to_move_x ** 2 + need_to_move_y ** 2)
             need_to_move_angle = math.atan2(need_to_move_y, need_to_move_x)
@@ -107,8 +107,8 @@ class PlayingState(State):
                 temp_cam_pos_y = temp_cam_pos_y + math.sin(need_to_move_angle) * need_to_move_magnitude
         
         else:
-            temp_cam_pos_x = entity_manager.client_player.position[0]
-            temp_cam_pos_y = entity_manager.client_player.position[1]
+            temp_cam_pos_x = entity_manager.get_client_player().position[0]
+            temp_cam_pos_y = entity_manager.get_client_player().position[1]
         
         if temp_cam_pos_x > world.border_right + commons.BLOCK_SIZE - commons.WINDOW_WIDTH * 0.5:
             temp_cam_pos_x = world.border_right + commons.BLOCK_SIZE - commons.WINDOW_WIDTH * 0.5
@@ -153,7 +153,7 @@ class PlayingState(State):
         )
         commons.screen.blit(world.terrain_surface, terrain_position)
         entity_manager.draw_projectiles()
-        entity_manager.client_player.draw()
+        entity_manager.get_client_player().draw()
         entity_manager.draw_particles()
         entity_manager.draw_enemies()
         entity_manager.draw_physics_items()
@@ -176,8 +176,8 @@ class PlayingState(State):
             )
         
         if commons.DRAW_UI:
-            entity_manager.client_player.draw_hp()
-            commons.screen.blit(entity_manager.client_player.hotbar_image, (5, 20))
+            entity_manager.get_client_player().draw_hp()
+            commons.screen.blit(entity_manager.get_client_player().hotbar_image, (5, 20))
             entity_manager.draw_messages()
         
         entity_manager.draw_damage_numbers()
@@ -188,30 +188,30 @@ class PlayingState(State):
         if entity_manager.client_prompt is not None:
             entity_manager.client_prompt.draw()
         
-        if not entity_manager.client_player.alive:
+        if not entity_manager.get_client_player().alive:
             draw_death_message()
         
         if commons.DRAW_UI:
-            if entity_manager.client_player.inventory_open:
-                commons.screen.blit(entity_manager.client_player.inventory_image, (5, 70))
-                entity_manager.client_player.blit_craft_surf.fill((255, 0, 255))
-                entity_manager.client_player.blit_craft_surf.blit(
-                    entity_manager.client_player.craftable_items_surf,
-                    (0, entity_manager.client_player.crafting_menu_offset_y),
+            if entity_manager.get_client_player().inventory_open:
+                commons.screen.blit(entity_manager.get_client_player().inventory_image, (5, 70))
+                entity_manager.get_client_player().blit_craft_surf.fill((255, 0, 255))
+                entity_manager.get_client_player().blit_craft_surf.blit(
+                    entity_manager.get_client_player().craftable_items_surf,
+                    (0, entity_manager.get_client_player().crafting_menu_offset_y),
                 )
-                commons.screen.blit(entity_manager.client_player.blit_craft_surf, (5, 270))
+                commons.screen.blit(entity_manager.get_client_player().blit_craft_surf, (5, 270))
         
-            if entity_manager.client_player.chest_open:
-                commons.screen.blit(entity_manager.client_player.chest_image, (245, 265))
+            if entity_manager.get_client_player().chest_open:
+                commons.screen.blit(entity_manager.get_client_player().chest_image, (245, 265))
         
             pygame.draw.rect(
                 commons.screen,
                 (230, 230, 10),
-                pygame.Rect(5 + entity_manager.client_player.hotbar_index * 48, 20, 48, 48),
+                pygame.Rect(5 + entity_manager.get_client_player().hotbar_index * 48, 20, 48, 48),
                 3,
             )
         
-            if entity_manager.client_player.inventory_open:
+            if entity_manager.get_client_player().inventory_open:
                 draw_inventory_hover_text()
                 draw_exit_button()
         
@@ -224,7 +224,7 @@ class PlayingState(State):
         
         if GameState.auto_save_tick <= 0:
             GameState.auto_save_tick += commons.AUTO_SAVE_FREQUENCY
-            entity_manager.client_player.save()
+            entity_manager.get_client_player().save()
             world.save()
         else:
             GameState.auto_save_tick -= commons.DELTA_TIME
@@ -237,39 +237,39 @@ class PlayingState(State):
         for event in events:
             if event.type == pygame.QUIT:
                 pass # Handled in main
-            # print(round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
+            # print(round(entity_manager.get_client_player().position[0] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE, round(entity_manager.get_client_player().position[1] / commons.BLOCK_SIZE, 0) * commons.BLOCK_SIZE)
             if event.type == pygame.KEYDOWN:
                 # Toggle Inventory
                 if event.key == pygame.K_ESCAPE:
-                    if entity_manager.client_player.inventory_open:
+                    if entity_manager.get_client_player().inventory_open:
                         game_data.play_sound("sound.menu_close")
-                        entity_manager.client_player.render_current_item_image()
-                        entity_manager.client_player.inventory_open = False
-                        entity_manager.client_player.chest_open = False
+                        entity_manager.get_client_player().render_current_item_image()
+                        entity_manager.get_client_player().inventory_open = False
+                        entity_manager.get_client_player().chest_open = False
                     else:
                         game_data.play_sound("sound.menu_open")
-                        entity_manager.client_player.inventory_open = True
-                        entity_manager.client_player.crafting_menu_offset_y = 120
-                        entity_manager.client_player.update_craftable_items()
-                        entity_manager.client_player.render_craftable_items_surf()
+                        entity_manager.get_client_player().inventory_open = True
+                        entity_manager.get_client_player().crafting_menu_offset_y = 120
+                        entity_manager.get_client_player().update_craftable_items()
+                        entity_manager.get_client_player().render_craftable_items_surf()
                         entity_manager.client_prompt = None
             
                 if event.key == pygame.K_a:
-                    entity_manager.client_player.sprites.moving_left = True
-                    entity_manager.client_player.direction = 0
+                    entity_manager.get_client_player().sprites.moving_left = True
+                    entity_manager.get_client_player().direction = 0
             
                 if event.key == pygame.K_d:
-                    entity_manager.client_player.sprites.moving_right = True
-                    entity_manager.client_player.direction = 1
+                    entity_manager.get_client_player().sprites.moving_right = True
+                    entity_manager.get_client_player().direction = 1
             
                 # Player Walk
                 if event.key == pygame.K_s:
-                    entity_manager.client_player.sprites.moving_down = True
-                    entity_manager.client_player.animation_speed = 0.05
+                    entity_manager.get_client_player().sprites.moving_down = True
+                    entity_manager.get_client_player().animation_speed = 0.05
             
                 # Player Jump
                 if event.key == pygame.K_SPACE:
-                    entity_manager.client_player.jump()
+                    entity_manager.get_client_player().jump()
             
                 # Kill All Enemies Cheat
                 if event.key == pygame.K_x:
@@ -304,8 +304,8 @@ class PlayingState(State):
                 if event.key == pygame.K_r:
                     if commons.SHIFT_ACTIVE:
                         world.world.spawn_position = (
-                            entity_manager.client_player.position[0],
-                            entity_manager.client_player.position[1],
+                            entity_manager.get_client_player().position[0],
+                            entity_manager.get_client_player().position[1],
                         )
                         entity_manager.add_message(
                             f"Spawn point moved to {str(world.world.spawn_position)}",
@@ -317,7 +317,7 @@ class PlayingState(State):
                             for particle_index in range(
                                     int(game_constants.PARTICLE_COUNT_RESPAWN * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
-                                    entity_manager.client_player.position,
+                                    entity_manager.get_client_player().position,
                                     pygame.Color(230, 230, 255),
                                     magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
                                     size=game_constants.PARTICLE_SIZE,
@@ -326,7 +326,7 @@ class PlayingState(State):
             
                         game_data.play_sound("sound.mirror")
             
-                        entity_manager.client_player.respawn()
+                        entity_manager.get_client_player().respawn()
                         entity_manager.add_message(
                             "Player respawned",
                             pygame.Color(255, 223, 10),
@@ -337,7 +337,7 @@ class PlayingState(State):
                             for particle_index in range(
                                     int(game_constants.PARTICLE_COUNT_RESPAWN_ARRIVE * commons.PARTICLE_DENSITY)):
                                 entity_manager.spawn_particle(
-                                    entity_manager.client_player.position,
+                                    entity_manager.get_client_player().position,
                                     pygame.Color(230, 230, 255),
                                     magnitude=game_constants.PARTICLE_MAGNITUDE_BASE + random.random() * game_constants.PARTICLE_MAGNITUDE_RANGE,
                                     size=game_constants.PARTICLE_SIZE,
@@ -437,17 +437,19 @@ class PlayingState(State):
                 if event.key == pygame.K_c:
                     if commons.SHIFT_ACTIVE:
                         if (
-                                entity_manager.client_player.items[item.ItemLocation.HOTBAR][
-                                    entity_manager.client_player.hotbar_index
+                                entity_manager.get_client_player().items[item.ItemLocation.HOTBAR][
+                                    entity_manager.get_client_player().hotbar_index
                                 ]
                                 is not None
                         ):
-                            entity_manager.client_player.items[item.ItemLocation.HOTBAR][
-                                entity_manager.client_player.hotbar_index
+                            current_hotbar_item = entity_manager.get_client_player().items[item.ItemLocation.HOTBAR][
+                                entity_manager.get_client_player().hotbar_index
+                            ]
+                            assert current_hotbar_item is not None
+                            entity_manager.get_client_player().items[item.ItemLocation.HOTBAR][
+                                entity_manager.get_client_player().hotbar_index
                             ] = item.Item(
-                                entity_manager.client_player.items[item.ItemLocation.HOTBAR][
-                                    entity_manager.client_player.hotbar_index
-                                ].item_id,
+                                current_hotbar_item.item_id,
                                 auto_assign_prefix=True,
                             )
                             entity_manager.add_message(
@@ -459,7 +461,7 @@ class PlayingState(State):
                                 ),
                                 life=2.5,
                             )
-                            entity_manager.client_player.render_current_item_image()
+                            entity_manager.get_client_player().render_current_item_image()
                             render_hand_text()
             
                 # Test Prompt Cheat
@@ -530,25 +532,25 @@ class PlayingState(State):
             
                 # Hotbar Item Selection
                 if event.key == pygame.K_1:
-                    entity_manager.client_player.hotbar_index = 0
+                    entity_manager.get_client_player().hotbar_index = 0
                 if event.key == pygame.K_2:
-                    entity_manager.client_player.hotbar_index = 1
+                    entity_manager.get_client_player().hotbar_index = 1
                 if event.key == pygame.K_3:
-                    entity_manager.client_player.hotbar_index = 2
+                    entity_manager.get_client_player().hotbar_index = 2
                 if event.key == pygame.K_4:
-                    entity_manager.client_player.hotbar_index = 3
+                    entity_manager.get_client_player().hotbar_index = 3
                 if event.key == pygame.K_5:
-                    entity_manager.client_player.hotbar_index = 4
+                    entity_manager.get_client_player().hotbar_index = 4
                 if event.key == pygame.K_6:
-                    entity_manager.client_player.hotbar_index = 5
+                    entity_manager.get_client_player().hotbar_index = 5
                 if event.key == pygame.K_7:
-                    entity_manager.client_player.hotbar_index = 6
+                    entity_manager.get_client_player().hotbar_index = 6
                 if event.key == pygame.K_8:
-                    entity_manager.client_player.hotbar_index = 7
+                    entity_manager.get_client_player().hotbar_index = 7
                 if event.key == pygame.K_9:
-                    entity_manager.client_player.hotbar_index = 8
+                    entity_manager.get_client_player().hotbar_index = 8
                 if event.key == pygame.K_0:
-                    entity_manager.client_player.hotbar_index = 9
+                    entity_manager.get_client_player().hotbar_index = 9
             
                 if (
                         event.key == pygame.K_1
@@ -562,8 +564,8 @@ class PlayingState(State):
                         or event.key == pygame.K_9
                         or event.key == pygame.K_0
                 ):
-                    entity_manager.client_player.render_current_item_image()
-                    entity_manager.client_player.item_swing = False
+                    entity_manager.get_client_player().render_current_item_image()
+                    entity_manager.get_client_player().item_swing = False
                     render_hand_text()
             
                     game_data.play_sound("sound.menu_select")
@@ -606,40 +608,40 @@ class PlayingState(State):
             # Key up Events
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_a:
-                    entity_manager.client_player.sprites.moving_left = False
+                    entity_manager.get_client_player().sprites.moving_left = False
                 if event.key == pygame.K_d:
-                    entity_manager.client_player.sprites.moving_right = False
+                    entity_manager.get_client_player().sprites.moving_right = False
                 if event.key == pygame.K_s:
-                    entity_manager.client_player.sprites.moving_down = False
-                    entity_manager.client_player.moving_down_tick = 5
-                    entity_manager.client_player.stop_moving_down = True
-                    entity_manager.client_player.animation_speed = 0.025
+                    entity_manager.get_client_player().sprites.moving_down = False
+                    entity_manager.get_client_player().moving_down_tick = 5
+                    entity_manager.get_client_player().stop_moving_down = True
+                    entity_manager.get_client_player().animation_speed = 0.025
             
             # Hotbar Item and Crafting Scrolling
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 4:
-                    if entity_manager.client_player.inventory_open:
-                        entity_manager.client_player.crafting_menu_offset_velocity_y += 200
+                    if entity_manager.get_client_player().inventory_open:
+                        entity_manager.get_client_player().crafting_menu_offset_velocity_y += 200
                     else:
-                        if entity_manager.client_player.hotbar_index > 0:
-                            entity_manager.client_player.hotbar_index -= 1
-                            entity_manager.client_player.render_current_item_image()
-                            entity_manager.client_player.item_swing = False
+                        if entity_manager.get_client_player().hotbar_index > 0:
+                            entity_manager.get_client_player().hotbar_index -= 1
+                            entity_manager.get_client_player().render_current_item_image()
+                            entity_manager.get_client_player().item_swing = False
                             render_hand_text()
                         else:
-                            entity_manager.client_player.hotbar_index = 9
+                            entity_manager.get_client_player().hotbar_index = 9
                         game_data.play_sound("sound.menu_select")
             
                 if event.button == 5:
-                    if entity_manager.client_player.inventory_open:
-                        entity_manager.client_player.crafting_menu_offset_velocity_y -= 200
+                    if entity_manager.get_client_player().inventory_open:
+                        entity_manager.get_client_player().crafting_menu_offset_velocity_y -= 200
                     else:
-                        if entity_manager.client_player.hotbar_index < 9:
-                            entity_manager.client_player.hotbar_index += 1
-                            entity_manager.client_player.render_current_item_image()
-                            entity_manager.client_player.item_swing = False
+                        if entity_manager.get_client_player().hotbar_index < 9:
+                            entity_manager.get_client_player().hotbar_index += 1
+                            entity_manager.get_client_player().render_current_item_image()
+                            entity_manager.get_client_player().item_swing = False
                             render_hand_text()
                         else:
-                            entity_manager.client_player.hotbar_index = 0
+                            entity_manager.get_client_player().hotbar_index = 0
                         game_data.play_sound("sound.menu_select")
             

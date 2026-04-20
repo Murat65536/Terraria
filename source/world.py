@@ -200,7 +200,7 @@ wall_tile_mask_data: list[list[int]] = []
 
 leaf_tile: int = 0
 
-world: World | None = None
+world: World = World()
 
 
 def save():
@@ -786,8 +786,8 @@ def create_terrain_surface() -> None:
     """
     Renders all tiles in the map to a huge surface
     """
-    # TextureRenderX = (round(entity_manager.client_player.position[0] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
-    # TextureRenderY = (round(entity_manager.client_player.position[1] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
+    # TextureRenderX = (round(entity_manager.get_client_player().position[0] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
+    # TextureRenderY = (round(entity_manager.get_client_player().position[1] / commons.BLOCK_SIZE, 0) + 100) * commons.BLOCK_SIZE
     global terrain_surface
     print("Creating Terrain Surface...")
     terrain_surface = pygame.Surface((WORLD_SIZE_X * commons.BLOCK_SIZE, WORLD_SIZE_Y * commons.BLOCK_SIZE))
@@ -879,17 +879,17 @@ def use_special_tile(i, j) -> None:
     if TileTag.CHEST in tile_data.tags:
         for chest_data_index in range(len(world.chest_data)):
             if world.chest_data[chest_data_index][0] == (i, j):
-                entity_manager.client_player.open_chest(world.chest_data[chest_data_index][1])
+                entity_manager.get_client_player().open_chest(world.chest_data[chest_data_index][1])
 
     if TileTag.WORKBENCH in tile_data.tags:
-        entity_manager.client_player.crafting_menu_offset_y = 120
-        entity_manager.client_player.update_craftable_items()
-        entity_manager.client_player.render_craftable_items_surf()
-        entity_manager.client_player.inventory_open = True
+        entity_manager.get_client_player().crafting_menu_offset_y = 120
+        entity_manager.get_client_player().update_craftable_items()
+        entity_manager.get_client_player().render_craftable_items_surf()
+        entity_manager.get_client_player().inventory_open = True
         entity_manager.client_prompt = None
 
     if TileTag.CYCLABLE in tile_data.tags:
-        player_direction = entity_manager.client_player.direction
+        player_direction = entity_manager.get_client_player().direction
         if player_direction == 0:
             tile_cycle_id_str = tile_data.cycle_facing_left_tile_id_str
             tile_cycle_data = game_data.get_tile_by_id_str(tile_cycle_id_str)

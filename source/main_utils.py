@@ -53,14 +53,14 @@ def draw_death_message() -> None:
     """
     Renders and draws a large death message to the screen
     """
-    assert isinstance(entity_manager.client_player, entity_manager.Player)
+    assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
     death_text = shared_methods.outline_text("You were slain...", pygame.Color(255, 127, 127), commons.LARGE_FONT)
     respawn_text = shared_methods.outline_text(
-        str(int(entity_manager.client_player.respawn_time_remaining) + 1),
+        str(int(entity_manager.get_client_player().respawn_time_remaining) + 1),
         pygame.Color(255, 127, 127),
         commons.LARGE_FONT,
     )
-    alpha = int((1 - entity_manager.client_player.death_message_alpha) * 255)
+    alpha = int((1 - entity_manager.get_client_player().death_message_alpha) * 255)
     death_text.set_alpha(alpha)
     respawn_text.set_alpha(alpha)
     commons.screen.blit(
@@ -79,8 +79,8 @@ def render_hand_text() -> None:
     """
     Renders the full name of the item that the player has equipped in their hotbar to a surface
     """
-    assert isinstance(entity_manager.client_player, entity_manager.Player)
-    equipped = entity_manager.client_player.items[item.ItemLocation.HOTBAR][entity_manager.client_player.hotbar_index]
+    assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
+    equipped = entity_manager.get_client_player().items[item.ItemLocation.HOTBAR][entity_manager.get_client_player().hotbar_index]
     if equipped is not None:
         color = shared_methods.get_tier_color(equipped.get_tier())
         GameState.hand_text = shared_methods.outline_text(equipped.get_name(), color, commons.DEFAULT_FONT)
@@ -361,15 +361,15 @@ def render_stats_text(pos: List[Any]) -> bool:
     """
     Gets an item using the parsed position and renders it's information to a surface
     """
-    assert isinstance(entity_manager.client_player, entity_manager.Player)
+    assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
 
     if pos[0] == item.ItemLocation.CRAFTING_MENU:
         equipped = item.Item(
-            entity_manager.client_player.items[pos[0]][pos[1]][0],
-            entity_manager.client_player.items[pos[0]][pos[1]][1],
+            entity_manager.get_client_player().items[pos[0]][pos[1]][0],
+            entity_manager.get_client_player().items[pos[0]][pos[1]][1],
         )
     else:
-        equipped = entity_manager.client_player.items[pos[0]][pos[1]]
+        equipped = entity_manager.get_client_player().items[pos[0]][pos[1]]
 
     if equipped is not None:
         if equipped != GameState.last_hovered_item:
@@ -584,7 +584,7 @@ def draw_inventory_hover_text() -> None:
     """
     Checks if the player is hovering over an item in the UI and displays the item's info if they are
     """
-    assert isinstance(entity_manager.client_player, entity_manager.Player)
+    assert isinstance(entity_manager.get_client_player(), entity_manager.Player)
     pos = None
 
     # Inventory
@@ -602,7 +602,7 @@ def draw_inventory_hover_text() -> None:
                 break
 
     # Chest
-    elif entity_manager.client_player.chest_open and pygame.Rect(245, 265, 384, 192).collidepoint(
+    elif entity_manager.get_client_player().chest_open and pygame.Rect(245, 265, 384, 192).collidepoint(
             commons.MOUSE_POSITION
     ):
         for chest_index in range(20):
@@ -614,13 +614,13 @@ def draw_inventory_hover_text() -> None:
 
     # Crafting menu
     elif pygame.Rect(5, 270, 48, 288).collidepoint(commons.MOUSE_POSITION):
-        array_index = (commons.MOUSE_POSITION[1] - 270 - int(entity_manager.client_player.crafting_menu_offset_y)) // 48
-        if 0 <= array_index < len(entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU]):
+        array_index = (commons.MOUSE_POSITION[1] - 270 - int(entity_manager.get_client_player().crafting_menu_offset_y)) // 48
+        if 0 <= array_index < len(entity_manager.get_client_player().items[item.ItemLocation.CRAFTING_MENU]):
             if pygame.mouse.get_pressed()[0]:
                 if not commons.is_holding_item:
                     item.item_holding = item.Item(
-                        entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0],
-                        amount=entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][1],
+                        entity_manager.get_client_player().items[item.ItemLocation.CRAFTING_MENU][array_index][0],
+                        amount=entity_manager.get_client_player().items[item.ItemLocation.CRAFTING_MENU][array_index][1],
                         auto_assign_prefix=True,
                     )
                     commons.is_holding_item = True
@@ -630,10 +630,10 @@ def draw_inventory_hover_text() -> None:
                 elif GameState.can_drop_holding and item.item_holding is not None:
                     if (
                             item.item_holding.item_id
-                            == entity_manager.client_player.items[item.ItemLocation.CRAFTING_MENU][array_index][0]
+                            == entity_manager.get_client_player().items[item.ItemLocation.CRAFTING_MENU][array_index][0]
                     ):
                         if item.item_holding.amount < item.item_holding.get_max_stack():
-                            item.item_holding.amount += entity_manager.client_player.items[
+                            item.item_holding.amount += entity_manager.get_client_player().items[
                                 item.ItemLocation.CRAFTING_MENU
                             ][array_index][1]
                             game_data.play_sound("sound.grab")
@@ -658,7 +658,7 @@ def draw_inventory_hover_text() -> None:
                 item_add_data = None
 
                 if mouse_buttons[0] or GameState.item_drop_tick <= 0:
-                    item_add_data = entity_manager.client_player.give_item(item.item_holding, amount, position=pos)
+                    item_add_data = entity_manager.get_client_player().give_item(item.item_holding, amount, position=pos)
 
                 if item_add_data is not None:
                     GameState.can_drop_holding = False
@@ -680,11 +680,11 @@ def draw_inventory_hover_text() -> None:
                     # Items are being swapped
                     elif item_add_data[0] == item.ItemSlotClickResult.SWAPPED:
                         game_data.play_sound(item.item_holding.get_drop_sound_id_str())
-                        entity_manager.client_player.items[item_add_data[2]][pos[1]] = item.item_holding
+                        entity_manager.get_client_player().items[item_add_data[2]][pos[1]] = item.item_holding
                         item.item_holding = item_add_data[1]
 
-                    if pos not in entity_manager.client_player.old_inventory_positions:
-                        entity_manager.client_player.old_inventory_positions.append(pos)
+                    if pos not in entity_manager.get_client_player().old_inventory_positions:
+                        entity_manager.get_client_player().old_inventory_positions.append(pos)
 
                 if GameState.item_drop_tick <= 0:
                     GameState.item_drop_rate -= 1
@@ -700,11 +700,11 @@ def draw_inventory_hover_text() -> None:
             # Picking up item
             elif GameState.can_pickup_item and not mouse_buttons[2]:
                 GameState.can_pickup_item = False
-                item.item_holding = entity_manager.client_player.remove_item(pos)
+                item.item_holding = entity_manager.get_client_player().remove_item(pos)
                 if item.item_holding is not None:
                     game_data.play_sound(item.item_holding.get_pickup_sound_id_str())
                     commons.is_holding_item = True
-                entity_manager.client_player.render_current_item_image()
+                entity_manager.get_client_player().render_current_item_image()
 
         if render_stats_text(pos) and not commons.is_holding_item:
             commons.screen.blit(
@@ -713,14 +713,14 @@ def draw_inventory_hover_text() -> None:
             )
 
     elif pygame.mouse.get_pressed()[2] and commons.is_holding_item:
-        if entity_manager.client_player.direction == 1:
+        if entity_manager.get_client_player().direction == 1:
             velocity = (32, random.random() * 2)
         else:
             velocity = (-32, random.random() * 2)
 
         entity_manager.spawn_physics_item(
             item.item_holding,
-            entity_manager.client_player.position,
+            entity_manager.get_client_player().position,
             velocity=velocity,
         )
 
@@ -760,8 +760,8 @@ def draw_exit_button() -> None:
             game_data.play_sound("sound.menu_select")
         color = pygame.Color(230, 230, 0)
         if pygame.mouse.get_pressed()[0]:
-            entity_manager.client_player.inventory_open = False
-            entity_manager.client_player.chest_open = False
+            entity_manager.get_client_player().inventory_open = False
+            entity_manager.get_client_player().chest_open = False
             entity_manager.client_prompt = prompt.Prompt(
                 "Exit",
                 game_data.EXIT_MESSAGES[random.randint(0, len(game_data.EXIT_MESSAGES) - 1)],

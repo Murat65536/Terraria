@@ -71,13 +71,13 @@ class PhysicsItem:
         """
         Checks to see if the PhysicsItem is off screen, if it is then remove it from the physics items list
         """
-        if self.position[0] < entity_manager.client_player.position[0] - commons.WINDOW_WIDTH * 0.5:
+        if self.position[0] < entity_manager.get_client_player().position[0] - commons.WINDOW_WIDTH * 0.5:
             entity_manager.physics_items.remove(self)
-        elif self.position[0] > entity_manager.client_player.position[0] + commons.WINDOW_WIDTH * 0.5:
+        elif self.position[0] > entity_manager.get_client_player().position[0] + commons.WINDOW_WIDTH * 0.5:
             entity_manager.physics_items.remove(self)
-        elif self.position[1] < entity_manager.client_player.position[1] - commons.WINDOW_HEIGHT * 0.5:
+        elif self.position[1] < entity_manager.get_client_player().position[1] - commons.WINDOW_HEIGHT * 0.5:
             entity_manager.physics_items.remove(self)
-        elif self.position[1] > entity_manager.client_player.position[1] + commons.WINDOW_HEIGHT * 0.5:
+        elif self.position[1] > entity_manager.get_client_player().position[1] + commons.WINDOW_HEIGHT * 0.5:
             entity_manager.physics_items.remove(self)
 
     def update(self):
@@ -124,27 +124,27 @@ class PhysicsItem:
 
         collide = not self.stationary
 
-        if self.item.item_id not in entity_manager.client_player.un_pickupable_items:
+        if self.item.item_id not in entity_manager.get_client_player().un_pickupable_items:
             if self.pickup_delay <= 0:
                 if (
-                        abs(self.position[0] - entity_manager.client_player.position[0]) < commons.BLOCK_SIZE * 3.5
-                        and abs(self.position[1] - entity_manager.client_player.position[1]) < commons.BLOCK_SIZE * 3.5
+                        abs(self.position[0] - entity_manager.get_client_player().position[0]) < commons.BLOCK_SIZE * 3.5
+                        and abs(self.position[1] - entity_manager.get_client_player().position[1]) < commons.BLOCK_SIZE * 3.5
                 ):
                     collide = False
                     self.stationary = False
                     self.time_stationary = 0
 
                     angle = math.atan2(
-                        entity_manager.client_player.position[1] - self.position[1],
-                        entity_manager.client_player.position[0] - self.position[0],
+                        entity_manager.get_client_player().position[1] - self.position[1],
+                        entity_manager.get_client_player().position[0] - self.position[0],
                     )
                     self.velocity = (
                         self.velocity[0] + math.cos(angle) * 1000 * commons.DELTA_TIME,
                         self.velocity[1] + math.sin(angle) * 1000 * commons.DELTA_TIME,
                     )
 
-                    if entity_manager.client_player.rect.colliderect(self.rect):
-                        item_add_data = entity_manager.client_player.give_item(self.item, amount=self.item.amount)
+                    if entity_manager.get_client_player().rect.colliderect(self.rect):
+                        item_add_data = entity_manager.get_client_player().give_item(self.item, amount=self.item.amount)
                         assert item_add_data is not None
 
                         if item_add_data[0] == item.ItemSlotClickResult.GAVE_ALL:
@@ -153,7 +153,7 @@ class PhysicsItem:
                                 self.item.item_id,
                                 self.item.amount,
                                 self.item.get_tier(),
-                                entity_manager.client_player.position,
+                                entity_manager.get_client_player().position,
                                 unique=self.item.has_prefix,
                                 item=self.item,
                             )
